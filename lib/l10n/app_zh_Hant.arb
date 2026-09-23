@@ -1,0 +1,1164 @@
+{
+  "@@locale": "zh_Hant",
+  "languageName": "繁體中文",
+  "@languageName": {
+    "description": "This language, written in itself. Shown in the language picker."
+  },
+  "vsLastMonthLabel": "較上個月 {pct}%",
+  "@vsLastMonthLabel": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      }
+    }
+  },
+  "levelStreakLabel": "等級 {level} · {streak}",
+  "@levelStreakLabel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "save": "儲存",
+  "cancel": "取消",
+  "cancelCaps": "取消",
+  "deleteCaps": "刪除",
+  "done": "完成",
+  "set": "組",
+  "home": "首頁",
+  "progress": "進度",
+  "exercises": "動作",
+  "settings": "設定",
+  "today": "今天",
+  "thisWeek": "本週",
+  "recommended": "推薦",
+  "goal": "目標",
+  "volume": "訓練量",
+  "setsToday": "今日組數",
+  "prs": "紀錄",
+  "todaysFocus": "今日重點",
+  "todaysRoutine": "今日課表",
+  "startWorkout": "開始訓練",
+  "routines": "課表",
+  "tools": "工具",
+  "firstSessionHint": "選擇肌群並記錄第一次訓練",
+  "exerciseCount": "{n, plural, =1{{n} 個動作} other{{n} 個動作}}",
+  "@exerciseCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "pushDay": "推日",
+  "pullDay": "拉日",
+  "legDay": "腿部",
+  "pushFocus": "胸 · 肩 · 三頭肌",
+  "pullFocus": "背 · 二頭肌 · 斜方肌",
+  "legFocus": "股四頭肌 · 腿後肌 · 臀肌",
+  "train": "訓練",
+  "step1": "第 1 步，共 2 步",
+  "step2": "第 2 步，共 2 步",
+  "chooseFocus": "選擇重點",
+  "buildSession": "建立訓練",
+  "tapMuscles": "點選你想訓練的肌群 — 正面與背面。",
+  "noMusclesYet": "尚未選擇肌群 — 點選身體開始。",
+  "continueBtn": "繼續",
+  "nothingForFocus": "此重點暫無動作",
+  "goBackPick": "返回並選擇你的資料庫中有動作的肌群。",
+  "pickedHint": "我們已為你安排訓練 — 點選即可新增或移除這 {n} 個動作中的任一項。",
+  "@pickedHint": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "pickAnExercise": "選擇動作",
+  "searchAllExercises": "搜尋動作…",
+  "noExercisesMatch": "沒有相符的動作",
+  "createItInstead": "改為建立自己的動作",
+  "startCount": "開始 · {n, plural, =1{{n} 個動作} other{{n} 個動作}}",
+  "@startCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "inProgress": "進行中",
+  "paused": "已暫停",
+  "last": "上次",
+  "rest": "休息",
+  "skip": "略過",
+  "addSet": "+ 新增一組",
+  "finishSession": "結束訓練",
+  "setCol": "#",
+  "repsCol": "次數",
+  "weightCol": "重量 ({unit})",
+  "@weightCol": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "repsTitle": "次數",
+  "weightTitle": "重量 ({unit})",
+  "@weightTitle": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "sessionComplete": "訓練已記錄",
+  "finishHeadlinePr": "新的個人紀錄",
+  "finishHeadlineGoal": "已達成本週目標",
+  "finishHeadlineStreak": "連續紀錄保持中",
+  "finishHeadlineDefault": "又完成一次訓練",
+  "finishBodyPr": "你在 {prs, plural, =1{1 個動作} other{{prs} 個動作}}中舉出了新高。已記錄下來。",
+  "@finishBodyPr": {
+    "placeholders": {
+      "prs": {
+        "type": "int"
+      }
+    }
+  },
+  "finishBodyGoal": "你已完成本週預定的訓練次數。",
+  "finishBodyStreak": "連續 {streak} 天。最難的是不要停下來。",
+  "@finishBodyStreak": {
+    "placeholders": {
+      "streak": {
+        "type": "int"
+      }
+    }
+  },
+  "finishBodyDefault": "已記錄並計入。持續才會帶來進步。",
+  "vsLastTime": "與上次相比",
+  "firstTime": "首次記錄",
+  "prCount": "{n, plural, =1{{n} 個新紀錄} other{{n} 個新紀錄}}",
+  "@prCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "saveAndExit": "儲存並離開",
+  "duration": "時長",
+  "setsCaps": "組數",
+  "exerciseXofY": "動作 {i}/{n}",
+  "@exerciseXofY": {
+    "placeholders": {
+      "i": {
+        "type": "int"
+      },
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "decrease": "減少",
+  "increase": "增加",
+  "markSet": "將第 {n} 組標記為完成",
+  "@markSet": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "pauseWorkout": "暫停訓練",
+  "resumeWorkout": "繼續訓練",
+  "discardTitle": "捨棄這次訓練？",
+  "discardBody": "這次訓練的組數資料將會遺失。",
+  "keepTraining": "繼續訓練",
+  "discard": "捨棄",
+  "notifRestChannel": "休息計時器",
+  "notifRestChannelWhy": "在組間休息結束時通知你",
+  "notifAlertChannel": "休息計時器（提醒）",
+  "notifAlertChannelWhy": "休息一結束就顯示橫幅提醒",
+  "restOverTitle": "休息結束",
+  "restOverBody": "繼續吧 — 下一組在等你。",
+  "totalVolume30d": "總訓練量 · 30 天",
+  "consistency": "持續性",
+  "sessionsLogged": "{n, plural, =1{已記錄 {n} 次訓練} other{已記錄 {n} 次訓練}}",
+  "@sessionsLogged": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "streakDays": "連續 {n} 天",
+  "@streakDays": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "bodyweight": "體重",
+  "notLoggedYet": "尚未記錄",
+  "logShort": "+ 記錄",
+  "logBodyweight": "記錄體重",
+  "trackWeight": "追蹤你的體重變化",
+  "muscleMap": "肌肉地圖",
+  "days7": "7 天",
+  "days30": "30 天",
+  "heatLow": "未訓練",
+  "heatHigh": "最大訓練量",
+  "muscleMapEmpty": "記錄一次訓練後，你的身體會在這裡開始亮起。",
+  "muscleMapHint": "點選肌肉查看訓練情況。",
+  "muscleMapBehind": "落後：{names}",
+  "@muscleMapBehind": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "ofTarget": "目標的 {pct}%",
+  "@ofTarget": {
+    "placeholders": {
+      "pct": {
+        "type": "int"
+      }
+    }
+  },
+  "muscleSplit": "肌群分布",
+  "splitEmpty": "訓練後即可查看訓練量在各肌群間的分布。",
+  "personalRecords": "個人紀錄",
+  "prEmpty": "當你記錄組數時，個人紀錄會顯示在這裡。",
+  "strength1rm": "力量 · 估算 1RM",
+  "strengthEmpty": "同一動作記錄兩次後，力量曲線會顯示在這裡。",
+  "oneRmEst": "估算 1RM：{w}",
+  "@oneRmEst": {
+    "placeholders": {
+      "w": {
+        "type": "String"
+      }
+    }
+  },
+  "restDayShort": "休息日",
+  "restDay": "休息日 — 沒有紀錄。",
+  "delete": "刪除",
+  "deleteEntry": "刪除此紀錄？",
+  "deleteEntryBody": "「{name}」會從這一天、紀錄與圖表中移除。",
+  "@deleteEntryBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "bodyweightHistory": "歷史",
+  "noBodyweightYet": "尚無紀錄。",
+  "exercisesCaps": "動作",
+  "timeCaps": "時間",
+  "libraryCount": "{n, plural, =1{資料庫中有 {n} 個動作} other{資料庫中有 {n} 個動作}}",
+  "@libraryCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "searchExercises": "搜尋動作",
+  "muscleFilter": "肌群",
+  "levelFilter": "等級",
+  "newExercise": "新增動作",
+  "exerciseName": "動作名稱",
+  "equipmentLabel": "器材",
+  "addExercise": "新增動作",
+  "advanced": "進階",
+  "demoMedia": "示範",
+  "addMedia": "新增媒體",
+  "mediaHint": "圖片、GIF 或影片",
+  "changeMedia": "變更",
+  "videoSelected": "已選擇影片",
+  "favouritesOnly": "收藏",
+  "noFavouritesYet": "尚無收藏",
+  "noFavouritesHint": "點選動作旁的星號即可收藏在這裡。",
+  "clearFilters": "清除篩選條件",
+  "noExercisesFound": "找不到動作",
+  "noExercisesHint": "試試其他搜尋方式或清除篩選條件。",
+  "personalRecord": "個人紀錄",
+  "history": "歷史",
+  "noHistory": "尚無訓練紀錄。進行這個動作以建立歷史資料。",
+  "notes": "筆記",
+  "notePlaceholder": "提示、設定、感受…",
+  "showAllNotes": "顯示全部 {n} 則筆記",
+  "@showAllNotes": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "howTo": "如何進行",
+  "similar": "類似",
+  "primaryLabel": "主要",
+  "secondaryLabel": "次要",
+  "none": "無",
+  "setCount": "{n, plural, =1{{n} 組} other{{n} 組}}",
+  "@setCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "volumeSuffix": "訓練量 {v}",
+  "@volumeSuffix": {
+    "placeholders": {
+      "v": {
+        "type": "String"
+      }
+    }
+  },
+  "weeklyPlan": "每週計畫",
+  "yourRoutines": "你的課表",
+  "noRoutines": "尚無課表。建立一個並加入你的動作。",
+  "newRoutine": "新增課表",
+  "routineName": "課表名稱",
+  "schedule": "排程",
+  "addFromList": "從下方清單新增動作。",
+  "addExercises": "新增動作",
+  "deleteRoutine": "刪除此課表？",
+  "exercisesWithCount": "動作 · {n}",
+  "@exercisesWithCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "setDay": "設定 {day}",
+  "@setDay": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "newRoutineName": "新增課表",
+  "dragToReorder": "長按並拖曳以重新排序 — 這就是訓練順序。",
+  "reorderHandle": "重新排序 {name}",
+  "@reorderHandle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "removeFromRoutine": "從課表移除",
+  "dropExercise": "移除此動作？",
+  "dropExerciseBody": "「{name}」會從這次訓練移除。已記錄的內容不會遺失。",
+  "@dropExerciseBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "drop": "移除",
+  "addToWorkout": "新增動作",
+  "resetData": "刪除我的所有資料",
+  "resetTitle": "全部刪除？",
+  "resetBody": "訓練、紀錄、課表、筆記與個人檔案都會刪除。此操作無法復原 — 如有需要請先匯出備份。",
+  "resetConfirm": "全部刪除",
+  "resetDone": "所有資料已刪除",
+  "support": "支援",
+  "reportBug": "回報錯誤",
+  "requestFeature": "建議功能",
+  "starOnGithub": "在 GitHub 給星",
+  "buyCoffee": "請我喝咖啡",
+  "cantOpenLink": "無法開啟連結",
+  "preferences": "偏好設定",
+  "theme": "主題",
+  "darkTheme": "深色",
+  "lightTheme": "淺色",
+  "languageLabel": "語言",
+  "unitsLabel": "單位",
+  "restTimer": "休息計時器",
+  "alarmBlockedTitle": "通知已關閉",
+  "alarmBlockedBody": "螢幕鎖定時休息鬧鐘不會響",
+  "alarmBlockedAction": "開啟",
+  "alarmSound": "鬧鐘聲音",
+  "alarmDefaultName": "預設",
+  "alarmSoundHint": "使用自己的聲音 — 最長 15 秒",
+  "alarmChoose": "選擇聲音…",
+  "alarmPreview": "播放目前聲音",
+  "alarmReset": "重設為預設聲音",
+  "alarmTooLong": "這個聲音超過 15 秒",
+  "alarmInvalid": "無法讀取此音訊檔案",
+  "alarmChanged": "鬧鐘聲音設為「{name}」",
+  "@alarmChanged": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "alarmChangedDefault": "已恢復預設聲音",
+  "homeWidgets": "主畫面",
+  "addActivityWidget": "新增活動小工具",
+  "addStatsWidget": "新增統計小工具",
+  "pinUnsupported": "請從啟動器的小工具選單加入",
+  "background": "背景",
+  "bgNone": "無",
+  "bgDots": "圓點",
+  "bgGrid": "格線",
+  "data": "資料",
+  "exportCsv": "匯出訓練（CSV）",
+  "exportBackup": "匯出備份（ZIP）",
+  "importBackup": "匯入備份",
+  "importHint": "選擇從 GymMane 匯出的 .zip 備份（或舊版 .json）。目前資料（包括媒體）將被取代。",
+  "import": "匯入",
+  "chooseFile": "選擇檔案",
+  "importFromApp": "從其他應用程式匯入",
+  "importUnknownFormat": "此檔案需要包含日期、動作、次數與重量欄位",
+  "importZipNoWeights": "此 ZIP 中沒有體重檔案",
+  "importWeights": "{n, plural, =1{已匯入 {n} 筆體重紀錄} other{已匯入 {n} 筆體重紀錄}}",
+  "@importWeights": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "importReadFailed": "無法讀取此檔案",
+  "importUnitTitle": "這個檔案使用哪種單位？",
+  "importUnitBody": "此匯出檔未標示重量單位。",
+  "importNothing": "沒有新的內容可匯入",
+  "importDone": "{n, plural, =1{已匯入 {n} 次訓練} other{已匯入 {n} 次訓練}}",
+  "@importDone": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "aboutGymmane": "關於 GymMane",
+  "yourProfile": "你的個人檔案",
+  "autofills": "自動填入計算器",
+  "nameLabel": "姓名",
+  "sexLabel": "性別",
+  "male": "男性",
+  "female": "女性",
+  "ageLabel": "年齡",
+  "heightLabel": "身高",
+  "weightLabel": "體重",
+  "weeklyGoal": "每週目標",
+  "activityLabel": "活動量",
+  "addPhoto": "新增照片",
+  "removePhoto": "移除照片",
+  "takePhoto": "拍照",
+  "chooseGallery": "從相簿選擇",
+  "backupCopied": "備份已複製到剪貼簿",
+  "backupImported": "備份已匯入",
+  "backupFailed": "無法讀取此備份",
+  "nothingToExport": "尚無可匯出的內容 — 請先記錄一次訓練",
+  "athlete": "運動員",
+  "calculatorsCount": "{n} 個訓練計算器",
+  "@calculatorsCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "result": "結果",
+  "weightLifted": "舉起重量",
+  "repsPerformed": "完成次數",
+  "neck": "頸部",
+  "waist": "腰圍",
+  "hip": "臀圍（女性）",
+  "targetWeight": "目標體重",
+  "workingWeight": "訓練重量",
+  "activityLevel": "活動等級",
+  "barWeight": "槓鈴重量",
+  "perSide": "每側",
+  "justTheBar": "只有槓鈴桿。",
+  "perSideCount": "每側 × {n}",
+  "@perSideCount": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "rampSet": "{pct} · {reps} 次",
+  "@rampSet": {
+    "placeholders": {
+      "pct": {
+        "type": "String"
+      },
+      "reps": {
+        "type": "int"
+      }
+    }
+  },
+  "toolNameRm": "1RM",
+  "toolNameBmi": "BMI",
+  "toolNameCal": "卡路里",
+  "toolNameBf": "體脂",
+  "toolNamePlate": "槓片",
+  "toolNameWarmup": "暖身",
+  "toolTitleRm": "1RM 計算器",
+  "toolTitleBmi": "BMI 計算器",
+  "toolTitleCal": "卡路里與宏量營養素",
+  "toolTitleBf": "體脂率",
+  "toolTitlePlate": "槓片計算器",
+  "toolTitleWarmup": "暖身組",
+  "toolHintRm": "估算單次最大重量（Epley 公式）",
+  "toolHintCal": "估算每日維持所需熱量",
+  "toolHintBf": "依美國海軍法估算",
+  "toolHintPlate": "槓鈴總重量",
+  "toolHintWarmup": "目標訓練重量",
+  "toolDescRm": "估算單次最大重量",
+  "toolDescBmi": "身體質量指數",
+  "toolDescCal": "卡路里與宏量營養素",
+  "toolDescBf": "體脂百分比",
+  "toolDescPlate": "槓片計算器",
+  "toolDescWarmup": "漸進暖身組",
+  "bmiUnderweight": "體重過輕",
+  "bmiNormal": "正常體重",
+  "bmiOverweight": "過重",
+  "bmiObese": "肥胖",
+  "actSedentary": "久坐",
+  "actLight": "輕度",
+  "actActive": "活躍",
+  "actModerate": "中等",
+  "muscleChest": "胸",
+  "muscleBack": "背",
+  "muscleShoulders": "肩",
+  "muscleBiceps": "二頭肌",
+  "muscleTriceps": "三頭肌",
+  "muscleForearm": "前臂",
+  "muscleTrapezius": "斜方肌",
+  "muscleAbdomen": "腹肌",
+  "muscleObliques": "腹斜肌",
+  "muscleQuads": "股四頭肌",
+  "muscleHamstrings": "腿後肌",
+  "muscleGlutes": "臀肌",
+  "muscleCalves": "小腿",
+  "mgChest": "胸",
+  "mgBack": "背",
+  "mgLegs": "腿部",
+  "mgShoulders": "肩",
+  "mgArms": "手臂",
+  "mgCore": "核心",
+  "equipBarbell": "槓鈴",
+  "equipDumbbell": "啞鈴",
+  "equipCable": "滑輪",
+  "equipMachine": "機械",
+  "equipBodyweight": "自體重量",
+  "equipWeighted": "負重",
+  "equipBand": "彈力帶",
+  "equipKettlebell": "壺鈴",
+  "equipOther": "其他",
+  "diffBeginner": "初學者",
+  "diffAdvanced": "進階",
+  "diffIntermediate": "中階",
+  "about": "關於",
+  "version": "版本 {v}",
+  "@version": {
+    "placeholders": {
+      "v": {
+        "type": "String"
+      }
+    }
+  },
+  "aboutBlurb": "由訓練者為訓練者打造。",
+  "freeForever": "永久免費",
+  "freeForeverWhy": "無訂閱、無廣告、沒有付費鎖定功能。",
+  "fullyOffline": "100% 離線",
+  "fullyOfflineWhy": "不需帳號、不連伺服器。你的訓練資料永遠不會離開這支手機。",
+  "yoursToTake": "資料屬於你",
+  "yoursToTakeWhy": "隨時匯出為 CSV，並可一次刪除所有資料。",
+  "whatsInside": "內容",
+  "exercisesInside": "{n} 個動作",
+  "@exercisesInside": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "exercisesInsideWhy": "每個動作都有動畫與逐步說明。",
+  "calculatorsInside": "6 個計算器",
+  "calculatorsInsideWhy": "1RM、槓片、BMI、卡路里、體脂與暖身 — 全都基於公開公式。",
+  "mathInside": "透明計算",
+  "mathInsideWhy": "訓練量、紀錄與組數都依你的資料計算，沒有只是裝飾的數字。",
+  "yourNumbers": "你的數據",
+  "sessionsCaps": "訓練",
+  "liftedCaps": "舉起",
+  "streakCaps": "連續",
+  "daysUnit": "{n, plural, =1{天} other{天}}",
+  "@daysUnit": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "restDefaultLabel": "休息計時器",
+  "restDefault": "預設：{s} 秒 — 可在設定中變更",
+  "@restDefault": {
+    "placeholders": {
+      "s": {
+        "type": "int"
+      }
+    }
+  },
+  "reset": "重設",
+  "welcomeKicker": "歡迎使用",
+  "welcomeBlurb": "所有資料都留在手機上。不需帳號、不需網路、不用付費。",
+  "welcomeStart": "開始",
+  "onbStep": "第 {i} 步，共 {n} 步",
+  "@onbStep": {
+    "placeholders": {
+      "i": {
+        "type": "int"
+      },
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "onbNameTitle": "我們該怎麼稱呼你？",
+  "onbNameHint": "你的名字",
+  "onbNameWhy": "僅用於稱呼你。永遠不會離開你的手機。",
+  "onbBodyTitle": "一些數據",
+  "onbBodyWhy": "這些資料用於計算器，你可以隨時在設定中修改。",
+  "onbGoalTitle": "你多久訓練一次？",
+  "onbGoalWhy": "設定每週目標。請務實，不要過度勉強。",
+  "perWeek": "{n, plural, =1{每週 {n} 次訓練} other{每週 {n} 次訓練}}",
+  "@perWeek": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "onbUnitsTitle": "公斤還是磅？",
+  "next": "下一步",
+  "back": "返回",
+  "skip2": "略過",
+  "setDone": "本組完成",
+  "nextExercise": "下一個動作",
+  "skipExercise": "略過此動作？",
+  "skipExerciseBody": "你沒有將任何一組標記為完成，因此「{name}」不會留下紀錄。",
+  "dropExerciseAction": "移除動作",
+  "restOff": "關閉",
+  "volumeCumulative": "你移動過的所有公斤數累計",
+  "volumeChartEmpty": "記錄一次訓練後，曲線會從這裡開始",
+  "weekRhythm": "每週節奏",
+  "weekRhythmHint": "你實際有訓練的日子。",
+  "weekRhythmBest": "{day} 是你的日子",
+  "weekRhythmEmpty": "記錄訓練後，你的一週會在這裡逐漸成形。",
+  "allTime": "全部時間",
+  "allTimeSessions": "訓練",
+  "allTimeTime": "時間",
+  "allTimeVolume": "舉起",
+  "allTimeSets": "組數",
+  "allTimeAvg": "每次訓練平均 {time}",
+  "hoursShort": "{n} 小時",
+  "notHere": "{place} 沒有 {gear}",
+  "notHereWhy": "換成你今天真的能使用的器材。",
+  "altHere": "你在這裡可以做的",
+  "places": "我的地點",
+  "placesShort": "地點",
+  "placesHint": "設定每個地點有哪些器材，資料庫就只會顯示你實際能做的動作。",
+  "placeAll": "任何地方",
+  "placeNew": "新增地點",
+  "placeNameLabel": "名稱",
+  "placeNamePlaceholder": "家、健身房、公園…",
+  "placeGearLabel": "可用器材",
+  "placeGearCount": "{n, plural, =0{未選擇器材} =1{1 種器材} other{{n} 種器材}}",
+  "placeExercises": "這裡有 {n} 個動作",
+  "placeEmptyTitle": "隨時隨地訓練",
+  "placeEmptyBody": "地點就是你在那裡擁有的器材清單。先選一個開始，之後可再編輯。",
+  "placeDeleteTitle": "刪除地點",
+  "placeDeleteBody": "只會刪除地點 — 你的動作與訓練會保留。",
+  "placeGym": "健身房",
+  "placeHome": "家",
+  "placeOutdoors": "戶外",
+  "placeFilterLabel": "地點",
+  "noGearOnly": "無器材",
+  "placeActive": "在 {name} 訓練",
+  "journal": "日誌",
+  "noteCount": "{n, plural, =0{沒有筆記} =1{1 則筆記} other{{n} 則筆記}}",
+  "noteKindNote": "筆記",
+  "noteKindPlan": "計畫",
+  "noteKindDone": "成功",
+  "noteKindPain": "不適",
+  "noteFilterAll": "全部",
+  "newNote": "新增筆記",
+  "editNote": "編輯筆記",
+  "addNote": "新增筆記",
+  "noteEmptyTitle": "尚無任何筆記",
+  "noteEmptyBody": "記錄提示、下次計畫、訓練感受 — 想的話也可附上照片或影片。",
+  "noteNoneForExercise": "此動作尚無筆記。",
+  "noteKindLabel": "類型",
+  "noteTextLabel": "筆記",
+  "noteDateLabel": "日期",
+  "noteExerciseLabel": "動作",
+  "noteMediaLabel": "照片與影片",
+  "noteGeneral": "無動作",
+  "noteAttach": "附加",
+  "noteRemoveMedia": "移除附件",
+  "deleteNoteTitle": "刪除筆記",
+  "deleteNoteBody": "筆記及所有附件將永久刪除。",
+  "noteToday": "今天",
+  "noteYesterday": "昨天",
+  "noteAllNotes": "所有筆記",
+  "noteCalendar": "日曆",
+  "noteNoneOnDay": "這一天沒有任何筆記",
+  "noteAddOnDay": "為這一天新增筆記",
+  "notePrevMonth": "上個月",
+  "noteNextMonth": "下個月",
+  "noteMonthCount": "{n, plural, =0{本月沒有筆記} =1{本月 1 則筆記} other{本月 {n} 則筆記}}",
+  "measures": "身體尺寸",
+  "measuresHint": "從頸部到小腿 — 不只看槓鈴，也觀察身體的變化。",
+  "measureCount": "{n, plural, =0{沒有測量} =1{1 筆測量} other{{n} 筆測量}}",
+  "measureNoneYet": "尚未測量",
+  "measureHistory": "歷史",
+  "measureNeck": "頸部",
+  "measureShoulders": "肩",
+  "measureChest": "胸圍",
+  "measureArm": "手臂",
+  "measureForearm": "前臂",
+  "measureWaist": "腰圍",
+  "measureHips": "臀圍",
+  "measureThigh": "大腿",
+  "measureCalf": "小腿",
+  "measureBodyfat": "體脂",
+  "timeline": "時間軸",
+  "timelineHint": "相同姿勢、相同地點、相同光線。一年後你會難以置信。",
+  "timelineEmptyTitle": "第一張照片會開始追蹤",
+  "photoCount": "{n, plural, =0{沒有照片} =1{1 張照片} other{{n} 張照片}}",
+  "poseFront": "正面",
+  "poseSide": "側面",
+  "poseBack": "背面",
+  "photoEvery": "提醒我",
+  "photoEveryDays": "每 {n} 天",
+  "photoEveryOff": "永不",
+  "timelineEvery": "每隔以下天數分組",
+  "custom": "自訂",
+  "photoNextIn": "{n, plural, =1{下一張照片是明天} other{距下一張照片還有 {n} 天}}",
+  "photoDueNow": "該拍照片了 — 今天拍一張吧",
+  "addTodayPhotos": "新增今天的照片",
+  "posePhoto": "{pose}照片",
+  "compare": "比較",
+  "compareNeedTwo": "在不同的兩天拍攝相同姿勢，就能在這裡比較。",
+  "dayNumber": "第 {n} 天",
+  "daysApart": "{n, plural, =0{同一天} =1{相隔 1 天} other{相隔 {n} 天}}",
+  "deleteEntryTitle": "刪除這一天",
+  "deleteDayBody": "這一天的照片也會永久刪除。",
+  "timelinePhotos": "照片",
+  "timelineBody": "肌肉地圖",
+  "timelineBodyEmpty": "記錄訓練後，肌肉地圖會開始填滿 — 不需要照片。",
+  "timelineBodyHint": "由你自己的組數資料建立 — 不會上傳任何內容。",
+  "timelineWindow": "{from} – {to}",
+  "sessionCount": "{n, plural, =0{沒有訓練} =1{1 次訓練} other{{n} 次訓練}}",
+  "notifPhotoChannel": "進度照片",
+  "notifPhotoChannelWhy": "到下一張進度照片時間時提醒你。",
+  "notifPhotoTitle": "該拍進度照片了",
+  "notifPhotoBody": "距上一張已 {n} 天。相同姿勢、相同光線。",
+  "share": "分享",
+  "sharePick": "你想顯示什麼？",
+  "shareSession": "上次訓練",
+  "shareStreak": "連續紀錄與持續性",
+  "shareBody": "訓練肌群",
+  "shareCompare": "之前 / 之後",
+  "shareHint": "卡片在你的手機上建立。直到你選擇傳送位置前，任何內容都不會離開手機。",
+  "shareFailed": "無法建立卡片",
+  "shareWeekOf": "最近 7 天",
+  "shareStreakLabel": "連續天數",
+  "shareSessionsLabel": "訓練",
+  "shareVolumeLabel": "訓練量",
+  "shareSetsLabel": "組數",
+  "shareNothing": "請先記錄一次訓練 — 目前還沒有可顯示的內容",
+  "restForExercise": "此動作的休息",
+  "restUsingDefault": "使用預設時間",
+  "restCustom": "僅此動作",
+  "setType": "組別類型",
+  "setTypeNormal": "正式組",
+  "setTypeWarmup": "暖身",
+  "setTypeDrop": "遞減組",
+  "setTypeFailure": "力竭",
+  "setTypeHint": "暖身組不計入訓練量或紀錄。",
+  "addWarmup": "暖身",
+  "platesPerSide": "每側：{plates}",
+  "macroProtein": "蛋白質",
+  "macroCarbs": "碳水化合物",
+  "macroFat": "脂肪",
+  "equipRings": "吊環",
+  "madeWithLoveBy": "用心製作",
+  "sourceCode": "原始碼",
+  "suggested": "建議",
+  "results": "結果",
+  "noMatches": "沒有符合此搜尋的動作。",
+  "tapToEdit": "點選鉛筆修正紀錄，或點垃圾桶刪除。",
+  "editEntry": "編輯",
+  "editEntryHint": "修正任何一組的次數或重量。",
+  "removeSet": "刪除本組",
+  "continueWorkout": "繼續",
+  "continueWorkoutBody": "訓練會以已勾選的組數繼續。再次完成後，會以原始日期儲存。",
+  "addBodyWidget": "新增肌肉地圖小工具",
+  "repsOnly": "僅次數",
+  "repsOnlyHint": "此動作不記錄重量。",
+  "useDefaultArt": "恢復預設插圖",
+  "daysShort": "{n} 天",
+  "focusCard": "今日重點",
+  "autoAdvance": "自動前往下一個",
+  "autoAdvanceHint": "勾選某動作的最後一組後，訓練會自動前往下一個動作。",
+  "autoProgress": "下次增加重量",
+  "autoProgressHint": "完成所有次數後，下次訓練會從多 {w} 的重量開始。",
+  "placePlates": "槓片與槓鈴桿",
+  "platesAll": "全部可用",
+  "platesOwned": "{n, plural, =1{{n} 種尺寸} other{{n} 種尺寸}}",
+  "platePairs": "對數",
+  "plateAchievable": "最接近的可用重量：{w}",
+  "autoWarmup": "從暖身組開始",
+  "autoWarmupHint": "開啟訓練時加入漸進暖身組。",
+  "trainReminder": "訓練提醒",
+  "trainReminderHint": "在這個時間提醒你，但只會在課表排定的日子提醒。",
+  "notifTrainChannel": "訓練提醒",
+  "notifTrainChannelWhy": "在你安排的日子提醒你訓練。",
+  "notifTrainTitle": "該訓練了",
+  "notifTrainBody": "你的課表在等你。",
+  "exportCatalog": "匯出動作清單",
+  "importRoutine": "匯入課表（JSON）",
+  "planIntro": "請只使用此清單中的動作為我建立訓練課表。",
+  "planFormat": "只以 JSON 回覆，格式如下：",
+  "planImported": "{n, plural, =1{已新增 {n} 個動作到課表} other{已新增 {n} 個動作到課表}}",
+  "planNothing": "此檔案中的動作都與你的資料庫不符",
+  "planFailed": "這個檔案不是 GymMane 能讀取的課表",
+  "routineGroup": "群組",
+  "newGroup": "新增群組",
+  "noGroup": "無群組",
+  "groupNameHint": "推 / 拉 / 腿、5×5…",
+  "filters": "篩選條件",
+  "setsPlannedHint": "為每個動作選擇需要的組數。訓練開啟時會全部準備好。",
+  "nextTime": "下次",
+  "nextHold": "維持相同重量，直到完成所有次數",
+  "bgPhoto": "你的照片",
+  "bgPhotoPick": "選擇照片",
+  "bgPhotoChange": "變更照片",
+  "bgPhotoRemove": "移除照片",
+  "bgDim": "變暗程度",
+  "dimSoft": "輕微",
+  "dimMedium": "中等",
+  "dimStrong": "強烈",
+  "bgPhotoHint": "它會顯示在整個介面背後，並加深以保持可讀性。",
+  "reminderSmart": "智慧",
+  "reminderFixed": "固定時間",
+  "reminderSmartHint": "它會使用你實際訓練的日子與時間；如果當天已訓練，就不再提醒。",
+  "reminderSmartEmpty": "再記錄幾次訓練，讓它學習你的習慣。",
+  "habitFocus": "你通常在 {day} 訓練的內容",
+  "duplicateRoutine": "複製課表",
+  "copySuffix": "{name}（副本）",
+  "saveAsRoutine": "儲存為課表",
+  "savedAsRoutine": "已儲存為課表",
+  "templates": "現成課表",
+  "templatesHint": "以你的資料庫建立的經典課表，之後所有內容都可修改。",
+  "templateAdded": "{n, plural, =1{已新增 {n} 個課表} other{已新增 {n} 個課表}}",
+  "tplFullbody": "每週三次全身訓練，非常適合入門。",
+  "tplPpl": "推、拉、腿。每週三天或六天。",
+  "tplUpperlower": "上半身與下半身，每週四天。",
+  "tplStronglifts": "兩套五組五次的訓練交替進行。",
+  "tplStartingstrength": "每次訓練都有深蹲，兩套訓練交替進行。",
+  "tplHome": "只需要引體向上桿與地板。",
+  "dayCount": "{n, plural, =1{{n} 天} other{{n} 天}}",
+  "logRpe": "記錄用力程度（RPE）",
+  "rpeTitle": "用力程度（RPE）",
+  "rpeHint": "10 = 無法再做一次；8 = 約還能做兩次。",
+  "superset": "超級組",
+  "supersetLink": "與下一個連接",
+  "supersetHint": "連接的動作之間不休息 — 直接進入下一個動作。",
+  "aiRoutine": "AI 課表",
+  "aiIntro": "GymMane 絕不直接與 AI 通訊。你先匯出動作清單，貼到你已在使用的 AI 助手，再把回覆匯入。任何資料都不會自行離開手機。",
+  "aiStep1": "匯出動作清單。如果已選擇地點，清單只會包含你在那裡能做的動作。",
+  "aiStep2": "把這個檔案交給你選擇的 AI，請它建立課表。",
+  "aiStep3": "將回覆存成檔案 — JSON 或純文字都可以。",
+  "aiStep4": "在這裡匯入。名稱會與你的資料庫比對並建立課表。",
+  "aiMissing": "{n, plural, =1{有 1 個名稱不在你的資料庫} other{有 {n} 個名稱不在你的資料庫}}",
+  "importApps": "支援的應用程式",
+  "importOtherCsv": "任何包含日期、動作、次數與重量的 CSV",
+  "importAskApp": "需要其他應用程式？請求加入支援",
+  "awardFirstStepName": "第一步",
+  "awardFirstStepLine": "歡迎來到 GymMane。這個送給你。",
+  "awardFirstWorkoutName": "第一次訓練",
+  "awardFirstWorkoutLine": "第一次已記錄。這是最難的一次。",
+  "awardFirstRoutineName": "第一個課表",
+  "awardFirstRoutineLine": "現在你有一個可以持續回來執行的計畫。",
+  "awardFirstRecordName": "第一個紀錄",
+  "awardFirstRecordLine": "你在一個動作中刷新了最佳成績。",
+  "awardStreak3Name": "連續三天",
+  "awardStreak3Line": "連續三天。就是這樣開始的。",
+  "awardTonne1Name": "一噸",
+  "awardTonne1Line": "所有組數累計舉起一千公斤。",
+  "awardSets100Name": "一百組",
+  "awardSets100Line": "完成一百組，一組一組累積而來。",
+  "awardHours10Name": "十小時",
+  "awardHours10Line": "累積訓練十小時。",
+  "awardWorkouts50Name": "五十次訓練",
+  "awardWorkouts50Line": "你已完成五十次訓練。",
+  "awardHours50Name": "五十小時",
+  "awardHours50Line": "花了五十小時訓練。",
+  "awardsTitle": "獎牌",
+  "awardWon": "已獲得",
+  "yearTitle": "你的年度",
+  "yearBestMonth": "最佳月份",
+  "yearMonths": "個月",
+  "awardSpinHint": "滑動獎牌讓它旋轉",
+  "awardUnlocked": "解鎖新成就",
+  "awardNice": "很棒！",
+  "awardSaveImage": "儲存圖片",
+  "awardSaved": "已儲存到相簿",
+  "awardStreakBottom": "連續",
+  "awardStreak7Top": "七天",
+  "awardStreak7Name": "七天",
+  "awardStreak7Line": "整整一週，一天都沒漏掉。",
+  "awardStreak30Top": "三十天",
+  "awardStreak30Name": "三十天",
+  "awardStreak30Line": "連續一個月。現在已成為習慣。",
+  "awardWorkouts100Top": "一百",
+  "awardWorkouts100Bottom": "訓練",
+  "awardWorkouts100Name": "一百次訓練",
+  "awardWorkouts100Line": "從頭到尾記錄一百次訓練。",
+  "awardTonnes100Top": "一百",
+  "awardTonnes100Bottom": "噸",
+  "awardTonnes100Name": "一百噸",
+  "awardTonnes100Line": "你累積舉起的重量達到 100,000 公斤。",
+  "awardSets1000Top": "一千",
+  "awardSets1000Bottom": "組",
+  "awardSets1000Name": "一千組",
+  "awardSets1000Line": "一組一組累積到一千。",
+  "profile": "個人檔案",
+  "editProfile": "編輯個人檔案",
+  "pickBadge": "徽章",
+  "badgeTitle": "你的徽章",
+  "statWorkouts": "訓練",
+  "statTrained": "訓練",
+  "statSets": "組數",
+  "statLifted": "舉起",
+  "statStreak": "連續",
+  "statDays": "天",
+  "unitHours": "小時",
+  "unitDays": "天",
+  "snapshots": "照片",
+  "snapNow": "現在拍攝",
+  "calendarLegend": "訓練 · 照片",
+  "addCover": "新增封面",
+  "addTodayWidget": "今日訓練是否完成",
+  "monthTitle": "本月",
+  "photosCard": "你的照片",
+  "handleLabel": "使用者名稱",
+  "setupTitle": "填寫這些資料後，頁面其餘內容會自動填入",
+  "setupHint": "這裡的每個數字都來自你的紀錄。任何資料都不會傳送到其他地方。",
+  "setupWorkout": "記錄第一次訓練",
+  "setupWeight": "記錄體重",
+  "setupMeasures": "測量身體尺寸",
+  "setupPhoto": "拍第一張進度照片",
+  "progressTitle": "進度",
+  "tileVolume30": "訓練量 · 30 天",
+  "tileAddWeight": "新增你的數值",
+  "heatToneTitle": "熱度顏色",
+  "heatToneHint": "只會改變格線與身體的顏色。",
+  "thisWeekTitle": "本週",
+  "momentsEmptyTitle": "這裡目前沒有內容",
+  "deletePhotoTitle": "刪除這張照片？",
+  "deletePhotoBody": "它將被永久刪除。",
+  "awardsEarned": "已獲得",
+  "awardsLocked": "未解鎖",
+  "awardStreak100Name": "一百天",
+  "awardWorkouts10Name": "十次訓練",
+  "awardWorkouts10Line": "前十次最能帶來改變。",
+  "awardWorkouts365Name": "三百六十五",
+  "awardWorkouts365Line": "相當於一年每一天的一次訓練，一次一次記錄下來。",
+  "awardTonnes10Name": "十噸",
+  "awardTonnes10Line": "一萬公斤從你手中舉起。",
+  "awardHours100Name": "一百小時",
+  "awardHours100Line": "計時器運轉著，在槓鈴下度過一百小時。",
+  "awardWonOn": "於 {date} 獲得",
+  "awardProgressLabel": "{value} / {goal}",
+  "badgeName": "{id, select, gold{金色} blue{藍色} green{綠色} other{徽章}}",
+  "memberSince": "自 {date} 起",
+  "levelShort": "等級 {n}",
+  "levelToNext": "{n, plural, =1{距等級 {next} 還有 1 次訓練} other{距等級 {next} 還有 {n} 次訓練}}",
+  "heightCm": "{n} 公分",
+  "heatToneName": "{id, select, ember{餘燼} green{綠色} blue{藍色} mono{灰色} other{顏色}}",
+  "setsThisWeek": "{n} 組",
+  "weekOfGoal": "本週 {n} / {goal}",
+  "momentCount": "{n} 張照片",
+  "badgeHint": "選擇一種顏色，或點選目前顏色來移除。只供你自己使用 — 不會驗證，也完全免費。",
+  "momentsEmptyHint": "拍下健身房、白板、上好槓片的槓鈴 — 任何你想記住的東西。照片留在手機上，只有你看得到。",
+  "awardStreak100Line": "連續一百天。這已不只是動力，而是習慣。",
+  "coverLabel": "封面",
+  "removeCover": "移除封面",
+  "startTitle": "開始訓練",
+  "logTitle": "記錄訓練",
+  "logHint": "不使用計時器 — 只要填入你做了什麼。",
+  "orStartFrom": "或從這裡開始",
+  "pickExercisesOption": "選擇動作",
+  "chooseFocusOption": "選擇重點",
+  "plannedRoutine": "已排定",
+  "logWorkoutAction": "記錄訓練",
+  "logging": "記錄中",
+  "placesLabel": "我的地點",
+
+  "keepScreenOn": "訓練時保持螢幕開啟",
+  "lockWorkout": "鎖定螢幕",
+  "unlockWorkout": "解鎖",
+  "lockedCaps": "已鎖定",
+  "holdToUnlock": "長按以解鎖",
+  "liveChannel": "訓練進行中",
+  "liveChannelWhy": "訓練時顯示目前的動作、組數和休息計時",
+  "liveSet": "第 {n} 組，共 {total} 組",
+  "liveResting": "休息中",
+  "liveAllDone": "所有組數已完成",
+  "undo": "復原",
+  "deleteSet": "刪除這一組",
+  "setDeleted": "已刪除這一組",
+  "removeWarmup": "移除熱身",
+  "addWeightAction": "增加重量",
+  "workoutOverview": "本次訓練",
+  "allExercisesShort": "全部",
+  "setsDoneOf": "{done}/{total} 組",
+  "nowLabel": "現在",
+  "deleteWorkout": "刪除訓練",
+  "deleteWorkoutBody": "這次訓練及其所有組數都會從紀錄中刪除。",
+  "themeAuto": "自動",
+  "themeAutoHint": "跟隨手機",
+  "demoSizeTitle": "訓練時的動作示範",
+  "demoLarge": "大",
+  "demoSmall": "小",
+  "demoOff": "隱藏",
+  "alarmStyleTitle": "休息結束時",
+  "alarmStyleLoud": "一律響鈴",
+  "alarmStyleQuiet": "遵循靜音模式",
+  "alarmStyleVibrate": "僅震動",
+  "alarmStyleHint": "「一律響鈴」使用鬧鐘音量，靜音時也會響。「遵循靜音模式」使用通知音量，手機靜音時只會震動。",
+  "suggestedPicks": "為你推薦",
+  "moreOptions": "更多選項",
+  "suggestInWorkouts": "在快速訓練中推薦",
+  "suggestInWorkoutsHint": "關閉後不會出現在推薦中，但仍可手動加入。",
+  "dontSuggest": "不再推薦",
+  "noLongerSuggested": "之後不會再推薦",
+  "onbPlaceTitle": "你在哪裡訓練？",
+  "onbPlaceWhy": "選出你訓練的所有地點。我們只會推薦你在每個地點能做的動作。",
+  "onbPlaceGear": "那裡有什麼器材？",
+  "distanceCol": "距離（{unit}）",
+  "timeCol": "時間",
+  "timeMinutesTitle": "時間（分鐘）",
+  "timeSecondsTitle": "時間（秒）",
+  "distanceTitle": "距離（{unit}）",
+  "holdLabel": "撐住",
+  "stopLabel": "停止",
+  "startHold": "開始 · {time}",
+  "exerciseTypeLabel": "記錄方式",
+  "typeReps": "次數和重量",
+  "typeTime": "時間",
+  "typeCardio": "距離和時間",
+  "exerciseTypeHint": "跑步或游泳等有氧運動記錄距離和時間。平板支撐等靜態動作記錄時間。",
+  "howToLabel": "做法（選填）",
+  "howToHint": "每行一個步驟",
+  "editExercise": "編輯動作",
+  "saveChanges": "儲存變更",
+  "noStepsYet": "還沒有步驟。寫下你自己的做法，免得忘記。",
+  "addSteps": "寫下步驟",
+  "setTypeRestPause": "休息暫停",
+  "planFormatNotes": "動作名稱請完全照清單上的寫。\"sets\"、\"reps\"、\"weight\"（使用指定單位）、以秒計的 \"rest\" 和 \"days\" 都是選填。\"superset\": true 會把動作和下一個連起來。多週計畫請像第二個範例一樣，把課表放在 \"weeks\" 裡。",
+  "planSets": "規劃組數",
+  "planSetsHint": "選擇每一組的類型、次數和重量。重量設為自動就會從上次訓練開始。",
+  "autoValue": "自動",
+  "clearPlan": "清除規劃",
+  "planChip": "規劃",
+  "shareRoutine": "分享課表",
+  "shareWeek": "分享我的一週",
+  "shareWeekHint": "你所有的課表和各自的日子。",
+  "shareMessage": "{name} — 用 GymMane 開啟檔案即可加入。",
+  "importRoutines": "匯入課表",
+  "importPasteHint": "在這裡貼上課表：從 GymMane 分享的、AI 的回答、JSON 或 CSV。",
+  "pasteAction": "貼上",
+  "routineCount": "{n, plural, other{{n} 個課表}}",
+  "useTheirSchedule": "也使用它的每週安排",
+  "useTheirScheduleHint": "它帶來的日子會取代你在那幾天的安排。",
+  "addToMyRoutines": "加入我的課表",
+  "routinesAdded": "{n, plural, other{已加入 {n} 個課表}}",
+  "nothingToImport": "這裡沒有 GymMane 能匯入的內容",
+  "aiStepCopy": "複製這段請求。裡面有你的動作清單和 GymMane 讀得懂的格式。",
+  "aiStepAsk": "貼到任何 AI，說出你的需求：每週幾天、目標、幾週。",
+  "aiStepPaste": "把它的回答貼在下方並匯入，不需要檔案。",
+  "copyForAi": "複製給 AI",
+  "copiedDone": "已複製",
+  "aiPasteHint": "在這裡貼上 AI 的回答",
+  "importAction": "匯入",
+  "showFormat": "查看格式",
+  "shareAsFile": "以檔案分享",
+  "recoveryTab": "恢復",
+  "recoveryOverall": "身體恢復 {pct}%",
+  "recoveryAllFresh": "全部都恢復了。今天練什麼都可以。",
+  "recoveryStill": "仍在恢復：{muscles}",
+  "recoveryTired": "疲勞",
+  "recoveryFresh": "恢復",
+  "recoveryHint": "點一下肌肉看它恢復了多少。越近的組數影響越大，越吃力的組數（依 RPE）影響更大。",
+  "recoveryPct": "已恢復 {pct}%",
+  "readyInHours": "約 {h} 小時後可練",
+  "tplAbcd": "四天：胸和三頭、背和二頭、腿、肩和腹。",
+  "tplAbcde": "五天，每天一個部位：胸、背、腿、肩、手臂。",
+  "elapsedCaps": "已經過",
+  "tapToSkip": "點一下略過",
+  "tapToStop": "點一下停止",
+  "screenLocked": "螢幕已鎖定",
+  "lockedHint": "長按上方的指紋圖示即可解鎖",
+  "liveDoneSet": "完成這一組",
+  "liveSkipRest": "略過休息",
+  "livePause": "暫停",
+  "liveResume": "繼續",
+  "liveNext": "下一個",
+  "liveUpNext": "接下來：{name}",
+  "stickerOpen": "分享到照片上",
+  "stickerNoPhoto": "不用照片",
+  "stickerWorkout": "訓練",
+  "stickerStreak": "連續",
+  "stickerDate": "日期",
+  "stickerHint": "拖曳移動，雙指縮放或旋轉",
+  "stickerSaved": "已儲存到相簿",
+  "stickerWeek": "本週",
+  "getReady": "準備",
+
+  "stickerGallery": "相簿",
+  "stickerCamera": "相機",
+  "shareIntroTitle": "分享這個課表",
+  "shareIntroBody": "傳給你的伴侶、朋友或家人。他們會收到一個小檔案，用 GymMane 開啟，一點就能加入，組數和重量都在。",
+  "removedFromRoutine": "已從課表移除",
+
+  "radarTitle": "本月",
+  "radarHint": "看看哪些部位需要多練",
+  "radarEmpty": "本月訓練後就能看到你的均衡度",
+  "radarBalanced": "目前很均衡",
+  "radarFocus": "需要多練：{list}",
+
+  "countdownReady": "準備",
+  "countdownSkip": "點一下立即開始",
+  "countdownSetting": "開始前倒數",
+
+  "effortSetting": "記錄每組強度",
+  "effortHint": "RPE：10 表示一次都做不動了，8 表示還能再做兩次。RIR 表示還剩幾次。記錄後，估算 1RM 會使用 RPE 表。",
+  "rirTitle": "餘力 (RIR)",
+  "rirHint": "0 表示一次都做不動了，2 表示還能再做兩次。",
+  "addWeekWidget": "新增本週小工具",
+
+  "gamificationSetting": "獎牌和等級"
+}

@@ -1,0 +1,10 @@
+GymMane 1.3.0
+
+• A cleaner, calmer design
+• A live notification with the rest countdown
+• RPE or RIR on every set
+• Timed sets, extra weight on bodyweight exercises and a weekly widget
+• Share your routines and import from Lyfta
+• 16 languages
+
+And a lot more. Install it and find out.

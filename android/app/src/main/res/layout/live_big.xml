@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/live_title"
+                style="@android:style/TextAppearance.Material.Notification.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="@font/nunito_extrabold"
+                android:maxLines="2"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/live_detail"
+                style="@android:style/TextAppearance.Material.Notification"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:ellipsize="end"
+                android:singleLine="true" />
+        </LinearLayout>
+
+        <Chronometer
+            android:id="@+id/live_clock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:fontFamily="@font/nunito_extrabold"
+            android:includeFontPadding="false"
+            android:textColor="@color/live_accent"
+            android:textSize="38sp" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/live_progress"
+        style="@android:style/Widget.Material.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:layout_marginTop="12dp"
+        android:progressBackgroundTint="@color/live_accent"
+        android:progressTint="@color/live_accent" />
+
+    <TextView
+        android:id="@+id/live_next"
+        style="@android:style/TextAppearance.Material.Notification"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textSize="12sp" />
+</LinearLayout>

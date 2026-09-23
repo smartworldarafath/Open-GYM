@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@color/live_accent" />
+            <size android:width="24dp" android:height="24dp" />
+        </shape>
+    </item>
+    <item android:bottom="4dp" android:left="4dp" android:right="4dp" android:top="4dp">
+        <bitmap
+            android:gravity="fill"
+            android:src="@drawable/ic_stat_gymmane"
+            android:tint="@color/live_on_accent" />
+    </item>
+</layer-list>

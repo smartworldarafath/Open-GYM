@@ -1,0 +1,10 @@
+GymMane 1.3.0
+
+• Un diseño más limpio y tranquilo
+• Notificación en vivo con la cuenta atrás del descanso
+• RPE o RIR en cada serie
+• Series por tiempo, peso extra en los ejercicios con tu peso y un widget semanal
+• Comparte tus rutinas e importa desde Lyfta
+• 16 idiomas
+
+Y mucho más. Instálala y descúbrelo.

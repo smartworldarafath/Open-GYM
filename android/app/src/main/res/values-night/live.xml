@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="live_accent">#D9A184</color>
+    <color name="live_on_accent">#FF0C0B0A</color>
+    <color name="live_done">#8FA377</color>
+    <color name="live_pause">#E0B15A</color>
+    <color name="live_ink">#FFFFFFFF</color>
+    <color name="live_idle">#FF2B2B2B</color>
+    <color name="live_on_pause">#FF0C0B0A</color>
+    <color name="live_on_done">#FF0C0B0A</color>
+</resources>
