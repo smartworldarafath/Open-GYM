@@ -18,11 +18,14 @@ import '../widgets/profile_avatar.dart';
 import 'settings_screen.dart';
 import 'share_sheet.dart';
 
-const List<String> kProfileBadges = ['gold', 'blue', 'green'];
+const List<String> kProfileBadges = ['gold', 'blue', 'green', 'red', 'black', 'violet'];
 
 Color badgeColor(String id) => switch (id) {
       'blue' => const Color(0xFF4A9EEB),
       'green' => const Color(0xFF54B979),
+      'red' => const Color(0xFFE54D4D),
+      'black' => const Color(0xFF2A2A2E),
+      'violet' => const Color(0xFF9B51E0),
       _ => const Color(0xFFE8B84B),
     };
 

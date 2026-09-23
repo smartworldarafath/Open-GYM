@@ -1,4 +1,4 @@
-package com.gymmane.app
+package com.opengym.app
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -27,7 +27,7 @@ import java.io.ByteArrayOutputStream
 object LiveNotifier {
     private const val ID = 1003
     private const val CHANNEL = "live_workout_v2"
-    private const val ACTION = "com.gymmane.app.LIVE_ACTION"
+    private const val ACTION = "com.opengym.app.LIVE_ACTION"
     private const val FLASH_MS = 1600L
 
     var dart: MethodChannel? = null

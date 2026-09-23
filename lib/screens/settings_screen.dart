@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -80,6 +81,23 @@ class SettingsScreen extends StatelessWidget {
                     () => fit.themePref,
                     fit.setThemePref,
                     hint: t.themeAutoHint,
+                  ),
+                  _prefRow(
+                    gc,
+                    PhosphorIconsRegular.palette,
+                    'UI Color',
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _uiColorDot(gc, 'violet', const Color(0xFF9B51E0), 'Violet'),
+                        const SizedBox(width: 8),
+                        _uiColorDot(gc, 'green', const Color(0xFF4CAF50), 'Green'),
+                        const SizedBox(width: 8),
+                        _uiColorDot(gc, 'gray', const Color(0xFF9E9E9E), 'Gray'),
+                        const SizedBox(width: 8),
+                        _uiColorDot(gc, 'default', const Color(0xFFD9A184), 'Current Color'),
+                      ],
+                    ),
                   ),
                   GestureDetector(
                     behavior: HitTestBehavior.opaque,
@@ -326,6 +344,49 @@ class SettingsScreen extends StatelessWidget {
           const SizedBox(width: 12),
           control,
         ],
+      ),
+    );
+  }
+
+  Widget _uiColorDot(GymColors gc, String id, Color color, String tooltip) {
+    final selected = fit.uiColorPref == id;
+    return Tooltip(
+      message: tooltip,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          if (!selected) {
+            HapticFeedback.selectionClick();
+            fit.setUiColorPref(id);
+          }
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 220),
+          curve: Curves.easeOutCubic,
+          width: 26,
+          height: 26,
+          padding: const EdgeInsets.all(2.5),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: selected ? color : Colors.transparent,
+              width: 2,
+            ),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              color: color,
+              shape: BoxShape.circle,
+            ),
+            child: selected
+                ? const Icon(
+                    PhosphorIconsBold.check,
+                    size: 13,
+                    color: Colors.white,
+                  )
+                : null,
+          ),
+        ),
       ),
     );
   }
@@ -790,7 +851,7 @@ class SettingsScreen extends StatelessWidget {
         return;
       }
       await HomeWidget.requestPinWidget(
-          qualifiedAndroidName: 'com.gymmane.app.$provider');
+          qualifiedAndroidName: 'com.opengym.app.$provider');
     } catch (_) {
       if (context.mounted) _snack(context, t.pinUnsupported);
     }
@@ -1316,12 +1377,12 @@ class _ProfileSheetState extends State<_ProfileSheet> {
             const SizedBox(height: 12),
             _label(gc, t.activityLabel),
             const SizedBox(height: 8),
-            Wrap(spacing: 8, runSpacing: 8, children: [
-              _act(gc, t.activityName('Sedentary'), 1.2),
-              _act(gc, t.activityName('Light'), 1.375),
-              _act(gc, t.activityName('Moderate'), 1.55),
-              _act(gc, t.activityName('Active'), 1.725),
-            ]),
+            SegToggle([
+              SegOption(t.activityName('Sedentary'), p.activity == 1.2, () => _up(() => fit.updateProfile(activity: 1.2))),
+              SegOption(t.activityName('Light'), p.activity == 1.375, () => _up(() => fit.updateProfile(activity: 1.375))),
+              SegOption(t.activityName('Moderate'), p.activity == 1.55, () => _up(() => fit.updateProfile(activity: 1.55))),
+              SegOption(t.activityName('Active'), p.activity == 1.725, () => _up(() => fit.updateProfile(activity: 1.725))),
+            ], isExpanded: true, fontSize: 11, hPad: 4),
             const SizedBox(height: 22),
             PrimaryButton(label: t.done, onTap: () => Navigator.of(context).pop()),
           ],
@@ -1498,18 +1559,5 @@ class _ProfileSheetState extends State<_ProfileSheet> {
           onInc: inc,
           onEdit: edit == null ? null : () => edit(context).then((_) => _up(() {})),
         ));
-  }
-
-  Widget _act(GymColors gc, String label, double v) {
-    final active = fit.profile.activity == v;
-    return Pill(
-      label: label,
-      bg: active ? gc.ember : gc.bgRaised2,
-      fg: active ? gc.onEmber : gc.textSecondary,
-      onTap: () => _up(() => fit.updateProfile(activity: v)),
-      hPad: 12,
-      vPad: 8,
-      fontSize: 12,
-    );
   }
 }

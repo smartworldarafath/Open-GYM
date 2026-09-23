@@ -293,6 +293,7 @@ void main() {
       'GymMane', 'GYMMANE', 'GYM · MANE',
       'Open GYM', 'OPEN GYM', 'OPEN · GYM', 'Open-GYM',
       'Arafath', 'MADE BY',
+      'UI Color', 'Violet', 'Green', 'Gray', 'Current Color',
       'M', 'F', 'kg', 'lb', 'cm', 'EN', 'ES',
     };
 

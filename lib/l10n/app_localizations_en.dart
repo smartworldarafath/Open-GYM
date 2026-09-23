@@ -2456,6 +2456,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'gold': 'Gold',
       'blue': 'Blue',
       'green': 'Green',
+      'red': 'Red',
+      'black': 'Black',
+      'violet': 'Violet',
       'other': 'Badge',
     });
     return '$_temp0';

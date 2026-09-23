@@ -110,6 +110,44 @@ class GymColors extends ThemeExtension<GymColors> {
     danger: Color(0xFFC0392B),
   );
 
+  static GymColors darkWith([String uiColor = 'default']) => switch (uiColor) {
+        'violet' => dark.copyWith(
+            accent: const Color(0xFFB388FF),
+            accentSoft: const Color(0x29B388FF),
+            brass: const Color(0xFFCE93D8),
+          ),
+        'green' => dark.copyWith(
+            accent: const Color(0xFF66BB6A),
+            accentSoft: const Color(0x2966BB6A),
+            brass: const Color(0xFF81C784),
+          ),
+        'gray' => dark.copyWith(
+            accent: const Color(0xFFE0E0E0),
+            accentSoft: const Color(0x29E0E0E0),
+            brass: const Color(0xFFBDBDBD),
+          ),
+        _ => dark,
+      };
+
+  static GymColors lightWith([String uiColor = 'default']) => switch (uiColor) {
+        'violet' => light.copyWith(
+            accent: const Color(0xFF7C4DFF),
+            accentSoft: const Color(0x1F7C4DFF),
+            brass: const Color(0xFF8E24AA),
+          ),
+        'green' => light.copyWith(
+            accent: const Color(0xFF2E7D32),
+            accentSoft: const Color(0x1F2E7D32),
+            brass: const Color(0xFF388E3C),
+          ),
+        'gray' => light.copyWith(
+            accent: const Color(0xFF424242),
+            accentSoft: const Color(0x1F424242),
+            brass: const Color(0xFF616161),
+          ),
+        _ => light,
+      };
+
   @override
   GymColors copyWith({
     Color? pageBg,

@@ -56,6 +56,7 @@ class FitState extends FitCore
       }
 
       themePref = _themeFrom(data, fallback: 'dark');
+      uiColorPref = data['uiColor'] as String? ?? 'default';
       units = data['units'] as String? ?? 'kg';
 
       _applyLanguage(data['language'] as String? ?? language);
@@ -306,6 +307,7 @@ class FitState extends FitCore
         'profile': profile.toJson(),
         'dark': dark,
         'theme': themePref,
+        'uiColor': uiColorPref,
         'units': units,
         'language': language,
         'rest': restSeconds,
@@ -443,6 +445,7 @@ class FitState extends FitCore
     _loading = true;
     profile = Profile.fromJson((map['profile'] as Map?)?.cast<String, dynamic>() ?? {});
     themePref = _themeFrom(map, fallback: themePref);
+    uiColorPref = map['uiColor'] as String? ?? uiColorPref;
     units = map['units'] as String? ?? units;
     _applyLanguage(map['language'] as String? ?? language);
     restSeconds = (map['rest'] as num?)?.toInt() ?? restSeconds;

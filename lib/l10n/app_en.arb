@@ -850,7 +850,7 @@
   "@awardWonOn": {"placeholders": {"date": {"type": "String"}}},
   "awardProgressLabel": "{value} of {goal}",
   "@awardProgressLabel": {"placeholders": {"value": {"type": "String"}, "goal": {"type": "String"}}},
-  "badgeName": "{id, select, gold{Gold} blue{Blue} green{Green} other{Badge}}",
+  "badgeName": "{id, select, gold{Gold} blue{Blue} green{Green} red{Red} black{Black} violet{Violet} other{Badge}}",
   "@badgeName": {"placeholders": {"id": {"type": "String"}}},
   "memberSince": "Since {date}",
   "@memberSince": {"placeholders": {"date": {"type": "String"}}},

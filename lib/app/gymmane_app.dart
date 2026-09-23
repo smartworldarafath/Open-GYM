@@ -14,10 +14,10 @@ class GymManeApp extends StatelessWidget {
     return AnimatedBuilder(
       animation: fit,
       builder: (context, _) => MaterialApp(
-        title: 'GymMane',
+        title: 'Open GYM',
         debugShowCheckedModeBanner: false,
-        theme: AppTheme.light,
-        darkTheme: AppTheme.dark,
+        theme: AppTheme.lightWith(fit.uiColorPref),
+        darkTheme: AppTheme.darkWith(fit.uiColorPref),
         themeMode: fit.themeMode,
         locale: fit.locale,
         supportedLocales: AppLocalizations.supportedLocales,

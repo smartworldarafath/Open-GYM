@@ -11,8 +11,8 @@ import '../widgets/home_widget_views.dart';
 class HomeWidgetBridge {
   HomeWidgetBridge._();
 
-  static const _pkg = 'com.gymmane.app';
-  static const appGroup = 'group.com.gymmane.app';
+  static const _pkg = 'com.opengym.app';
+  static const appGroup = 'group.com.opengym.app';
   static const heatmapKey = 'heatmap_img';
   static const statsKey = 'stats_img';
   static const bodyKey = 'body_img';

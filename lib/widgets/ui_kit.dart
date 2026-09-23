@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../theme/app_colors.dart';
@@ -627,37 +628,184 @@ class SegOption {
   final VoidCallback onTap;
 }
 
-class SegToggle extends StatelessWidget {
-  const SegToggle(this.options, {super.key, this.hPad = 14, this.vPad = 7, this.fontSize = 12});
+class SegToggle extends StatefulWidget {
+  const SegToggle(
+    this.options, {
+    super.key,
+    this.hPad = 14,
+    this.vPad = 7,
+    this.fontSize = 12,
+    this.isExpanded = false,
+  });
+
   final List<SegOption> options;
   final double hPad;
   final double vPad;
   final double fontSize;
+  final bool isExpanded;
 
   @override
+  State<SegToggle> createState() => _SegToggleState();
+}
+
+class _SegToggleState extends State<SegToggle> {
+  @override
   Widget build(BuildContext context) {
+    if (widget.options.isEmpty) return const SizedBox.shrink();
     final gc = context.gc;
+    final selIdx = widget.options.indexWhere((o) => o.selected);
+    final activeIdx = selIdx >= 0 ? selIdx : 0;
+
+    if (widget.isExpanded) {
+      return LayoutBuilder(
+        builder: (context, constraints) {
+          final totalW = constraints.maxWidth;
+          final tabW = (totalW - 6) / widget.options.length;
+
+          return Container(
+            padding: const EdgeInsets.all(3),
+            decoration: BoxDecoration(color: gc.bgRaised2, borderRadius: BorderRadius.circular(100)),
+            child: Stack(
+              children: [
+                AnimatedPositioned(
+                  duration: const Duration(milliseconds: 280),
+                  curve: Curves.easeOutCubic,
+                  left: activeIdx * tabW,
+                  top: 0,
+                  bottom: 0,
+                  width: tabW,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: gc.ember,
+                      borderRadius: BorderRadius.circular(100),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.12),
+                          blurRadius: 6,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Row(
+                  children: [
+                    for (int i = 0; i < widget.options.length; i++)
+                      Expanded(
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () {
+                            if (!widget.options[i].selected) {
+                              HapticFeedback.selectionClick();
+                            }
+                            widget.options[i].onTap();
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: widget.hPad, vertical: widget.vPad),
+                            alignment: Alignment.center,
+                            child: AnimatedDefaultTextStyle(
+                              duration: const Duration(milliseconds: 200),
+                              curve: Curves.easeOut,
+                              style: AppTheme.f(
+                                widget.fontSize,
+                                weight: FontWeight.w600,
+                                color: widget.options[i].selected ? gc.onEmber : gc.textSecondary,
+                              ),
+                              child: Text(
+                                widget.options[i].label,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
+
+    double maxTextW = 0;
+    for (final o in widget.options) {
+      final tp = TextPainter(
+        text: TextSpan(text: o.label, style: AppTheme.f(widget.fontSize, weight: FontWeight.w600)),
+        textDirection: TextDirection.ltr,
+        maxLines: 1,
+      )..layout();
+      if (tp.width > maxTextW) maxTextW = tp.width;
+    }
+    final tabW = math.max(maxTextW + widget.hPad * 2, 40.0);
+
     return Container(
       padding: const EdgeInsets.all(3),
       decoration: BoxDecoration(color: gc.bgRaised2, borderRadius: BorderRadius.circular(100)),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          for (final o in options)
-            GestureDetector(
-              onTap: o.onTap,
+      child: SizedBox(
+        width: tabW * widget.options.length,
+        child: Stack(
+          children: [
+            AnimatedPositioned(
+              duration: const Duration(milliseconds: 280),
+              curve: Curves.easeOutCubic,
+              left: activeIdx * tabW,
+              top: 0,
+              bottom: 0,
+              width: tabW,
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: hPad, vertical: vPad),
                 decoration: BoxDecoration(
-                  color: o.selected ? gc.ember : Colors.transparent,
+                  color: gc.ember,
                   borderRadius: BorderRadius.circular(100),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.12),
+                      blurRadius: 6,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
-                child: Text(o.label,
-                    style: AppTheme.f(fontSize,
-                        weight: FontWeight.w600, color: o.selected ? gc.onEmber : gc.textSecondary)),
               ),
             ),
-        ],
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                for (int i = 0; i < widget.options.length; i++)
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      if (!widget.options[i].selected) {
+                        HapticFeedback.selectionClick();
+                      }
+                      widget.options[i].onTap();
+                    },
+                    child: SizedBox(
+                      width: tabW,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: widget.hPad, vertical: widget.vPad),
+                        alignment: Alignment.center,
+                        child: AnimatedDefaultTextStyle(
+                          duration: const Duration(milliseconds: 200),
+                          curve: Curves.easeOut,
+                          style: AppTheme.f(
+                            widget.fontSize,
+                            weight: FontWeight.w600,
+                            color: widget.options[i].selected ? gc.onEmber : gc.textSecondary,
+                          ),
+                          child: Text(
+                            widget.options[i].label,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

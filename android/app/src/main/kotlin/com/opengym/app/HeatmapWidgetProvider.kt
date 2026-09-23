@@ -1,4 +1,4 @@
-package com.gymmane.app
+package com.opengym.app
 
 import android.appwidget.AppWidgetManager
 import android.content.Context
@@ -6,7 +6,7 @@ import android.content.SharedPreferences
 import android.widget.RemoteViews
 import es.antonborri.home_widget.HomeWidgetProvider
 
-class StatsWidgetProvider : HomeWidgetProvider() {
+class HeatmapWidgetProvider : HomeWidgetProvider() {
     override fun onUpdate(
         context: Context,
         appWidgetManager: AppWidgetManager,
@@ -14,8 +14,8 @@ class StatsWidgetProvider : HomeWidgetProvider() {
         widgetData: SharedPreferences
     ) {
         appWidgetIds.forEach { widgetId ->
-            val views = RemoteViews(context.packageName, R.layout.widget_stats).apply {
-                bindThemedImage(context, widgetData, "stats_img")
+            val views = RemoteViews(context.packageName, R.layout.widget_heatmap).apply {
+                bindThemedImage(context, widgetData, "heatmap_img")
             }
             appWidgetManager.updateAppWidget(widgetId, views)
         }

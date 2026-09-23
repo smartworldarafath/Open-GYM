@@ -59,6 +59,17 @@ mixin SettingsState on FitCore, ToolsState, LibraryState {
     notifyListeners();
   }
 
+  String uiColorPref = 'default';
+
+  void setUiColorPref(String pref) {
+    if (!const ['default', 'violet', 'green', 'gray'].contains(pref)) return;
+    if (uiColorPref == pref) return;
+    uiColorPref = pref;
+    _persist();
+    _refreshWidgets();
+    notifyListeners();
+  }
+
   void setThemeDark() => setThemePref('dark');
 
   void setThemeLight() => setThemePref('light');
