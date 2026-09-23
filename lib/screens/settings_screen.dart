@@ -25,6 +25,7 @@ import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import '../widgets/body_rulers.dart';
 import '../widgets/dialogs.dart';
+import '../widgets/donation_sheet.dart';
 import '../widgets/entrance.dart';
 import '../widgets/glass.dart';
 import '../widgets/liquid_notch.dart';
@@ -38,7 +39,6 @@ import '../widgets/ui_kit.dart';
 const _kRepoUrl = 'https://github.com/smartworldarafath/Open-GYM';
 const _kBugUrl = '$_kRepoUrl/issues/new?labels=bug';
 const _kFeatureUrl = '$_kRepoUrl/issues/new?labels=enhancement';
-const _kKofiUrl = 'https://ko-fi.com/inlitx';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -299,7 +299,7 @@ class SettingsScreen extends StatelessWidget {
               (PhosphorIconsRegular.bug, t.reportBug, () => _open(context, _kBugUrl)),
               (PhosphorIconsRegular.lightbulb, t.requestFeature, () => _open(context, _kFeatureUrl)),
               (PhosphorIconsRegular.githubLogo, t.starOnGithub, () => _open(context, _kRepoUrl)),
-              (PhosphorIconsRegular.coffee, t.buyCoffee, () => _open(context, _kKofiUrl)),
+              (PhosphorIconsRegular.coffee, t.buyCoffee, () => showDonationSheet(context)),
             ]),
             const SizedBox(height: 22),
             _linkGroup(gc, [

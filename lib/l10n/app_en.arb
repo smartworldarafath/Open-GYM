@@ -458,7 +458,7 @@
   "importNothing": "Nothing new to import",
   "importDone": "{n, plural, =1{Imported {n} session} other{Imported {n} sessions}}",
   "@importDone": { "placeholders": { "n": { "type": "int" } } },
-  "aboutGymmane": "About GymMane",
+  "aboutGymmane": "About Open GYM",
   "yourProfile": "YOUR PROFILE",
   "autofills": "Autofills the calculators",
   "nameLabel": "NAME",

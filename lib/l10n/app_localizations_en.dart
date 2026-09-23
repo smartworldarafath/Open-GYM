@@ -1346,7 +1346,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get aboutGymmane => 'About GymMane';
+  String get aboutGymmane => 'About Open GYM';
 
   @override
   String get yourProfile => 'YOUR PROFILE';

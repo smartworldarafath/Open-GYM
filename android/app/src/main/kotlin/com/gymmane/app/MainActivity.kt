@@ -66,6 +66,24 @@ class MainActivity : FlutterActivity() {
             }
         }
 
+        MethodChannel(messenger, "gymmane/installer").setMethodCallHandler { call, result ->
+            if (call.method != "install") {
+                result.notImplemented()
+                return@setMethodCallHandler
+            }
+            val path = call.argument<String>("path")
+            if (path == null) {
+                result.error("no-path", "missing file path", null)
+                return@setMethodCallHandler
+            }
+            try {
+                installApk(path)
+                result.success(true)
+            } catch (e: Exception) {
+                result.error("install-failed", e.message, null)
+            }
+        }
+
         MethodChannel(messenger, "gymmane/screen").setMethodCallHandler { call, result ->
             val on = call.argument<Boolean>("on") ?: false
             when (call.method) {
@@ -219,5 +237,20 @@ class MainActivity : FlutterActivity() {
         FileOutputStream(file).use { it.write(bytes) }
         MediaStore.Images.Media.insertImage(contentResolver, file.absolutePath, name, null)
         return true
+    }
+
+    private fun installApk(path: String) {
+        val file = File(path)
+        if (!file.exists()) throw Exception("APK file not found: $path")
+        val uri: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            androidx.core.content.FileProvider.getUriForFile(this, "${packageName}.fileprovider", file)
+        } else {
+            Uri.fromFile(file)
+        }
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            setDataAndType(uri, "application/vnd.android.package-archive")
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
+        }
+        startActivity(intent)
     }
 }
