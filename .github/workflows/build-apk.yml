@@ -106,20 +106,21 @@ jobs:
         run: sed -i -e 's/-Wl,/-Wl,--build-id=none,/' "$PUB_CACHE"/hosted/pub.dev/jni-*/src/CMakeLists.txt
 
       - name: Set up signing
-        if: ${{ secrets.KEYSTORE_BASE64 != '' }}
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
         run: |
-          echo "$KEYSTORE_BASE64" | base64 -d > android/app/gymmane-release.jks
-          cat > android/key.properties <<EOF
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > android/app/gymmane-release.jks
+            cat > android/key.properties <<EOF
           storePassword=$KEYSTORE_PASSWORD
           keyPassword=$KEY_PASSWORD
           keyAlias=$KEY_ALIAS
           storeFile=gymmane-release.jks
           EOF
+          fi
 
       - name: Build APKs
         run: |
