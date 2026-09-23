@@ -223,7 +223,7 @@ class _DonationSheetState extends State<DonationSheet> {
                       child: Image.asset(
                         current.asset,
                         fit: BoxFit.contain,
-                        errorBuilder: (_, __, ___) => Center(
+                        errorBuilder: (_, _, _) => Center(
                           child: Icon(PhosphorIconsRegular.warningCircle, color: gc.textTertiary, size: 36),
                         ),
                       ),

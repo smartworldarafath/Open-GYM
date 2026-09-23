@@ -54,6 +54,8 @@ class GymColors extends ThemeExtension<GymColors> {
   final Color warn;
   final Color danger;
 
+  Color get onAccent => accent.computeLuminance() > 0.5 ? const Color(0xFF140D09) : Colors.white;
+
   static const dark = GymColors(
     pageBg: Color(0xFF0A0908),
     bg: Color(0xFF0A0A0A),

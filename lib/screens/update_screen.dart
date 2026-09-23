@@ -294,7 +294,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
             child: Image.asset(
               'assets/icon/ic_1024.png',
               fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => Icon(PhosphorIconsFill.barbell, color: gc.accent, size: 32),
+              errorBuilder: (_, _, _) => Icon(PhosphorIconsFill.barbell, color: gc.accent, size: 32),
             ),
           ),
           const SizedBox(width: 16),
