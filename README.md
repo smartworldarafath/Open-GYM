@@ -197,28 +197,17 @@ Open-GYM/
 
 ---
 
-## 👥 Contributors & Acknowledgements
+## 🤝 Contributing
 
-Open-GYM stands on the shoulders of the open-source community. Heartfelt gratitude to everyone who contributed code, translations, architecture, and artwork:
-
-### 🌟 Project Team & Contributors
-- **[Arafath Rahman](https://github.com/smartworldarafath)** (`@smartworldarafath`) — Project Maintainer & Lead
-- **[InlitX](https://github.com/InlitX)** (`@InlitX`) — Original Core Author & Architectural Foundation
-- **[ddd](https://github.com/1506952493)** (`@1506952493`) — Core features & localization
-- **[EinToni](https://github.com/EinToni)** (`@EinToni`) — Bug fixes & platform improvements
-- **[Mark](https://github.com/Marcos6226)** (`@Marcos6226`) — UI & data enhancements
-- **[Eful97](https://github.com/Eful97)** (`@Eful97`) — Community contributions
-- **[Veland55](https://github.com/Veland55)** (`@Veland55`) — Community contributions
-- **[matheusdz](https://github.com/matheusdz)** (`@matheusdz`) — Community contributions
-
-### 🎨 Design & Artwork Attribution
-- **Exercise Illustrations**: Sourced from [Workout Guide](https://github.com/bryllim/workout-guide) by **Bryl Lim**, based on the open anatomy dataset by **[Everkinetic](https://github.com/everkinetic/data)**, licensed under **[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)**.
-- **Typography**: [Nunito Font](https://github.com/googlefonts/nunito) by the Nunito Project Authors, licensed under the **SIL Open Font License**.
-- Detailed attribution notes are documented in [CREDITS.md](CREDITS.md).
+Bug reports, ideas and pull requests are welcome. For anything big, open an
+[issue](https://github.com/smartworldarafath/Open-GYM/issues) first. Translations are plain files in [lib/l10n](lib/l10n), and
+[TRANSLATING.md](TRANSLATING.md) explains how to add one.
 
 ---
 
-## 📄 License
+## 📄 License & Credits
 
 - **Code**: Licensed under the **[GNU General Public License v3.0 (GPL-3.0)](LICENSE)**.
-- **Exercise Art**: Licensed under **[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)**.
+- **Exercise Illustrations**: Sourced from [Workout Guide](https://github.com/bryllim/workout-guide) by **Bryl Lim**, based on [Everkinetic](https://github.com/everkinetic/data), under **[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)**.
+- **Typography**: [Nunito Font](https://github.com/googlefonts/nunito) under the **SIL Open Font License**.
+- Detailed attribution notes are documented in **[CREDITS.md](CREDITS.md)**.
