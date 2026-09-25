@@ -1,0 +1,170 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1560 1010" width="1560" height="1010" role="img" aria-label="Open-GYM live data flow">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#faf7f4"/>
+    </linearGradient>
+    <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#a8a29e"/>
+    </marker>
+    <marker id="a2d" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#78716c"/>
+    </marker>
+    <filter id="sh2" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="1.5" stdDeviation="2" flood-color="#1c1917" flood-opacity="0.08"/>
+    </filter>
+    <style>
+      .t{font-family:'Segoe UI',Inter,Roboto,Helvetica,Arial,sans-serif;fill:#1c1917}
+      .ttl{font-size:30px;font-weight:700}
+      .sub{font-size:14.5px;fill:#78716c}
+      .bl{font-size:12.5px;font-weight:700;letter-spacing:.07em}
+      .nt{font-size:13px;font-weight:600}
+      .nb{font-size:11px;fill:#57534e}
+      .lg{font-size:11px;fill:#57534e}
+      .ar{stroke:#a8a29e;stroke-width:2;fill:none}
+      .ad{stroke:#78716c;stroke-width:2;stroke-dasharray:6 5;fill:none}
+      .tag{font-size:10.5px;fill:#78716c;font-weight:600}
+    </style>
+  </defs>
+
+  <rect width="1560" height="1010" fill="url(#bg2)"/>
+  <text class="t ttl" x="40" y="52">Open-GYM — one tap, five writes</text>
+  <text class="t sub" x="40" y="78">From tapping a set to the lockscreen, the home widgets and the disk agreeing with each other. Every arrow is on-device; no step talks to a server.</text>
+
+  <g filter="url(#sh2)">
+    <rect x="64" y="150" width="250" height="150" rx="14" fill="#fff7ed" stroke="#fed7aa"/>
+    <text class="t nt" x="80" y="178">1 · Session screen</text>
+    <text class="t nb" x="80" y="204">onTap calls fit.completeSet()</text>
+    <text class="t nb" x="80" y="226">haptic tick, celebration overlay</text>
+    <text class="t nb" x="80" y="248">no I/O and no await on this path,</text>
+    <text class="t nb" x="80" y="270">so the floor tap feels instant</text>
+
+    <rect x="360" y="150" width="250" height="150" rx="14" fill="#fff7ed" stroke="#fed7aa"/>
+    <text class="t nt" x="376" y="178">2 · Mutator (lib/state)</text>
+    <text class="t nb" x="376" y="204">pure Dart model change plus the</text>
+    <text class="t nb" x="376" y="226">undo stack and session flags</text>
+    <text class="t nb" x="376" y="248">marks the store dirty once, then</text>
+    <text class="t nb" x="376" y="270">returns immediately</text>
+
+    <rect x="656" y="150" width="250" height="150" rx="14" fill="#fff7ed" stroke="#fed7aa"/>
+    <text class="t nt" x="672" y="178">3 · Derived state</text>
+    <text class="t nb" x="672" y="204">estimated 1RM, volume, PR flags,</text>
+    <text class="t nb" x="672" y="226">muscle load, award eligibility</text>
+    <text class="t nb" x="672" y="248">computed on read, never stored</text>
+    <text class="t nb" x="672" y="270">twice, so history stays canonical</text>
+
+    <rect x="952" y="150" width="250" height="150" rx="14" fill="#fff7ed" stroke="#fed7aa"/>
+    <text class="t nt" x="968" y="178">4 · notifyListeners()</text>
+    <text class="t nb" x="968" y="204">AppShell subscribes once and</text>
+    <text class="t nb" x="968" y="226">rebuilds only the active route</text>
+    <text class="t nb" x="968" y="248">screens keep their own setState</text>
+    <text class="t nb" x="968" y="270">for transient UI like dialogs</text>
+
+    <rect x="1248" y="150" width="250" height="150" rx="14" fill="#fff7ed" stroke="#fed7aa"/>
+    <text class="t nt" x="1264" y="178">5 · Render</text>
+    <text class="t nb" x="1264" y="204">the screen tree repaints, charts</text>
+    <text class="t nb" x="1264" y="226">and heatmaps recompute values</text>
+    <text class="t nb" x="1264" y="248">the wear shell repaints from the</text>
+    <text class="t nb" x="1264" y="270">same FitState instance</text>
+  </g>
+
+  <path class="ar" d="M314,225 H354" marker-end="url(#a2)"/>
+  <path class="ar" d="M610,225 H650" marker-end="url(#a2)"/>
+  <path class="ar" d="M906,225 H946" marker-end="url(#a2)"/>
+  <path class="ar" d="M1202,225 H1242" marker-end="url(#a2)"/>
+  <path class="ar" d="M485,300 V354" marker-end="url(#a2)"/>
+
+  <g filter="url(#sh2)">
+    <rect x="64" y="360" width="1434" height="60" rx="14" fill="#ffffff" stroke="#d6d3d1"/>
+    <text class="t bl" x="80" y="386">SIDE-EFFECT FAN-OUT</text>
+    <text class="t nb" x="80" y="406">queued behind the mutation, never awaited by the tap — one trailing 400 ms debounce for storage, three fire-and-forget local services for widgets, notification and alarms</text>
+  </g>
+
+  <path class="ar" d="M229,420 V454" marker-end="url(#a2)"/>
+  <path class="ar" d="M596,420 V454" marker-end="url(#a2)"/>
+  <path class="ar" d="M963,420 V454" marker-end="url(#a2)"/>
+  <path class="ar" d="M1330,420 V454" marker-end="url(#a2)"/>
+
+  <g filter="url(#sh2)">
+    <rect x="64" y="460" width="330" height="210" rx="14" fill="#f5f3ff" stroke="#ddd6fe"/>
+    <text class="t nt" x="80" y="490">A · Store — SharedPreferences</text>
+    <text class="t nb" x="80" y="520">trailing 400 ms debounce collapses bursts</text>
+    <text class="t nb" x="80" y="544">jsonEncode(fit.toJson()) → one document</text>
+    <text class="t nb" x="80" y="568">one key: gymmane_v1, plus gm_* side keys</text>
+    <text class="t nb" x="80" y="592">readers see either the old or the new file</text>
+    <text class="t nb" x="80" y="616">boot path: Store.load() → resumeSession()</text>
+    <text class="t nb" x="80" y="640">wipe = clear the key, nothing to shred</text>
+
+    <rect x="431" y="460" width="330" height="210" rx="14" fill="#f5f3ff" stroke="#ddd6fe"/>
+    <text class="t nt" x="447" y="490">B · Five home widgets</text>
+    <text class="t nb" x="447" y="520">HomeWidgetBridge.render() runs after saves</text>
+    <text class="t nb" x="447" y="544">renderFlutterWidget() builds a day and a</text>
+    <text class="t nb" x="447" y="568">night PNG per widget out of Flutter code</text>
+    <text class="t nb" x="447" y="592">saveWidgetData(bitmap) + updateAppWidget()</text>
+    <text class="t nb" x="447" y="616">providers: Today, Week, Heat, Stats, Body</text>
+    <text class="t nb" x="447" y="640">ThemedWidget swaps to the night bitmap</text>
+
+    <rect x="798" y="460" width="330" height="210" rx="14" fill="#f5f3ff" stroke="#ddd6fe"/>
+    <text class="t nt" x="814" y="490">C · Lockscreen notification</text>
+    <text class="t nb" x="814" y="520">LiveWorkout.sync() coalesces bursts: one</text>
+    <text class="t nb" x="814" y="544">push wins, a dirty flag retries after it</text>
+    <text class="t nb" x="814" y="568">gymmane/live_activity → LiveNotifier.kt</text>
+    <text class="t nb" x="814" y="592">one segment per exercise plus progress</text>
+    <text class="t nb" x="814" y="616">action buttons reply on the gymmane/live</text>
+    <text class="t nb" x="814" y="640">channel straight back into FitState</text>
+
+    <rect x="1165" y="460" width="330" height="210" rx="14" fill="#f5f3ff" stroke="#ddd6fe"/>
+    <text class="t nt" x="1181" y="490">D · Rest timer and alarms</text>
+    <text class="t nb" x="1181" y="520">flutter_local_notifications exact alarm</text>
+    <text class="t nb" x="1181" y="544">scheduled at session.restEndsAt</text>
+    <text class="t nb" x="1181" y="568">full-screen intent, sound and vibration</text>
+    <text class="t nb" x="1181" y="592">gymmane/alarms copies an imported 15 s</text>
+    <text class="t nb" x="1181" y="616">clip into app storage, never a live URI</text>
+    <text class="t nb" x="1181" y="640">boot receiver re-arms pending alarms</text>
+  </g>
+
+  <path class="ad" d="M229,730 V676" marker-end="url(#a2d)"/>
+  <path class="ad" d="M596,730 V676" marker-end="url(#a2d)"/>
+  <path class="ad" d="M963,730 V676" marker-end="url(#a2d)"/>
+  <text class="t tag" x="236" y="708">boot load</text>
+  <text class="t tag" x="603" y="708">view tap</text>
+  <text class="t tag" x="970" y="708">action reply</text>
+
+  <g filter="url(#sh2)">
+    <rect x="64" y="730" width="330" height="170" rx="14" fill="#ffffff" stroke="#d6d3d1" stroke-dasharray="6 5"/>
+    <text class="t nt" x="80" y="760">Return 1 — process death</text>
+    <text class="t nb" x="80" y="790">the phone reboots or Android kills the app</text>
+    <text class="t nb" x="80" y="812">next launch: main() → Store.load()</text>
+    <text class="t nb" x="80" y="834">jsonDecode + fromJson() rebuild FitState</text>
+    <text class="t nb" x="80" y="856">resumeSession() restores the rest clock,</text>
+    <text class="t nb" x="80" y="878">the paused flag and the exercise index</text>
+
+    <rect x="431" y="730" width="330" height="170" rx="14" fill="#ffffff" stroke="#d6d3d1" stroke-dasharray="6 5"/>
+    <text class="t nt" x="447" y="760">Return 2 — widget tap</text>
+    <text class="t nb" x="447" y="790">AppWidgetProvider PendingIntent fires</text>
+    <text class="t nb" x="447" y="812">home_widget delivers it to the Dart side</text>
+    <text class="t nb" x="447" y="834">AppShell routes to the right screen</text>
+    <text class="t nb" x="447" y="856">state is read live, never a cached copy,</text>
+    <text class="t nb" x="447" y="878">so a widget can never show stale volume</text>
+
+    <rect x="798" y="730" width="330" height="170" rx="14" fill="#ffffff" stroke="#d6d3d1" stroke-dasharray="6 5"/>
+    <text class="t nt" x="814" y="760">Return 3 — notification action</text>
+    <text class="t nb" x="814" y="790">LiveNotifier buttons send an action on</text>
+    <text class="t nb" x="814" y="812">gymmane/live: skip rest, pause, next set</text>
+    <text class="t nb" x="814" y="834">the mutator runs and the fan-out repeats</text>
+    <text class="t nb" x="814" y="856">pause cancels the pending exact alarm</text>
+    <text class="t nb" x="814" y="878">and refreshes the lockscreen segment</text>
+
+    <rect x="1165" y="730" width="330" height="170" rx="14" fill="#fefce8" stroke="#fde68a"/>
+    <text class="t nt" x="1181" y="760">Scope rule for contributors</text>
+    <text class="t nb" x="1181" y="790">screens call fit.* only — never Store,</text>
+    <text class="t nb" x="1181" y="812">SharedPreferences or a MethodChannel</text>
+    <text class="t nb" x="1181" y="834">services are the single door to disk and</text>
+    <text class="t nb" x="1181" y="856">to Android — add one, do not add ten</text>
+    <text class="t nb" x="1181" y="878">every mutation stays undoable</text>
+  </g>
+
+  <text class="t lg" x="40" y="944">Solid arrow = data moving forward. Dashed arrow = input coming back from outside the widget tree. Boxes A to D are the four destinations that must stay in sync with FitState.</text>
+  <text class="t lg" x="40" y="968">None of these paths uses the network: storage is SharedPreferences, media is app-private files, and the only sockets in the app belong to the optional updater.</text>
+</svg>
+

@@ -1,0 +1,245 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1560 1300" width="1560" height="1300" role="img" aria-label="Open-GYM system architecture">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#faf7f4"/>
+    </linearGradient>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#a8a29e"/>
+    </marker>
+    <marker id="arwAcc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#c2410c"/>
+    </marker>
+    <filter id="sh" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="1.5" stdDeviation="2" flood-color="#1c1917" flood-opacity="0.08"/>
+    </filter>
+    <style>
+      .t{font-family:'Segoe UI',Inter,Roboto,Helvetica,Arial,sans-serif;fill:#1c1917}
+      .ttl{font-size:30px;font-weight:700}
+      .sub{font-size:14.5px;fill:#78716c}
+      .bl{font-size:12.5px;font-weight:700;letter-spacing:.07em;fill:#1c1917}
+      .nt{font-size:13px;font-weight:600;fill:#1c1917}
+      .nb{font-size:11px;fill:#57534e}
+      .ar{stroke:#a8a29e;stroke-width:2;fill:none}
+      .arc{stroke:#c2410c;stroke-width:2.2;fill:none}
+      .lg{font-size:11px;fill:#57534e}
+    </style>
+  </defs>
+
+  <rect width="1560" height="1300" fill="url(#bg)"/>
+  <text class="t ttl" x="40" y="52">Open-GYM — System Architecture</text>
+  <text class="t sub" x="40" y="78">One Flutter app, one process: a ChangeNotifier state core on top, a native Kotlin layer underneath for widgets, alarms, haptics and the lockscreen session.</text>
+
+  <g filter="url(#sh)">
+    <rect x="40" y="110" width="940" height="168" rx="16" fill="#ffffff" stroke="#e7e5e4"/>
+    <rect x="56" y="128" width="4" height="20" rx="2" fill="#c2410c"/>
+    <text class="t bl" x="70" y="144">1 · PRESENTATION — FLUTTER (lib/app, lib/screens, lib/widgets)</text>
+    <rect x="64" y="150" width="211" height="110" rx="12" fill="#fff7ed" stroke="#fed7aa"/>
+    <text class="t nt" x="78" y="176">AppShell</text>
+    <text class="t nb" x="78" y="196">single StatefulWidget,</text>
+    <text class="t nb" x="78" y="212">switches screens on fit.route</text>
+    <rect x="291" y="150" width="211" height="110" rx="12" fill="#fff7ed" stroke="#fed7aa"/>
+    <text class="t nt" x="305" y="176">28 screens</text>
+    <text class="t nb" x="305" y="196">home, train, session, progress,</text>
+    <text class="t nb" x="305" y="212">library, routines, tools, awards</text>
+    <rect x="518" y="150" width="211" height="110" rx="12" fill="#fff7ed" stroke="#fed7aa"/>
+    <text class="t nt" x="532" y="176">Theme system</text>
+    <text class="t nb" x="532" y="196">light, OLED dark, system;</text>
+    <text class="t nb" x="532" y="212">UI colour, heat tone, wallpaper</text>
+    <rect x="745" y="150" width="211" height="110" rx="12" fill="#fff7ed" stroke="#fed7aa"/>
+    <text class="t nt" x="759" y="176">Widget kit</text>
+    <text class="t nb" x="759" y="196">glass panels, liquid notch,</text>
+    <text class="t nb" x="759" y="212">charts, body map, share cards</text>
+  </g>
+  <path class="ar" d="M510,278 V298" marker-end="url(#arw)"/>
+
+  <g filter="url(#sh)">
+    <rect x="40" y="302" width="940" height="146" rx="16" fill="#ffffff" stroke="#e7e5e4"/>
+    <rect x="56" y="320" width="4" height="20" rx="2" fill="#b45309"/>
+    <text class="t bl" x="70" y="336">2 · STATE CORE — lib/state (plain ChangeNotifier, no state package)</text>
+    <rect x="64" y="340" width="286" height="92" rx="12" fill="#fffbeb" stroke="#fcd34d"/>
+    <text class="t nt" x="78" y="366">FitState extends FitCore</text>
+    <text class="t nb" x="78" y="386">with 12 mixins in 13 part files:</text>
+    <text class="t nb" x="78" y="402">workout, routines, stats, tools …</text>
+    <rect x="367" y="340" width="286" height="92" rx="12" fill="#fffbeb" stroke="#fcd34d"/>
+    <text class="t nt" x="381" y="366">Route stack</text>
+    <text class="t nb" x="381" y="386">route + _routeStack, pushRoute /</text>
+    <text class="t nb" x="381" y="402">popRoute, PopScope discard guard</text>
+    <rect x="670" y="340" width="286" height="92" rx="12" fill="#fffbeb" stroke="#fcd34d"/>
+    <text class="t nt" x="684" y="366">Debounced persistence</text>
+    <text class="t nb" x="684" y="386">every mutation → 400 ms debounce</text>
+    <text class="t nb" x="684" y="402">→ Store.instance.save(toJson())</text>
+  </g>
+  <path class="ar" d="M510,448 V468" marker-end="url(#arw)"/>
+
+  <g filter="url(#sh)">
+    <rect x="40" y="472" width="940" height="186" rx="16" fill="#ffffff" stroke="#e7e5e4"/>
+    <rect x="56" y="490" width="4" height="20" rx="2" fill="#0f766e"/>
+    <text class="t bl" x="70" y="506">3 · FITNESS DOMAIN LOGIC (state mixins + lib/services)</text>
+    <rect x="64" y="510" width="211" height="130" rx="12" fill="#f0fdfa" stroke="#99f6e4"/>
+    <text class="t nt" x="78" y="536">Live session engine</text>
+    <text class="t nb" x="78" y="556">working, warm-up, drop and</text>
+    <text class="t nb" x="78" y="572">failure sets; RPE and RIR;</text>
+    <text class="t nb" x="78" y="590">linked supersets; rest deadline;</text>
+    <text class="t nb" x="78" y="606">manual mode; resume after kill</text>
+    <rect x="291" y="510" width="211" height="130" rx="12" fill="#f0fdfa" stroke="#99f6e4"/>
+    <text class="t nt" x="305" y="536">Progress and awards</text>
+    <text class="t nb" x="305" y="556">estimated 1RM per set, PRs,</text>
+    <text class="t nb" x="305" y="572">volume, streaks, 84 or 182 day</text>
+    <text class="t nb" x="305" y="590">heatmap, muscle load,</text>
+    <text class="t nb" x="305" y="606">20 unlockable medals</text>
+    <rect x="518" y="510" width="211" height="130" rx="12" fill="#f0fdfa" stroke="#99f6e4"/>
+    <text class="t nt" x="532" y="536">Six calculators</text>
+    <text class="t nb" x="532" y="556">1RM, plate maths plus plate</text>
+    <text class="t nb" x="532" y="572">inventory, BMI, TDEE with</text>
+    <text class="t nb" x="532" y="590">macro split, navy body fat,</text>
+    <text class="t nb" x="532" y="606">warm-up ramp</text>
+    <rect x="745" y="510" width="211" height="130" rx="12" fill="#f0fdfa" stroke="#99f6e4"/>
+    <text class="t nt" x="759" y="536">Import and export</text>
+    <text class="t nb" x="759" y="556">Hevy, Strong, Lyfta, FitNotes,</text>
+    <text class="t nb" x="759" y="572">weight CSVs, SQLite dumps →</text>
+    <text class="t nb" x="759" y="590">alias matching → sessions;</text>
+    <text class="t nb" x="759" y="606">own ZIP backup round trip</text>
+  </g>
+  <path class="ar" d="M510,658 V678" marker-end="url(#arw)"/>
+
+  <g filter="url(#sh)">
+    <rect x="40" y="682" width="940" height="176" rx="16" fill="#ffffff" stroke="#e7e5e4"/>
+    <rect x="56" y="700" width="4" height="20" rx="2" fill="#7c3aed"/>
+    <text class="t bl" x="70" y="716">4 · LOCAL DATA — NOTHING LEAVES THE DEVICE</text>
+    <rect x="64" y="730" width="211" height="112" rx="12" fill="#f5f3ff" stroke="#ddd6fe"/>
+    <text class="t nt" x="78" y="756">Store</text>
+    <text class="t nb" x="78" y="776">one JSON document in</text>
+    <text class="t nb" x="78" y="792">SharedPreferences under the</text>
+    <text class="t nb" x="78" y="808">key gymmane_v1, plus gm_*</text>
+    <text class="t nb" x="78" y="824">side keys for small notes</text>
+    <rect x="291" y="730" width="211" height="112" rx="12" fill="#f5f3ff" stroke="#ddd6fe"/>
+    <text class="t nt" x="305" y="756">MediaStore</text>
+    <text class="t nb" x="305" y="776">exercise photos and videos,</text>
+    <text class="t nb" x="305" y="792">progress shots, moments and</text>
+    <text class="t nb" x="305" y="808">journal attachments kept as</text>
+    <text class="t nb" x="305" y="824">files in app-private storage</text>
+    <rect x="518" y="730" width="211" height="112" rx="12" fill="#f5f3ff" stroke="#ddd6fe"/>
+    <text class="t nt" x="532" y="756">AlarmStore</text>
+    <text class="t nb" x="532" y="776">imported rest-alarm sounds are</text>
+    <text class="t nb" x="532" y="792">copied into the app so a pinned</text>
+    <text class="t nb" x="532" y="808">document URI can never break</text>
+    <text class="t nb" x="532" y="824">mid-session (15 s cap)</text>
+    <rect x="745" y="730" width="211" height="112" rx="12" fill="#f5f3ff" stroke="#ddd6fe"/>
+    <text class="t nt" x="759" y="756">Bundled assets</text>
+    <text class="t nb" x="759" y="776">552 exercise definitions, 302</text>
+    <text class="t nb" x="759" y="792">vector art files, 40 medal</text>
+    <text class="t nb" x="759" y="808">badges, GLSL shaders, Nunito</text>
+    <text class="t nb" x="759" y="824">font, alarm audio</text>
+  </g>
+  <path class="ar" d="M510,858 V878" marker-end="url(#arw)"/>
+
+  <g filter="url(#sh)">
+    <rect x="40" y="882" width="940" height="176" rx="16" fill="#ffffff" stroke="#e7e5e4"/>
+    <rect x="56" y="900" width="4" height="20" rx="2" fill="#0369a1"/>
+    <text class="t bl" x="70" y="916">5 · PLATFORM BRIDGES (DART PACKAGES + METHOD CHANNELS)</text>
+    <rect x="64" y="930" width="211" height="112" rx="12" fill="#f0f9ff" stroke="#bae6fd"/>
+    <text class="t nt" x="78" y="956">gymmane/* channels</text>
+    <text class="t nb" x="78" y="976">haptics, incoming, gallery,</text>
+    <text class="t nb" x="78" y="992">installer, screen, device, live,</text>
+    <text class="t nb" x="78" y="1008">live_activity, alarms — the only</text>
+    <text class="t nb" x="78" y="1024">door into native code</text>
+    <rect x="291" y="930" width="211" height="112" rx="12" fill="#f0f9ff" stroke="#bae6fd"/>
+    <text class="t nt" x="305" y="956">home_widget 0.7</text>
+    <text class="t nb" x="305" y="976">each widget is a Flutter widget</text>
+    <text class="t nb" x="305" y="992">rendered to a day and a night</text>
+    <text class="t nb" x="305" y="1008">bitmap, then written into widget</text>
+    <text class="t nb" x="305" y="1024">prefs and reloaded</text>
+    <rect x="518" y="930" width="211" height="112" rx="12" fill="#f0f9ff" stroke="#bae6fd"/>
+    <text class="t nt" x="532" y="956">Local notifications</text>
+    <text class="t nb" x="532" y="976">rest alarm, train reminder,</text>
+    <text class="t nb" x="532" y="992">progress-photo reminder, exact</text>
+    <text class="t nb" x="532" y="1008">alarms, boot receiver, full</text>
+    <text class="t nb" x="532" y="1024">screen intent for the rest bell</text>
+    <rect x="745" y="930" width="211" height="112" rx="12" fill="#f0f9ff" stroke="#bae6fd"/>
+    <text class="t nt" x="759" y="956">Media packages</text>
+    <text class="t nb" x="759" y="976">audioplayers, video_player,</text>
+    <text class="t nb" x="759" y="992">image_picker, file_picker,</text>
+    <text class="t nb" x="759" y="1008">share_plus, app_settings,</text>
+    <text class="t nb" x="759" y="1024">path_drawing, url_launcher</text>
+  </g>
+  <path class="ar" d="M510,1058 V1078" marker-end="url(#arw)"/>
+
+  <g filter="url(#sh)">
+    <rect x="40" y="1082" width="940" height="150" rx="16" fill="#ffffff" stroke="#e7e5e4"/>
+    <rect x="56" y="1100" width="4" height="20" rx="2" fill="#b45309"/>
+    <text class="t bl" x="70" y="1116">6 · NATIVE ANDROID — KOTLIN, 787 LINES (android/app/src/main)</text>
+    <rect x="64" y="1130" width="286" height="82" rx="12" fill="#fef3c7" stroke="#fcd34d"/>
+    <text class="t nt" x="78" y="1156">MainActivity.kt</text>
+    <text class="t nb" x="78" y="1176">channel handlers, rotary input, haptics,</text>
+    <text class="t nb" x="78" y="1192">MediaStore export, APK install</text>
+    <rect x="367" y="1130" width="286" height="82" rx="12" fill="#fef3c7" stroke="#fcd34d"/>
+    <text class="t nt" x="381" y="1156">LiveNotifier.kt</text>
+    <text class="t nb" x="381" y="1176">lockscreen notification, one segment</text>
+    <text class="t nb" x="381" y="1192">per exercise, actions back into Dart</text>
+    <rect x="670" y="1130" width="286" height="82" rx="12" fill="#fef3c7" stroke="#fcd34d"/>
+    <text class="t nt" x="684" y="1156">Five widget providers</text>
+    <text class="t nb" x="684" y="1176">Today, Week, Heatmap, Stats, Body +</text>
+    <text class="t nb" x="684" y="1192">ThemedWidget day/night, midnight roll</text>
+  </g>
+
+  <g filter="url(#sh)">
+    <rect x="1014" y="110" width="506" height="1122" rx="16" fill="#ffffff" stroke="#e7e5e4"/>
+    <rect x="1030" y="128" width="4" height="20" rx="2" fill="#c2410c"/>
+    <text class="t bl" x="1044" y="144">SECOND SURFACE + SHIP PIPELINE</text>
+
+    <rect x="1040" y="172" width="454" height="128" rx="12" fill="#fff7ed" stroke="#fed7aa"/>
+    <text class="t nt" x="1056" y="198">Wear OS entry point</text>
+    <text class="t nb" x="1056" y="218">main() checks DeviceKind.isWatch() before the</text>
+    <text class="t nb" x="1056" y="234">engine boots and calls runApp(WearApp) instead of</text>
+    <text class="t nb" x="1056" y="250">runApp(GymMane) — phone and watch UIs share one</text>
+    <text class="t nb" x="1056" y="266">FitState, one Store and one set of services.</text>
+
+    <rect x="1040" y="316" width="454" height="150" rx="12" fill="#fff7ed" stroke="#fed7aa"/>
+    <text class="t nt" x="1056" y="342">Wear shell (lib/wear/wear_shell.dart)</text>
+    <text class="t nb" x="1056" y="362">separate root widget: liquid-panel chrome, a week</text>
+    <text class="t nb" x="1056" y="378">ring painter, live clock, routines, live session,</text>
+    <text class="t nb" x="1056" y="394">awards, settings; input via GestureDetector,</text>
+    <text class="t nb" x="1056" y="410">flutter_wear_input (Swipe/Tap/Forward) and</text>
+    <text class="t nb" x="1056" y="426">MainActivity rotary encoders.</text>
+
+    <rect x="1040" y="482" width="454" height="128" rx="12" fill="#fff7ed" stroke="#fed7aa"/>
+    <text class="t nt" x="1056" y="508">Ship pipeline (one workflow)</text>
+    <text class="t nb" x="1056" y="528">build-apk.yml pins Flutter 3.41.9, the exact value the</text>
+    <text class="t nb" x="1056" y="544">F-Droid recipe reads. Every PR runs analyze + 508 tests</text>
+    <text class="t nb" x="1056" y="560">and builds universal and split APKs. Dispatching the</text>
+    <text class="t nb" x="1056" y="576">workflow with a tag input rebuilds signed, splits debug</text>
+    <text class="t nb" x="1056" y="592">info and publishes 4 APKs to a GitHub release.</text>
+
+    <rect x="1040" y="626" width="454" height="128" rx="12" fill="#fff7ed" stroke="#fed7aa"/>
+    <text class="t nt" x="1056" y="652">In-app updater</text>
+    <text class="t nb" x="1056" y="672">UpdateScreen queries the GitHub releases API,</text>
+    <text class="t nb" x="1056" y="688">streams the APK with dart:io HttpClient and hands</text>
+    <text class="t nb" x="1056" y="704">the path to gymmane/installer, which fires an</text>
+    <text class="t nb" x="1056" y="720">ACTION_VIEW install intent through the app</text>
+    <text class="t nb" x="1056" y="736">FileProvider. This is the only network traffic.</text>
+
+    <rect x="1040" y="770" width="454" height="128" rx="12" fill="#fff7ed" stroke="#fed7aa"/>
+    <text class="t nt" x="1056" y="796">Privacy posture</text>
+    <text class="t nb" x="1056" y="816">no accounts, no server state, no analytics SDK, no</text>
+    <text class="t nb" x="1056" y="832">ads; every workout stays in app-private storage</text>
+    <text class="t nb" x="1056" y="848">and android:allowBackup=&quot;false&quot; keeps it out of</text>
+    <text class="t nb" x="1056" y="864">OS cloud backups. Wipe is a single action.</text>
+
+    <rect x="1040" y="914" width="454" height="150" rx="12" fill="#f5f3ff" stroke="#ddd6fe"/>
+    <text class="t nt" x="1056" y="940">Three test suites guard the core</text>
+    <text class="t nb" x="1056" y="960">508 tests: fit_state_test (state and persistence),</text>
+    <text class="t nb" x="1056" y="976">home_screen_test (20 scenarios), rest_alarm_test.</text>
+    <text class="t nb" x="1056" y="992">Their golden expectations double as a data-format</text>
+    <text class="t nb" x="1056" y="1008">spec for the store JSON and the backup zip.</text>
+
+    <rect x="1040" y="1080" width="454" height="128" rx="12" fill="#fefce8" stroke="#fde68a" stroke-dasharray="6 5"/>
+    <text class="t nt" x="1056" y="1106">Rule of thumb for contributors</text>
+    <text class="t nb" x="1056" y="1126">UI never touches storage or Android APIs directly:</text>
+    <text class="t nb" x="1056" y="1142">it mutates fit, the state layer debounces the save</text>
+    <text class="t nb" x="1056" y="1158">and fans out through services. New features add a</text>
+    <text class="t nb" x="1056" y="1174">mixin, a state file and a test — not a package.</text>
+  </g>
+
+  <text class="t lg" x="40" y="1256">Boxes are source directories, arrows are call direction. Every band maps to lib/ (Flutter) except the last two, which map to android/ (Kotlin) and .github/ (CI).</text>
+</svg>
