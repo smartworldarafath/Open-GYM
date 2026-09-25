@@ -70,6 +70,23 @@ mixin SettingsState on FitCore, ToolsState, LibraryState {
     notifyListeners();
   }
 
+  String appIconPref = 'default';
+
+  void setAppIconPref(String pref) {
+    if (appIconPref == pref) return;
+    appIconPref = pref;
+    _persist();
+    notifyListeners();
+    _applyAppIcon(pref);
+  }
+
+  Future<void> _applyAppIcon(String icon) async {
+    try {
+      const channel = MethodChannel('gymmane/app_icon');
+      await channel.invokeMethod('setIcon', {'icon': icon});
+    } catch (_) {}
+  }
+
   void setThemeDark() => setThemePref('dark');
 
   void setThemeLight() => setThemePref('light');

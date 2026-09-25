@@ -12,7 +12,7 @@ import '../widgets/entrance.dart';
 import '../widgets/ui_kit.dart';
 import 'update_screen.dart';
 
-const _kVersion = '1.2.0';
+const _kVersion = '1.3.0';
 const _kAuthor = 'Arafath';
 const _kAuthorUrl = 'https://github.com/smartworldarafath';
 const _kRepoUrl = 'https://github.com/smartworldarafath/Open-GYM';

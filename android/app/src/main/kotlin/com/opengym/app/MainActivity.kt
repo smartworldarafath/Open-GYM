@@ -1,5 +1,6 @@
 package com.opengym.app
 
+import android.content.ComponentName
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -36,6 +37,75 @@ class MainActivity : FlutterActivity() {
             }
             buzz()
             result.success(null)
+        }
+
+        MethodChannel(messenger, "gymmane/app_icon").setMethodCallHandler { call, result ->
+            when (call.method) {
+                "setIcon" -> {
+                    val iconName = call.argument<String>("icon") ?: "default"
+                    try {
+                        val pkg = packageName
+                        val aliases = mapOf(
+                            "default" to "$pkg.MainActivity",
+                            "ic_1" to "$pkg.MainActivityAlias1",
+                            "ic_2" to "$pkg.MainActivityAlias2",
+                            "ic_3" to "$pkg.MainActivityAlias3",
+                            "ic_4" to "$pkg.MainActivityAlias4",
+                            "ic_5" to "$pkg.MainActivityAlias5",
+                            "ic_6" to "$pkg.MainActivityAlias6",
+                            "ic_7" to "$pkg.MainActivityAlias7",
+                            "ic_8" to "$pkg.MainActivityAlias8"
+                        )
+                        val targetComponent = aliases[iconName] ?: "$pkg.MainActivity"
+
+                        packageManager.setComponentEnabledSetting(
+                            ComponentName(pkg, targetComponent),
+                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                            PackageManager.DONT_KILL_APP
+                        )
+
+                        for ((_, comp) in aliases) {
+                            if (comp != targetComponent) {
+                                packageManager.setComponentEnabledSetting(
+                                    ComponentName(pkg, comp),
+                                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                                    PackageManager.DONT_KILL_APP
+                                )
+                            }
+                        }
+                        result.success(true)
+                    } catch (e: Exception) {
+                        result.error("SET_ICON_FAILED", e.message, null)
+                    }
+                }
+                "getIcon" -> {
+                    try {
+                        val pkg = packageName
+                        val aliases = mapOf(
+                            "$pkg.MainActivityAlias1" to "ic_1",
+                            "$pkg.MainActivityAlias2" to "ic_2",
+                            "$pkg.MainActivityAlias3" to "ic_3",
+                            "$pkg.MainActivityAlias4" to "ic_4",
+                            "$pkg.MainActivityAlias5" to "ic_5",
+                            "$pkg.MainActivityAlias6" to "ic_6",
+                            "$pkg.MainActivityAlias7" to "ic_7",
+                            "$pkg.MainActivityAlias8" to "ic_8"
+                        )
+                        var current = "default"
+                        for ((comp, name) in aliases) {
+                            val state = packageManager.getComponentEnabledSetting(ComponentName(pkg, comp))
+                            if (state == PackageManager.COMPONENT_ENABLED_STATE_ENABLED) {
+                                current = name
+                                break
+                            }
+                        }
+                        result.success(current)
+                    } catch (e: Exception) {
+                        result.success("default")
+                    }
+                }
+                else -> result.notImplemented()
+            }
         }
 
         val incoming = MethodChannel(messenger, "gymmane/incoming")

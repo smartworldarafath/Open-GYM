@@ -1,9 +1,13 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+
+import '../screens/update_screen.dart';
 
 import '../l10n/l10n.dart';
 import '../screens/about_screen.dart';
@@ -78,6 +82,8 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
   String? _incoming;
   bool _scrolled = false;
   int _restTick = fit.restDoneTick;
+  String? _availableUpdateTag;
+  bool _dismissedUpdate = false;
 
   @override
   void initState() {
@@ -88,6 +94,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
     fit.addListener(_offerIncoming);
     fit.addListener(_restOver);
     _queueCelebration();
+    _checkUpdateOnLaunch();
     IncomingShare.listen(_receive);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final text = await IncomingShare.take();
@@ -264,12 +271,160 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
                       onClose: _closeCelebration,
                     ),
                   ),
+                if (_availableUpdateTag != null && !_dismissedUpdate)
+                  Positioned(
+                    top: MediaQuery.viewPaddingOf(context).top + 10,
+                    left: 16,
+                    right: 16,
+                    child: _buildUpdateNotificationCard(context),
+                  ),
               ],
               ),
             ),
           ),
         );
       },
+    );
+  }
+
+  Future<void> _checkUpdateOnLaunch() async {
+    try {
+      final client = HttpClient();
+      client.connectionTimeout = const Duration(seconds: 6);
+      final request = await client.getUrl(
+        Uri.parse('https://api.github.com/repos/smartworldarafath/Open-GYM/releases/latest'),
+      );
+      request.headers.set('User-Agent', 'Open-GYM-App');
+      final response = await request.close();
+      if (response.statusCode == 200) {
+        final body = await response.transform(utf8.decoder).join();
+        final json = jsonDecode(body) as Map<String, dynamic>;
+        final tagName = (json['tag_name'] as String? ?? '').replaceAll('v', '').trim();
+        if (_isVersionNewer(tagName, '1.3.0')) {
+          if (mounted) {
+            setState(() {
+              _availableUpdateTag = tagName;
+            });
+          }
+        }
+      }
+    } catch (_) {}
+  }
+
+  bool _isVersionNewer(String latest, String current) {
+    if (latest.isEmpty) return false;
+    final latestParts = latest.split('.').map((p) => int.tryParse(p) ?? 0).toList();
+    final currentParts = current.split('.').map((p) => int.tryParse(p) ?? 0).toList();
+    for (int i = 0; i < 3; i++) {
+      final l = i < latestParts.length ? latestParts[i] : 0;
+      final c = i < currentParts.length ? currentParts[i] : 0;
+      if (l > c) return true;
+      if (l < c) return false;
+    }
+    return false;
+  }
+
+  Widget _buildUpdateNotificationCard(BuildContext context) {
+    final gc = context.gc;
+    return TweenAnimationBuilder<double>(
+      tween: Tween<double>(begin: 0.0, end: 1.0),
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeOutBack,
+      builder: (context, val, child) {
+        return Transform.translate(
+          offset: Offset(0, (1 - val) * -20),
+          child: Opacity(
+            opacity: val.clamp(0.0, 1.0),
+            child: child,
+          ),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        decoration: BoxDecoration(
+          color: gc.bgRaised,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: gc.ember.withValues(alpha: 0.5), width: 1.5),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.35),
+              blurRadius: 16,
+              offset: const Offset(0, 4),
+            ),
+            BoxShadow(
+              color: gc.ember.withValues(alpha: 0.15),
+              blurRadius: 12,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: gc.ember.withValues(alpha: 0.18),
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Icon(PhosphorIconsFill.sparkle, size: 18, color: gc.ember),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Open-GYM v$_availableUpdateTag',
+                    style: AppTheme.f(13.5, weight: FontWeight.w700, color: gc.text),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    'New update ready - Tap to update',
+                    style: AppTheme.f(11.5, weight: FontWeight.w500, color: gc.textSecondary),
+                  ),
+                ],
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                setState(() => _dismissedUpdate = true);
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const UpdateScreen(currentVersion: '1.3.0'),
+                  ),
+                );
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                decoration: BoxDecoration(
+                  color: gc.ember,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Text(
+                  'Update',
+                  style: TextStyle(
+                    fontSize: 12.5,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            GestureDetector(
+              onTap: () => setState(() => _dismissedUpdate = true),
+              child: Container(
+                padding: const EdgeInsets.all(4),
+                child: Icon(PhosphorIconsBold.x, size: 16, color: gc.textTertiary),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 

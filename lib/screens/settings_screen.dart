@@ -86,17 +86,96 @@ class SettingsScreen extends StatelessWidget {
                     gc,
                     PhosphorIconsRegular.palette,
                     'UI Color',
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        _uiColorDot(gc, 'violet', const Color(0xFF9B51E0), 'Violet'),
-                        const SizedBox(width: 8),
-                        _uiColorDot(gc, 'green', const Color(0xFF4CAF50), 'Green'),
-                        const SizedBox(width: 8),
-                        _uiColorDot(gc, 'gray', const Color(0xFF9E9E9E), 'Gray'),
-                        const SizedBox(width: 8),
-                        _uiColorDot(gc, 'default', const Color(0xFFD9A184), 'Current Color'),
-                      ],
+                    LiquidDockSelector<String>(
+                      items: const ['violet', 'green', 'gray', 'default'],
+                      selected: fit.uiColorPref,
+                      onSelect: (id) => fit.setUiColorPref(id),
+                      slotWidth: 36,
+                      slotHeight: 34,
+                      pillColor: gc.ember,
+                      builder: (context, item, isSelected) {
+                        final color = switch (item) {
+                          'violet' => const Color(0xFF9B51E0),
+                          'green' => const Color(0xFF4CAF50),
+                          'gray' => const Color(0xFF9E9E9E),
+                          _ => const Color(0xFFD9A184),
+                        };
+                        return AnimatedContainer(
+                          duration: const Duration(milliseconds: 220),
+                          curve: Curves.easeOutCubic,
+                          width: isSelected ? 22 : 18,
+                          height: isSelected ? 22 : 18,
+                          decoration: BoxDecoration(
+                            color: color,
+                            shape: BoxShape.circle,
+                            boxShadow: isSelected
+                                ? [
+                                    BoxShadow(
+                                      color: color.withValues(alpha: 0.45),
+                                      blurRadius: 6,
+                                      offset: const Offset(0, 1),
+                                    ),
+                                  ]
+                                : null,
+                          ),
+                          child: isSelected
+                              ? const Center(
+                                  child: Icon(PhosphorIconsBold.check, size: 12, color: Colors.white),
+                                )
+                              : null,
+                        );
+                      },
+                    ),
+                  ),
+                  _prefRow(
+                    gc,
+                    PhosphorIconsRegular.appWindow,
+                    'App Icon',
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () => _editAppIcon(context),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 28,
+                            height: 28,
+                            padding: const EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              color: gc.bgRaised2,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: gc.border),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(6),
+                              child: Image.asset(
+                                _iconAssetFor(fit.appIconPref),
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                              color: gc.ember.withValues(alpha: 0.15),
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: gc.ember.withValues(alpha: 0.35)),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  'Change',
+                                  style: AppTheme.f(12, weight: FontWeight.w600, color: gc.ember),
+                                ),
+                                const SizedBox(width: 3),
+                                Icon(PhosphorIconsBold.caretRight, size: 11, color: gc.ember),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   GestureDetector(
@@ -344,49 +423,6 @@ class SettingsScreen extends StatelessWidget {
           const SizedBox(width: 12),
           control,
         ],
-      ),
-    );
-  }
-
-  Widget _uiColorDot(GymColors gc, String id, Color color, String tooltip) {
-    final selected = fit.uiColorPref == id;
-    return Tooltip(
-      message: tooltip,
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () {
-          if (!selected) {
-            HapticFeedback.selectionClick();
-            fit.setUiColorPref(id);
-          }
-        },
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 220),
-          curve: Curves.easeOutCubic,
-          width: 26,
-          height: 26,
-          padding: const EdgeInsets.all(2.5),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: selected ? color : Colors.transparent,
-              width: 2,
-            ),
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-              color: color,
-              shape: BoxShape.circle,
-            ),
-            child: selected
-                ? const Icon(
-                    PhosphorIconsBold.check,
-                    size: 13,
-                    color: Colors.white,
-                  )
-                : null,
-          ),
-        ),
       ),
     );
   }
@@ -1109,6 +1145,15 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
+  void _editAppIcon(BuildContext context) {
+    showAppSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => const _AppIconSheet(),
+    );
+  }
+
   void _editAlarmSound(BuildContext context) {
     showAppSheet(
       context: context,
@@ -1219,6 +1264,221 @@ class _LanguageSheet extends StatelessWidget {
                   ),
               ],
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+String _iconAssetFor(String id) => switch (id) {
+      'ic_1' => 'assets/icon/ic_1.png',
+      'ic_2' => 'assets/icon/ic_2.png',
+      'ic_3' => 'assets/icon/ic_3.png',
+      'ic_4' => 'assets/icon/ic_4.png',
+      'ic_5' => 'assets/icon/ic_5.png',
+      'ic_6' => 'assets/icon/ic_6.png',
+      'ic_7' => 'assets/icon/ic_7.png',
+      'ic_8' => 'assets/icon/ic_8.png',
+      _ => 'assets/icon/ic_default.png',
+    };
+
+class _AppIconSheet extends StatefulWidget {
+  const _AppIconSheet();
+
+  @override
+  State<_AppIconSheet> createState() => _AppIconSheetState();
+}
+
+class _AppIconSheetState extends State<_AppIconSheet> {
+  late String _selected;
+
+  static const _icons = [
+    ('default', 'Default', 'assets/icon/ic_default.png'),
+    ('ic_1', 'Icon 1', 'assets/icon/ic_1.png'),
+    ('ic_2', 'Icon 2', 'assets/icon/ic_2.png'),
+    ('ic_3', 'Icon 3', 'assets/icon/ic_3.png'),
+    ('ic_4', 'Icon 4', 'assets/icon/ic_4.png'),
+    ('ic_5', 'Icon 5', 'assets/icon/ic_5.png'),
+    ('ic_6', 'Icon 6', 'assets/icon/ic_6.png'),
+    ('ic_7', 'Icon 7', 'assets/icon/ic_7.png'),
+    ('ic_8', 'Icon 8', 'assets/icon/ic_8.png'),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _selected = fit.appIconPref;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final gc = context.gc;
+    return Container(
+      constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.78),
+      padding: sheetPad(context),
+      decoration: BoxDecoration(
+        color: gc.bgRaised,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const SheetHandle(),
+          const SizedBox(height: 16),
+          SheetTitle('App Icon', subtitle: 'Choose your launcher app icon'),
+          const SizedBox(height: 18),
+          Flexible(
+            child: GridView.builder(
+              shrinkWrap: true,
+              itemCount: _icons.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+                childAspectRatio: 0.86,
+              ),
+              itemBuilder: (context, index) {
+                final (id, label, asset) = _icons[index];
+                final isSelected = _selected == id;
+                return GestureDetector(
+                  onTap: () => setState(() => _selected = id),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.easeOutCubic,
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: isSelected ? gc.ember.withValues(alpha: 0.12) : gc.bgRaised2,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: isSelected ? gc.ember : gc.border,
+                        width: isSelected ? 2 : 1,
+                      ),
+                      boxShadow: isSelected
+                          ? [
+                              BoxShadow(
+                                color: gc.ember.withValues(alpha: 0.25),
+                                blurRadius: 8,
+                                offset: const Offset(0, 2),
+                              ),
+                            ]
+                          : null,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            Container(
+                              width: 52,
+                              height: 52,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(13),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(alpha: 0.22),
+                                    blurRadius: 4,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(13),
+                                child: Image.asset(
+                                  asset,
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ),
+                            if (isSelected)
+                              Positioned(
+                                top: -4,
+                                right: -4,
+                                child: Container(
+                                  width: 18,
+                                  height: 18,
+                                  decoration: BoxDecoration(
+                                    color: gc.ember,
+                                    shape: BoxShape.circle,
+                                    border: Border.all(color: gc.bgRaised, width: 1.5),
+                                  ),
+                                  child: const Center(
+                                    child: Icon(PhosphorIconsBold.check, size: 10, color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          label,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTheme.f(12,
+                              weight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                              color: isSelected ? gc.ember : gc.textSecondary),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 18),
+          Row(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: () => Navigator.of(context).pop(),
+                  child: Container(
+                    height: 46,
+                    decoration: BoxDecoration(
+                      color: gc.bgRaised2,
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(color: gc.border),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Cancel',
+                        style: AppTheme.f(14, weight: FontWeight.w600, color: gc.textSecondary),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    fit.setAppIconPref(_selected);
+                    Navigator.of(context).pop();
+                  },
+                  child: Container(
+                    height: 46,
+                    decoration: BoxDecoration(
+                      color: gc.ember,
+                      borderRadius: BorderRadius.circular(14),
+                      boxShadow: [
+                        BoxShadow(
+                          color: gc.ember.withValues(alpha: 0.35),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'Save',
+                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -1498,31 +1758,30 @@ class _ProfileSheetState extends State<_ProfileSheet> {
   }
 
   Widget _badgeDots(GymColors gc) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        for (final id in kProfileBadges) ...[
-          GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () => _up(() => fit.setProfileBadge(id)),
-            child: Semantics(
-              button: true,
-              selected: fit.profile.badge == id,
-              label: t.badgeName(id),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5),
-                child: Icon(
-                  PhosphorIconsFill.sealCheck,
-                  size: fit.profile.badge == id ? 26 : 22,
-                  color: fit.profile.badge == id
-                      ? badgeColor(id)
-                      : badgeColor(id).withValues(alpha: 0.32),
-                ),
-              ),
+    return LiquidDockSelector<String>(
+      items: kProfileBadges,
+      selected: fit.profile.badge,
+      onSelect: (id) => _up(() => fit.setProfileBadge(id)),
+      slotWidth: 36,
+      slotHeight: 34,
+      pillColor: gc.ember,
+      builder: (context, id, isSelected) {
+        return Semantics(
+          button: true,
+          selected: isSelected,
+          label: t.badgeName(id),
+          child: AnimatedScale(
+            scale: isSelected ? 1.15 : 0.88,
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeOutBack,
+            child: Icon(
+              PhosphorIconsFill.sealCheck,
+              size: 22,
+              color: isSelected ? badgeColor(id) : badgeColor(id).withValues(alpha: 0.35),
             ),
           ),
-        ],
-      ],
+        );
+      },
     );
   }
 

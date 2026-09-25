@@ -648,7 +648,40 @@ class SegToggle extends StatefulWidget {
   State<SegToggle> createState() => _SegToggleState();
 }
 
-class _SegToggleState extends State<SegToggle> {
+class _SegToggleState extends State<SegToggle> with SingleTickerProviderStateMixin {
+  late final AnimationController _move =
+      AnimationController(vsync: this, duration: const Duration(milliseconds: 320), value: 1.0);
+  int _lastIdx = 0;
+  double _fromX = 0;
+  double _shownX = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    final idx = widget.options.indexWhere((o) => o.selected);
+    _lastIdx = idx >= 0 ? idx : 0;
+  }
+
+  @override
+  void didUpdateWidget(SegToggle oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final idx = widget.options.indexWhere((o) => o.selected);
+    final currentIdx = idx >= 0 ? idx : 0;
+    if (currentIdx != _lastIdx) {
+      _fromX = _shownX;
+      _lastIdx = currentIdx;
+      _move.forward(from: 0);
+    }
+  }
+
+  @override
+  void dispose() {
+    _move.dispose();
+    super.dispose();
+  }
+
+  static double _lerp(double a, double b, double t) => a + (b - a) * t;
+
   @override
   Widget build(BuildContext context) {
     if (widget.options.isEmpty) return const SizedBox.shrink();
@@ -665,41 +698,156 @@ class _SegToggleState extends State<SegToggle> {
           return Container(
             padding: const EdgeInsets.all(3),
             decoration: BoxDecoration(color: gc.bgRaised2, borderRadius: BorderRadius.circular(100)),
-            child: Stack(
-              children: [
-                AnimatedPositioned(
-                  duration: const Duration(milliseconds: 280),
-                  curve: Curves.easeOutCubic,
-                  left: activeIdx * tabW,
-                  top: 0,
-                  bottom: 0,
-                  width: tabW,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: gc.ember,
-                      borderRadius: BorderRadius.circular(100),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.12),
-                          blurRadius: 6,
-                          offset: const Offset(0, 2),
+            child: SizedBox(
+              width: totalW,
+              child: AnimatedBuilder(
+                animation: _move,
+                builder: (context, _) {
+                  final t = _move.value;
+                  final to = activeIdx * tabW;
+                  final right = to >= _fromX;
+                  final lead = Curves.easeOutCubic.transform(t);
+                  final trail = Curves.easeInOutCubic.transform(t);
+                  final l = _lerp(_fromX, to, right ? trail : lead);
+                  final r = _lerp(_fromX + tabW, to + tabW, right ? lead : trail);
+                  final squash = 1 - 0.12 * (1 - (2 * t - 1).abs()) * (to == _fromX ? 0 : 1);
+                  _shownX = (to == _fromX) ? to : l;
+
+                  return Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Positioned(
+                        left: l,
+                        width: (r - l).clamp(tabW * 0.8, tabW * 2.5),
+                        top: 2 * (1 - squash),
+                        bottom: 2 * (1 - squash),
+                        child: RepaintBoundary(
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: gc.ember,
+                              borderRadius: BorderRadius.circular(100),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.14),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                      ],
+                      ),
+                      Row(
+                        children: [
+                          for (int i = 0; i < widget.options.length; i++)
+                            Expanded(
+                              child: GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: () {
+                                  if (!widget.options[i].selected) {
+                                    HapticFeedback.selectionClick();
+                                  }
+                                  widget.options[i].onTap();
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(horizontal: widget.hPad, vertical: widget.vPad),
+                                  alignment: Alignment.center,
+                                  child: AnimatedDefaultTextStyle(
+                                    duration: const Duration(milliseconds: 200),
+                                    curve: Curves.easeOut,
+                                    style: AppTheme.f(
+                                      widget.fontSize,
+                                      weight: FontWeight.w600,
+                                      color: widget.options[i].selected ? gc.onEmber : gc.textSecondary,
+                                    ),
+                                    child: Text(
+                                      widget.options[i].label,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          );
+        },
+      );
+    }
+
+    double maxTextW = 0;
+    for (final o in widget.options) {
+      final tp = TextPainter(
+        text: TextSpan(text: o.label, style: AppTheme.f(widget.fontSize, weight: FontWeight.w600)),
+        textDirection: TextDirection.ltr,
+        maxLines: 1,
+      )..layout();
+      if (tp.width > maxTextW) maxTextW = tp.width;
+    }
+    final tabW = math.max(maxTextW + widget.hPad * 2, 40.0);
+
+    return Container(
+      padding: const EdgeInsets.all(3),
+      decoration: BoxDecoration(color: gc.bgRaised2, borderRadius: BorderRadius.circular(100)),
+      child: SizedBox(
+        width: tabW * widget.options.length,
+        child: AnimatedBuilder(
+          animation: _move,
+          builder: (context, _) {
+            final t = _move.value;
+            final to = activeIdx * tabW;
+            final right = to >= _fromX;
+            final lead = Curves.easeOutCubic.transform(t);
+            final trail = Curves.easeInOutCubic.transform(t);
+            final l = _lerp(_fromX, to, right ? trail : lead);
+            final r = _lerp(_fromX + tabW, to + tabW, right ? lead : trail);
+            final squash = 1 - 0.12 * (1 - (2 * t - 1).abs()) * (to == _fromX ? 0 : 1);
+            _shownX = (to == _fromX) ? to : l;
+
+            return Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Positioned(
+                  left: l,
+                  width: (r - l).clamp(tabW * 0.8, tabW * 2.5),
+                  top: 2 * (1 - squash),
+                  bottom: 2 * (1 - squash),
+                  child: RepaintBoundary(
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: gc.ember,
+                        borderRadius: BorderRadius.circular(100),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.14),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
                 Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     for (int i = 0; i < widget.options.length; i++)
-                      Expanded(
-                        child: GestureDetector(
-                          behavior: HitTestBehavior.opaque,
-                          onTap: () {
-                            if (!widget.options[i].selected) {
-                              HapticFeedback.selectionClick();
-                            }
-                            widget.options[i].onTap();
-                          },
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () {
+                          if (!widget.options[i].selected) {
+                            HapticFeedback.selectionClick();
+                          }
+                          widget.options[i].onTap();
+                        },
+                        child: SizedBox(
+                          width: tabW,
                           child: Container(
                             padding: EdgeInsets.symmetric(horizontal: widget.hPad, vertical: widget.vPad),
                             alignment: Alignment.center,
@@ -723,88 +871,152 @@ class _SegToggleState extends State<SegToggle> {
                   ],
                 ),
               ],
-            ),
-          );
-        },
-      );
-    }
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
 
-    double maxTextW = 0;
-    for (final o in widget.options) {
-      final tp = TextPainter(
-        text: TextSpan(text: o.label, style: AppTheme.f(widget.fontSize, weight: FontWeight.w600)),
-        textDirection: TextDirection.ltr,
-        maxLines: 1,
-      )..layout();
-      if (tp.width > maxTextW) maxTextW = tp.width;
+class LiquidDockSelector<T> extends StatefulWidget {
+  const LiquidDockSelector({
+    super.key,
+    required this.items,
+    required this.selected,
+    required this.onSelect,
+    required this.builder,
+    this.slotWidth = 38.0,
+    this.slotHeight = 38.0,
+    this.pillColor,
+    this.pillRadius = 100,
+  });
+
+  final List<T> items;
+  final T selected;
+  final ValueChanged<T> onSelect;
+  final Widget Function(BuildContext context, T item, bool isSelected) builder;
+  final double slotWidth;
+  final double slotHeight;
+  final Color? pillColor;
+  final double pillRadius;
+
+  @override
+  State<LiquidDockSelector<T>> createState() => _LiquidDockSelectorState<T>();
+}
+
+class _LiquidDockSelectorState<T> extends State<LiquidDockSelector<T>>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _move =
+      AnimationController(vsync: this, duration: const Duration(milliseconds: 320), value: 1.0);
+  int _lastIdx = 0;
+  double _fromX = 0;
+  double _shownX = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    final idx = widget.items.indexOf(widget.selected);
+    _lastIdx = idx >= 0 ? idx : 0;
+    _fromX = _lastIdx * widget.slotWidth;
+    _shownX = _fromX;
+  }
+
+  @override
+  void didUpdateWidget(LiquidDockSelector<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final idx = widget.items.indexOf(widget.selected);
+    final currentIdx = idx >= 0 ? idx : 0;
+    if (currentIdx != _lastIdx) {
+      _fromX = _shownX;
+      _lastIdx = currentIdx;
+      _move.forward(from: 0);
     }
-    final tabW = math.max(maxTextW + widget.hPad * 2, 40.0);
+  }
+
+  @override
+  void dispose() {
+    _move.dispose();
+    super.dispose();
+  }
+
+  static double _lerp(double a, double b, double t) => a + (b - a) * t;
+
+  @override
+  Widget build(BuildContext context) {
+    final gc = context.gc;
+    final selIdx = widget.items.indexOf(widget.selected);
+    final activeIdx = selIdx >= 0 ? selIdx : 0;
+    final pillBg = widget.pillColor ?? gc.emberSoft;
 
     return Container(
       padding: const EdgeInsets.all(3),
-      decoration: BoxDecoration(color: gc.bgRaised2, borderRadius: BorderRadius.circular(100)),
+      decoration: BoxDecoration(color: gc.bgRaised2, borderRadius: BorderRadius.circular(widget.pillRadius)),
       child: SizedBox(
-        width: tabW * widget.options.length,
-        child: Stack(
-          children: [
-            AnimatedPositioned(
-              duration: const Duration(milliseconds: 280),
-              curve: Curves.easeOutCubic,
-              left: activeIdx * tabW,
-              top: 0,
-              bottom: 0,
-              width: tabW,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: gc.ember,
-                  borderRadius: BorderRadius.circular(100),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.12),
-                      blurRadius: 6,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
+        width: widget.slotWidth * widget.items.length,
+        height: widget.slotHeight,
+        child: AnimatedBuilder(
+          animation: _move,
+          builder: (context, _) {
+            final t = _move.value;
+            final to = activeIdx * widget.slotWidth;
+            final right = to >= _fromX;
+            final lead = Curves.easeOutCubic.transform(t);
+            final trail = Curves.easeInOutCubic.transform(t);
+            final l = _lerp(_fromX, to, right ? trail : lead);
+            final r = _lerp(_fromX + widget.slotWidth, to + widget.slotWidth, right ? lead : trail);
+            final squash = 1 - 0.14 * (1 - (2 * t - 1).abs()) * (to == _fromX ? 0 : 1);
+            _shownX = (to == _fromX) ? to : l;
+
+            return Stack(
+              clipBehavior: Clip.none,
               children: [
-                for (int i = 0; i < widget.options.length; i++)
-                  GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      if (!widget.options[i].selected) {
-                        HapticFeedback.selectionClick();
-                      }
-                      widget.options[i].onTap();
-                    },
-                    child: SizedBox(
-                      width: tabW,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: widget.hPad, vertical: widget.vPad),
-                        alignment: Alignment.center,
-                        child: AnimatedDefaultTextStyle(
-                          duration: const Duration(milliseconds: 200),
-                          curve: Curves.easeOut,
-                          style: AppTheme.f(
-                            widget.fontSize,
-                            weight: FontWeight.w600,
-                            color: widget.options[i].selected ? gc.onEmber : gc.textSecondary,
+                Positioned(
+                  left: l,
+                  width: (r - l).clamp(widget.slotWidth * 0.8, widget.slotWidth * 2.5),
+                  top: 2 + 2 * (1 - squash),
+                  bottom: 2 + 2 * (1 - squash),
+                  child: RepaintBoundary(
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: pillBg,
+                        borderRadius: BorderRadius.circular(widget.pillRadius),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.12),
+                            blurRadius: 6,
+                            offset: const Offset(0, 2),
                           ),
-                          child: Text(
-                            widget.options[i].label,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
+                        ],
                       ),
                     ),
                   ),
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    for (final item in widget.items)
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () {
+                          if (widget.selected != item) {
+                            HapticFeedback.selectionClick();
+                            widget.onSelect(item);
+                          }
+                        },
+                        child: SizedBox(
+                          width: widget.slotWidth,
+                          height: widget.slotHeight,
+                          child: Center(
+                            child: widget.builder(context, item, widget.selected == item),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
               ],
-            ),
-          ],
+            );
+          },
         ),
       ),
     );

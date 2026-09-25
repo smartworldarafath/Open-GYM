@@ -14,7 +14,7 @@ import '../widgets/entrance.dart';
 import '../widgets/ui_kit.dart';
 
 class UpdateScreen extends StatefulWidget {
-  const UpdateScreen({super.key, this.currentVersion = '1.0.0'});
+  const UpdateScreen({super.key, this.currentVersion = '1.3.0'});
 
   final String currentVersion;
 
@@ -24,7 +24,7 @@ class UpdateScreen extends StatefulWidget {
 
 enum _UpdateStatus { checking, upToDate, updateAvailable, downloading, downloaded, error }
 
-class _UpdateScreenState extends State<UpdateScreen> {
+class _UpdateScreenState extends State<UpdateScreen> with SingleTickerProviderStateMixin {
   _UpdateStatus _status = _UpdateStatus.checking;
   String _errorMessage = '';
 
@@ -39,15 +39,21 @@ class _UpdateScreenState extends State<UpdateScreen> {
   double _downloadSpeedMbps = 0.0;
   StreamSubscription<List<int>>? _downloadSubscription;
   HttpClientRequest? _activeRequest;
+  late AnimationController _celebrateController;
 
   @override
   void initState() {
     super.initState();
+    _celebrateController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    )..repeat(reverse: true);
     _checkForUpdate();
   }
 
   @override
   void dispose() {
+    _celebrateController.dispose();
     _downloadSubscription?.cancel();
     _activeRequest?.abort();
     super.dispose();
@@ -396,13 +402,30 @@ class _UpdateScreenState extends State<UpdateScreen> {
         );
 
       case _UpdateStatus.updateAvailable:
-        return Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: gc.bgRaised,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: gc.accent.withValues(alpha: 0.5)),
-          ),
+        return AnimatedBuilder(
+          animation: _celebrateController,
+          builder: (context, child) {
+            final pulse = _celebrateController.value;
+            return Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: gc.bgRaised,
+                borderRadius: BorderRadius.circular(22),
+                border: Border.all(
+                  color: Color.lerp(gc.accent, gc.accentSoft, pulse)!,
+                  width: 1.5 + pulse * 1.0,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: gc.accent.withValues(alpha: 0.2 + pulse * 0.2),
+                    blurRadius: 12 + pulse * 8,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: child,
+            );
+          },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -414,8 +437,15 @@ class _UpdateScreenState extends State<UpdateScreen> {
                       color: gc.accentSoft,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Text('NEW UPDATE',
-                        style: AppTheme.f(11, weight: FontWeight.w800, color: gc.accent, letterSpacing: 0.5)),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(PhosphorIconsFill.sparkle, size: 13, color: gc.accent),
+                        const SizedBox(width: 5),
+                        Text('NEW UPDATE AVAILABLE',
+                            style: AppTheme.f(11, weight: FontWeight.w800, color: gc.accent, letterSpacing: 0.5)),
+                      ],
+                    ),
                   ),
                   const Spacer(),
                   Text('v$_latestVersion',
@@ -425,7 +455,28 @@ class _UpdateScreenState extends State<UpdateScreen> {
               const SizedBox(height: 12),
               Text(_releaseTitle,
                   style: AppTheme.f(15.5, weight: FontWeight.w700, color: gc.text)),
-              const SizedBox(height: 18),
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: gc.bgRaised2,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: gc.border),
+                ),
+                child: Row(
+                  children: [
+                    Icon(PhosphorIconsFill.shieldCheck, size: 16, color: gc.sage),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'Zero Data Loss: Your history, routines, and profile stay 100% safe.',
+                        style: AppTheme.f(11, weight: FontWeight.w500, color: gc.textSecondary),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
               GestureDetector(
                 onTap: _startDownload,
                 child: Container(
@@ -435,7 +486,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
                     borderRadius: BorderRadius.circular(14),
                     boxShadow: [
                       BoxShadow(
-                        color: gc.accent.withValues(alpha: 0.3),
+                        color: gc.accent.withValues(alpha: 0.35),
                         blurRadius: 10,
                         offset: const Offset(0, 4),
                       ),
