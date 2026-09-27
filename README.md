@@ -931,7 +931,6 @@ If you find **Open-GYM** helpful and want to support ongoing development, mainte
 
 | Method | Details / Direct Link |
 | :--- | :--- |
-| **☕ Buy Me a Coffee** | [https://www.buymeacoffee.com/arafathrahman](https://www.buymeacoffee.com/arafathrahman) |
 | **☕ SupportKori** | [https://www.supportkori.com/arafathrahman](https://www.supportkori.com/arafathrahman) |
 | **⚡ nsave** | Ntag: `@arafath_rahman9` (Md Arafath Rahman) |
 | **🔴 RedotPay** | Account ID: `1965421414` |
@@ -939,12 +938,64 @@ If you find **Open-GYM** helpful and want to support ongoing development, mainte
 
 <br/>
 
-<a href="https://www.buymeacoffee.com/arafathrahman" target="_blank">
-  <img src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-support%20Arafath-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=black" alt="Buy Me a Coffee" />
-</a>
-&nbsp;
+
 <a href="https://www.supportkori.com/arafathrahman" target="_blank">
   <img src="https://img.shields.io/badge/Support-SupportKori-FF5E5B?style=for-the-badge&logo=buymeacoffee&logoColor=white" alt="SupportKori" />
 </a>
+
+</div>
+
+
+---
+
+## ☕ Support / Buy Me a Coffee & Become a Sponsor
+
+<div align="center">
+
+<details>
+<summary>
+  <img src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-Support%20Arafath%20Rahman-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=black" alt="Buy Me a Coffee" />
+  <br/>
+  <sub><b>▲ Click here to see every payment option &amp; the payment QR codes</b></sub>
+</summary>
+
+<br/>
+
+<table>
+  <tr>
+    <td align="center" width="25%" valign="top">
+      <h4>☕ SupportKori</h4>
+      <a href="https://www.supportkori.com/arafathrahman" target="_blank">
+        <img src="assets/donations/support_kori.jpg" alt="SupportKori QR" width="190" style="border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.15);" />
+      </a><br/>
+      <sub>Cards / bKash / Nagad<br/><a href="https://www.supportkori.com/arafathrahman">supportkori.com/arafathrahman</a></sub>
+    </td>
+    <td align="center" width="25%" valign="top">
+      <h4>⚡ nsave</h4>
+      <img src="assets/donations/nsave.jpg" alt="nsave QR" width="190" style="border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.15);" /><br/>
+      <sub>Ntag: <code>@arafath_rahman9</code></sub>
+    </td>
+    <td align="center" width="25%" valign="top">
+      <h4>🔴 RedotPay</h4>
+      <img src="assets/donations/redotpay.jpg" alt="RedotPay QR" width="190" style="border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.15);" /><br/>
+      <sub>Account ID: <code>1965421414</code></sub>
+    </td>
+    <td align="center" width="25%" valign="top">
+      <h4>🅿️ Payoneer</h4>
+      <img src="assets/donations/payoneer.jpg" alt="Payoneer info" width="190" style="border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.15);" /><br/>
+      <sub><code>arafathrahman710@gmail.com</code><br/>Customer ID: <code>70366820</code></sub>
+    </td>
+  </tr>
+</table>
+
+<br/>
+
+**🌍 Outside Bangladesh?** One-tap online support &mdash; cards, Apple Pay &amp; Google Pay:
+
+<a href="https://www.buymeacoffee.com/arafathrahman" target="_blank">
+  <img src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-buymeacoffee.com%2Farafathrahman-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=black" alt="Buy Me a Coffee online" />
+</a>
+
+</details>
 
 </div>
