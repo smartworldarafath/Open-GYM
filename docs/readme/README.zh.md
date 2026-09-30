@@ -45,7 +45,7 @@
 
 <img src="../screenshots/store/en/04-progress.jpg" width="250" alt="完全源于真实组数的进度图表" />
 <img src="../screenshots/store/en/05-library.jpg" width="250" alt="500+ 内置动作配带动画" />
-<img src="../screenshots/store/en/06-privacy.jpg" width="250" alt="无账号 · 无网络权限 · 纯粹离线" />
+<img src="../screenshots/store/en/06-privacy.jpg" width="398" alt="无账号 · 无网络权限 · 纯粹离线" />
 
 <details>
 <summary><sub><b>界面截图</b>，全部来自真机</sub></summary>

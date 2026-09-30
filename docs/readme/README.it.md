@@ -45,7 +45,7 @@ Tocca i muscoli che vuoi allenare, registra le serie e guarda crescere i tuoi nu
 
 <img src="../screenshots/store/en/04-progress.jpg" width="250" alt="Progressi dalle tue serie" />
 <img src="../screenshots/store/en/05-library.jpg" width="250" alt="500+ esercizi con animazioni" />
-<img src="../screenshots/store/en/06-privacy.jpg" width="250" alt="Nessun account. Niente internet. Niente fumo." />
+<img src="../screenshots/store/en/06-privacy.jpg" width="398" alt="Nessun account. Niente internet. Niente fumo." />
 
 <details>
 <summary><sub><b>Screenshot semplici</b>, tutte le schermate direttamente dal telefono</sub></summary>

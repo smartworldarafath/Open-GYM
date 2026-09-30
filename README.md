@@ -32,13 +32,13 @@
 <br/>
 <br/>
 
-<img src="docs/screenshots/store/en/01-hero.jpg" width="260" alt="Lift. Log it. Grow." />
-<img src="docs/screenshots/store/en/02-train.jpg" width="260" alt="Tap the muscle, get the session" />
-<img src="docs/screenshots/store/en/03-rest.jpg" width="260" alt="Tick the set, rest rings itself" />
+<img src="docs/screenshots/store/en/01-hero.jpg" width="250" alt="Lift. Log it. Grow." />
+<img src="docs/screenshots/store/en/02-train.jpg" width="250" alt="Tap the muscle, get the session" />
+<img src="docs/screenshots/store/en/03-rest.jpg" width="250" alt="Tick the set, rest rings itself" />
 
-<img src="docs/screenshots/store/en/04-progress.jpg" width="260" alt="Progress from your own sets" />
-<img src="docs/screenshots/store/en/05-library.jpg" width="260" alt="500+ exercises with animations" />
-<img src="docs/screenshots/store/en/06-privacy.jpg" width="260" alt="No account. No smoke." />
+<img src="docs/screenshots/store/en/04-progress.jpg" width="250" alt="Progress from your own sets" />
+<img src="docs/screenshots/store/en/05-library.jpg" width="250" alt="500+ exercises with animations" />
+<img src="docs/screenshots/store/en/06-privacy.jpg" width="398" alt="No account. No smoke." />
 
 <details>
 <summary><sub><b>View In-App Screenshots (Direct Phone Captures)</b></sub></summary>
