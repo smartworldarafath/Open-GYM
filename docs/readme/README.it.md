@@ -47,6 +47,13 @@ Tocca i muscoli che vuoi allenare, registra le serie e guarda crescere i tuoi nu
 <img src="../screenshots/store/en/05-library.jpg" width="250" alt="500+ esercizi con animazioni" />
 <img src="../screenshots/store/en/06-privacy.jpg" width="398" alt="Nessun account. Niente internet. Niente fumo." />
 
+<br/>
+<br/>
+
+<video src="https://github.com/user-attachments/assets/651c7e0f-9546-449d-8b71-1b52208fdd6a" width="720" controls preload="metadata"></video>
+
+<sub><b>▶ Tour di 90 secondi</b> — Open-GYM dal vivo su un telefono accanto alla build di Android Studio: Progressi · Impostazioni · Creazione della sessione · zero permessi concessi.</sub>
+
 <details>
 <summary><sub><b>Screenshot semplici</b>, tutte le schermate direttamente dal telefono</sub></summary>
 <br/>

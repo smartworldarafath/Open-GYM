@@ -47,6 +47,13 @@
 <img src="../screenshots/store/en/05-library.jpg" width="250" alt="500+ 内置动作配带动画" />
 <img src="../screenshots/store/en/06-privacy.jpg" width="398" alt="无账号 · 无网络权限 · 纯粹离线" />
 
+<br/>
+<br/>
+
+<video src="https://github.com/user-attachments/assets/651c7e0f-9546-449d-8b71-1b52208fdd6a" width="720" controls preload="metadata"></video>
+
+<sub><b>▶ 90 秒应用演示</b> — Open-GYM 真机实录，旁边的屏幕上就是 Android Studio 构建：进度 · 设置 · 构建训练 · 未授予任何权限。</sub>
+
 <details>
 <summary><sub><b>界面截图</b>，全部来自真机</sub></summary>
 <br/>

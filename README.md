@@ -40,6 +40,13 @@
 <img src="docs/screenshots/store/en/05-library.jpg" width="250" alt="500+ exercises with animations" />
 <img src="docs/screenshots/store/en/06-privacy.jpg" width="398" alt="No account. No smoke." />
 
+<br/>
+<br/>
+
+<video src="https://github.com/user-attachments/assets/651c7e0f-9546-449d-8b71-1b52208fdd6a" width="720" controls preload="metadata"></video>
+
+<sub><b>▶ 90-second app tour</b> — Open-GYM live on a phone beside the Android Studio build: Progress · Settings · Building a session · zero permissions granted.</sub>
+
 <details>
 <summary><sub><b>View In-App Screenshots (Direct Phone Captures)</b></sub></summary>
 <br/>
