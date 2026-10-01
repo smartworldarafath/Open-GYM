@@ -31,6 +31,8 @@ jobs:
 
       - name: Build web application
         working-directory: web
+        env:
+          NODE_ENV: production
         run: |
           npm run build
           cp dist/index.html dist/404.html
