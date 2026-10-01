@@ -25,6 +25,8 @@ import { AboutScreen } from './screens/AboutScreen';
 import { AWARDS } from './data/awards';
 import { Sparkles, X } from 'lucide-react';
 import { getAssetUrl } from './utils/assets';
+import { FluidCanvas } from './components/FluidCanvas';
+import { LiquidNotch, type NotchToastRequest } from './components/LiquidNotch';
 
 export function App() {
   const {
@@ -43,6 +45,17 @@ export function App() {
 
   const unlockedAwardObj = latestAwardUnlocked
     ? AWARDS.find((a) => a.id === latestAwardUnlocked)
+    : null;
+
+  const currentToast: NotchToastRequest | null = unlockedAwardObj
+    ? {
+        id: unlockedAwardObj.id,
+        title: unlockedAwardObj.name,
+        subtitle: `Medal Unlocked · ${unlockedAwardObj.desc}`,
+        badgeId: unlockedAwardObj.id,
+        accent: '#D9A184',
+        durationMs: 5000,
+      }
     : null;
 
   const renderScreen = () => {
@@ -87,15 +100,18 @@ export function App() {
     <div
       className={`min-h-screen ${
         themeClasses[settings.theme] || themeClasses.dark
-      } dot-bg font-sans selection:bg-[#D9A184] selection:text-[#140D09] flex flex-col lg:flex-row`}
+      } dot-bg font-sans selection:bg-[#D9A184] selection:text-[#140D09] flex flex-col lg:flex-row relative`}
     >
+      {/* Interactive Fluid Ambient & Ripple Canvas */}
+      <FluidCanvas />
+
       {/* Desktop Sidebar (persistent on large screens >= 1024px) */}
-      <div className="hidden lg:block flex-shrink-0">
+      <div className="hidden lg:block flex-shrink-0 relative z-20">
         <DesktopSidebar />
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 min-h-screen">
+      <div className="flex-1 flex flex-col min-w-0 min-h-screen relative z-10">
         {/* Mobile Top Header (only on mobile screens < 1024px) */}
         <div className="lg:hidden">
           <Header />
@@ -120,34 +136,8 @@ export function App() {
       {/* Floating Rest Countdown Banner */}
       <RestTimerBanner />
 
-      {/* Medal Unlocked Toast Notification */}
-      {unlockedAwardObj && (
-        <div className="fixed top-6 right-6 z-50 animate-in fade-in slide-in-from-top-4 duration-300 max-w-sm w-full">
-          <div className="bg-[#1C1A18] border border-[#D9A184] rounded-2xl p-4 shadow-2xl flex items-center justify-between text-white">
-            <div className="flex items-center gap-3">
-              <img
-                src={getAssetUrl(`assets/badges/${unlockedAwardObj.id}.webp`)}
-                alt=""
-                className="w-12 h-12 object-contain drop-shadow"
-              />
-              <div>
-                <div className="text-[10px] font-black text-[#D9A184] uppercase tracking-wider flex items-center gap-1">
-                  <Sparkles className="w-3.5 h-3.5 fill-current" /> Medal Unlocked!
-                </div>
-                <div className="text-sm font-black text-white">{unlockedAwardObj.name}</div>
-                <div className="text-[11px] text-neutral-400">{unlockedAwardObj.desc}</div>
-              </div>
-            </div>
-
-            <button
-              onClick={dismissLatestAward}
-              className="p-1.5 rounded-lg text-neutral-400 hover:text-white ml-2"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Signature Open-GYM Fluid Liquid Notch Toast */}
+      <LiquidNotch toast={currentToast} onDismiss={dismissLatestAward} />
     </div>
   );
 }

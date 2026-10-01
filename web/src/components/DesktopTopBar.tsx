@@ -11,6 +11,7 @@ import {
   Calendar,
   Layers,
 } from 'lucide-react';
+import { LiquidDockSelector } from './LiquidDockSelector';
 
 export const DesktopTopBar: React.FC = () => {
   const { route, settings, updateSettings, session, pushRoute, startEmptyWorkout } = useGymStore();
@@ -52,24 +53,16 @@ export const DesktopTopBar: React.FC = () => {
       </div>
 
       <div className="flex items-center gap-3">
-        {/* Unit Switcher Pill */}
-        <div className="flex bg-[#1A1817] p-1 rounded-xl border border-[#2B2826] text-xs">
-          <button
-            onClick={() => updateSettings({ units: 'kg' })}
-            className={`px-2.5 py-1 rounded-lg font-extrabold transition-all ${
-              settings.units === 'kg' ? 'bg-[#D9A184] text-[#140D09] shadow-sm' : 'text-neutral-400'
-            }`}
-          >
-            KG
-          </button>
-          <button
-            onClick={() => updateSettings({ units: 'lb' })}
-            className={`px-2.5 py-1 rounded-lg font-extrabold transition-all ${
-              settings.units === 'lb' ? 'bg-[#D9A184] text-[#140D09] shadow-sm' : 'text-neutral-400'
-            }`}
-          >
-            LB
-          </button>
+        {/* Liquid Unit Switcher Pill */}
+        <div className="w-28">
+          <LiquidDockSelector<'kg' | 'lb'>
+            items={[
+              { id: 'kg', label: 'KG' },
+              { id: 'lb', label: 'LB' },
+            ]}
+            selected={settings.units}
+            onSelect={(units) => updateSettings({ units })}
+          />
         </div>
 
         {/* Sound Toggle */}
