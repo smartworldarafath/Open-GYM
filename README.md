@@ -25,6 +25,7 @@
 
 <p>
   <a href="https://github.com/smartworldarafath/Open-GYM/releases"><img alt="Get it on GitHub" src="docs/badges/get-it-on-github.png" height="58" /></a>
+  <a href="https://smartworldarafath.github.io/Open-GYM/"><img alt="Open Web App" src="https://img.shields.io/badge/Open_Web_App-Live_Preview-D9A184?style=for-the-badge&logo=googlechrome&logoColor=140D09" height="58" /></a>
 </p>
 
 <sub><b>English</b> · <a href="docs/readme/README.es.md">Español</a> · <a href="docs/readme/README.it.md">Italiano</a> · <a href="docs/readme/README.zh.md">简体中文</a></sub>
