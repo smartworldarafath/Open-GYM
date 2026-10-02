@@ -1,0 +1,62 @@
+name: Build & Release iOS (iPhone)
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag / version, e.g. v1.3.0'
+        required: true
+        default: 'v1.3.0'
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  build-ios:
+    name: Build iOS IPA
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Show versions
+        run: |
+          flutter --version
+          xcodebuild -version
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build iOS Application (Release, Unsigned)
+        run: |
+          flutter build ios --release --no-codesign
+
+      - name: Package into IPA
+        run: |
+          mkdir -p build/ios/ipa/Payload
+          cp -r build/ios/iphoneos/Runner.app build/ios/ipa/Payload/
+          cd build/ios/ipa
+          zip -r -9 Open-GYM-v1.3.0.ipa Payload
+          ls -lh Open-GYM-v1.3.0.ipa
+
+      - name: Upload IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Open-GYM-iOS-v1.3.0
+          path: build/ios/ipa/Open-GYM-v1.3.0.ipa
+          if-no-files-found: error
+
+      - name: Attach IPA to GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          gh release upload "$TAG" build/ios/ipa/Open-GYM-v1.3.0.ipa --clobber
