@@ -124,20 +124,21 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Build macOS Application
+      - name: Build macOS Application & Package DMG
         run: |
           flutter build macos --release
-          cd build/macos/Build/Products/Release
-          zip -r -9 Open-GYM-macOS-v1.3.2.zip Runner.app || zip -r -9 Open-GYM-macOS-v1.3.2.zip "Open GYM.app"
+          mkdir -p dist/dmg
+          cp -r "build/macos/Build/Products/Release/Open GYM.app" dist/dmg/ || cp -r build/macos/Build/Products/Release/Runner.app dist/dmg/"Open GYM.app"
+          hdiutil create -volname "Open-GYM" -srcfolder dist/dmg -ov -format UDZO Open-GYM-macOS-v1.3.2.dmg
 
-      - name: Upload macOS Zip to GitHub Release
+      - name: Upload macOS DMG to GitHub Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload "${{ env.TAG_NAME }}" build/macos/Build/Products/Release/Open-GYM-macOS-v1.3.2.zip --clobber
+          gh release upload "${{ env.TAG_NAME }}" Open-GYM-macOS-v1.3.2.dmg --clobber
 
   build-windows:
-    name: Build Windows Application
+    name: Build Windows Application (EXE Installer)
     runs-on: windows-latest
     steps:
       - name: Checkout repository
@@ -155,13 +156,22 @@ jobs:
       - name: Build Windows Application
         run: flutter build windows --release
 
-      - name: Package & Upload Windows Bundle to GitHub Release
+      - name: Build Windows Standalone EXE Installer
+        shell: pwsh
+        run: |
+          if (-not (Get-Command iscc -ErrorAction SilentlyContinue) -and -not (Test-Path "C:\Program Files (x86)\Inno Setup 6\ISCC.exe")) {
+            choco install innosetup -y
+          }
+          $isccPath = if (Test-Path "C:\Program Files (x86)\Inno Setup 6\ISCC.exe") { "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" } else { "iscc" }
+          & $isccPath windows/installer/installer.iss
+          Get-ChildItem windows/installer/Output
+
+      - name: Upload Windows EXE Installer to GitHub Release
         shell: pwsh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          Compress-Archive -Path build\windows\x64\runner\Release\* -DestinationPath Open-GYM-Windows-x64-v1.3.2.zip
-          gh release upload "${{ env.TAG_NAME }}" Open-GYM-Windows-x64-v1.3.2.zip --clobber
+          gh release upload "${{ env.TAG_NAME }}" windows\installer\Output\Open-GYM-Windows-x64-v1.3.2.exe --clobber
 
   build-linux:
     name: Build Linux Application
