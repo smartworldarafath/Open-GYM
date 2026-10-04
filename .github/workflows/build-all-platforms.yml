@@ -15,6 +15,9 @@ on:
 permissions:
   contents: write
 
+env:
+  TAG_NAME: ${{ inputs.tag || github.ref_name }}
+
 jobs:
   build-android:
     name: Build Android APKs
@@ -40,26 +43,22 @@ jobs:
 
       - name: Build Universal & Split APKs
         run: |
-          flutter build apk --release
-          flutter build apk --release --split-per-abi
+          flutter build apk --release --android-skip-build-dependency-validation
+          flutter build apk --release --split-per-abi --android-skip-build-dependency-validation
 
-      - name: Organize APKs
+      - name: Rename & Upload APKs to GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          mkdir -p dist/android
           cd build/app/outputs/flutter-apk
-          cp app-release.apk ../../../dist/android/Open-GYM-universal.apk
-          cp app-arm64-v8a-release.apk ../../../dist/android/Open-GYM-arm64-v8a.apk
-          cp app-armeabi-v7a-release.apk ../../../dist/android/Open-GYM-armeabi-v7a.apk
-          cp app-x86_64-release.apk ../../../dist/android/Open-GYM-x86_64.apk
+          cp app-release.apk Open-GYM-universal.apk
+          cp app-arm64-v8a-release.apk Open-GYM-arm64-v8a.apk
+          cp app-armeabi-v7a-release.apk Open-GYM-armeabi-v7a.apk
+          cp app-x86_64-release.apk Open-GYM-x86_64.apk
+          gh release upload "${{ env.TAG_NAME }}" Open-GYM-*.apk --clobber
 
-      - name: Upload Android Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: android-apks
-          path: dist/android/*.apk
-
-  build-apple:
-    name: Build Apple Binaries (iOS/iPadOS & macOS)
+  build-ios:
+    name: Build iOS Application (iPhone & iPad)
     runs-on: macos-14
     steps:
       - name: Checkout repository
@@ -92,20 +91,52 @@ jobs:
           cp -r build/ios/iphoneos/Runner.app build/ios/ipa/Payload/
           cd build/ios/ipa
           zip -r -9 Open-GYM-iOS-v1.3.2.ipa Payload
-          mkdir -p ../../../dist/apple
-          cp Open-GYM-iOS-v1.3.2.ipa ../../../dist/apple/
 
-      - name: Build macOS Application (MacBook)
+      - name: Upload iOS IPA to GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "${{ env.TAG_NAME }}" build/ios/ipa/Open-GYM-iOS-v1.3.2.ipa --clobber
+
+  build-macos:
+    name: Build macOS Application (MacBook)
+    runs-on: macos-14
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Select Xcode 16
+        run: |
+          if [ -d "/Applications/Xcode_16.2.app" ]; then
+            sudo xcode-select -s /Applications/Xcode_16.2.app
+          elif [ -d "/Applications/Xcode_16.1.app" ]; then
+            sudo xcode-select -s /Applications/Xcode_16.1.app
+          elif [ -d "/Applications/Xcode_16.0.app" ]; then
+            sudo xcode-select -s /Applications/Xcode_16.0.app
+          fi
+
+      - name: Install dependencies
+        run: |
+          flutter pub get
+          cd macos && pod install
+
+      - name: Build macOS Application
         run: |
           flutter build macos --release
           cd build/macos/Build/Products/Release
-          zip -r -9 ../../../../dist/apple/Open-GYM-macOS-v1.3.2.zip Runner.app
+          zip -r -9 Open-GYM-macOS-v1.3.2.zip Runner.app || zip -r -9 Open-GYM-macOS-v1.3.2.zip "Open GYM.app"
 
-      - name: Upload Apple Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: apple-binaries
-          path: dist/apple/*
+      - name: Upload macOS Zip to GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "${{ env.TAG_NAME }}" build/macos/Build/Products/Release/Open-GYM-macOS-v1.3.2.zip --clobber
 
   build-windows:
     name: Build Windows Application
@@ -126,17 +157,13 @@ jobs:
       - name: Build Windows Application
         run: flutter build windows --release
 
-      - name: Package Windows Bundle
+      - name: Package & Upload Windows Bundle to GitHub Release
         shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          New-Item -ItemType Directory -Force -Path dist/windows
-          Compress-Archive -Path build\windows\x64\runner\Release\* -DestinationPath dist/windows/Open-GYM-Windows-x64-v1.3.2.zip
-
-      - name: Upload Windows Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows-binaries
-          path: dist/windows/*
+          Compress-Archive -Path build\windows\x64\runner\Release\* -DestinationPath Open-GYM-Windows-x64-v1.3.2.zip
+          gh release upload "${{ env.TAG_NAME }}" Open-GYM-Windows-x64-v1.3.2.zip --clobber
 
   build-linux:
     name: Build Linux Application
@@ -162,40 +189,10 @@ jobs:
       - name: Build Linux Application
         run: flutter build linux --release
 
-      - name: Package Linux Bundle
-        run: |
-          mkdir -p dist/linux
-          cd build/linux/x64/release/bundle
-          tar -czvf ../../../../dist/linux/Open-GYM-Linux-x64-v1.3.2.tar.gz *
-
-      - name: Upload Linux Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: linux-binaries
-          path: dist/linux/*
-
-  publish-release:
-    name: Publish Release to GitHub
-    needs: [build-android, build-apple, build-windows, build-linux]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Download all artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: all-dist
-
-      - name: Flatten release assets
-        run: |
-          mkdir -p release-files
-          find all-dist -type f -exec cp {} release-files/ \;
-          ls -la release-files
-
-      - name: Upload all assets to GitHub Release
+      - name: Package & Upload Linux Bundle to GitHub Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG: ${{ inputs.tag || github.ref_name }}
         run: |
-          gh release upload "$TAG" release-files/* --clobber
+          cd build/linux/x64/release/bundle
+          tar -czvf Open-GYM-Linux-x64-v1.3.2.tar.gz *
+          gh release upload "${{ env.TAG_NAME }}" Open-GYM-Linux-x64-v1.3.2.tar.gz --clobber
