@@ -8,6 +8,11 @@ on:
         required: true
         default: 'v1.3.2'
         type: string
+      platform:
+        description: 'Platform to build (all, macos, windows, ios, android, linux)'
+        required: false
+        default: 'all'
+        type: string
   push:
     tags:
       - 'v*'
@@ -21,6 +26,7 @@ env:
 jobs:
   build-android:
     name: Build Android APKs
+    if: ${{ !inputs.platform || inputs.platform == 'all' || inputs.platform == 'android' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -59,6 +65,7 @@ jobs:
 
   build-ios:
     name: Build iOS Application (iPhone & iPad)
+    if: ${{ !inputs.platform || inputs.platform == 'all' || inputs.platform == 'ios' }}
     runs-on: macos-14
     steps:
       - name: Checkout repository
@@ -100,6 +107,7 @@ jobs:
 
   build-macos:
     name: Build macOS Application (MacBook)
+    if: ${{ !inputs.platform || inputs.platform == 'all' || inputs.platform == 'macos' }}
     runs-on: macos-14
     steps:
       - name: Checkout repository
@@ -120,15 +128,46 @@ jobs:
           elif [ -d "/Applications/Xcode_16.0.app" ]; then
             sudo xcode-select -s /Applications/Xcode_16.0.app
           fi
+          xcodebuild -version
 
-      - name: Install dependencies
-        run: flutter pub get
+      - name: Install dependencies & Patch plugins
+        run: |
+          flutter pub get
+          python3 -c "
+          import glob, os
+          count = 0
+          for ext in ('*.h', '*.m'):
+              for path in glob.glob(os.path.expanduser('~/.pub-cache/hosted/pub.dev/video_player_avfoundation*/**/' + ext), recursive=True):
+                  with open(path, 'r', encoding='utf-8', errors='ignore') as f:
+                      content = f.read()
+                  if '#import <TargetConditionals.h>' not in content:
+                      with open(path, 'w', encoding='utf-8') as f:
+                          f.write('#import <TargetConditionals.h>\n' + content)
+                      count += 1
+          print(f'Successfully patched {count} video_player_avfoundation files with TargetConditionals.h')
+          "
+
+      - name: Clean CocoaPods integration if any
+        run: |
+          cd macos
+          rm -rf Podfile Podfile.lock Pods
+          pod deintegrate 2>/dev/null || true
+          cd ..
 
       - name: Build macOS Application & Package DMG
         run: |
           flutter build macos --release
           mkdir -p dist/dmg
-          cp -r "build/macos/Build/Products/Release/Open GYM.app" dist/dmg/ || cp -r build/macos/Build/Products/Release/Runner.app dist/dmg/"Open GYM.app"
+          if [ -d "build/macos/Build/Products/Release/Open GYM.app" ]; then
+            cp -r "build/macos/Build/Products/Release/Open GYM.app" dist/dmg/
+          elif [ -d "build/macos/Build/Products/Release/Runner.app" ]; then
+            cp -r "build/macos/Build/Products/Release/Runner.app" "dist/dmg/Open GYM.app"
+          else
+            echo "Listing release folder:"
+            ls -la build/macos/Build/Products/Release/
+            exit 1
+          fi
+          ln -s /Applications dist/dmg/Applications
           hdiutil create -volname "Open-GYM" -srcfolder dist/dmg -ov -format UDZO Open-GYM-macOS-v1.3.2.dmg
 
       - name: Upload macOS DMG to GitHub Release
@@ -139,6 +178,7 @@ jobs:
 
   build-windows:
     name: Build Windows Application (EXE Installer)
+    if: ${{ !inputs.platform || inputs.platform == 'all' || inputs.platform == 'windows' }}
     runs-on: windows-latest
     steps:
       - name: Checkout repository
@@ -175,6 +215,7 @@ jobs:
 
   build-linux:
     name: Build Linux Application
+    if: ${{ !inputs.platform || inputs.platform == 'all' || inputs.platform == 'linux' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
