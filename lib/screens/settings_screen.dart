@@ -89,6 +89,7 @@ class SettingsScreen extends StatelessWidget {
                       items: const ['violet', 'green', 'gray', 'default'],
                       selected: fit.uiColorPref,
                       onSelect: (id) => fit.setUiColorPref(id),
+                      glass: true,
                       slotWidth: 36,
                       slotHeight: 34,
                       pillColor: gc.ember,
@@ -197,7 +198,7 @@ class SettingsScreen extends StatelessWidget {
                   _prefRow(gc, PhosphorIconsRegular.scales, t.unitsLabel, SegToggle([
                     SegOption('kg', fit.units == 'kg', () => fit.setUnits('kg')),
                     SegOption('lb', fit.units == 'lb', () => fit.setUnits('lb')),
-                  ])),
+                  ], glass: true)),
                   _prefRow(
                     gc,
                     PhosphorIconsRegular.timer,
@@ -723,6 +724,7 @@ class SettingsScreen extends StatelessWidget {
               const SizedBox(height: 18),
               PrimaryButton(
                 label: t.chooseFile,
+                glass: true,
                 onTap: () {
                   Navigator.pop(sheet);
                   _importFromApp(context);

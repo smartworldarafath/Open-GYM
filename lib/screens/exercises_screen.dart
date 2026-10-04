@@ -110,6 +110,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
             RoundAction(
               size: 40,
               label: t.newExercise,
+              glass: true,
               onTap: () => showCreateExerciseSheet(context),
               child: Icon(PhosphorIconsRegular.plus, size: 17, color: gc.text),
             ),

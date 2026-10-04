@@ -56,11 +56,13 @@ class ProgressScreen extends StatelessWidget {
                   label: t.share,
                   child: GestureDetector(
                     onTap: () => showShareSheet(context),
-                    child: Container(
+                    child: GlassBox(
+                      shape: BoxShape.circle,
                       width: 38,
                       height: 38,
-                      decoration: BoxDecoration(color: gc.bgRaised, shape: BoxShape.circle),
-                      child: Icon(PhosphorIconsRegular.shareNetwork, size: 17, color: gc.text),
+                      child: Center(
+                        child: Icon(PhosphorIconsRegular.shareNetwork, size: 17, color: gc.text),
+                      ),
                     ),
                   ),
                 ),

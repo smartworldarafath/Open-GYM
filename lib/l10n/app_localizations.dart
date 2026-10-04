@@ -2401,7 +2401,7 @@ abstract class AppLocalizations {
   /// No description provided for @aboutGymmane.
   ///
   /// In en, this message translates to:
-  /// **'About GymMane'**
+  /// **'About Open GYM'**
   String get aboutGymmane;
 
   /// No description provided for @yourProfile.
@@ -4453,7 +4453,7 @@ abstract class AppLocalizations {
   /// No description provided for @badgeName.
   ///
   /// In en, this message translates to:
-  /// **'{id, select, gold{Gold} blue{Blue} green{Green} other{Badge}}'**
+  /// **'{id, select, gold{Gold} blue{Blue} green{Green} red{Red} black{Black} violet{Violet} other{Badge}}'**
   String badgeName(String id);
 
   /// No description provided for @memberSince.

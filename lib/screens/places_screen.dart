@@ -46,13 +46,10 @@ class PlacesScreen extends StatelessWidget {
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () => _rename(context, null),
-                  child: Container(
+                  child: GlassBox(
                     height: 50,
+                    radius: 16,
                     alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: gc.border),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -98,14 +95,10 @@ class PlacesScreen extends StatelessWidget {
                     child: GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: () => fit.setActivePlace(fit.addPresetPlace(preset)),
-                      child: Container(
+                      child: GlassBox(
                         height: 44,
+                        radius: 14,
                         alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: gc.bgRaised2,
-                          border: Border.all(color: gc.border),
-                          borderRadius: BorderRadius.circular(14),
-                        ),
                         child: FittedBox(
                           fit: BoxFit.scaleDown,
                           child: Padding(

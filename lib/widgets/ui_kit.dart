@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -384,6 +385,7 @@ class RoundAction extends StatelessWidget {
     this.label,
     this.size = 36,
     this.filled = false,
+    this.glass = false,
   });
 
   final Widget child;
@@ -391,14 +393,51 @@ class RoundAction extends StatelessWidget {
   final String? label;
   final double size;
   final bool filled;
+  final bool glass;
 
   @override
   Widget build(BuildContext context) {
     final gc = context.gc;
-    final button = Pressable(
-      onTap: onTap,
-      scale: 0.9,
-      child: Container(
+    final dark = gc.bg.computeLuminance() < 0.5;
+
+    Widget visual;
+    if (glass) {
+      visual = ClipOval(
+        child: BackdropFilter(
+          filter: ui.ImageFilter.blur(sigmaX: 14, sigmaY: 14),
+          child: Container(
+            width: size,
+            height: size,
+            decoration: BoxDecoration(
+              color: filled
+                  ? gc.ember.withValues(alpha: dark ? 0.45 : 0.6)
+                  : gc.bgRaised.withValues(alpha: dark ? 0.38 : 0.55),
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: Colors.white.withValues(alpha: dark ? 0.22 : 0.50),
+                width: 0.9,
+              ),
+            ),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.white.withValues(alpha: dark ? 0.16 : 0.35),
+                    Colors.white.withValues(alpha: 0.0),
+                  ],
+                  stops: const [0, 0.7],
+                ),
+              ),
+              child: Center(child: child),
+            ),
+          ),
+        ),
+      );
+    } else {
+      visual = Container(
         width: size,
         height: size,
         decoration: BoxDecoration(
@@ -407,7 +446,13 @@ class RoundAction extends StatelessWidget {
           border: Border.all(color: filled ? gc.ember : gc.border),
         ),
         child: Center(child: child),
-      ),
+      );
+    }
+
+    final button = Pressable(
+      onTap: onTap,
+      scale: 0.9,
+      child: visual,
     );
     return label == null ? button : Semantics(button: true, label: label, child: button);
   }
@@ -636,6 +681,7 @@ class SegToggle extends StatefulWidget {
     this.vPad = 7,
     this.fontSize = 12,
     this.isExpanded = false,
+    this.glass = false,
   });
 
   final List<SegOption> options;
@@ -643,6 +689,7 @@ class SegToggle extends StatefulWidget {
   final double vPad;
   final double fontSize;
   final bool isExpanded;
+  final bool glass;
 
   @override
   State<SegToggle> createState() => _SegToggleState();
@@ -682,6 +729,51 @@ class _SegToggleState extends State<SegToggle> with SingleTickerProviderStateMix
 
   static double _lerp(double a, double b, double t) => a + (b - a) * t;
 
+  Widget _wrapContainer(BuildContext context, GymColors gc, Widget inner, {double? width}) {
+    final dark = gc.bg.computeLuminance() < 0.5;
+    if (widget.glass) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(100),
+        child: BackdropFilter(
+          filter: ui.ImageFilter.blur(sigmaX: 14, sigmaY: 14),
+          child: Container(
+            width: width,
+            padding: const EdgeInsets.all(3),
+            decoration: BoxDecoration(
+              color: gc.bgRaised2.withValues(alpha: dark ? 0.35 : 0.50),
+              borderRadius: BorderRadius.circular(100),
+              border: Border.all(
+                color: Colors.white.withValues(alpha: dark ? 0.18 : 0.45),
+                width: 0.9,
+              ),
+            ),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.white.withValues(alpha: dark ? 0.12 : 0.30),
+                    Colors.white.withValues(alpha: 0.0),
+                  ],
+                  stops: const [0, 0.65],
+                ),
+              ),
+              child: inner,
+            ),
+          ),
+        ),
+      );
+    }
+    return Container(
+      width: width,
+      padding: const EdgeInsets.all(3),
+      decoration: BoxDecoration(color: gc.bgRaised2, borderRadius: BorderRadius.circular(100)),
+      child: inner,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.options.isEmpty) return const SizedBox.shrink();
@@ -695,10 +787,10 @@ class _SegToggleState extends State<SegToggle> with SingleTickerProviderStateMix
           final totalW = constraints.maxWidth;
           final tabW = (totalW - 6) / widget.options.length;
 
-          return Container(
-            padding: const EdgeInsets.all(3),
-            decoration: BoxDecoration(color: gc.bgRaised2, borderRadius: BorderRadius.circular(100)),
-            child: SizedBox(
+          return _wrapContainer(
+            context,
+            gc,
+            SizedBox(
               width: totalW,
               child: AnimatedBuilder(
                 animation: _move,
@@ -792,10 +884,10 @@ class _SegToggleState extends State<SegToggle> with SingleTickerProviderStateMix
     }
     final tabW = math.max(maxTextW + widget.hPad * 2, 40.0);
 
-    return Container(
-      padding: const EdgeInsets.all(3),
-      decoration: BoxDecoration(color: gc.bgRaised2, borderRadius: BorderRadius.circular(100)),
-      child: SizedBox(
+    return _wrapContainer(
+      context,
+      gc,
+      SizedBox(
         width: tabW * widget.options.length,
         child: AnimatedBuilder(
           animation: _move,
@@ -890,6 +982,7 @@ class LiquidDockSelector<T> extends StatefulWidget {
     this.slotHeight = 38.0,
     this.pillColor,
     this.pillRadius = 100,
+    this.glass = false,
   });
 
   final List<T> items;
@@ -900,6 +993,7 @@ class LiquidDockSelector<T> extends StatefulWidget {
   final double slotHeight;
   final Color? pillColor;
   final double pillRadius;
+  final bool glass;
 
   @override
   State<LiquidDockSelector<T>> createState() => _LiquidDockSelectorState<T>();
@@ -945,80 +1039,118 @@ class _LiquidDockSelectorState<T> extends State<LiquidDockSelector<T>>
   @override
   Widget build(BuildContext context) {
     final gc = context.gc;
+    final dark = gc.bg.computeLuminance() < 0.5;
     final selIdx = widget.items.indexOf(widget.selected);
     final activeIdx = selIdx >= 0 ? selIdx : 0;
     final pillBg = widget.pillColor ?? gc.emberSoft;
 
-    return Container(
-      padding: const EdgeInsets.all(3),
-      decoration: BoxDecoration(color: gc.bgRaised2, borderRadius: BorderRadius.circular(widget.pillRadius)),
-      child: SizedBox(
-        width: widget.slotWidth * widget.items.length,
-        height: widget.slotHeight,
-        child: AnimatedBuilder(
-          animation: _move,
-          builder: (context, _) {
-            final t = _move.value;
-            final to = activeIdx * widget.slotWidth;
-            final right = to >= _fromX;
-            final lead = Curves.easeOutCubic.transform(t);
-            final trail = Curves.easeInOutCubic.transform(t);
-            final l = _lerp(_fromX, to, right ? trail : lead);
-            final r = _lerp(_fromX + widget.slotWidth, to + widget.slotWidth, right ? lead : trail);
-            final squash = 1 - 0.14 * (1 - (2 * t - 1).abs()) * (to == _fromX ? 0 : 1);
-            _shownX = (to == _fromX) ? to : l;
+    final dockInner = SizedBox(
+      width: widget.slotWidth * widget.items.length,
+      height: widget.slotHeight,
+      child: AnimatedBuilder(
+        animation: _move,
+        builder: (context, _) {
+          final t = _move.value;
+          final to = activeIdx * widget.slotWidth;
+          final right = to >= _fromX;
+          final lead = Curves.easeOutCubic.transform(t);
+          final trail = Curves.easeInOutCubic.transform(t);
+          final l = _lerp(_fromX, to, right ? trail : lead);
+          final r = _lerp(_fromX + widget.slotWidth, to + widget.slotWidth, right ? lead : trail);
+          final squash = 1 - 0.14 * (1 - (2 * t - 1).abs()) * (to == _fromX ? 0 : 1);
+          _shownX = (to == _fromX) ? to : l;
 
-            return Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Positioned(
-                  left: l,
-                  width: (r - l).clamp(widget.slotWidth * 0.8, widget.slotWidth * 2.5),
-                  top: 2 + 2 * (1 - squash),
-                  bottom: 2 + 2 * (1 - squash),
-                  child: RepaintBoundary(
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: pillBg,
-                        borderRadius: BorderRadius.circular(widget.pillRadius),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.12),
-                            blurRadius: 6,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
+          return Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Positioned(
+                left: l,
+                width: (r - l).clamp(widget.slotWidth * 0.8, widget.slotWidth * 2.5),
+                top: 2 + 2 * (1 - squash),
+                bottom: 2 + 2 * (1 - squash),
+                child: RepaintBoundary(
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: pillBg,
+                      borderRadius: BorderRadius.circular(widget.pillRadius),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.12),
+                          blurRadius: 6,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    for (final item in widget.items)
-                      GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () {
-                          if (widget.selected != item) {
-                            HapticFeedback.selectionClick();
-                            widget.onSelect(item);
-                          }
-                        },
-                        child: SizedBox(
-                          width: widget.slotWidth,
-                          height: widget.slotHeight,
-                          child: Center(
-                            child: widget.builder(context, item, widget.selected == item),
-                          ),
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  for (final item in widget.items)
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        if (widget.selected != item) {
+                          HapticFeedback.selectionClick();
+                          widget.onSelect(item);
+                        }
+                      },
+                      child: SizedBox(
+                        width: widget.slotWidth,
+                        height: widget.slotHeight,
+                        child: Center(
+                          child: widget.builder(context, item, widget.selected == item),
                         ),
                       ),
-                  ],
-                ),
-              ],
-            );
-          },
-        ),
+                    ),
+                ],
+              ),
+            ],
+          );
+        },
       ),
+    );
+
+    if (widget.glass) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(widget.pillRadius),
+        child: BackdropFilter(
+          filter: ui.ImageFilter.blur(sigmaX: 14, sigmaY: 14),
+          child: Container(
+            padding: const EdgeInsets.all(3),
+            decoration: BoxDecoration(
+              color: gc.bgRaised2.withValues(alpha: dark ? 0.35 : 0.50),
+              borderRadius: BorderRadius.circular(widget.pillRadius),
+              border: Border.all(
+                color: Colors.white.withValues(alpha: dark ? 0.18 : 0.45),
+                width: 0.9,
+              ),
+            ),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(widget.pillRadius),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.white.withValues(alpha: dark ? 0.12 : 0.30),
+                    Colors.white.withValues(alpha: 0.0),
+                  ],
+                  stops: const [0, 0.65],
+                ),
+              ),
+              child: dockInner,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Container(
+      padding: const EdgeInsets.all(3),
+      decoration: BoxDecoration(color: gc.bgRaised2, borderRadius: BorderRadius.circular(widget.pillRadius)),
+      child: dockInner,
     );
   }
 }
@@ -1110,6 +1242,7 @@ class PrimaryButton extends StatelessWidget {
     this.fg,
     this.height = 56,
     this.icon,
+    this.glass = false,
   });
   final String label;
   final VoidCallback onTap;
@@ -1117,11 +1250,72 @@ class PrimaryButton extends StatelessWidget {
   final Color? fg;
   final double height;
   final List<IconPath>? icon;
+  final bool glass;
 
   @override
   Widget build(BuildContext context) {
     final gc = context.gc;
-    final f = fg ?? gc.onEmber;
+    final dark = gc.bg.computeLuminance() < 0.5;
+    final f = fg ?? (glass ? Colors.white : gc.onEmber);
+
+    final row = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        if (icon != null) ...[
+          SvgPathIcon(icon!, size: 15, color: f),
+          const SizedBox(width: 9),
+        ],
+        Flexible(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(titleCase(label),
+                maxLines: 1,
+                style: AppTheme.f(15.5, weight: FontWeight.w700, color: f, letterSpacing: 0.2)),
+          ),
+        ),
+      ],
+    );
+
+    if (glass) {
+      return Pressable(
+        onTap: onTap,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(100),
+          child: BackdropFilter(
+            filter: ui.ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+            child: Container(
+              width: double.infinity,
+              height: height,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                color: (bg ?? gc.ember).withValues(alpha: dark ? 0.42 : 0.55),
+                borderRadius: BorderRadius.circular(100),
+                border: Border.all(
+                  color: Colors.white.withValues(alpha: dark ? 0.32 : 0.60),
+                  width: 1.0,
+                ),
+              ),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.white.withValues(alpha: dark ? 0.25 : 0.45),
+                      Colors.white.withValues(alpha: 0.0),
+                    ],
+                    stops: const [0, 0.7],
+                  ),
+                ),
+                child: row,
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
     return Pressable(
       onTap: onTap,
       child: Container(
@@ -1129,23 +1323,7 @@ class PrimaryButton extends StatelessWidget {
         height: height,
         decoration: BoxDecoration(color: bg ?? gc.ember, borderRadius: BorderRadius.circular(100)),
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (icon != null) ...[
-              SvgPathIcon(icon!, size: 15, color: f),
-              const SizedBox(width: 9),
-            ],
-            Flexible(
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(titleCase(label),
-                    maxLines: 1,
-                    style: AppTheme.f(15.5, weight: FontWeight.w700, color: f, letterSpacing: 0.2)),
-              ),
-            ),
-          ],
-        ),
+        child: row,
       ),
     );
   }

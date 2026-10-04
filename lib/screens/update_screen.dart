@@ -11,10 +11,11 @@ import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import '../widgets/entrance.dart';
+import '../widgets/glass.dart';
 import '../widgets/ui_kit.dart';
 
 class UpdateScreen extends StatefulWidget {
-  const UpdateScreen({super.key, this.currentVersion = '1.3.0'});
+  const UpdateScreen({super.key, this.currentVersion = '1.3.1'});
 
   final String currentVersion;
 
@@ -379,13 +380,9 @@ class _UpdateScreenState extends State<UpdateScreen> with SingleTickerProviderSt
               const SizedBox(height: 18),
               GestureDetector(
                 onTap: _checkForUpdate,
-                child: Container(
+                child: GlassBox(
+                  radius: 14,
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: gc.bgRaised2,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: gc.border),
-                  ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -626,13 +623,9 @@ class _UpdateScreenState extends State<UpdateScreen> with SingleTickerProviderSt
                 children: [
                   GestureDetector(
                     onTap: _checkForUpdate,
-                    child: Container(
+                    child: GlassBox(
+                      radius: 12,
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                      decoration: BoxDecoration(
-                        color: gc.bgRaised2,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: gc.border),
-                      ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [

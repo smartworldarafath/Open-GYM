@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
@@ -50,31 +51,37 @@ class HomeFolder extends StatelessWidget {
               Positioned(left: 10, right: 10, top: 22, height: _front + 6, child: peek),
               Positioned.fill(
                 top: _front,
-                child: CustomPaint(
-                  painter: _FrontPainter(
-                    top: Color.lerp(gc.bgRaised, dark ? Colors.white : gc.bgRaised, dark ? 0.1 : 0)!,
-                    bottom: Color.lerp(gc.bgRaised, dark ? Colors.white : gc.bg, dark ? 0.02 : 0.35)!,
-                    edge: dark ? Colors.white.withValues(alpha: 0.08) : gc.border,
-                    shadow: Colors.black.withValues(alpha: dark ? 0.5 : 0.12),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(13, 24, 10, 12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        FittedBox(
-                          fit: BoxFit.scaleDown,
-                          alignment: Alignment.centerLeft,
-                          child: Text(title,
-                              maxLines: 1,
-                              style: AppTheme.f(15.5, weight: FontWeight.w800, color: gc.text)),
+                child: ClipPath(
+                  clipper: const _FolderClipper(tabLeft: true),
+                  child: BackdropFilter(
+                    filter: ui.ImageFilter.blur(sigmaX: 14, sigmaY: 14),
+                    child: CustomPaint(
+                      painter: _FrontPainter(
+                        top: (dark ? Colors.white : gc.bgRaised).withValues(alpha: dark ? 0.35 : 0.55),
+                        bottom: (dark ? gc.bgRaised : gc.bg).withValues(alpha: dark ? 0.20 : 0.35),
+                        edge: Colors.white.withValues(alpha: dark ? 0.22 : 0.60),
+                        shadow: Colors.black.withValues(alpha: dark ? 0.30 : 0.08),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(13, 24, 10, 12),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              alignment: Alignment.centerLeft,
+                              child: Text(title,
+                                  maxLines: 1,
+                                  style: AppTheme.f(15.5, weight: FontWeight.w800, color: gc.text)),
+                            ),
+                            const Spacer(),
+                            Text(detail,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTheme.f(11, weight: FontWeight.w600, color: gc.textSecondary)),
+                          ],
                         ),
-                        const Spacer(),
-                        Text(detail,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: AppTheme.f(11, weight: FontWeight.w600, color: gc.textSecondary)),
-                      ],
+                      ),
                     ),
                   ),
                 ),
@@ -85,6 +92,17 @@ class HomeFolder extends StatelessWidget {
       ),
     );
   }
+}
+
+class _FolderClipper extends CustomClipper<Path> {
+  const _FolderClipper({required this.tabLeft});
+  final bool tabLeft;
+
+  @override
+  Path getClip(Size size) => _folderPath(size, tabLeft: tabLeft);
+
+  @override
+  bool shouldReclip(_FolderClipper oldClipper) => oldClipper.tabLeft != tabLeft;
 }
 
 Path _folderPath(Size s, {required bool tabLeft, double tab = 12}) {

@@ -12,6 +12,7 @@ import '../state/fit_state.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import '../widgets/entrance.dart';
+import '../widgets/glass.dart';
 import '../widgets/medal_shelf.dart';
 import '../widgets/photo_source_sheet.dart';
 import '../widgets/profile_avatar.dart';
@@ -556,12 +557,16 @@ class _ProfileHeader extends SliverPersistentHeaderDelegate {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
-      child: Container(
+      child: GlassBox(
+        shape: BoxShape.circle,
         width: 38,
         height: 38,
-        decoration:
-            BoxDecoration(color: Colors.black.withValues(alpha: 0.5), shape: BoxShape.circle),
-        child: Icon(icon, size: 18, color: Colors.white),
+        blur: 14,
+        tint: Colors.black.withValues(alpha: 0.30),
+        borderColor: Colors.white.withValues(alpha: 0.30),
+        child: Center(
+          child: Icon(icon, size: 18, color: Colors.white),
+        ),
       ),
     );
   }
@@ -604,12 +609,9 @@ class _ProfileHeader extends SliverPersistentHeaderDelegate {
             GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: onEdit,
-              child: Container(
+              child: GlassBox(
+                radius: 100,
                 padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-                decoration: BoxDecoration(
-                  color: gc.bgRaised2,
-                  borderRadius: BorderRadius.circular(100),
-                ),
                 child: Text(t.editProfile,
                     style: AppTheme.f(13.5, weight: FontWeight.w600, color: gc.text)),
               ),

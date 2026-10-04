@@ -133,9 +133,9 @@ class HomeScreen extends StatelessWidget {
         GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: fit.goProgress,
-          child: Container(
+          child: GlassBox(
+            radius: 100,
             padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 9),
-            decoration: BoxDecoration(color: gc.bgRaised, borderRadius: BorderRadius.circular(100)),
             child: Row(
               children: [
                 SvgPathIcon(Ic.flame, size: 15, color: gc.accent),
@@ -242,6 +242,7 @@ class HomeScreen extends StatelessWidget {
                     label: t.startWorkout,
                     icon: Ic.play,
                     height: 52,
+                    glass: true,
                     onTap: isRoutine ? () => fit.startRoutine(routine) : fit.startFocusWorkout,
                   ),
                 ],

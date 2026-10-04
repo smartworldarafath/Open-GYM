@@ -4,2834 +4,2936 @@ import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
 
-/// The translations for Bengali (n).
+/// The translations for Bengali Bangla (`bn`).
 class AppLocalizationsBn extends AppLocalizations {
   AppLocalizationsBn([String locale = 'bn']) : super(locale);
 
   @override
-  String get languageName => 'à¦¬à¦¾à¦‚à¦²à¦¾';
+  String get languageName => 'বাংলা';
 
   @override
   String vsLastMonthLabel(String pct) {
-    return 'à¦—à¦¤ à¦®à¦¾à¦¸à§‡à¦° à¦¤à§à¦²à¦¨à¦¾à§Ÿ $pct%';
+    return 'গত মাসের তুলনায় $pct%';
   }
 
   @override
   String levelStreakLabel(int level, String streak) {
-    return 'à¦²à§‡à¦­à§‡à¦² $level Â· $streak';
+    return 'লেভেল $level · $streak';
   }
 
   @override
-  String get save => 'à¦¸à¦‚à¦°à¦•à§à¦·à¦£';
+  String get save => 'সংরক্ষণ';
 
   @override
-  String get cancel => 'à¦¬à¦¾à¦¤à¦¿à¦²';
+  String get cancel => 'বাতিল';
 
   @override
-  String get cancelCaps => 'à¦¬à¦¾à¦¤à¦¿à¦²';
+  String get cancelCaps => 'বাতিল';
 
   @override
-  String get deleteCaps => 'à¦®à§à¦›à§à¦¨';
+  String get deleteCaps => 'মুছুন';
 
   @override
-  String get done => 'à¦¸à¦®à§à¦ªà¦¨à§à¦¨';
+  String get done => 'সম্পন্ন';
 
   @override
-  String get set => 'à¦¸à§‡à¦Ÿ';
+  String get set => 'সেট';
 
   @override
-  String get home => 'à¦¹à§‹à¦®';
+  String get home => 'হোম';
 
   @override
-  String get progress => 'à¦‰à¦¨à§à¦¨à¦¤à¦¿';
+  String get progress => 'উন্নতি';
 
   @override
-  String get exercises => 'à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦®';
+  String get exercises => 'ব্যায়াম';
 
   @override
-  String get settings => 'à¦¸à§‡à¦Ÿà¦¿à¦‚à¦¸';
+  String get settings => 'সেটিংস';
 
   @override
-  String get today => 'à¦†à¦œ';
+  String get today => 'আজ';
 
   @override
-  String get thisWeek => 'à¦à¦‡ à¦¸à¦ªà§à¦¤à¦¾à¦¹';
+  String get thisWeek => 'এই সপ্তাহ';
 
   @override
-  String get recommended => 'à¦¸à§à¦ªà¦¾à¦°à¦¿à¦¶à¦•à§ƒà¦¤';
+  String get recommended => 'সুপারিশকৃত';
 
   @override
-  String get goal => 'à¦²à¦•à§à¦·à§à¦¯';
+  String get goal => 'লক্ষ্য';
 
   @override
-  String get volume => 'à¦­à¦²à¦¿à¦‰à¦®';
+  String get volume => 'ভলিউম';
 
   @override
-  String get setsToday => 'à¦†à¦œà¦•à§‡à¦° à¦¸à§‡à¦Ÿ';
+  String get setsToday => 'আজকের সেট';
 
   @override
-  String get prs => 'à¦°à§‡à¦•à¦°à§à¦¡ (PR)';
+  String get prs => 'রেকর্ড (PR)';
 
   @override
-  String get todaysFocus => 'à¦†à¦œà¦•à§‡à¦° à¦«à§‹à¦•à¦¾à¦¸';
+  String get todaysFocus => 'আজকের ফোকাস';
 
   @override
-  String get todaysRoutine => 'à¦†à¦œà¦•à§‡à¦° à¦°à§à¦Ÿà¦¿à¦¨';
+  String get todaysRoutine => 'আজকের রুটিন';
 
   @override
-  String get startWorkout => 'à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦® à¦¶à§à¦°à§ à¦•à¦°à§à¦¨';
+  String get startWorkout => 'ব্যায়াম শুরু করুন';
 
   @override
-  String get routines => 'à¦°à§à¦Ÿà¦¿à¦¨';
+  String get routines => 'রুটিন';
 
   @override
-  String get tools => 'à¦Ÿà§à¦²à¦¸';
+  String get tools => 'টুলস';
 
   @override
-  String get firstSessionHint => 'à¦ªà§‡à¦¶à§€ à¦¬à§‡à¦›à§‡ à¦¨à¦¿à§Ÿà§‡ à¦†à¦ªà¦¨à¦¾à¦° à¦ªà§à¦°à¦¥à¦® à¦¸à§‡à¦¶à¦¨ à¦²à¦— à¦•à¦°à§à¦¨';
+  String get firstSessionHint => 'পেশী বেছে নিয়ে আপনার প্রথম সেশন লগ করুন';
 
   @override
   String exerciseCount(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '{n', one: '{n');
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$nটি ব্যায়াম',
+      one: '$nটি ব্যায়াম',
+    );
     return '$_temp0';
   }
 
   @override
-  String get pushDay => 'à¦ªà§à¦¶ à¦¡à§‡';
+  String get pushDay => 'পুশ ডে';
 
   @override
-  String get pullDay => 'à¦ªà§à¦² à¦¡à§‡';
+  String get pullDay => 'পুল ডে';
 
   @override
-  String get legDay => 'à¦²à§‡à¦— à¦¡à§‡';
+  String get legDay => 'লেগ ডে';
 
   @override
-  String get pushFocus => 'à¦¬à§à¦• Â· à¦•à¦¾à¦à¦§ Â· à¦Ÿà§à¦°à¦¾à¦‡à¦¸à§‡à¦ªà§à¦¸';
+  String get pushFocus => 'বুক · কাঁধ · ট্রাইসেপ্স';
 
   @override
-  String get pullFocus => 'à¦ªà¦¿à¦  Â· à¦¬à¦¾à¦‡à¦¸à§‡à¦ªà§à¦¸ Â· à¦Ÿà§à¦°à§à¦¯à¦¾à¦ªà¦¸';
+  String get pullFocus => 'পিঠ · বাইসেপ্স · ট্র্যাপস';
 
   @override
-  String get legFocus => 'à¦•à§‹à¦¯à¦¼à¦¾à¦¡à¦¸ Â· à¦¹à§à¦¯à¦¾à¦®à¦¸à§à¦Ÿà§à¦°à¦¿à¦‚à¦¸ Â· à¦—à§à¦²à§à¦Ÿà¦¸';
+  String get legFocus => 'কোয়াডস · হ্যামস্ট্রিংস · গ্লুটস';
 
   @override
-  String get train => 'à¦Ÿà§à¦°à§‡à¦¨';
+  String get train => 'ট্রেন';
 
   @override
-  String get step1 => 'à¦§à¦¾à¦ª à§§ / à§¨';
+  String get step1 => 'ধাপ ১ / ২';
 
   @override
-  String get step2 => 'à¦§à¦¾à¦ª à§¨ / à§¨';
+  String get step2 => 'ধাপ ২ / ২';
 
   @override
-  String get chooseFocus => 'à¦«à§‹à¦•à¦¾à¦¸ à¦¨à¦¿à¦°à§à¦¬à¦¾à¦šà¦¨ à¦•à¦°à§à¦¨';
+  String get chooseFocus => 'ফোকাস নির্বাচন করুন';
 
   @override
-  String get buildSession => 'à¦¸à§‡à¦¶à¦¨ à¦¸à¦¾à¦œà¦¾à¦¨';
+  String get buildSession => 'সেশন সাজান';
 
   @override
-  String get tapMuscles => 'à¦¯à§‡ à¦ªà§‡à¦¶à§€à¦—à§à¦²à§‹ à¦Ÿà§à¦°à§‡à¦¨ à¦•à¦°à¦¤à§‡ à¦šà¦¾à¦¨ à¦¸à§à¦ªà¦°à§à¦¶ à¦•à¦°à§à¦¨ â€” à¦¸à¦¾à¦®à¦¨à§‡ à¦à¦¬à¦‚ à¦ªà¦¿à¦›à¦¨à§‡à¥¤';
+  String get tapMuscles => 'যে পেশীগুলো ট্রেন করতে চান স্পর্শ করুন — সামনে এবং পিছনে।';
 
   @override
-  String get noMusclesYet => 'à¦à¦–à¦¨à¦“ à¦•à§‹à¦¨à§‹ à¦ªà§‡à¦¶à§€ à¦¨à¦¿à¦°à§à¦¬à¦¾à¦šà¦¿à¦¤ à¦¹à§Ÿà¦¨à¦¿ â€” à¦¶à§à¦°à§ à¦•à¦°à¦¤à§‡ à¦¶à¦°à§€à¦°à§‡ à¦¸à§à¦ªà¦°à§à¦¶ à¦•à¦°à§à¦¨à¥¤';
+  String get noMusclesYet => 'এখনও কোনো পেশী নির্বাচিত হয়নি — শুরু করতে শরীরে স্পর্শ করুন।';
 
   @override
-  String get continueBtn => 'à¦šà¦¾à¦²à¦¿à¦¯à¦¼à§‡ à¦¯à¦¾à¦¨';
+  String get continueBtn => 'চালিয়ে যান';
 
   @override
-  String get nothingForFocus => 'à¦à¦‡ à¦«à§‹à¦•à¦¾à¦¸à§‡ à¦à¦–à¦¨à¦“ à¦•à¦¿à¦›à§ à¦¨à§‡à¦‡';
+  String get nothingForFocus => 'এই ফোকাসে এখনও কিছু নেই';
 
   @override
-  String get goBackPick => 'à¦«à¦¿à¦°à§‡ à¦¯à¦¾à¦¨ à¦à¦¬à¦‚ à¦²à¦¾à¦‡à¦¬à§à¦°à§‡à¦°à¦¿à¦° à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦®à¦¯à§à¦•à§à¦¤ à¦ªà§‡à¦¶à§€ à¦¨à¦¿à¦°à§à¦¬à¦¾à¦šà¦¨ à¦•à¦°à§à¦¨à¥¤';
+  String get goBackPick => 'ফিরে যান এবং লাইব্রেরির ব্যায়ামযুক্ত পেশী নির্বাচন করুন।';
 
   @override
   String pickedHint(int n) {
-    return 'à¦†à¦®à¦°à¦¾ à¦†à¦ªà¦¨à¦¾à¦° à¦œà¦¨à§à¦¯ à¦à¦•à¦Ÿà¦¿ à¦¸à§‡à¦¶à¦¨ à¦¬à§‡à¦›à§‡ à¦¨à¦¿à§Ÿà§‡à¦›à¦¿ â€” $nà¦Ÿà¦¿ à¦¥à§‡à¦•à§‡ à¦¯à§‡à¦•à§‹à¦¨à§‹à¦Ÿà¦¿ à¦¯à§‹à¦— à¦¬à¦¾ à¦¬à¦¾à¦¦ à¦¦à¦¿à¦¨à¥¤';
+    return 'আমরা আপনার জন্য একটি সেশন বেছে নিয়েছি — $nটি থেকে যেকোনোটি যোগ বা বাদ দিন।';
   }
 
   @override
-  String get pickAnExercise => 'à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦® à¦¬à§‡à¦›à§‡ à¦¨à¦¿à¦¨';
+  String get pickAnExercise => 'ব্যায়াম বেছে নিন';
 
   @override
-  String get searchAllExercises => 'à¦¯à§‡à¦•à§‹à¦¨à§‹ à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦® à¦–à§à¦à¦œà§à¦¨â€¦';
+  String get searchAllExercises => 'যেকোনো ব্যায়াম খুঁজুন…';
 
   @override
-  String get noExercisesMatch => 'à¦•à§‹à¦¨à§‹ à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦® à¦®à§‡à¦²à§‡à¦¨à¦¿';
+  String get noExercisesMatch => 'কোনো ব্যায়াম মেলেনি';
 
   @override
-  String get createItInstead => 'à¦¤à¦¾à¦° à¦ªà¦°à¦¿à¦¬à¦°à§à¦¤à§‡ à¦¨à¦¿à¦œà§‡à¦° à¦®à¦¤à§‹ à¦¨à¦¤à§à¦¨ à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦® à¦¤à§ˆà¦°à¦¿ à¦•à¦°à§à¦¨';
+  String get createItInstead => 'তার পরিবর্তে নিজের মতো নতুন ব্যায়াম তৈরি করুন';
 
   @override
   String startCount(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '{n', one: '{n');
-    return '$_temp0';
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$nটি ব্যায়াম',
+      one: '$nটি ব্যায়াম',
+    );
+    return 'শুরু · $_temp0';
   }
 
   @override
-  String get inProgress => 'à¦šà¦²à¦®à¦¾à¦¨';
+  String get inProgress => 'চলমান';
 
   @override
-  String get paused => 'à¦¸à§à¦¥à¦—à¦¿à¦¤';
+  String get paused => 'স্থগিত';
 
   @override
-  String get last => 'à¦¸à¦°à§à¦¬à¦¶à§‡à¦·';
+  String get last => 'সর্বশেষ';
 
   @override
-  String get rest => 'à¦¬à¦¿à¦¶à§à¦°à¦¾à¦®';
+  String get rest => 'বিশ্রাম';
 
   @override
-  String get skip => 'à¦à¦¡à¦¼à¦¿à¦¯à¦¼à§‡ à¦¯à¦¾à¦¨';
+  String get skip => 'এড়িয়ে যান';
 
   @override
-  String get addSet => '+ à¦¸à§‡à¦Ÿ à¦¯à§‹à¦— à¦•à¦°à§à¦¨';
+  String get addSet => '+ সেট যোগ করুন';
 
   @override
-  String get finishSession => 'à¦¸à§‡à¦¶à¦¨ à¦¸à¦®à¦¾à¦ªà§à¦¤ à¦•à¦°à§à¦¨';
+  String get finishSession => 'সেশন সমাপ্ত করুন';
 
   @override
-  String get setDone => 'à¦¸à§‡à¦Ÿ à¦¸à¦®à§à¦ªà¦¨à§à¦¨';
+  String get setDone => 'সেট সম্পন্ন';
 
   @override
-  String get nextExercise => 'à¦ªà¦°à¦¬à¦°à§à¦¤à§€ à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦®';
+  String get nextExercise => 'পরবর্তী ব্যায়াম';
 
   @override
-  String get skipExercise => 'à¦à¦‡ à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦®à¦Ÿà¦¿ à¦à¦¡à¦¼à¦¿à¦¯à¦¼à§‡ à¦¯à¦¾à¦¬à§‡à¦¨?';
+  String get skipExercise => 'এই ব্যায়ামটি এড়িয়ে যাবেন?';
 
   @override
   String skipExerciseBody(String name) {
-    return 'à¦†à¦ªà¦¨à¦¿ à¦•à§‹à¦¨à§‹ à¦¸à§‡à¦Ÿ à¦¸à¦®à§à¦ªà¦¨à§à¦¨ à¦•à¦°à§‡à¦¨à¦¨à¦¿, à¦¤à¦¾à¦‡ "$name"-à¦à¦° à¦œà¦¨à§à¦¯ à¦•à¦¿à¦›à§à¦‡ à¦¸à¦‚à¦°à¦•à§à¦·à¦¿à¦¤ à¦¹à¦¬à§‡ à¦¨à¦¾à¥¤';
+    return 'আপনি কোনো সেট সম্পন্ন করেননি, তাই \"$name\"-এর জন্য কিছুই সংরক্ষিত হবে না।';
   }
 
   @override
-  String get dropExerciseAction => 'à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦® à¦¬à¦¾à¦¦ à¦¦à¦¿à¦¨';
+  String get dropExerciseAction => 'ব্যায়াম বাদ দিন';
 
   @override
-  String get restOff => 'à¦¬à¦¨à§à¦§';
+  String get restOff => 'বন্ধ';
 
   @override
   String get setCol => '#';
 
   @override
-  String get repsCol => 'à¦°à§‡à¦ªà¦¸';
+  String get repsCol => 'রেপস';
 
   @override
   String weightCol(String unit) {
-    return 'à¦“à¦œà¦¨ ($unit)';
+    return 'ওজন ($unit)';
   }
 
   @override
-  String get repsTitle => 'à¦°à§‡à¦ªà¦¸';
+  String get repsTitle => 'রেপস';
 
   @override
   String weightTitle(String unit) {
-    return 'à¦“à¦œà¦¨ ($unit)';
+    return 'ওজন ($unit)';
   }
 
   @override
-  String get sessionComplete => 'à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦® à¦¸à¦®à§à¦ªà¦¨à§à¦¨';
+  String get sessionComplete => 'ব্যায়াম সম্পন্ন';
 
   @override
-  String get finishHeadlinePr => 'à¦¨à¦¤à§à¦¨ à¦¬à§à¦¯à¦•à§à¦¤à¦¿à¦—à¦¤ à¦°à§‡à¦•à¦°à§à¦¡';
+  String get finishHeadlinePr => 'নতুন ব্যক্তিগত রেকর্ড';
 
   @override
-  String get finishHeadlineGoal => 'à¦¸à¦¾à¦ªà§à¦¤à¦¾à¦¹à¦¿à¦• à¦²à¦•à§à¦·à§à¦¯ à¦…à¦°à§à¦œà¦¿à¦¤';
+  String get finishHeadlineGoal => 'সাপ্তাহিক লক্ষ্য অর্জিত';
 
   @override
-  String get finishHeadlineStreak => 'à¦§à¦¾à¦°à¦¾à¦¬à¦¾à¦¹à¦¿à¦•à¦¤à¦¾ à¦¬à¦œà¦¾à¦¯à¦¼ à¦°à¦¯à¦¼à§‡à¦›à§‡';
+  String get finishHeadlineStreak => 'ধারাবাহিকতা বজায় রয়েছে';
 
   @override
-  String get finishHeadlineDefault => 'à¦†à¦°à§‡à¦•à¦Ÿà¦¿ à¦¸à§‡à¦¶à¦¨ à¦¸à¦«à¦²à¦­à¦¾à¦¬à§‡ à¦¶à§‡à¦·';
+  String get finishHeadlineDefault => 'আরেকটি সেশন সফলভাবে শেষ';
 
   @override
   String finishBodyPr(int prs) {
-    String _temp0 = intl.Intl.pluralLogic(prs, locale: localeName, other: '{prs', one: 'à¦à¦•à¦Ÿà¦¿ à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦®à§‡');
-    return '$_temp0';
+    String _temp0 = intl.Intl.pluralLogic(
+      prs,
+      locale: localeName,
+      other: '$prsটি ব্যায়ামে',
+      one: 'একটি ব্যায়ামে',
+    );
+    return 'আপনি $_temp0 আগের চেয়ে বেশি ওজন তুলেছেন। এটি রেকর্ডে যুক্ত হলো।';
   }
 
   @override
-  String get finishBodyGoal => 'à¦†à¦ªà¦¨à¦¿ à¦à¦‡ à¦¸à¦ªà§à¦¤à¦¾à¦¹à§‡à¦° à¦¨à¦¿à¦°à§à¦§à¦¾à¦°à¦¿à¦¤ à¦¸à§‡à¦¶à¦¨ à¦²à¦•à§à¦·à§à¦¯ à¦ªà§‚à¦°à¦£ à¦•à¦°à§‡à¦›à§‡à¦¨à¥¤';
+  String get finishBodyGoal => 'আপনি এই সপ্তাহের নির্ধারিত সেশন লক্ষ্য পূরণ করেছেন।';
 
   @override
   String finishBodyStreak(int streak) {
-    return 'à¦Ÿà¦¾à¦¨à¦¾ $streak à¦¦à¦¿à¦¨à¥¤ à¦¸à¦¬à¦šà§‡à¦¯à¦¼à§‡ à¦—à§à¦°à§à¦¤à§à¦¬à¦ªà§‚à¦°à§à¦£ à¦¹à¦²à§‹ à¦¥à¦®à¦•à§‡ à¦¨à¦¾ à¦¯à¦¾à¦“à§Ÿà¦¾à¥¤';
+    return 'টানা $streak দিন। সবচেয়ে গুরুত্বপূর্ণ হলো থমকে না যাওয়া।';
   }
 
   @override
-  String get finishBodyDefault => 'à¦²à¦— à¦“ à¦—à¦£à¦¨à¦¾ à¦¸à¦®à§à¦ªà¦¨à§à¦¨à¥¤ à¦§à¦¾à¦°à¦¾à¦¬à¦¾à¦¹à¦¿à¦•à¦¤à¦¾à¦‡ à¦†à¦¸à¦² à¦…à¦—à§à¦°à¦—à¦¤à¦¿à¥¤';
+  String get finishBodyDefault => 'লগ ও গণনা সম্পন্ন। ধারাবাহিকতাই আসল অগ্রগতি।';
 
   @override
-  String get vsLastTime => 'à¦—à¦¤à¦¬à¦¾à¦°à§‡à¦° à¦¤à§à¦²à¦¨à¦¾à§Ÿ';
+  String get vsLastTime => 'গতবারের তুলনায়';
 
   @override
-  String get firstTime => 'à¦ªà§à¦°à¦¥à¦®à¦¬à¦¾à¦° à¦²à¦— à¦•à¦°à¦¾ à¦¹à§Ÿà§‡à¦›à§‡';
+  String get firstTime => 'প্রথমবার লগ করা হয়েছে';
 
   @override
   String prCount(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '{n', one: '{n');
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$nটি নতুন রেকর্ড',
+      one: '$nটি নতুন রেকর্ড',
+    );
     return '$_temp0';
   }
 
   @override
-  String get saveAndExit => 'à¦¸à¦‚à¦°à¦•à§à¦·à¦£ à¦•à¦°à§‡ à¦ªà§à¦°à¦¸à§à¦¥à¦¾à¦¨ à¦•à¦°à§à¦¨';
+  String get saveAndExit => 'সংরক্ষণ করে প্রস্থান করুন';
 
   @override
-  String get duration => 'à¦¸à¦®à¦¯à¦¼à¦•à¦¾à¦²';
+  String get duration => 'সময়কাল';
 
   @override
-  String get setsCaps => 'à¦¸à§‡à¦Ÿ';
+  String get setsCaps => 'সেট';
 
   @override
   String exerciseXofY(int i, int n) {
-    return 'à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦® $i / $n';
+    return 'ব্যায়াম $i / $n';
   }
 
   @override
-  String get decrease => 'à¦•à¦®à¦¾à¦¨';
+  String get decrease => 'কমান';
 
   @override
-  String get increase => 'à¦¬à¦¾à¦¡à¦¼à¦¾à¦¨';
+  String get increase => 'বাড়ান';
 
   @override
   String markSet(int n) {
-    return 'à¦¸à§‡à¦Ÿ $n à¦¸à¦®à§à¦ªà¦¨à§à¦¨ à¦šà¦¿à¦¹à§à¦¨à¦¿à¦¤ à¦•à¦°à§à¦¨';
+    return 'সেট $n সম্পন্ন চিহ্নিত করুন';
   }
 
   @override
-  String get pauseWorkout => 'à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦® à¦¸à§à¦¥à¦—à¦¿à¦¤ à¦•à¦°à§à¦¨';
+  String get pauseWorkout => 'ব্যায়াম স্থগিত করুন';
 
   @override
-  String get resumeWorkout => 'à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦® à¦ªà§à¦¨à¦°à¦¾à¦¯à¦¼ à¦¶à§à¦°à§ à¦•à¦°à§à¦¨';
+  String get resumeWorkout => 'ব্যায়াম পুনরায় শুরু করুন';
 
   @override
-  String get discardTitle => 'à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦® à¦¬à¦¾à¦¤à¦¿à¦² à¦•à¦°à¦¬à§‡à¦¨?';
+  String get discardTitle => 'ব্যায়াম বাতিল করবেন?';
 
   @override
-  String get discardBody => 'à¦à¦‡ à¦¸à§‡à¦¶à¦¨à§‡à¦° à¦¸à¦®à¦¸à§à¦¤ à¦¸à§‡à¦Ÿ à¦®à§à¦›à§‡ à¦¯à¦¾à¦¬à§‡à¥¤';
+  String get discardBody => 'এই সেশনের সমস্ত সেট মুছে যাবে।';
 
   @override
-  String get keepTraining => 'à¦Ÿà§à¦°à§‡à¦¨à¦¿à¦‚ à¦šà¦¾à¦²à¦¿à¦¯à¦¼à§‡ à¦¯à¦¾à¦¨';
+  String get keepTraining => 'ট্রেনিং চালিয়ে যান';
 
   @override
-  String get discard => 'à¦¬à¦¾à¦¤à¦¿à¦² à¦•à¦°à§à¦¨';
+  String get discard => 'বাতিল করুন';
 
   @override
-  String get notifRestChannel => 'à¦¬à¦¿à¦¶à§à¦°à¦¾à¦®à§‡à¦° à¦Ÿà¦¾à¦‡à¦®à¦¾à¦°';
+  String get notifRestChannel => 'বিশ্রামের টাইমার';
 
   @override
-  String get notifRestChannelWhy => 'à¦¸à§‡à¦Ÿà§‡à¦° à¦®à¦¾à¦à§‡ à¦¬à¦¿à¦¶à§à¦°à¦¾à¦® à¦¶à§‡à¦· à¦¹à¦²à§‡ à¦†à¦ªà¦¨à¦¾à¦•à§‡ à¦œà¦¾à¦¨à¦¾à¦¯à¦¼';
+  String get notifRestChannelWhy => 'সেটের মাঝে বিশ্রাম শেষ হলে আপনাকে জানায়';
 
   @override
-  String get notifAlertChannel => 'à¦¬à¦¿à¦¶à§à¦°à¦¾à¦®à§‡à¦° à¦Ÿà¦¾à¦‡à¦®à¦¾à¦° (à¦…à§à¦¯à¦¾à¦²à¦¾à¦°à§à¦Ÿ)';
+  String get notifAlertChannel => 'বিশ্রামের টাইমার (অ্যালার্ট)';
 
   @override
-  String get notifAlertChannelWhy => 'à¦¬à¦¿à¦¶à§à¦°à¦¾à¦® à¦¶à§‡à¦· à¦¹à¦“à§Ÿà¦¾à¦° à¦¸à¦¾à¦¥à§‡ à¦¸à¦¾à¦¥à§‡ à¦¬à§à¦¯à¦¾à¦¨à¦¾à¦° à¦ªà§à¦°à¦¦à¦°à§à¦¶à¦¨ à¦•à¦°à§‡';
+  String get notifAlertChannelWhy => 'বিশ্রাম শেষ হওয়ার সাথে সাথে ব্যানার প্রদর্শন করে';
 
   @override
-  String get restOverTitle => 'à¦¬à¦¿à¦¶à§à¦°à¦¾à¦® à¦¶à§‡à¦·';
+  String get restOverTitle => 'বিশ্রাম শেষ';
 
   @override
-  String get restOverBody => 'à¦•à¦¾à¦œà§‡ à¦«à¦¿à¦°à§‡ à¦†à¦¸à§à¦¨ â€” à¦ªà¦°à¦¬à¦°à§à¦¤à§€ à¦¸à§‡à¦Ÿ à¦…à¦ªà§‡à¦•à§à¦·à¦¾ à¦•à¦°à¦›à§‡à¥¤';
+  String get restOverBody => 'কাজে ফিরে আসুন — পরবর্তী সেট অপেক্ষা করছে।';
 
   @override
-  String get totalVolume30d => 'à¦®à§‹à¦Ÿ à¦­à¦²à¦¿à¦‰à¦® Â· à§©à§¦ à¦¦à¦¿à¦¨';
+  String get totalVolume30d => 'মোট ভলিউম · ৩০ দিন';
 
   @override
-  String get volumeCumulative => 'à¦†à¦ªà¦¨à¦¾à¦° à¦‰à¦¤à§à¦¤à§‹à¦²à¦¨ à¦•à¦°à¦¾ à¦ªà§à¦°à¦¤à¦¿ à¦•à§‡à¦œà¦¿à¦° à¦®à§‹à¦Ÿ à¦¯à§‹à¦—à¦«à¦²';
+  String get volumeCumulative => 'আপনার উত্তোলন করা প্রতি কেজির মোট যোগফল';
 
   @override
-  String get volumeChartEmpty => 'à¦à¦•à¦Ÿà¦¿ à¦¸à§‡à¦¶à¦¨ à¦²à¦— à¦•à¦°à§à¦¨ à¦à¦¬à¦‚ à¦šà¦¾à¦°à§à¦Ÿ à¦à¦–à¦¾à¦¨à§‡ à¦¶à§à¦°à§ à¦¹à¦¬à§‡';
+  String get volumeChartEmpty => 'একটি সেশন লগ করুন এবং চার্ট এখানে শুরু হবে';
 
   @override
-  String get weekRhythm => 'à¦¸à¦¾à¦ªà§à¦¤à¦¾à¦¹à¦¿à¦• à¦›à¦¨à§à¦¦';
+  String get weekRhythm => 'সাপ্তাহিক ছন্দ';
 
   @override
-  String get weekRhythmHint => 'à¦¸à¦ªà§à¦¤à¦¾à¦¹à§‡à¦° à¦•à§‹à¦¨ à¦¦à¦¿à¦¨à¦—à§à¦²à§‹à¦¤à§‡ à¦†à¦ªà¦¨à¦¿ à¦‰à¦ªà¦¸à§à¦¥à¦¿à¦¤ à¦¥à¦¾à¦•à§‡à¦¨à¥¤';
+  String get weekRhythmHint => 'সপ্তাহের কোন দিনগুলোতে আপনি উপস্থিত থাকেন।';
 
   @override
   String weekRhythmBest(String day) {
-    return '$day à¦†à¦ªà¦¨à¦¾à¦° à¦¸à§‡à¦°à¦¾ à¦¦à¦¿à¦¨';
+    return '$day আপনার সেরা দিন';
   }
 
   @override
-  String get weekRhythmEmpty => 'à¦¸à§‡à¦¶à¦¨ à¦²à¦— à¦•à¦°à§à¦¨ à¦à¦¬à¦‚ à¦†à¦ªà¦¨à¦¾à¦° à¦¸à¦ªà§à¦¤à¦¾à¦¹à§‡à¦° à¦°à§à¦Ÿà¦¿à¦¨ à¦à¦–à¦¾à¦¨à§‡ à¦°à§‚à¦ª à¦¨à§‡à¦¬à§‡à¥¤';
+  String get weekRhythmEmpty => 'সেশন লগ করুন এবং আপনার সপ্তাহের রুটিন এখানে রূপ নেবে।';
 
   @override
-  String get allTime => 'à¦¸à¦°à§à¦¬à¦®à§‹à¦Ÿ';
+  String get allTime => 'সর্বমোট';
 
   @override
-  String get allTimeSessions => 'à¦¸à§‡à¦¶à¦¨';
+  String get allTimeSessions => 'সেশন';
 
   @override
-  String get allTimeTime => 'à¦¸à¦®à¦¯à¦¼';
+  String get allTimeTime => 'সময়';
 
   @override
-  String get allTimeVolume => 'à¦‰à¦¤à§à¦¤à§‹à¦²à¦¿à¦¤';
+  String get allTimeVolume => 'উত্তোলিত';
 
   @override
-  String get allTimeSets => 'à¦¸à§‡à¦Ÿ';
+  String get allTimeSets => 'সেট';
 
   @override
   String allTimeAvg(String time) {
-    return 'à¦—à¦¡à¦¼à§‡ à¦ªà§à¦°à¦¤à¦¿ à¦¸à§‡à¦¶à¦¨à§‡ $time';
+    return 'গড়ে প্রতি সেশনে $time';
   }
 
   @override
   String hoursShort(int n) {
-    return '$nà¦˜à¦£à§à¦Ÿà¦¾';
+    return '$nঘণ্টা';
   }
 
   @override
-  String get consistency => 'à¦§à¦¾à¦°à¦¾à¦¬à¦¾à¦¹à¦¿à¦•à¦¤à¦¾';
+  String get consistency => 'ধারাবাহিকতা';
 
   @override
   String sessionsLogged(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '{n', one: '{n');
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$nটি সেশন লগ হয়েছে',
+      one: '$nটি সেশন লগ হয়েছে',
+    );
     return '$_temp0';
   }
 
   @override
   String streakDays(int n) {
-    return '$n à¦¦à¦¿à¦¨à§‡à¦° à¦§à¦¾à¦°à¦¾à¦¬à¦¾à¦¹à¦¿à¦•à¦¤à¦¾';
+    return '$n দিনের ধারাবাহিকতা';
   }
 
   @override
-  String get bodyweight => 'à¦¶à¦°à§€à¦°à§‡à¦° à¦“à¦œà¦¨';
+  String get bodyweight => 'শরীরের ওজন';
 
   @override
-  String get notLoggedYet => 'à¦à¦–à¦¨à¦“ à¦²à¦— à¦•à¦°à¦¾ à¦¹à¦¯à¦¼à¦¨à¦¿';
+  String get notLoggedYet => 'এখনও লগ করা হয়নি';
 
   @override
-  String get logShort => '+ à¦²à¦—';
+  String get logShort => '+ লগ';
 
   @override
-  String get logBodyweight => 'à¦¶à¦°à§€à¦°à§‡à¦° à¦“à¦œà¦¨ à¦²à¦— à¦•à¦°à§à¦¨';
+  String get logBodyweight => 'শরীরের ওজন লগ করুন';
 
   @override
-  String get trackWeight => 'à¦¸à¦®à¦¯à¦¼à§‡à¦° à¦¸à¦¾à¦¥à§‡ à¦†à¦ªà¦¨à¦¾à¦° à¦“à¦œà¦¨à§‡à¦° à¦ªà¦°à¦¿à¦¬à¦°à§à¦¤à¦¨ à¦Ÿà§à¦°à§à¦¯à¦¾à¦• à¦•à¦°à§à¦¨';
+  String get trackWeight => 'সময়ের সাথে আপনার ওজনের পরিবর্তন ট্র্যাক করুন';
 
   @override
-  String get muscleMap => 'à¦ªà§‡à¦¶à§€à¦° à¦®à¦¾à¦¨à¦šà¦¿à¦¤à§à¦°';
+  String get muscleMap => 'পেশীর মানচিত্র';
 
   @override
-  String get days7 => 'à§­ à¦¦à¦¿à¦¨';
+  String get days7 => '৭ দিন';
 
   @override
-  String get days30 => 'à§©à§¦ à¦¦à¦¿à¦¨';
+  String get days30 => '৩০ দিন';
 
   @override
-  String get heatLow => 'à¦…à¦¬à§à¦¯à¦¬à¦¹à§ƒà¦¤';
+  String get heatLow => 'অব্যবহৃত';
 
   @override
-  String get heatHigh => 'à¦¸à¦°à§à¦¬à§‹à¦šà§à¦š à¦­à¦²à¦¿à¦‰à¦®';
+  String get heatHigh => 'সর্বোচ্চ ভলিউম';
 
   @override
-  String get muscleMapEmpty => 'à¦à¦•à¦Ÿà¦¿ à¦¸à§‡à¦¶à¦¨ à¦²à¦— à¦•à¦°à§à¦¨ à¦à¦¬à¦‚ à¦¶à¦°à§€à¦° à¦à¦–à¦¾à¦¨à§‡ à¦¸à¦•à§à¦°à¦¿à¦¯à¦¼ à¦¹à¦¯à¦¼à§‡ à¦‰à¦ à¦¬à§‡à¥¤';
+  String get muscleMapEmpty => 'একটি সেশন লগ করুন এবং শরীর এখানে সক্রিয় হয়ে উঠবে।';
 
   @override
-  String get muscleMapHint => 'à¦ªà§‡à¦¶à§€à¦¤à§‡ à¦Ÿà§à¦¯à¦¾à¦ª à¦•à¦°à§‡ à¦¬à¦¿à¦¸à§à¦¤à¦¾à¦°à¦¿à¦¤ à¦¦à§‡à¦–à§à¦¨à¥¤';
+  String get muscleMapHint => 'পেশীতে ট্যাপ করে বিস্তারিত দেখুন।';
 
   @override
   String muscleMapBehind(String names) {
-    return 'à¦ªà¦¿à¦›à¦¿à¦¯à¦¼à§‡ à¦°à¦¯à¦¼à§‡à¦›à§‡: $names';
+    return 'পিছিয়ে রয়েছে: $names';
   }
 
   @override
   String ofTarget(int pct) {
-    return 'à¦²à¦•à§à¦·à§à¦¯à§‡à¦° $pct%';
+    return 'লক্ষ্যের $pct%';
   }
 
   @override
-  String get muscleSplit => 'à¦ªà§‡à¦¶à§€à¦° à¦¬à¦¿à¦­à¦¾à¦œà¦¨';
+  String get muscleSplit => 'পেশীর বিভাজন';
 
   @override
-  String get splitEmpty => 'à¦ªà§‡à¦¶à§€à¦­à¦¿à¦¤à§à¦¤à¦¿à¦• à¦­à¦²à¦¿à¦‰à¦® à¦­à¦¾à¦— à¦¦à§‡à¦–à¦¤à§‡ à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦® à¦•à¦°à§à¦¨à¥¤';
+  String get splitEmpty => 'পেশীভিত্তিক ভলিউম ভাগ দেখতে ব্যায়াম করুন।';
 
   @override
-  String get personalRecords => 'à¦¬à§à¦¯à¦•à§à¦¤à¦¿à¦—à¦¤ à¦°à§‡à¦•à¦°à§à¦¡';
+  String get personalRecords => 'ব্যক্তিগত রেকর্ড';
 
   @override
-  String get prEmpty => 'à¦¸à§‡à¦Ÿ à¦²à¦— à¦•à¦°à¦¾à¦° à¦¸à¦¾à¦¥à§‡ à¦¸à¦¾à¦¥à§‡ à¦†à¦ªà¦¨à¦¾à¦° à¦°à§‡à¦•à¦°à§à¦¡ à¦à¦–à¦¾à¦¨à§‡ à¦ªà§à¦°à¦¦à¦°à§à¦¶à¦¿à¦¤ à¦¹à¦¬à§‡à¥¤';
+  String get prEmpty => 'সেট লগ করার সাথে সাথে আপনার রেকর্ড এখানে প্রদর্শিত হবে।';
 
   @override
-  String get strength1rm => 'à¦¶à¦•à§à¦¤à¦¿ Â· à¦†à¦¨à§à¦®à¦¾à¦¨à¦¿à¦• 1RM';
+  String get strength1rm => 'শক্তি · আনুমানিক 1RM';
 
   @override
-  String get strengthEmpty => 'à¦¯à§‡à¦•à§‹à¦¨à§‹ à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦® à¦¦à§à¦‡à¦¬à¦¾à¦° à¦²à¦— à¦•à¦°à¦²à§‡ à¦¤à¦¾à¦° à¦¶à¦•à§à¦¤à¦¿à¦° à¦—à§à¦°à¦¾à¦« à¦à¦–à¦¾à¦¨à§‡ à¦¦à§‡à¦–à¦¾ à¦¯à¦¾à¦¬à§‡à¥¤';
+  String get strengthEmpty => 'যেকোনো ব্যায়াম দুইবার লগ করলে তার শক্তির গ্রাফ এখানে দেখা যাবে।';
 
   @override
   String oneRmEst(String w) {
-    return 'à¦†à¦¨à§à¦®à¦¾à¦¨à¦¿à¦• 1RM $w';
+    return 'আনুমানিক 1RM $w';
   }
 
   @override
-  String get restDayShort => 'à¦¬à¦¿à¦¶à§à¦°à¦¾à¦®à§‡à¦° à¦¦à¦¿à¦¨';
+  String get restDayShort => 'বিশ্রামের দিন';
 
   @override
-  String get restDay => 'à¦¬à¦¿à¦¶à§à¦°à¦¾à¦®à§‡à¦° à¦¦à¦¿à¦¨ â€” à¦•à¦¿à¦›à§à¦‡ à¦²à¦— à¦•à¦°à¦¾ à¦¹à¦¯à¦¼à¦¨à¦¿à¥¤';
+  String get restDay => 'বিশ্রামের দিন — কিছুই লগ করা হয়নি।';
 
   @override
-  String get delete => 'à¦®à§à¦›à§à¦¨';
+  String get delete => 'মুছুন';
 
   @override
-  String get deleteEntry => 'à¦à¦‡ à¦à¦¨à§à¦Ÿà§à¦°à¦¿ à¦®à§à¦›à§‡ à¦«à§‡à¦²à¦¬à§‡à¦¨?';
+  String get deleteEntry => 'এই এন্ট্রি মুছে ফেলবেন?';
 
   @override
   String deleteEntryBody(String name) {
-    return '"$name" à¦†à¦œà¦•à§‡à¦° à¦¦à¦¿à¦¨, à¦°à§‡à¦•à¦°à§à¦¡ à¦à¦¬à¦‚ à¦šà¦¾à¦°à§à¦Ÿ à¦¥à§‡à¦•à§‡ à¦®à§à¦›à§‡ à¦«à§‡à¦²à¦¾ à¦¹à¦¬à§‡à¥¤';
+    return '\"$name\" আজকের দিন, রেকর্ড এবং চার্ট থেকে মুছে ফেলা হবে।';
   }
 
   @override
-  String get bodyweightHistory => 'à¦‡à¦¤à¦¿à¦¹à¦¾à¦¸';
+  String get bodyweightHistory => 'ইতিহাস';
 
   @override
-  String get noBodyweightYet => 'à¦à¦–à¦¨à¦“ à¦•à¦¿à¦›à§ à¦²à¦— à¦•à¦°à¦¾ à¦¹à¦¯à¦¼à¦¨à¦¿à¥¤';
+  String get noBodyweightYet => 'এখনও কিছু লগ করা হয়নি।';
 
   @override
-  String get exercisesCaps => 'à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦®';
+  String get exercisesCaps => 'ব্যায়াম';
 
   @override
-  String get timeCaps => 'à¦¸à¦®à¦¯à¦¼';
+  String get timeCaps => 'সময়';
 
   @override
   String libraryCount(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: 'à¦²à¦¾à¦‡à¦¬à§à¦°à§‡à¦°à¦¿à¦¤à§‡ {n', one: 'à¦²à¦¾à¦‡à¦¬à§à¦°à§‡à¦°à¦¿à¦¤à§‡ {n');
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'লাইব্রেরিতে $nটি ব্যায়াম',
+      one: 'লাইব্রেরিতে $nটি ব্যায়াম',
+    );
     return '$_temp0';
   }
 
   @override
-  String get searchExercises => 'à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦® à¦–à§à¦à¦œà§à¦¨';
+  String get searchExercises => 'ব্যায়াম খুঁজুন';
 
   @override
-  String get muscleFilter => 'à¦ªà§‡à¦¶à§€';
+  String get muscleFilter => 'পেশী';
 
   @override
-  String get levelFilter => 'à¦²à§‡à¦­à§‡à¦²';
+  String get levelFilter => 'লেভেল';
 
   @override
-  String get newExercise => 'à¦¨à¦¤à§à¦¨ à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦®';
+  String get newExercise => 'নতুন ব্যায়াম';
 
   @override
-  String get exerciseName => 'à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦®à§‡à¦° à¦¨à¦¾à¦®';
+  String get exerciseName => 'ব্যায়ামের নাম';
 
   @override
-  String get equipmentLabel => 'à¦¸à¦°à¦žà§à¦œà¦¾à¦®';
+  String get equipmentLabel => 'সরঞ্জাম';
 
   @override
-  String get addExercise => 'à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦® à¦¯à§‹à¦— à¦•à¦°à§à¦¨';
+  String get addExercise => 'ব্যায়াম যোগ করুন';
 
   @override
-  String get advanced => 'à¦‰à¦¨à§à¦¨à¦¤';
+  String get advanced => 'উন্নত';
 
   @override
-  String get demoMedia => 'à¦¡à§‡à¦®à§‹';
+  String get demoMedia => 'ডেমো';
 
   @override
-  String get addMedia => 'à¦®à¦¿à¦¡à¦¿à¦¯à¦¼à¦¾ à¦¯à§‹à¦— à¦•à¦°à§à¦¨';
+  String get addMedia => 'মিডিয়া যোগ করুন';
 
   @override
-  String get mediaHint => 'à¦›à¦¬à¦¿, à¦œà¦¿à¦†à¦‡à¦à¦« à¦¬à¦¾ à¦­à¦¿à¦¡à¦¿à¦“';
+  String get mediaHint => 'ছবি, জিআইএফ বা ভিডিও';
 
   @override
-  String get changeMedia => 'à¦ªà¦°à¦¿à¦¬à¦°à§à¦¤à¦¨';
+  String get changeMedia => 'পরিবর্তন';
 
   @override
-  String get videoSelected => 'à¦­à¦¿à¦¡à¦¿à¦“ à¦¨à¦¿à¦°à§à¦¬à¦¾à¦šà¦¿à¦¤';
+  String get videoSelected => 'ভিডিও নির্বাচিত';
 
   @override
-  String get favouritesOnly => 'à¦ªà§à¦°à¦¿à¦¯à¦¼à¦—à§à¦²à§‹';
+  String get favouritesOnly => 'প্রিয়গুলো';
 
   @override
-  String get noFavouritesYet => 'à¦à¦–à¦¨à¦“ à¦•à§‹à¦¨à§‹ à¦ªà§à¦°à¦¿à¦¯à¦¼ à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦® à¦¨à§‡à¦‡';
+  String get noFavouritesYet => 'এখনও কোনো প্রিয় ব্যায়াম নেই';
 
   @override
-  String get noFavouritesHint => 'à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦®à§‡ à¦¤à¦¾à¦°à¦¾ à¦šà¦¿à¦¹à§à¦¨à§‡ à¦Ÿà§à¦¯à¦¾à¦ª à¦•à¦°à§‡ à¦à¦–à¦¾à¦¨à§‡ à¦¯à§à¦•à§à¦¤ à¦•à¦°à§à¦¨à¥¤';
+  String get noFavouritesHint => 'ব্যায়ামে তারা চিহ্নে ট্যাপ করে এখানে যুক্ত করুন।';
 
   @override
-  String get clearFilters => 'à¦«à¦¿à¦²à§à¦Ÿà¦¾à¦° à¦®à§à¦›à§à¦¨';
+  String get clearFilters => 'ফিল্টার মুছুন';
 
   @override
-  String get noExercisesFound => 'à¦•à§‹à¦¨à§‹ à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦® à¦ªà¦¾à¦“à¦¯à¦¼à¦¾ à¦¯à¦¾à¦¯à¦¼à¦¨à¦¿';
+  String get noExercisesFound => 'কোনো ব্যায়াম পাওয়া যায়নি';
 
   @override
-  String get noExercisesHint => 'à¦­à¦¿à¦¨à§à¦¨ à¦…à¦¨à§à¦¸à¦¨à§à¦§à¦¾à¦¨ à¦•à¦°à§à¦¨ à¦¬à¦¾ à¦«à¦¿à¦²à§à¦Ÿà¦¾à¦° à¦¸à¦¾à¦« à¦•à¦°à§à¦¨à¥¤';
+  String get noExercisesHint => 'ভিন্ন অনুসন্ধান করুন বা ফিল্টার সাফ করুন।';
 
   @override
-  String get personalRecord => 'à¦¬à§à¦¯à¦•à§à¦¤à¦¿à¦—à¦¤ à¦°à§‡à¦•à¦°à§à¦¡';
+  String get personalRecord => 'ব্যক্তিগত রেকর্ড';
 
   @override
-  String get history => 'à¦‡à¦¤à¦¿à¦¹à¦¾à¦¸';
+  String get history => 'ইতিহাস';
 
   @override
-  String get noHistory => 'à¦à¦–à¦¨à¦“ à¦•à§‹à¦¨à§‹ à¦¸à§‡à¦¶à¦¨ à¦¨à§‡à¦‡à¥¤ à¦‡à¦¤à¦¿à¦¹à¦¾à¦¸ à¦—à§œà¦¤à§‡ à¦à¦‡ à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦®à¦Ÿà¦¿ à¦•à¦°à§à¦¨à¥¤';
+  String get noHistory => 'এখনও কোনো সেশন নেই। ইতিহাস গড়তে এই ব্যায়ামটি করুন।';
 
   @override
-  String get notes => 'à¦¨à§‹à¦Ÿ';
+  String get notes => 'নোট';
 
   @override
-  String get notePlaceholder => 'à¦ªà¦¯à¦¼à§‡à¦¨à§à¦Ÿ, à¦¸à§‡à¦Ÿà¦†à¦ª, à¦•à§‡à¦®à¦¨ à¦…à¦¨à§à¦­à¦¬ à¦¹à§Ÿà§‡à¦›à§‡â€¦';
+  String get notePlaceholder => 'পয়েন্ট, সেটআপ, কেমন অনুভব হয়েছে…';
 
   @override
   String showAllNotes(int n) {
-    return 'à¦¸à¦¬ $nà¦Ÿà¦¿ à¦¨à§‹à¦Ÿ à¦¦à§‡à¦–à§à¦¨';
+    return 'সব $nটি নোট দেখুন';
   }
 
   @override
   String notHere(String gear, String place) {
-    return '$place-à¦ à¦•à§‹à¦¨à§‹ $gear à¦¨à§‡à¦‡';
+    return '$place-এ কোনো $gear নেই';
   }
 
   @override
-  String get notHereWhy => 'à¦†à¦œ à¦¯à¦¾ à¦¬à§à¦¯à¦¬à¦¹à¦¾à¦° à¦•à¦°à¦¤à§‡ à¦ªà¦¾à¦°à¦¬à§‡à¦¨ à¦¤à¦¾ à¦¦à¦¿à§Ÿà§‡ à¦¬à¦¦à¦²à§‡ à¦¨à¦¿à¦¨à¥¤';
+  String get notHereWhy => 'আজ যা ব্যবহার করতে পারবেন তা দিয়ে বদলে নিন।';
 
   @override
-  String get altHere => 'à¦à¦–à¦¾à¦¨à§‡ à¦¯à¦¾ à¦•à¦°à¦¤à§‡ à¦ªà¦¾à¦°à§‡à¦¨';
+  String get altHere => 'এখানে যা করতে পারেন';
 
   @override
-  String get places => 'à¦†à¦®à¦¾à¦° à¦¸à§à¦¥à¦¾à¦¨à¦¸à¦®à§‚à¦¹';
+  String get places => 'আমার স্থানসমূহ';
 
   @override
-  String get placesShort => 'à¦¸à§à¦¥à¦¾à¦¨à¦¸à¦®à§‚à¦¹';
+  String get placesShort => 'স্থানসমূহ';
 
   @override
-  String get placesHint => 'à¦ªà§à¦°à¦¤à¦¿à¦Ÿà¦¿ à¦¸à§à¦¥à¦¾à¦¨à§‡ à¦•à§€ à¦¸à¦°à¦žà§à¦œà¦¾à¦® à¦†à¦›à§‡ à¦œà¦¾à¦¨à¦¾à¦¨, à¦²à¦¾à¦‡à¦¬à§à¦°à§‡à¦°à¦¿à¦¤à§‡ à¦¶à§à¦§à§ à¦¸à§‡à¦—à§à¦²à§‹à¦‡ à¦¦à§‡à¦–à¦¾à¦¬à§‡à¥¤';
+  String get placesHint => 'প্রতিটি স্থানে কী সরঞ্জাম আছে জানান, লাইব্রেরিতে শুধু সেগুলোই দেখাবে।';
 
   @override
-  String get placeAll => 'à¦¯à§‡à¦•à§‹à¦¨à§‹ à¦¸à§à¦¥à¦¾à¦¨';
+  String get placeAll => 'যেকোনো স্থান';
 
   @override
-  String get placeNew => 'à¦¨à¦¤à§à¦¨ à¦¸à§à¦¥à¦¾à¦¨';
+  String get placeNew => 'নতুন স্থান';
 
   @override
-  String get placeNameLabel => 'à¦¨à¦¾à¦®';
+  String get placeNameLabel => 'নাম';
 
   @override
-  String get placeNamePlaceholder => 'à¦¬à¦¾à¦¡à¦¼à¦¿, à¦œà¦¿à¦®, à¦ªà¦¾à¦°à§à¦•â€¦';
+  String get placeNamePlaceholder => 'বাড়ি, জিম, পার্ক…';
 
   @override
-  String get placeGearLabel => 'à¦à¦–à¦¾à¦¨à§‡ à¦•à§€ à¦†à¦›à§‡';
+  String get placeGearLabel => 'এখানে কী আছে';
 
   @override
   String placeGearCount(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '{n', one: 'à§§ à¦§à¦°à¦£à§‡à¦° à¦¸à¦°à¦žà§à¦œà¦¾à¦®', zero: 'à¦•à¦¿à¦›à§à¦‡ à¦šà¦¿à¦¹à§à¦¨à¦¿à¦¤ à¦¨à§‡à¦‡');
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n ধরণের সরঞ্জাম',
+      one: '১ ধরণের সরঞ্জাম',
+      zero: 'কিছুই চিহ্নিত নেই',
+    );
     return '$_temp0';
   }
 
   @override
   String placeExercises(int n) {
-    return 'à¦à¦–à¦¾à¦¨à§‡ $nà¦Ÿà¦¿ à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦® à¦°à§Ÿà§‡à¦›à§‡';
+    return 'এখানে $nটি ব্যায়াম রয়েছে';
   }
 
   @override
-  String get placeEmptyTitle => 'à¦¯à§‡à¦–à¦¾à¦¨à§‡à¦‡ à¦¥à¦¾à¦•à§à¦¨ à¦…à¦¨à§à¦¶à§€à¦²à¦¨ à¦•à¦°à§à¦¨';
+  String get placeEmptyTitle => 'যেখানেই থাকুন অনুশীলন করুন';
 
   @override
-  String get placeEmptyBody => 'à¦¸à§à¦¥à¦¾à¦¨ à¦¹à¦²à§‹ à¦¸à¦°à¦žà§à¦œà¦¾à¦®à§‡à¦° à¦¤à¦¾à¦²à¦¿à¦•à¦¾à¥¤ à¦¶à§à¦°à§ à¦•à¦°à¦¤à§‡ à¦à¦•à¦Ÿà¦¿ à¦¨à¦¿à¦°à§à¦¬à¦¾à¦šà¦¨ à¦•à¦°à§à¦¨à¥¤';
+  String get placeEmptyBody => 'স্থান হলো সরঞ্জামের তালিকা। শুরু করতে একটি নির্বাচন করুন।';
 
   @override
-  String get placeDeleteTitle => 'à¦¸à§à¦¥à¦¾à¦¨ à¦®à§à¦›à§à¦¨';
+  String get placeDeleteTitle => 'স্থান মুছুন';
 
   @override
-  String get placeDeleteBody => 'à¦•à§‡à¦¬à¦² à¦¸à§à¦¥à¦¾à¦¨à¦Ÿà¦¿ à¦®à§à¦›à§‡ à¦¯à¦¾à¦¬à§‡ â€” à¦†à¦ªà¦¨à¦¾à¦° à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦® à¦à¦¬à¦‚ à¦¸à§‡à¦¶à¦¨ à¦…à¦•à§à¦·à¦¤ à¦¥à¦¾à¦•à¦¬à§‡à¥¤';
+  String get placeDeleteBody => 'কেবল স্থানটি মুছে যাবে — আপনার ব্যায়াম এবং সেশন অক্ষত থাকবে।';
 
   @override
-  String get placeGym => 'à¦œà¦¿à¦®';
+  String get placeGym => 'জিম';
 
   @override
-  String get placeHome => 'à¦¬à¦¾à¦¡à¦¼à¦¿';
+  String get placeHome => 'বাড়ি';
 
   @override
-  String get placeOutdoors => 'à¦–à§‹à¦²à¦¾ à¦®à¦¾à¦ ';
+  String get placeOutdoors => 'খোলা মাঠ';
 
   @override
-  String get placeFilterLabel => 'à¦¸à§à¦¥à¦¾à¦¨';
+  String get placeFilterLabel => 'স্থান';
 
   @override
-  String get noGearOnly => 'à¦¸à¦°à¦žà§à¦œà¦¾à¦® à¦›à¦¾à§œà¦¾';
+  String get noGearOnly => 'সরঞ্জাম ছাড়া';
 
   @override
   String placeActive(String name) {
-    return '$name-à¦ à¦Ÿà§à¦°à§‡à¦¨à¦¿à¦‚';
+    return '$name-এ ট্রেনিং';
   }
 
   @override
-  String get journal => 'à¦œà¦¾à¦°à§à¦¨à¦¾à¦²';
+  String get journal => 'জার্নাল';
 
   @override
   String noteCount(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '{n', one: 'à§§à¦Ÿà¦¿ à¦¨à§‹à¦Ÿ', zero: 'à¦•à§‹à¦¨à§‹ à¦¨à§‹à¦Ÿ à¦¨à§‡à¦‡');
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$nটি নোট',
+      one: '১টি নোট',
+      zero: 'কোনো নোট নেই',
+    );
     return '$_temp0';
   }
 
   @override
-  String get noteKindNote => 'à¦¨à§‹à¦Ÿ';
+  String get noteKindNote => 'নোট';
 
   @override
-  String get noteKindPlan => 'à¦ªà¦°à¦¿à¦•à¦²à§à¦ªà¦¨à¦¾';
+  String get noteKindPlan => 'পরিকল্পনা';
 
   @override
-  String get noteKindDone => 'à¦¸à¦¾à¦«à¦²à§à¦¯';
+  String get noteKindDone => 'সাফল্য';
 
   @override
-  String get noteKindPain => 'à¦¬à§à¦¯à¦¥à¦¾';
+  String get noteKindPain => 'ব্যথা';
 
   @override
-  String get noteFilterAll => 'à¦¸à¦•à¦²';
+  String get noteFilterAll => 'সকল';
 
   @override
-  String get newNote => 'à¦¨à¦¤à§à¦¨ à¦¨à§‹à¦Ÿ';
+  String get newNote => 'নতুন নোট';
 
   @override
-  String get editNote => 'à¦¨à§‹à¦Ÿ à¦¸à¦®à§à¦ªà¦¾à¦¦à¦¨à¦¾';
+  String get editNote => 'নোট সম্পাদনা';
 
   @override
-  String get addNote => 'à¦¨à§‹à¦Ÿ à¦¯à§‹à¦— à¦•à¦°à§à¦¨';
+  String get addNote => 'নোট যোগ করুন';
 
   @override
-  String get noteEmptyTitle => 'à¦†à¦ªà¦¨à¦¾à¦° à¦šà¦¿à¦¨à§à¦¤à¦¾à¦­à¦¾à¦¬à¦¨à¦¾ à¦²à¦¿à¦–à§à¦¨';
+  String get noteEmptyTitle => 'আপনার চিন্তাভাবনা লিখুন';
 
   @override
-  String get noteEmptyBody => 'à¦†à¦ªà¦¨à¦¾à¦° à¦Ÿà§à¦°à§‡à¦¨à¦¿à¦‚à§Ÿà§‡à¦° à¦¨à§‹à¦Ÿ, à¦…à¦¨à§à¦­à§‚à¦¤à¦¿ à¦“ à¦ªà¦°à¦¿à¦•à¦²à§à¦ªà¦¨à¦¾ à¦à¦–à¦¾à¦¨à§‡ à¦¸à¦‚à¦°à¦•à§à¦·à¦£ à¦•à¦°à§à¦¨à¥¤';
+  String get noteEmptyBody => 'আপনার ট্রেনিংয়ের নোট, অনুভূতি ও পরিকল্পনা এখানে সংরক্ষণ করুন।';
 
   @override
-  String get noteNoneForExercise => 'à¦à¦‡ à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦®à§‡à¦° à¦œà¦¨à§à¦¯ à¦•à§‹à¦¨à§‹ à¦¨à§‹à¦Ÿ à¦¨à§‡à¦‡';
+  String get noteNoneForExercise => 'এই ব্যায়ামের জন্য কোনো নোট নেই';
 
   @override
-  String get noteKindLabel => 'à¦§à¦°à¦¨';
+  String get noteKindLabel => 'ধরন';
 
   @override
-  String get noteTextLabel => 'à¦¨à§‹à¦Ÿ';
+  String get noteTextLabel => 'নোট';
 
   @override
-  String get noteDateLabel => 'à¦¤à¦¾à¦°à¦¿à¦–';
+  String get noteDateLabel => 'তারিখ';
 
   @override
-  String get noteExerciseLabel => 'à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦® (à¦à¦šà§à¦›à¦¿à¦•)';
+  String get noteExerciseLabel => 'ব্যায়াম (ঐচ্ছিক)';
 
   @override
-  String get noteMediaLabel => 'à¦›à¦¬à¦¿ à¦¬à¦¾ à¦­à¦¿à¦¡à¦¿à¦“';
+  String get noteMediaLabel => 'ছবি বা ভিডিও';
 
   @override
-  String get noteGeneral => 'à¦¸à¦¾à¦§à¦¾à¦°à¦£ à¦¨à§‹à¦Ÿ';
+  String get noteGeneral => 'সাধারণ নোট';
 
   @override
-  String get noteAttach => 'à¦¸à¦‚à¦¯à§à¦•à§à¦¤ à¦•à¦°à§à¦¨';
+  String get noteAttach => 'সংযুক্ত করুন';
 
   @override
-  String get noteRemoveMedia => 'à¦®à¦¿à¦¡à¦¿à¦¯à¦¼à¦¾ à¦¸à¦°à¦¾à¦¨';
+  String get noteRemoveMedia => 'মিডিয়া সরান';
 
   @override
-  String get deleteNoteTitle => 'à¦¨à§‹à¦Ÿ à¦®à§à¦›à¦¬à§‡à¦¨?';
+  String get deleteNoteTitle => 'নোট মুছবেন?';
 
   @override
-  String get deleteNoteBody => 'à¦à¦‡ à¦¨à§‹à¦Ÿà¦Ÿà¦¿ à¦šà¦¿à¦°à¦¤à¦°à§‡ à¦®à§à¦›à§‡ à¦«à§‡à¦²à¦¾ à¦¹à¦¬à§‡à¥¤';
+  String get deleteNoteBody => 'এই নোটটি চিরতরে মুছে ফেলা হবে।';
 
   @override
-  String get noteToday => 'à¦†à¦œ';
+  String get noteToday => 'আজ';
 
   @override
-  String get noteYesterday => 'à¦—à¦¤à¦•à¦¾à¦²';
+  String get noteYesterday => 'গতকাল';
 
   @override
-  String get noteAllNotes => 'à¦¸à¦•à¦² à¦¨à§‹à¦Ÿ';
+  String get noteAllNotes => 'সকল নোট';
 
   @override
-  String get noteCalendar => 'à¦•à§à¦¯à¦¾à¦²à§‡à¦¨à§à¦¡à¦¾à¦°';
+  String get noteCalendar => 'ক্যালেন্ডার';
 
   @override
-  String get noteNoneOnDay => 'à¦à¦‡ à¦¦à¦¿à¦¨à§‡ à¦•à§‹à¦¨à§‹ à¦¨à§‹à¦Ÿ à¦¨à§‡à¦‡';
+  String get noteNoneOnDay => 'এই দিনে কোনো নোট নেই';
 
   @override
-  String get noteAddOnDay => 'à¦à¦‡ à¦¦à¦¿à¦¨à§‡ à¦¨à§‹à¦Ÿ à¦¯à§‹à¦— à¦•à¦°à§à¦¨';
+  String get noteAddOnDay => 'এই দিনে নোট যোগ করুন';
 
   @override
-  String get notePrevMonth => 'à¦ªà§‚à¦°à§à¦¬à¦¬à¦°à§à¦¤à§€ à¦®à¦¾à¦¸';
+  String get notePrevMonth => 'পূর্ববর্তী মাস';
 
   @override
-  String get noteNextMonth => 'à¦ªà¦°à¦¬à¦°à§à¦¤à§€ à¦®à¦¾à¦¸';
+  String get noteNextMonth => 'পরবর্তী মাস';
 
   @override
   String noteMonthCount(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '{n', one: '{n');
+    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$nটি নোট', one: '$nটি নোট');
     return '$_temp0';
   }
 
   @override
-  String get measures => 'à¦ªà¦°à¦¿à¦®à¦¾à¦ª';
+  String get measures => 'পরিমাপ';
 
   @override
-  String get measuresHint => 'à¦¶à¦°à§€à¦°à§‡à¦° à¦¬à¦¿à¦­à¦¿à¦¨à§à¦¨ à¦…à¦‚à¦¶à§‡à¦° à¦ªà¦°à¦¿à¦®à¦¾à¦ª à¦Ÿà§à¦°à§à¦¯à¦¾à¦• à¦•à¦°à§à¦¨';
+  String get measuresHint => 'শরীরের বিভিন্ন অংশের পরিমাপ ট্র্যাক করুন';
 
   @override
   String measureCount(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '{n', one: '{n');
+    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$nটি পরিমাপ', one: '$nটি পরিমাপ');
     return '$_temp0';
   }
 
   @override
-  String get measureNoneYet => 'à¦à¦–à¦¨à¦“ à¦•à§‹à¦¨à§‹ à¦ªà¦°à¦¿à¦®à¦¾à¦ª à¦¨à§‡à¦‡';
+  String get measureNoneYet => 'এখনও কোনো পরিমাপ নেই';
 
   @override
-  String get measureHistory => 'à¦ªà¦°à¦¿à¦®à¦¾à¦ªà§‡à¦° à¦‡à¦¤à¦¿à¦¹à¦¾à¦¸';
+  String get measureHistory => 'পরিমাপের ইতিহাস';
 
   @override
-  String get measureNeck => 'à¦˜à¦¾à§œ';
+  String get measureNeck => 'ঘাড়';
 
   @override
-  String get measureShoulders => 'à¦•à¦¾à¦à¦§';
+  String get measureShoulders => 'কাঁধ';
 
   @override
-  String get measureChest => 'à¦¬à§à¦•';
+  String get measureChest => 'বুক';
 
   @override
-  String get measureArm => 'à¦¬à¦¾à¦¹à§';
+  String get measureArm => 'বাহু';
 
   @override
-  String get measureForearm => 'à¦…à¦—à§à¦°à¦¬à¦¾à¦¹à§';
+  String get measureForearm => 'অগ্রবাহু';
 
   @override
-  String get measureWaist => 'à¦•à§‹à¦®à¦°';
+  String get measureWaist => 'কোমর';
 
   @override
-  String get measureHips => 'à¦¨à¦¿à¦¤à¦®à§à¦¬';
+  String get measureHips => 'নিতম্ব';
 
   @override
-  String get measureThigh => 'à¦‰à¦°à§à¦° à¦®à¦¾à¦ª';
+  String get measureThigh => 'উরুর মাপ';
 
   @override
-  String get measureCalf => 'à¦•à¦¾à¦«';
+  String get measureCalf => 'কাফ';
 
   @override
-  String get measureBodyfat => 'à¦¶à¦°à§€à¦°à§‡à¦° à¦šà¦°à§à¦¬à¦¿';
+  String get measureBodyfat => 'শরীরের চর্বি';
 
   @override
-  String get timeline => 'à¦Ÿà¦¾à¦‡à¦®à¦²à¦¾à¦‡à¦¨';
+  String get timeline => 'টাইমলাইন';
 
   @override
-  String get timelineHint => 'à¦¶à¦°à§€à¦°à§‡à¦° à¦°à§‚à¦ªà¦¾à¦¨à§à¦¤à¦°à§‡à¦° à¦›à¦¬à¦¿';
+  String get timelineHint => 'শরীরের রূপান্তরের ছবি';
 
   @override
-  String get timelineEmptyTitle => 'à¦†à¦ªà¦¨à¦¾à¦° à¦°à§‚à¦ªà¦¾à¦¨à§à¦¤à¦° à¦ªà¦°à§à¦¯à¦¬à§‡à¦•à§à¦·à¦£ à¦•à¦°à§à¦¨';
+  String get timelineEmptyTitle => 'আপনার রূপান্তর পর্যবেক্ষণ করুন';
 
   @override
   String photoCount(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '{n', one: '{n');
+    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$nটি ছবি', one: '$nটি ছবি');
     return '$_temp0';
   }
 
   @override
-  String get poseFront => 'à¦¸à¦¾à¦®à¦¨à§‡';
+  String get poseFront => 'সামনে';
 
   @override
-  String get poseSide => 'à¦ªà¦¾à¦¶ à¦¥à§‡à¦•à§‡';
+  String get poseSide => 'পাশ থেকে';
 
   @override
-  String get poseBack => 'à¦ªà¦¿à¦›à¦¨à§‡';
+  String get poseBack => 'পিছনে';
 
   @override
-  String get photoEvery => 'à¦›à¦¬à¦¿ à¦¤à§‹à¦²à¦¾à¦° à¦¬à§à¦¯à¦¬à¦§à¦¾à¦¨';
+  String get photoEvery => 'ছবি তোলার ব্যবধান';
 
   @override
   String photoEveryDays(int n) {
-    return 'à¦ªà§à¦°à¦¤à¦¿ $n à¦¦à¦¿à¦¨ à¦…à¦¨à§à¦¤à¦°';
+    return 'প্রতি $n দিন অন্তর';
   }
 
   @override
-  String get photoEveryOff => 'à¦¬à¦¨à§à¦§';
+  String get photoEveryOff => 'বন্ধ';
 
   @override
-  String get timelineEvery => 'à¦ªà§à¦°à¦¤à¦¿ {n} à¦¦à¦¿à¦¨';
+  String get timelineEvery => 'প্রতিটি দলভুক্ত করুন';
 
   @override
-  String get custom => 'à¦•à¦¾à¦¸à§à¦Ÿà¦®';
+  String get custom => 'কাস্টম';
 
   @override
   String photoNextIn(int n) {
-    return 'à¦ªà¦°à¦¬à¦°à§à¦¤à§€ à¦›à¦¬à¦¿ $n à¦¦à¦¿à¦¨ à¦ªà¦°';
+    return 'পরবর্তী ছবি $n দিন পর';
   }
 
   @override
-  String get photoDueNow => 'à¦†à¦œ à¦›à¦¬à¦¿ à¦¤à§‹à¦²à¦¾à¦° à¦¸à¦®à¦¯à¦¼ à¦¹à§Ÿà§‡à¦›à§‡';
+  String get photoDueNow => 'আজ ছবি তোলার সময় হয়েছে';
 
   @override
-  String get addTodayPhotos => 'à¦†à¦œà¦•à§‡à¦° à¦›à¦¬à¦¿ à¦¯à§‹à¦— à¦•à¦°à§à¦¨';
+  String get addTodayPhotos => 'আজকের ছবি যোগ করুন';
 
   @override
   String posePhoto(String pose) {
-    return '$pose à¦ªà§‹à¦œà§‡à¦° à¦›à¦¬à¦¿';
+    return '$pose পোজের ছবি';
   }
 
   @override
-  String get compare => 'à¦¤à§à¦²à¦¨à¦¾ à¦•à¦°à§à¦¨';
+  String get compare => 'তুলনা করুন';
 
   @override
-  String get compareNeedTwo => 'à¦¤à§à¦²à¦¨à¦¾ à¦•à¦°à¦¾à¦° à¦œà¦¨à§à¦¯ à¦…à¦¨à§à¦¤à¦¤ à§¨à¦Ÿà¦¿ à¦›à¦¬à¦¿ à¦ªà§à¦°à¦¯à¦¼à§‹à¦œà¦¨';
+  String get compareNeedTwo => 'তুলনা করার জন্য অন্তত ২টি ছবি প্রয়োজন';
 
   @override
   String dayNumber(int n) {
-    return '$nà¦¤à¦® à¦¦à¦¿à¦¨';
+    return '$nতম দিন';
   }
 
   @override
   String daysApart(int n) {
-    return '$n à¦¦à¦¿à¦¨à§‡à¦° à¦¬à§à¦¯à¦¬à¦§à¦¾à¦¨';
+    return '$n দিনের ব্যবধান';
   }
 
   @override
-  String get deleteEntryTitle => 'à¦à¦¨à§à¦Ÿà§à¦°à¦¿ à¦®à§à¦›à¦¬à§‡à¦¨?';
+  String get deleteEntryTitle => 'এন্ট্রি মুছবেন?';
 
   @override
-  String get deleteDayBody => 'à¦à¦‡ à¦¦à¦¿à¦¨à§‡à¦° à¦¸à¦®à¦¸à§à¦¤ à¦›à¦¬à¦¿ à¦®à§à¦›à§‡ à¦¯à¦¾à¦¬à§‡à¥¤';
+  String get deleteDayBody => 'এই দিনের সমস্ত ছবি মুছে যাবে।';
 
   @override
-  String get timelinePhotos => 'à¦›à¦¬à¦¿';
+  String get timelinePhotos => 'ছবি';
 
   @override
-  String get timelineBody => 'à¦¶à¦¾à¦°à§€à¦°à¦¿à¦• à¦°à§‚à¦ªà¦¾à¦¨à§à¦¤à¦°';
+  String get timelineBody => 'শারীরিক রূপান্তর';
 
   @override
-  String get timelineBodyEmpty => 'à¦›à¦¬à¦¿ à¦¯à§‹à¦— à¦•à¦°à§‡ à¦°à§‚à¦ªà¦¾à¦¨à§à¦¤à¦°à§‡à¦° à¦—à¦¤à¦¿à¦§à¦¾à¦°à¦¾ à¦¦à§‡à¦–à§à¦¨à¥¤';
+  String get timelineBodyEmpty => 'ছবি যোগ করে রূপান্তরের গতিধারা দেখুন।';
 
   @override
-  String get timelineBodyHint => 'à¦¨à¦¿à¦¯à¦¼à¦®à¦¿à¦¤ à¦›à¦¬à¦¿ à¦¤à§à¦²à¦²à§‡ à¦…à¦—à§à¦°à¦—à¦¤à¦¿ à¦¸à¦¹à¦œà§‡ à¦¬à§‹à¦à¦¾ à¦¯à¦¾à¦¯à¦¼à¥¤';
+  String get timelineBodyHint => 'নিয়মিত ছবি তুললে অগ্রগতি সহজে বোঝা যায়।';
 
   @override
   String timelineWindow(String from, String to) {
-    return 'à¦¸à¦®à¦¯à¦¼à¦•à¦¾à¦²';
+    return '$from – $to';
   }
 
   @override
   String sessionCount(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '{n', one: '{n');
+    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$nটি সেশন', one: '$nটি সেশন');
     return '$_temp0';
   }
 
   @override
-  String get notifPhotoChannel => 'à¦…à¦—à§à¦°à¦—à¦¤à¦¿à¦° à¦›à¦¬à¦¿ à¦…à¦¨à§à¦¸à§à¦®à¦¾à¦°à¦•';
+  String get notifPhotoChannel => 'অগ্রগতির ছবি অনুস্মারক';
 
   @override
-  String get notifPhotoChannelWhy => 'à¦¨à¦¤à§à¦¨ à¦…à¦—à§à¦°à¦—à¦¤à¦¿ à¦›à¦¬à¦¿ à¦¤à§‹à¦²à¦¾à¦° à¦¸à¦®à¦¯à¦¼ à¦¹à¦²à§‡ à¦®à¦¨à§‡ à¦•à¦°à¦¿à¦¯à¦¼à§‡ à¦¦à§‡à¦¯à¦¼';
+  String get notifPhotoChannelWhy => 'নতুন অগ্রগতি ছবি তোলার সময় হলে মনে করিয়ে দেয়';
 
   @override
-  String get notifPhotoTitle => 'à¦…à¦—à§à¦°à¦—à¦¤à¦¿à¦° à¦›à¦¬à¦¿ à¦¤à§‹à¦²à¦¾à¦° à¦¸à¦®à¦¯à¦¼';
+  String get notifPhotoTitle => 'অগ্রগতির ছবি তোলার সময়';
 
   @override
   String notifPhotoBody(int n) {
-    return 'à¦¶à¦°à§€à¦°à§‡à¦° à¦ªà¦°à¦¿à¦¬à¦°à§à¦¤à¦¨à§‡à¦° à¦›à¦¬à¦¿ à¦¤à§‹à¦²à¦¾à¦° à¦¸à¦®à¦¯à¦¼ à¦¹à¦¯à¦¼à§‡à¦›à§‡à¥¤';
+    return 'পূর্বের ছবির পর $n দিন পেরিয়ে গেছে। একই ভঙ্গিমা, একই আলো বজায় রাখুন।';
   }
 
   @override
-  String get share => 'à¦¶à§‡à¦¯à¦¼à¦¾à¦°';
+  String get share => 'শেয়ার';
 
   @override
-  String get sharePick => 'à¦¶à§‡à¦¯à¦¼à¦¾à¦° à¦•à¦°à¦¾à¦° à¦…à¦‚à¦¶ à¦¬à§‡à¦›à§‡ à¦¨à¦¿à¦¨';
+  String get sharePick => 'শেয়ার করার অংশ বেছে নিন';
 
   @override
-  String get shareSession => 'à¦¸à§‡à¦¶à¦¨ à¦¶à§‡à¦¯à¦¼à¦¾à¦° à¦•à¦°à§à¦¨';
+  String get shareSession => 'সেশন শেয়ার করুন';
 
   @override
-  String get shareStreak => 'à¦§à¦¾à¦°à¦¾à¦¬à¦¾à¦¹à¦¿à¦•à¦¤à¦¾ à¦¶à§‡à¦¯à¦¼à¦¾à¦° à¦•à¦°à§à¦¨';
+  String get shareStreak => 'ধারাবাহিকতা শেয়ার করুন';
 
   @override
-  String get shareBody => 'à¦…à¦—à§à¦°à¦—à¦¤à¦¿ à¦¶à§‡à¦¯à¦¼à¦¾à¦° à¦•à¦°à§à¦¨';
+  String get shareBody => 'অগ্রগতি শেয়ার করুন';
 
   @override
-  String get shareCompare => 'à¦¤à§à¦²à¦¨à¦¾à¦®à§‚à¦²à¦• à¦›à¦¬à¦¿ à¦¶à§‡à¦¯à¦¼à¦¾à¦° à¦•à¦°à§à¦¨';
+  String get shareCompare => 'তুলনামূলক ছবি শেয়ার করুন';
 
   @override
-  String get shareHint => 'à¦•à¦¾à¦°à§à¦¡ à¦¹à¦¿à¦¸à§‡à¦¬à§‡ à¦¶à§‡à¦¯à¦¼à¦¾à¦° à¦•à¦°à§à¦¨';
+  String get shareHint => 'কার্ড হিসেবে শেয়ার করুন';
 
   @override
-  String get shareFailed => 'à¦¶à§‡à¦¯à¦¼à¦¾à¦° à¦•à¦°à¦¾ à¦¸à¦®à§à¦­à¦¬ à¦¹à§Ÿà¦¨à¦¿';
+  String get shareFailed => 'শেয়ার করা সম্ভব হয়নি';
 
   @override
-  String get shareWeekOf => '{date}-à¦à¦° à¦¸à¦ªà§à¦¤à¦¾à¦¹';
+  String get shareWeekOf => 'গত ৭ দিন';
 
   @override
-  String get shareStreakLabel => 'à¦Ÿà¦¾à¦¨à¦¾ à¦¦à¦¿à¦¨';
+  String get shareStreakLabel => 'টানা দিন';
 
   @override
-  String get shareSessionsLabel => 'à¦¸à§‡à¦¶à¦¨';
+  String get shareSessionsLabel => 'সেশন';
 
   @override
-  String get shareVolumeLabel => 'à¦®à§‹à¦Ÿ à¦‰à¦¤à§à¦¤à§‹à¦²à¦¿à¦¤';
+  String get shareVolumeLabel => 'মোট উত্তোলিত';
 
   @override
-  String get shareSetsLabel => 'à¦¸à§‡à¦Ÿ';
+  String get shareSetsLabel => 'সেট';
 
   @override
-  String get shareNothing => 'à¦¶à§‡à¦¯à¦¼à¦¾à¦° à¦•à¦°à¦¾à¦° à¦®à¦¤à§‹ à¦¤à¦¥à§à¦¯ à¦¨à§‡à¦‡';
+  String get shareNothing => 'শেয়ার করার মতো তথ্য নেই';
 
   @override
-  String get restForExercise => 'à¦à¦‡ à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦®à§‡à¦° à¦¬à¦¿à¦¶à§à¦°à¦¾à¦®';
+  String get restForExercise => 'এই ব্যায়ামের বিশ্রাম';
 
   @override
-  String get restUsingDefault => 'à¦¡à¦¿à¦«à¦²à§à¦Ÿ à¦¬à¦¿à¦¶à§à¦°à¦¾à¦® à¦¬à§à¦¯à¦¬à¦¹à¦¾à¦° à¦•à¦°à¦¾ à¦¹à¦šà§à¦›à§‡';
+  String get restUsingDefault => 'ডিফল্ট বিশ্রাম ব্যবহার করা হচ্ছে';
 
   @override
-  String get restCustom => 'à¦•à¦¾à¦¸à§à¦Ÿà¦® à¦¬à¦¿à¦¶à§à¦°à¦¾à¦®';
+  String get restCustom => 'কাস্টম বিশ্রাম';
 
   @override
-  String get setType => 'à¦¸à§‡à¦Ÿà§‡à¦° à¦§à¦°à¦¨';
+  String get setType => 'সেটের ধরন';
 
   @override
-  String get setTypeNormal => 'à¦¸à¦¾à¦§à¦¾à¦°à¦£ à¦¸à§‡à¦Ÿ';
+  String get setTypeNormal => 'সাধারণ সেট';
 
   @override
-  String get setTypeWarmup => 'à¦“à¦¯à¦¼à¦¾à¦°à§à¦®à¦†à¦ª à¦¸à§‡à¦Ÿ';
+  String get setTypeWarmup => 'ওয়ার্মআপ সেট';
 
   @override
-  String get setTypeDrop => 'à¦¡à§à¦°à¦ª à¦¸à§‡à¦Ÿ';
+  String get setTypeDrop => 'ড্রপ সেট';
 
   @override
-  String get setTypeFailure => 'à¦¬à§à¦¯à¦°à§à¦¥à¦¤à¦¾ à¦ªà¦°à§à¦¯à¦¨à§à¦¤ (Failure)';
+  String get setTypeFailure => 'ব্যর্থতা পর্যন্ত (Failure)';
 
   @override
-  String get setTypeHint => 'à¦¸à§‡à¦Ÿà§‡à¦° à¦¤à§€à¦¬à§à¦°à¦¤à¦¾ à¦à¦¬à¦‚ à¦‰à¦¦à§à¦¦à§‡à¦¶à§à¦¯ à¦šà¦¿à¦¹à§à¦¨à¦¿à¦¤ à¦•à¦°à§à¦¨';
+  String get setTypeHint => 'সেটের তীব্রতা এবং উদ্দেশ্য চিহ্নিত করুন';
 
   @override
-  String get addWarmup => '+ à¦“à¦¯à¦¼à¦¾à¦°à§à¦®à¦†à¦ª à¦¯à§‹à¦— à¦•à¦°à§à¦¨';
+  String get addWarmup => '+ ওয়ার্মআপ যোগ করুন';
 
   @override
   String platesPerSide(String plates) {
-    return 'à¦ªà§à¦°à¦¤à¦¿ à¦ªà¦¾à¦¶à§‡à¦° à¦ªà§à¦²à§‡à¦Ÿ';
+    return 'প্রতি পাশে: $plates';
   }
 
   @override
-  String get howTo => 'à¦•à§€à¦­à¦¾à¦¬à§‡ à¦•à¦°à¦¬à§‡à¦¨';
+  String get howTo => 'কীভাবে করবেন';
 
   @override
-  String get similar => 'à¦…à¦¨à§à¦°à§‚à¦ª à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦®';
+  String get similar => 'অনুরূপ ব্যায়াম';
 
   @override
-  String get primaryLabel => 'à¦ªà§à¦°à¦§à¦¾à¦¨';
+  String get primaryLabel => 'প্রধান';
 
   @override
-  String get secondaryLabel => 'à¦¸à¦¹à¦¾à¦¯à¦¼à¦•';
+  String get secondaryLabel => 'সহায়ক';
 
   @override
-  String get none => 'à¦•à¦¿à¦›à§à¦‡ à¦¨à¦¯à¦¼';
+  String get none => 'কিছুই নয়';
 
   @override
   String setCount(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '{n', one: '{n');
+    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$nটি সেট', one: '$nটি সেট');
     return '$_temp0';
   }
 
   @override
   String volumeSuffix(String v) {
-    return 'à¦­à¦²à¦¿à¦‰à¦®';
+    return '$v ভলিউম';
   }
 
   @override
-  String get weeklyPlan => 'à¦¸à¦¾à¦ªà§à¦¤à¦¾à¦¹à¦¿à¦• à¦ªà¦°à¦¿à¦•à¦²à§à¦ªà¦¨à¦¾';
+  String get weeklyPlan => 'সাপ্তাহিক পরিকল্পনা';
 
   @override
-  String get yourRoutines => 'à¦†à¦ªà¦¨à¦¾à¦° à¦°à§à¦Ÿà¦¿à¦¨à¦¸à¦®à§‚à¦¹';
+  String get yourRoutines => 'আপনার রুটিনসমূহ';
 
   @override
-  String get noRoutines => 'à¦à¦–à¦¨à¦“ à¦•à§‹à¦¨à§‹ à¦°à§à¦Ÿà¦¿à¦¨ à¦¨à§‡à¦‡';
+  String get noRoutines => 'এখনও কোনো রুটিন নেই';
 
   @override
-  String get newRoutine => 'à¦¨à¦¤à§à¦¨ à¦°à§à¦Ÿà¦¿à¦¨';
+  String get newRoutine => 'নতুন রুটিন';
 
   @override
-  String get routineName => 'à¦°à§à¦Ÿà¦¿à¦¨à§‡à¦° à¦¨à¦¾à¦®';
+  String get routineName => 'রুটিনের নাম';
 
   @override
-  String get schedule => 'à¦¸à¦®à¦¯à¦¼à¦¸à§‚à¦šà§€';
+  String get schedule => 'সময়সূচী';
 
   @override
-  String get addFromList => 'à¦¤à¦¾à¦²à¦¿à¦•à¦¾ à¦¥à§‡à¦•à§‡ à¦¯à§‹à¦— à¦•à¦°à§à¦¨';
+  String get addFromList => 'তালিকা থেকে যোগ করুন';
 
   @override
-  String get addExercises => 'à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦® à¦¯à§‹à¦— à¦•à¦°à§à¦¨';
+  String get addExercises => 'ব্যায়াম যোগ করুন';
 
   @override
-  String get deleteRoutine => 'à¦°à§à¦Ÿà¦¿à¦¨ à¦®à§à¦›à§à¦¨';
+  String get deleteRoutine => 'রুটিন মুছুন';
 
   @override
   String exercisesWithCount(int n) {
-    return '$nà¦Ÿà¦¿ à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦®';
+    return '$nটি ব্যায়াম';
   }
 
   @override
   String setDay(String day) {
-    return 'à¦¦à¦¿à¦¨ à¦¨à¦¿à¦°à§à¦§à¦¾à¦°à¦£ à¦•à¦°à§à¦¨';
+    return '$day নির্ধারণ করুন';
   }
 
   @override
-  String get newRoutineName => 'à¦¨à¦¤à§à¦¨ à¦°à§à¦Ÿà¦¿à¦¨';
+  String get newRoutineName => 'নতুন রুটিন';
 
   @override
-  String get dragToReorder => 'à¦•à§à¦°à¦® à¦ªà¦°à¦¿à¦¬à¦°à§à¦¤à¦¨ à¦•à¦°à¦¤à§‡ à¦Ÿà¦¾à¦¨à§à¦¨';
+  String get dragToReorder => 'ক্রম পরিবর্তন করতে টানুন';
 
   @override
   String reorderHandle(String name) {
-    return 'à¦ªà§à¦¨à¦ƒà¦•à§à¦°à¦® à¦¹à§à¦¯à¦¾à¦¨à§à¦¡à§‡à¦²';
+    return '$name এর ক্রম পরিবর্তন করুন';
   }
 
   @override
-  String get removeFromRoutine => 'à¦°à§à¦Ÿà¦¿à¦¨ à¦¥à§‡à¦•à§‡ à¦¸à¦°à¦¾à¦¨';
+  String get removeFromRoutine => 'রুটিন থেকে সরান';
 
   @override
-  String get dropExercise => 'à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦® à¦¬à¦¾à¦¦ à¦¦à§‡à¦¬à§‡à¦¨?';
+  String get dropExercise => 'ব্যায়াম বাদ দেবেন?';
 
   @override
   String dropExerciseBody(String name) {
-    return 'à¦à¦Ÿà¦¿ à¦à¦‡ à¦°à§à¦Ÿà¦¿à¦¨ à¦¥à§‡à¦•à§‡ à¦¸à¦°à¦¿à¦¯à¦¼à§‡ à¦¦à§‡à¦“à¦¯à¦¼à¦¾ à¦¹à¦¬à§‡à¥¤';
+    return '\"$name\" এই ওয়ার্কআউট থেকে বাদ পড়বে। পূর্বে সেভ করা কিছু হারাবে না।';
   }
 
   @override
-  String get drop => 'à¦¬à¦¾à¦¦ à¦¦à¦¿à¦¨';
+  String get drop => 'বাদ দিন';
 
   @override
-  String get addToWorkout => 'à¦“à¦¯à¦¼à¦¾à¦°à§à¦•à¦†à¦‰à¦Ÿà§‡ à¦¯à§‹à¦— à¦•à¦°à§à¦¨';
+  String get addToWorkout => 'ওয়ার্কআউটে যোগ করুন';
 
   @override
-  String get resetData => 'à¦¸à¦¬ à¦¡à§‡à¦Ÿà¦¾ à¦°à¦¿à¦¸à§‡à¦Ÿ à¦•à¦°à§à¦¨';
+  String get resetData => 'সব ডেটা রিসেট করুন';
 
   @override
-  String get resetTitle => 'à¦¸à¦®à¦¸à§à¦¤ à¦¡à§‡à¦Ÿà¦¾ à¦°à¦¿à¦¸à§‡à¦Ÿ à¦•à¦°à¦¬à§‡à¦¨?';
+  String get resetTitle => 'সমস্ত ডেটা রিসেট করবেন?';
 
   @override
-  String get resetBody => 'à¦†à¦ªà¦¨à¦¾à¦° à¦¸à¦®à¦¸à§à¦¤ à¦¸à§‡à¦¶à¦¨, à¦°à§à¦Ÿà¦¿à¦¨ à¦à¦¬à¦‚ à¦…à¦—à§à¦°à¦—à¦¤à¦¿ à¦®à§à¦›à§‡ à¦¯à¦¾à¦¬à§‡à¥¤ à¦à¦‡ à¦ªà¦¦à¦•à§à¦·à§‡à¦ªà¦Ÿà¦¿ à¦«à¦¿à¦°à¦¿à¦¯à¦¼à§‡ à¦¨à§‡à¦“à¦¯à¦¼à¦¾ à¦¯à¦¾à¦¬à§‡ à¦¨à¦¾à¥¤';
+  String get resetBody =>
+      'আপনার সমস্ত সেশন, রুটিন এবং অগ্রগতি মুছে যাবে। এই পদক্ষেপটি ফিরিয়ে নেওয়া যাবে না।';
 
   @override
-  String get resetConfirm => 'à¦¸à¦¬ à¦®à§à¦›à§‡ à¦«à§‡à¦²à§à¦¨';
+  String get resetConfirm => 'সব মুছে ফেলুন';
 
   @override
-  String get resetDone => 'à¦¡à§‡à¦Ÿà¦¾ à¦¸à¦«à¦²à¦­à¦¾à¦¬à§‡ à¦°à¦¿à¦¸à§‡à¦Ÿ à¦¹à¦¯à¦¼à§‡à¦›à§‡';
+  String get resetDone => 'ডেটা সফলভাবে রিসেট হয়েছে';
 
   @override
-  String get support => 'à¦¸à¦¹à¦¾à¦¯à¦¼à¦¤à¦¾';
+  String get support => 'সহায়তা';
 
   @override
-  String get reportBug => 'à¦¸à¦®à¦¸à§à¦¯à¦¾à¦° à¦•à¦¥à¦¾ à¦œà¦¾à¦¨à¦¾à¦¨';
+  String get reportBug => 'সমস্যার কথা জানান';
 
   @override
-  String get requestFeature => 'à¦¨à¦¤à§à¦¨ à¦«à¦¿à¦šà¦¾à¦°à§‡à¦° à¦…à¦¨à§à¦°à§‹à¦§ à¦•à¦°à§à¦¨';
+  String get requestFeature => 'নতুন ফিচারের অনুরোধ করুন';
 
   @override
-  String get starOnGithub => 'à¦—à¦¿à¦Ÿà¦¹à¦¾à¦¬à§‡ à¦¸à§à¦Ÿà¦¾à¦° à¦¦à¦¿à¦¨';
+  String get starOnGithub => 'গিটহাবে স্টার দিন';
 
   @override
-  String get buyCoffee => 'à¦à¦•à¦Ÿà¦¿ à¦•à¦«à¦¿ à¦–à¦¾à¦“à§Ÿà¦¾à¦¨';
+  String get buyCoffee => 'একটি কফি খাওয়ান';
 
   @override
-  String get cantOpenLink => 'à¦²à¦¿à¦™à§à¦•à¦Ÿà¦¿ à¦–à§‹à¦²à¦¾ à¦¯à¦¾à¦¯à¦¼à¦¨à¦¿';
+  String get cantOpenLink => 'লিঙ্কটি খোলা যায়নি';
 
   @override
-  String get preferences => 'à¦ªà¦›à¦¨à§à¦¦à¦¸à¦®à§‚à¦¹';
+  String get preferences => 'পছন্দসমূহ';
 
   @override
-  String get theme => 'à¦¥à¦¿à¦®';
+  String get theme => 'থিম';
 
   @override
-  String get darkTheme => 'à¦¡à¦¾à¦°à§à¦•';
+  String get darkTheme => 'ডার্ক';
 
   @override
-  String get lightTheme => 'à¦²à¦¾à¦‡à¦Ÿ';
+  String get lightTheme => 'লাইট';
 
   @override
-  String get languageLabel => 'à¦­à¦¾à¦·à¦¾';
+  String get languageLabel => 'ভাষা';
 
   @override
-  String get unitsLabel => 'à¦à¦•à¦•';
+  String get unitsLabel => 'একক';
 
   @override
-  String get restTimer => 'à¦¬à¦¿à¦¶à§à¦°à¦¾à¦®à§‡à¦° à¦Ÿà¦¾à¦‡à¦®à¦¾à¦°';
+  String get restTimer => 'বিশ্রামের টাইমার';
 
   @override
-  String get alarmBlockedTitle => 'à¦…à§à¦¯à¦¾à¦²à¦¾à¦°à§à¦® à¦¬à¦¨à§à¦§ à¦°à§Ÿà§‡à¦›à§‡';
+  String get alarmBlockedTitle => 'অ্যালার্ম বন্ধ রয়েছে';
 
   @override
-  String get alarmBlockedBody => 'à¦¬à¦¿à¦¶à§à¦°à¦¾à¦®à§‡à¦° à¦…à§à¦¯à¦¾à¦²à¦¾à¦°à§à¦® à¦¬à¦¾à¦œà¦¾à¦¨à§‹à¦° à¦œà¦¨à§à¦¯ à¦¨à§‹à¦Ÿà¦¿à¦«à¦¿à¦•à§‡à¦¶à¦¨à§‡à¦° à¦…à¦¨à§à¦®à¦¤à¦¿ à¦ªà§à¦°à¦¯à¦¼à§‹à¦œà¦¨à¥¤';
+  String get alarmBlockedBody => 'বিশ্রামের অ্যালার্ম বাজানোর জন্য নোটিফিকেশনের অনুমতি প্রয়োজন।';
 
   @override
-  String get alarmBlockedAction => 'à¦¸à§‡à¦Ÿà¦¿à¦‚à¦¸à§‡ à¦¯à¦¾à¦¨';
+  String get alarmBlockedAction => 'সেটিংসে যান';
 
   @override
-  String get alarmSound => 'à¦…à§à¦¯à¦¾à¦²à¦¾à¦°à§à¦®à§‡à¦° à¦¶à¦¬à§à¦¦';
+  String get alarmSound => 'অ্যালার্মের শব্দ';
 
   @override
-  String get alarmDefaultName => 'à¦¡à¦¿à¦«à¦²à§à¦Ÿ à¦¬à¦¿à¦ª';
+  String get alarmDefaultName => 'ডিফল্ট বিপ';
 
   @override
-  String get alarmSoundHint => 'à¦¸à§‡à¦Ÿ à¦¶à§‡à¦·à§‡à¦° à¦¶à¦¬à§à¦¦ à¦¨à¦¿à¦°à§à¦§à¦¾à¦°à¦£ à¦•à¦°à§à¦¨';
+  String get alarmSoundHint => 'সেট শেষের শব্দ নির্ধারণ করুন';
 
   @override
-  String get alarmChoose => 'à¦•à¦¾à¦¸à§à¦Ÿà¦® à¦…à¦¡à¦¿à¦“ à¦¬à§‡à¦›à§‡ à¦¨à¦¿à¦¨';
+  String get alarmChoose => 'কাস্টম অডিও বেছে নিন';
 
   @override
-  String get alarmPreview => 'à¦¶à¦¬à§à¦¦ à¦¶à§à¦¨à§à¦¨';
+  String get alarmPreview => 'শব্দ শুনুন';
 
   @override
-  String get alarmReset => 'à¦¡à¦¿à¦«à¦²à§à¦Ÿà§‡ à¦«à§‡à¦°à¦¤ à¦¯à¦¾à¦¨';
+  String get alarmReset => 'ডিফল্টে ফেরত যান';
 
   @override
-  String get alarmTooLong => 'à¦…à¦¡à¦¿à¦“à¦Ÿà¦¿ à¦–à§à¦¬ à¦¬à¦¡à¦¼';
+  String get alarmTooLong => 'অডিওটি খুব বড়';
 
   @override
-  String get alarmInvalid => 'à¦…à¦•à¦¾à¦°à§à¦¯à¦•à¦° à¦…à¦¡à¦¿à¦“ à¦«à¦¾à¦‡à¦²';
+  String get alarmInvalid => 'অকার্যকর অডিও ফাইল';
 
   @override
   String alarmChanged(String name) {
-    return 'à¦…à§à¦¯à¦¾à¦²à¦¾à¦°à§à¦® à¦¶à¦¬à§à¦¦ à¦†à¦ªà¦¡à§‡à¦Ÿ à¦¹à¦¯à¦¼à§‡à¦›à§‡';
+    return 'অ্যালার্ম সাউন্ড \"$name\"-এ সেট করা হয়েছে';
   }
 
   @override
-  String get alarmChangedDefault => 'à¦¡à¦¿à¦«à¦²à§à¦Ÿ à¦¶à¦¬à§à¦¦à§‡ à¦«à§‡à¦°à¦¤ à¦à¦¸à§‡à¦›à§‡';
+  String get alarmChangedDefault => 'ডিফল্ট শব্দে ফেরত এসেছে';
 
   @override
-  String get homeWidgets => 'à¦¹à§‹à¦® à¦‰à¦‡à¦œà§‡à¦Ÿ';
+  String get homeWidgets => 'হোম উইজেট';
 
   @override
-  String get addActivityWidget => 'à¦…à§à¦¯à¦¾à¦•à§à¦Ÿà¦¿à¦­à¦¿à¦Ÿà¦¿ à¦‰à¦‡à¦œà§‡à¦Ÿ à¦¯à§‹à¦— à¦•à¦°à§à¦¨';
+  String get addActivityWidget => 'অ্যাক্টিভিটি উইজেট যোগ করুন';
 
   @override
-  String get addStatsWidget => 'à¦ªà¦°à¦¿à¦¸à¦‚à¦–à§à¦¯à¦¾à¦¨ à¦‰à¦‡à¦œà§‡à¦Ÿ à¦¯à§‹à¦— à¦•à¦°à§à¦¨';
+  String get addStatsWidget => 'পরিসংখ্যান উইজেট যোগ করুন';
 
   @override
-  String get pinUnsupported => 'à¦¡à¦¿à¦­à¦¾à¦‡à¦¸à§‡ à¦‰à¦‡à¦œà§‡à¦Ÿ à¦ªà¦¿à¦¨ à¦¸à¦®à¦°à§à¦¥à¦¿à¦¤ à¦¨à¦¯à¦¼';
+  String get pinUnsupported => 'ডিভাইসে উইজেট পিন সমর্থিত নয়';
 
   @override
-  String get background => 'à¦ªà¦Ÿà¦­à§‚à¦®à¦¿';
+  String get background => 'পটভূমি';
 
   @override
-  String get bgNone => 'à¦¸à¦¾à¦¦à¦¾à¦®à¦¾à¦Ÿà¦¾';
+  String get bgNone => 'সাদামাটা';
 
   @override
-  String get bgDots => 'à¦¡à¦Ÿ à¦ªà§à¦¯à¦¾à¦Ÿà¦¾à¦°à§à¦¨';
+  String get bgDots => 'ডট প্যাটার্ন';
 
   @override
-  String get bgGrid => 'à¦—à§à¦°à¦¿à¦¡ à¦ªà§à¦¯à¦¾à¦Ÿà¦¾à¦°à§à¦¨';
+  String get bgGrid => 'গ্রিড প্যাটার্ন';
 
   @override
-  String get data => 'à¦¡à§‡à¦Ÿà¦¾';
+  String get data => 'ডেটা';
 
   @override
-  String get exportCsv => 'CSV à¦à¦•à§à¦¸à¦ªà§‹à¦°à§à¦Ÿ à¦•à¦°à§à¦¨';
+  String get exportCsv => 'CSV এক্সপোর্ট করুন';
 
   @override
-  String get exportBackup => 'à¦¬à§à¦¯à¦¾à¦•à¦†à¦ª à¦à¦•à§à¦¸à¦ªà§‹à¦°à§à¦Ÿ à¦•à¦°à§à¦¨';
+  String get exportBackup => 'ব্যাকআপ এক্সপোর্ট করুন';
 
   @override
-  String get importBackup => 'à¦¬à§à¦¯à¦¾à¦•à¦†à¦ª à¦‡à¦®à§à¦ªà§‹à¦°à§à¦Ÿ à¦•à¦°à§à¦¨';
+  String get importBackup => 'ব্যাকআপ ইম্পোর্ট করুন';
 
   @override
-  String get importHint => 'à¦œà¦¿à¦ª à¦¬à¦¾ à¦œà§‡à¦¸à¦¨ à¦¬à§à¦¯à¦¾à¦•à¦†à¦ª à¦«à¦¾à¦‡à¦² à¦¨à¦¿à¦°à§à¦¬à¦¾à¦šà¦¨ à¦•à¦°à§à¦¨';
+  String get importHint => 'জিপ বা জেসন ব্যাকআপ ফাইল নির্বাচন করুন';
 
   @override
-  String get import => 'à¦‡à¦®à§à¦ªà§‹à¦°à§à¦Ÿ';
+  String get import => 'ইম্পোর্ট';
 
   @override
-  String get chooseFile => 'à¦«à¦¾à¦‡à¦² à¦¨à¦¿à¦°à§à¦¬à¦¾à¦šà¦¨ à¦•à¦°à§à¦¨';
+  String get chooseFile => 'ফাইল নির্বাচন করুন';
 
   @override
-  String get importFromApp => 'à¦…à¦¨à§à¦¯ à¦…à§à¦¯à¦¾à¦ª à¦¥à§‡à¦•à§‡ à¦‡à¦®à§à¦ªà§‹à¦°à§à¦Ÿ';
+  String get importFromApp => 'অন্য অ্যাপ থেকে ইম্পোর্ট';
 
   @override
-  String get importUnknownFormat => 'à¦…à¦œà¦¾à¦¨à¦¾ à¦«à¦¾à¦‡à¦² à¦«à¦°à¦®à§à¦¯à¦¾à¦Ÿ';
+  String get importUnknownFormat => 'অজানা ফাইল ফরম্যাট';
 
   @override
-  String get importZipNoWeights => 'à¦œà¦¿à¦ª à¦«à¦¾à¦‡à¦²à§‡ à¦•à§‹à¦¨à§‹ à¦“à¦œà¦¨ à¦¡à§‡à¦Ÿà¦¾ à¦¨à§‡à¦‡';
+  String get importZipNoWeights => 'জিপ ফাইলে কোনো ওজন ডেটা নেই';
 
   @override
   String importWeights(int n) {
-    return 'à¦“à¦œà¦¨ à¦‡à¦®à§à¦ªà§‹à¦°à§à¦Ÿ à¦•à¦°à§à¦¨';
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$nটি ওজন পরিমাপ ইম্পোর্ট করা হয়েছে',
+      one: '$nটি ওজন পরিমাপ ইম্পোর্ট করা হয়েছে',
+    );
+    return '$_temp0';
   }
 
   @override
-  String get importReadFailed => 'à¦«à¦¾à¦‡à¦² à¦ªà§œà¦¾ à¦¸à¦®à§à¦­à¦¬ à¦¹à§Ÿà¦¨à¦¿';
+  String get importReadFailed => 'ফাইল পড়া সম্ভব হয়নি';
 
   @override
-  String get importUnitTitle => 'à¦“à¦œà¦¨à§‡à¦° à¦à¦•à¦• à¦¨à¦¿à¦°à§à¦¬à¦¾à¦šà¦¨ à¦•à¦°à§à¦¨';
+  String get importUnitTitle => 'ওজনের একক নির্বাচন করুন';
 
   @override
-  String get importUnitBody => 'à¦‡à¦®à§à¦ªà§‹à¦°à§à¦Ÿ à¦•à¦°à¦¾ à¦¡à§‡à¦Ÿà¦¾ à¦•à§‹à¦¨ à¦à¦•à¦•à§‡ à¦¸à¦‚à¦°à¦•à§à¦·à¦¿à¦¤?';
+  String get importUnitBody => 'ইম্পোর্ট করা ডেটা কোন এককে সংরক্ষিত?';
 
   @override
-  String get importNothing => 'à¦‡à¦®à§à¦ªà§‹à¦°à§à¦Ÿ à¦•à¦°à¦¾à¦° à¦®à¦¤à§‹ à¦¡à§‡à¦Ÿà¦¾ à¦ªà¦¾à¦“à¦¯à¦¼à¦¾ à¦¯à¦¾à¦¯à¦¼à¦¨à¦¿';
+  String get importNothing => 'ইম্পোর্ট করার মতো ডেটা পাওয়া যায়নি';
 
   @override
   String importDone(int n) {
-    return 'à¦¬à§à¦¯à¦¾à¦•à¦†à¦ª à¦¸à¦«à¦²à¦­à¦¾à¦¬à§‡ à¦‡à¦®à§à¦ªà§‹à¦°à§à¦Ÿ à¦¹à¦¯à¦¼à§‡à¦›à§‡';
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$nটি সেশন ইম্পোর্ট করা হয়েছে',
+      one: '$nটি সেশন ইম্পোর্ট করা হয়েছে',
+    );
+    return '$_temp0';
   }
 
   @override
-  String get aboutGymmane => 'Open GYM à¦¸à¦®à§à¦ªà¦°à§à¦•à§‡';
+  String get aboutGymmane => 'Open GYM সম্পর্কে';
 
   @override
-  String get yourProfile => 'à¦†à¦ªà¦¨à¦¾à¦° à¦ªà§à¦°à§‹à¦«à¦¾à¦‡à¦²';
+  String get yourProfile => 'আপনার প্রোফাইল';
 
   @override
-  String get autofills => 'à¦•à§à¦¯à¦¾à¦²à¦•à§à¦²à§‡à¦Ÿà¦°à§‡ à¦¸à§à¦¬à¦¯à¦¼à¦‚à¦•à§à¦°à¦¿à¦¯à¦¼ à¦ªà§‚à¦°à¦£';
+  String get autofills => 'ক্যালকুলেটরে স্বয়ংক্রিয় পূরণ';
 
   @override
-  String get nameLabel => 'à¦¨à¦¾à¦®';
+  String get nameLabel => 'নাম';
 
   @override
-  String get sexLabel => 'à¦²à¦¿à¦™à§à¦—';
+  String get sexLabel => 'লিঙ্গ';
 
   @override
-  String get macroProtein => 'à¦ªà§à¦°à§‹à¦Ÿà¦¿à¦¨';
+  String get macroProtein => 'প্রোটিন';
 
   @override
-  String get macroCarbs => 'à¦•à¦¾à¦°à§à¦¬à¦¸';
+  String get macroCarbs => 'কার্বস';
 
   @override
-  String get macroFat => 'à¦«à§à¦¯à¦¾à¦Ÿ';
+  String get macroFat => 'ফ্যাট';
 
   @override
-  String get male => 'à¦ªà§à¦°à§à¦·';
+  String get male => 'পুরুষ';
 
   @override
-  String get female => 'à¦®à¦¹à¦¿à¦²à¦¾';
+  String get female => 'মহিলা';
 
   @override
-  String get ageLabel => 'à¦¬à¦¯à¦¼à¦¸';
+  String get ageLabel => 'বয়স';
 
   @override
-  String get heightLabel => 'à¦‰à¦šà§à¦šà¦¤à¦¾';
+  String get heightLabel => 'উচ্চতা';
 
   @override
-  String get weightLabel => 'à¦“à¦œà¦¨';
+  String get weightLabel => 'ওজন';
 
   @override
-  String get weeklyGoal => 'à¦¸à¦¾à¦ªà§à¦¤à¦¾à¦¹à¦¿à¦• à¦²à¦•à§à¦·à§à¦¯';
+  String get weeklyGoal => 'সাপ্তাহিক লক্ষ্য';
 
   @override
-  String get activityLabel => 'à¦¦à§ˆà¦¨à¦¿à¦• à¦•à¦¾à¦°à§à¦¯à¦•à§à¦·à¦®à¦¤à¦¾';
+  String get activityLabel => 'দৈনিক কার্যক্ষমতা';
 
   @override
-  String get addPhoto => 'à¦›à¦¬à¦¿ à¦¯à§‹à¦— à¦•à¦°à§à¦¨';
+  String get addPhoto => 'ছবি যোগ করুন';
 
   @override
-  String get removePhoto => 'à¦›à¦¬à¦¿ à¦¸à¦°à¦¾à¦¨';
+  String get removePhoto => 'ছবি সরান';
 
   @override
-  String get takePhoto => 'à¦›à¦¬à¦¿ à¦¤à§à¦²à§à¦¨';
+  String get takePhoto => 'ছবি তুলুন';
 
   @override
-  String get chooseGallery => 'à¦—à§à¦¯à¦¾à¦²à¦¾à¦°à¦¿ à¦¥à§‡à¦•à§‡ à¦¬à§‡à¦›à§‡ à¦¨à¦¿à¦¨';
+  String get chooseGallery => 'গ্যালারি থেকে বেছে নিন';
 
   @override
-  String get backupCopied => 'à¦¬à§à¦¯à¦¾à¦•à¦†à¦ª à¦•à§à¦²à¦¿à¦ªà¦¬à§‹à¦°à§à¦¡à§‡ à¦•à¦ªà¦¿ à¦•à¦°à¦¾ à¦¹à¦¯à¦¼à§‡à¦›à§‡';
+  String get backupCopied => 'ব্যাকআপ ক্লিপবোর্ডে কপি করা হয়েছে';
 
   @override
-  String get backupImported => 'à¦¬à§à¦¯à¦¾à¦•à¦†à¦ª à¦¸à¦«à¦²à¦­à¦¾à¦¬à§‡ à¦ªà§à¦¨à¦°à§à¦¦à§à¦§à¦¾à¦° à¦•à¦°à¦¾ à¦¹à¦¯à¦¼à§‡à¦›à§‡';
+  String get backupImported => 'ব্যাকআপ সফলভাবে পুনরুদ্ধার করা হয়েছে';
 
   @override
-  String get backupFailed => 'à¦¬à§à¦¯à¦¾à¦•à¦†à¦ª à¦¬à§à¦¯à¦°à§à¦¥ à¦¹à¦¯à¦¼à§‡à¦›à§‡';
+  String get backupFailed => 'ব্যাকআপ ব্যর্থ হয়েছে';
 
   @override
-  String get nothingToExport => 'à¦à¦•à§à¦¸à¦ªà§‹à¦°à§à¦Ÿ à¦•à¦°à¦¾à¦° à¦œà¦¨à§à¦¯ à¦•à§‹à¦¨à§‹ à¦¡à§‡à¦Ÿà¦¾ à¦¨à§‡à¦‡';
+  String get nothingToExport => 'এক্সপোর্ট করার জন্য কোনো ডেটা নেই';
 
   @override
-  String get athlete => 'à¦…à§à¦¯à¦¾à¦¥à¦²à¦¿à¦Ÿ';
+  String get athlete => 'অ্যাথলিট';
 
   @override
   String calculatorsCount(int n) {
-    return '$nà¦Ÿà¦¿ à¦•à§à¦¯à¦¾à¦²à¦•à§à¦²à§‡à¦Ÿà¦°';
+    return '$nটি ক্যালকুলেটর';
   }
 
   @override
-  String get result => 'à¦«à¦²à¦¾à¦«à¦²';
+  String get result => 'ফলাফল';
 
   @override
-  String get weightLifted => 'à¦‰à¦¤à§à¦¤à§‹à¦²à¦¿à¦¤ à¦“à¦œà¦¨';
+  String get weightLifted => 'উত্তোলিত ওজন';
 
   @override
-  String get repsPerformed => 'à¦¸à¦®à§à¦ªà¦¨à§à¦¨ à¦°à§‡à¦ªà¦¸';
+  String get repsPerformed => 'সম্পন্ন রেপস';
 
   @override
-  String get neck => 'à¦˜à¦¾à§œ';
+  String get neck => 'ঘাড়';
 
   @override
-  String get waist => 'à¦•à§‹à¦®à¦°';
+  String get waist => 'কোমর';
 
   @override
-  String get hip => 'à¦¨à¦¿à¦¤à¦®à§à¦¬';
+  String get hip => 'নিতম্ব';
 
   @override
-  String get targetWeight => 'à¦•à¦¾à¦™à§à¦•à§à¦·à¦¿à¦¤ à¦“à¦œà¦¨';
+  String get targetWeight => 'কাঙ্ক্ষিত ওজন';
 
   @override
-  String get workingWeight => 'à¦“à¦¯à¦¼à¦¾à¦°à§à¦•à¦¿à¦‚ à¦“à¦œà¦¨';
+  String get workingWeight => 'ওয়ার্কিং ওজন';
 
   @override
-  String get activityLevel => 'à¦¶à¦¾à¦°à§€à¦°à¦¿à¦• à¦¸à¦•à§à¦°à¦¿à¦¯à¦¼à¦¤à¦¾';
+  String get activityLevel => 'শারীরিক সক্রিয়তা';
 
   @override
-  String get barWeight => 'à¦°à¦¡/à¦¬à¦¾à¦°à§‡à¦° à¦“à¦œà¦¨';
+  String get barWeight => 'রড/বারের ওজন';
 
   @override
-  String get perSide => 'à¦ªà§à¦°à¦¤à¦¿ à¦ªà¦¾à¦¶à§‡';
+  String get perSide => 'প্রতি পাশে';
 
   @override
-  String get justTheBar => 'à¦¶à§à¦§à§à¦®à¦¾à¦¤à§à¦° à¦¬à¦¾à¦°';
+  String get justTheBar => 'শুধুমাত্র বার';
 
   @override
   String perSideCount(int n) {
-    return 'à¦ªà§à¦°à¦¤à¦¿ à¦ªà¦¾à¦¶à§‡ $n';
+    return 'প্রতি পাশে $n';
   }
 
   @override
   String rampSet(String pct, int reps) {
-    return 'à¦°â€à§à¦¯à¦¾à¦®à§à¦ª à¦¸à§‡à¦Ÿ';
+    return '$pct · $reps রেপ';
   }
 
   @override
-  String get toolNameRm => 'à¦“à§Ÿà¦¾à¦¨-à¦°à§‡à¦ª à¦®à§à¦¯à¦¾à¦•à§à¦¸';
+  String get toolNameRm => 'ওয়ান-রেপ ম্যাক্স';
 
   @override
-  String get toolNameBmi => 'à¦¬à¦¿à¦à¦®à¦†à¦‡ à¦•à§à¦¯à¦¾à¦²à¦•à§à¦²à§‡à¦Ÿà¦°';
+  String get toolNameBmi => 'বিএমআই ক্যালকুলেটর';
 
   @override
-  String get toolNameCal => 'à¦•à§à¦¯à¦¾à¦²à§‹à¦°à¦¿ à¦•à§à¦¯à¦¾à¦²à¦•à§à¦²à§‡à¦Ÿà¦°';
+  String get toolNameCal => 'ক্যালোরি ক্যালকুলেটর';
 
   @override
-  String get toolNameBf => 'à¦¬à¦¡à¦¿ à¦«à§à¦¯à¦¾à¦Ÿ à¦•à§à¦¯à¦¾à¦²à¦•à§à¦²à§‡à¦Ÿà¦°';
+  String get toolNameBf => 'বডি ফ্যাট ক্যালকুলেটর';
 
   @override
-  String get toolNamePlate => 'à¦ªà§à¦²à§‡à¦Ÿ à¦•à§à¦¯à¦¾à¦²à¦•à§à¦²à§‡à¦Ÿà¦°';
+  String get toolNamePlate => 'প্লেট ক্যালকুলেটর';
 
   @override
-  String get toolNameWarmup => 'à¦“à¦¯à¦¼à¦¾à¦°à§à¦®à¦†à¦ª à¦•à§à¦¯à¦¾à¦²à¦•à§à¦²à§‡à¦Ÿà¦°';
+  String get toolNameWarmup => 'ওয়ার্মআপ ক্যালকুলেটর';
 
   @override
-  String get toolTitleRm => 'à¦“à¦¯à¦¼à¦¾à¦¨-à¦°à§‡à¦ª à¦®à§à¦¯à¦¾à¦•à§à¦¸';
+  String get toolTitleRm => 'ওয়ান-রেপ ম্যাক্স';
 
   @override
-  String get toolTitleBmi => 'à¦¬à¦¡à¦¿ à¦®à§à¦¯à¦¾à¦¸ à¦‡à¦¨à¦¡à§‡à¦•à§à¦¸';
+  String get toolTitleBmi => 'বডি ম্যাস ইনডেক্স';
 
   @override
-  String get toolTitleCal => 'à¦¦à§ˆà¦¨à¦¿à¦• à¦•à§à¦¯à¦¾à¦²à§‹à¦°à¦¿ à¦ªà§à¦°à¦¯à¦¼à§‹à¦œà¦¨';
+  String get toolTitleCal => 'দৈনিক ক্যালোরি প্রয়োজন';
 
   @override
-  String get toolTitleBf => 'à¦¶à¦°à§€à¦°à§‡à¦° à¦šà¦°à§à¦¬à¦¿à¦° à¦¶à¦¤à¦•à¦°à¦¾ à¦¹à¦¾à¦°';
+  String get toolTitleBf => 'শরীরের চর্বির শতকরা হার';
 
   @override
-  String get toolTitlePlate => 'à¦ªà§à¦²à§‡à¦Ÿà§‡à¦° à¦¹à¦¿à¦¸à¦¾à¦¬';
+  String get toolTitlePlate => 'প্লেটের হিসাব';
 
   @override
-  String get toolTitleWarmup => 'à¦“à¦¯à¦¼à¦¾à¦°à§à¦®à¦†à¦ª à¦°à§à¦Ÿà¦¿à¦¨';
+  String get toolTitleWarmup => 'ওয়ার্মআপ রুটিন';
 
   @override
-  String get toolHintRm => 'à¦¯à§‡à¦•à§‹à¦¨à§‹ à¦“à¦œà¦¨à§‡à¦° à¦°à§‡à¦ªà¦¸ à¦¥à§‡à¦•à§‡ à¦¸à¦°à§à¦¬à¦¾à¦§à¦¿à¦• à¦‰à¦¤à§à¦¤à§‹à¦²à¦¨ à¦¹à¦¿à¦¸à¦¾à¦¬ à¦•à¦°à§à¦¨';
+  String get toolHintRm => 'যেকোনো ওজনের রেপস থেকে সর্বাধিক উত্তোলন হিসাব করুন';
 
   @override
-  String get toolHintCal => 'à¦¬à¦œà¦¾à¦¯à¦¼ à¦°à¦¾à¦–à¦¾, à¦•à¦®à¦¾à¦¨à§‹ à¦¬à¦¾ à¦¬à¦¾à§œà¦¾à¦¨à§‹à¦° à¦•à§à¦¯à¦¾à¦²à§‹à¦°à¦¿ à¦¹à¦¿à¦¸à¦¾à¦¬';
+  String get toolHintCal => 'বজায় রাখা, কমানো বা বাড়ানোর ক্যালোরি হিসাব';
 
   @override
-  String get toolHintBf => 'à¦‡à¦‰à¦à¦¸ à¦¨à§‡à¦­à¦¿ à¦ªà¦¦à§à¦§à¦¤à¦¿à¦¤à§‡ à¦¶à¦¾à¦°à§€à¦°à¦¿à¦• à¦šà¦°à§à¦¬à¦¿à¦° à¦ªà¦°à¦¿à¦®à¦¾à¦ª';
+  String get toolHintBf => 'ইউএস নেভি পদ্ধতিতে শারীরিক চর্বির পরিমাপ';
 
   @override
-  String get toolHintPlate => 'à¦¬à¦¾à¦°à§‡ à¦•à§‹à¦¨ à¦ªà§à¦²à§‡à¦Ÿà¦—à§à¦²à§‹ à¦¸à¦¾à¦œà¦¾à¦¤à§‡ à¦¹à¦¬à§‡ à¦¤à¦¾ à¦¦à§‡à¦–à§à¦¨';
+  String get toolHintPlate => 'বারে কোন প্লেটগুলো সাজাতে হবে তা দেখুন';
 
   @override
-  String get toolHintWarmup => 'à¦­à¦¾à¦°à§€ à¦¸à§‡à¦Ÿà§‡à¦° à¦†à¦—à§‡ à¦¨à¦¿à¦°à¦¾à¦ªà¦¦ à¦“à¦¯à¦¼à¦¾à¦°à§à¦®à¦†à¦ª à¦¸à§‡à¦Ÿ à¦ªà§à¦°à¦¸à§à¦¤à§à¦¤ à¦•à¦°à§à¦¨';
+  String get toolHintWarmup => 'ভারী সেটের আগে নিরাপদ ওয়ার্মআপ সেট প্রস্তুত করুন';
 
   @override
-  String get toolDescRm => 'à¦†à¦ªà¦¨à¦¾à¦° à¦¸à¦°à§à¦¬à¦¾à¦§à¦¿à¦• à¦¸à¦•à§à¦·à¦®à¦¤à¦¾ à¦†à¦¨à§à¦®à¦¾à¦¨ à¦•à¦°à§à¦¨à¥¤';
+  String get toolDescRm => 'আপনার সর্বাধিক সক্ষমতা আনুমান করুন।';
 
   @override
-  String get toolDescBmi => 'à¦‰à¦šà§à¦šà¦¤à¦¾ à¦à¦¬à¦‚ à¦“à¦œà¦¨à§‡à¦° à¦¸à§à¦·à¦® à¦…à¦¨à§à¦ªà¦¾à¦¤ à¦œà¦¾à¦¨à§à¦¨à¥¤';
+  String get toolDescBmi => 'উচ্চতা এবং ওজনের সুষম অনুপাত জানুন।';
 
   @override
-  String get toolDescCal => 'à¦†à¦ªà¦¨à¦¾à¦° à¦²à¦•à§à¦·à§à¦¯à§‡à¦° à¦œà¦¨à§à¦¯ à¦‰à¦ªà¦¯à§à¦•à§à¦¤ à¦–à¦¾à¦¦à§à¦¯ à¦ªà¦°à¦¿à¦®à¦¾à¦ª à¦•à¦°à§à¦¨à¥¤';
+  String get toolDescCal => 'আপনার লক্ষ্যের জন্য উপযুক্ত খাদ্য পরিমাপ করুন।';
 
   @override
-  String get toolDescBf => 'à¦¶à¦°à§€à¦°à§‡à¦° à¦šà¦°à§à¦¬à¦¿à¦° à¦†à¦¨à§à¦®à¦¾à¦¨à¦¿à¦• à¦¶à¦¤à¦¾à¦‚à¦¶ à¦œà¦¾à¦¨à§à¦¨à¥¤';
+  String get toolDescBf => 'শরীরের চর্বির আনুমানিক শতাংশ জানুন।';
 
   @override
-  String get toolDescPlate => 'à¦¬à¦¾à¦°à§‡ à¦ªà§à¦²à§‡à¦Ÿ à¦¸à¦¾à¦œà¦¾à¦¨à§‹à¦° à¦¸à¦ à¦¿à¦• à¦¨à¦¿à¦°à§à¦¦à§‡à¦¶à¦¿à¦•à¦¾à¥¤';
+  String get toolDescPlate => 'বারে প্লেট সাজানোর সঠিক নির্দেশিকা।';
 
   @override
-  String get toolDescWarmup => 'à¦†à¦˜à¦¾à¦¤ à¦à¦¡à¦¼à¦¿à¦¯à¦¼à§‡ à¦¸à¦°à§à¦¬à§‹à¦šà§à¦š à¦•à¦¾à¦°à§à¦¯à¦•à§à¦·à¦®à¦¤à¦¾à¦° à¦œà¦¨à§à¦¯ à¦ªà§à¦°à¦¸à§à¦¤à§à¦¤à¦¿ à¦¨à¦¿à¦¨à¥¤';
+  String get toolDescWarmup => 'আঘাত এড়িয়ে সর্বোচ্চ কার্যক্ষমতার জন্য প্রস্তুতি নিন।';
 
   @override
-  String get bmiUnderweight => 'à¦•à¦® à¦“à¦œà¦¨';
+  String get bmiUnderweight => 'কম ওজন';
 
   @override
-  String get bmiNormal => 'à¦¸à§à¦¬à¦¾à¦­à¦¾à¦¬à¦¿à¦• à¦“à¦œà¦¨';
+  String get bmiNormal => 'স্বাভাবিক ওজন';
 
   @override
-  String get bmiOverweight => 'à¦…à¦¤à¦¿à¦°à¦¿à¦•à§à¦¤ à¦“à¦œà¦¨';
+  String get bmiOverweight => 'অতিরিক্ত ওজন';
 
   @override
-  String get bmiObese => 'à¦¸à§à¦¥à§‚à¦²à¦¤à¦¾';
+  String get bmiObese => 'স্থূলতা';
 
   @override
-  String get actSedentary => 'à¦…à¦²à¦¸ / à¦¬à¦¸à§‡ à¦•à¦¾à¦œ';
+  String get actSedentary => 'অলস / বসে কাজ';
 
   @override
-  String get actLight => 'à¦¹à¦¾à¦²à¦•à¦¾ à¦¸à¦•à§à¦°à¦¿à¦¯à¦¼ (à§§-à§© à¦¦à¦¿à¦¨/à¦¸à¦ªà§à¦¤à¦¾à¦¹)';
+  String get actLight => 'হালকা সক্রিয় (১-৩ দিন/সপ্তাহ)';
 
   @override
-  String get actActive => 'à¦…à¦¤à§à¦¯à¦¨à§à¦¤ à¦¸à¦•à§à¦°à¦¿à¦¯à¦¼ (à§¬-à§­ à¦¦à¦¿à¦¨/à¦¸à¦ªà§à¦¤à¦¾à¦¹)';
+  String get actActive => 'অত্যন্ত সক্রিয় (৬-৭ দিন/সপ্তাহ)';
 
   @override
-  String get actModerate => 'à¦®à¦¾à¦à¦¾à¦°à¦¿ à¦¸à¦•à§à¦°à¦¿à¦¯à¦¼ (à§©-à§« à¦¦à¦¿à¦¨/à¦¸à¦ªà§à¦¤à¦¾à¦¹)';
+  String get actModerate => 'মাঝারি সক্রিয় (৩-৫ দিন/সপ্তাহ)';
 
   @override
-  String get muscleChest => 'à¦¬à§à¦•';
+  String get muscleChest => 'বুক';
 
   @override
-  String get muscleBack => 'à¦ªà¦¿à¦ ';
+  String get muscleBack => 'পিঠ';
 
   @override
-  String get muscleShoulders => 'à¦•à¦¾à¦à¦§';
+  String get muscleShoulders => 'কাঁধ';
 
   @override
-  String get muscleBiceps => 'à¦¬à¦¾à¦‡à¦¸à§‡à¦ªà§à¦¸';
+  String get muscleBiceps => 'বাইসেপ্স';
 
   @override
-  String get muscleTriceps => 'à¦Ÿà§à¦°à¦¾à¦‡à¦¸à§‡à¦ªà§à¦¸';
+  String get muscleTriceps => 'ট্রাইসেপ্স';
 
   @override
-  String get muscleForearm => 'à¦…à¦—à§à¦°à¦¬à¦¾à¦¹à§';
+  String get muscleForearm => 'অগ্রবাহু';
 
   @override
-  String get muscleTrapezius => 'à¦Ÿà§à¦°à§à¦¯à¦¾à¦ªà§‡à¦œà¦¿à¦¯à¦¼à¦¾à¦¸';
+  String get muscleTrapezius => 'ট্র্যাপেজিয়াস';
 
   @override
-  String get muscleAbdomen => 'à¦…à§à¦¯à¦¾à¦¬à¦¸ / à¦ªà§‡à¦Ÿ';
+  String get muscleAbdomen => 'অ্যাবস / পেট';
 
   @override
-  String get muscleObliques => 'à¦…à¦¬à¦²à¦¿à¦•à§à¦¸';
+  String get muscleObliques => 'অবলিক্স';
 
   @override
-  String get muscleQuads => 'à¦•à§‹à¦¯à¦¼à¦¾à¦¡à§à¦°à¦¿à¦¸à§‡à¦ªà§à¦¸';
+  String get muscleQuads => 'কোয়াড্রিসেপ্স';
 
   @override
-  String get muscleHamstrings => 'à¦¹à§à¦¯à¦¾à¦®à¦¸à§à¦Ÿà§à¦°à¦¿à¦‚à¦¸';
+  String get muscleHamstrings => 'হ্যামস্ট্রিংস';
 
   @override
-  String get muscleGlutes => 'à¦—à§à¦²à§à¦Ÿà¦¸';
+  String get muscleGlutes => 'গ্লুটস';
 
   @override
-  String get muscleCalves => 'à¦•à¦¾à¦«';
+  String get muscleCalves => 'কাফ';
 
   @override
-  String get mgChest => 'à¦¬à§à¦•';
+  String get mgChest => 'বুক';
 
   @override
-  String get mgBack => 'à¦ªà¦¿à¦ ';
+  String get mgBack => 'পিঠ';
 
   @override
-  String get mgLegs => 'à¦ªà¦¾';
+  String get mgLegs => 'পা';
 
   @override
-  String get mgShoulders => 'à¦•à¦¾à¦à¦§';
+  String get mgShoulders => 'কাঁধ';
 
   @override
-  String get mgArms => 'à¦¹à¦¾à¦¤';
+  String get mgArms => 'হাত';
 
   @override
-  String get mgCore => 'à¦•à§‹à¦°';
+  String get mgCore => 'কোর';
 
   @override
-  String get equipBarbell => 'à¦¬à¦¾à¦°à¦¬à§‡à¦²';
+  String get equipBarbell => 'বারবেল';
 
   @override
-  String get equipDumbbell => 'à¦¡à¦¾à¦®à§à¦¬à§‡à¦²';
+  String get equipDumbbell => 'ডাম্বেল';
 
   @override
-  String get equipCable => 'à¦•à§‡à¦¬à¦²';
+  String get equipCable => 'কেবল';
 
   @override
-  String get equipMachine => 'à¦®à§‡à¦¶à¦¿à¦¨';
+  String get equipMachine => 'মেশিন';
 
   @override
-  String get equipBodyweight => 'à¦¶à¦°à§€à¦°à§‡à¦° à¦“à¦œà¦¨';
+  String get equipBodyweight => 'শরীরের ওজন';
 
   @override
-  String get equipWeighted => 'à¦…à¦¤à¦¿à¦°à¦¿à¦•à§à¦¤ à¦“à¦œà¦¨à¦¯à§à¦•à§à¦¤';
+  String get equipWeighted => 'অতিরিক্ত ওজনযুক্ত';
 
   @override
-  String get equipBand => 'à¦°à§‡à¦œà¦¿à¦¸à§à¦Ÿà§à¦¯à¦¾à¦¨à§à¦¸ à¦¬à§à¦¯à¦¾à¦¨à§à¦¡';
+  String get equipBand => 'রেজিস্ট্যান্স ব্যান্ড';
 
   @override
-  String get equipKettlebell => 'à¦•à§‡à¦Ÿà¦²à¦¬à§‡à¦²';
+  String get equipKettlebell => 'কেটলবেল';
 
   @override
-  String get equipRings => 'à¦œà¦¿à¦®à¦¨à§à¦¯à¦¾à¦¸à§à¦Ÿà¦¿à¦• à¦°à¦¿à¦‚à¦¸';
+  String get equipRings => 'জিমন্যাস্টিক রিংস';
 
   @override
-  String get equipOther => 'à¦…à¦¨à§à¦¯à¦¾à¦¨à§à¦¯';
+  String get equipOther => 'অন্যান্য';
 
   @override
-  String get diffBeginner => 'à¦¶à¦¿à¦•à§à¦·à¦¾à¦¨à¦¬à¦¿à¦¸';
+  String get diffBeginner => 'শিক্ষানবিস';
 
   @override
-  String get diffAdvanced => 'à¦‰à¦¨à§à¦¨à¦¤';
+  String get diffAdvanced => 'উন্নত';
 
   @override
-  String get diffIntermediate => 'à¦®à¦¾à¦à¦¾à¦°à¦¿';
+  String get diffIntermediate => 'মাঝারি';
 
   @override
-  String get about => 'à¦¸à¦®à§à¦ªà¦°à§à¦•à§‡';
+  String get about => 'সম্পর্কে';
 
   @override
   String version(String v) {
-    return 'à¦­à¦¾à¦°à§à¦¸à¦¨';
+    return 'সংস্করণ $v';
   }
 
   @override
-  String get aboutBlurb => 'à¦¬à¦¿à¦œà§à¦žà¦¾à¦ªà¦¨à¦¹à§€à¦¨, à¦¸à¦®à§à¦ªà§‚à¦°à§à¦£ à¦…à¦«à¦²à¦¾à¦‡à¦¨ à¦“à¦ªà§‡à¦¨ à¦¸à§‹à¦°à§à¦¸ à¦œà¦¿à¦® à¦²à¦—à¥¤';
+  String get aboutBlurb => 'বিজ্ঞাপনহীন, সম্পূর্ণ অফলাইন ওপেন সোর্স জিম লগ।';
 
   @override
-  String get freeForever => 'à¦šà¦¿à¦°à¦•à¦¾à¦² à¦¬à¦¿à¦¨à¦¾à¦®à§‚à¦²à§à¦¯à§‡';
+  String get freeForever => 'চিরকাল বিনামূল্যে';
 
   @override
-  String get freeForeverWhy => 'à¦•à§‹à¦¨à§‹ à¦ªà§‡à¦“à¦¯à¦¼à¦¾à¦² à¦¨à§‡à¦‡, à¦•à§‹à¦¨à§‹ à¦¸à¦¾à¦¬à¦¸à§à¦•à§à¦°à¦¿à¦ªà¦¶à¦¨ à¦¨à§‡à¦‡à¥¤';
+  String get freeForeverWhy => 'কোনো পেওয়াল নেই, কোনো সাবস্ক্রিপশন নেই।';
 
   @override
-  String get fullyOffline => 'à¦¸à¦®à§à¦ªà§‚à¦°à§à¦£ à¦…à¦«à¦²à¦¾à¦‡à¦¨';
+  String get fullyOffline => 'সম্পূর্ণ অফলাইন';
 
   @override
-  String get fullyOfflineWhy => 'à¦†à¦ªà¦¨à¦¾à¦° à¦¡à§‡à¦Ÿà¦¾ à¦†à¦ªà¦¨à¦¾à¦° à¦¡à¦¿à¦­à¦¾à¦‡à¦¸à§‡à¦‡ à¦¸à§à¦°à¦•à§à¦·à¦¿à¦¤ à¦¥à¦¾à¦•à§‡à¥¤';
+  String get fullyOfflineWhy => 'আপনার ডেটা আপনার ডিভাইসেই সুরক্ষিত থাকে।';
 
   @override
-  String get yoursToTake => 'à¦†à¦ªà¦¨à¦¾à¦° à¦¡à§‡à¦Ÿà¦¾ à¦†à¦ªà¦¨à¦¾à¦° à¦¨à¦¿à¦¯à¦¼à¦¨à§à¦¤à§à¦°à¦£à§‡à¦‡';
+  String get yoursToTake => 'আপনার ডেটা আপনার নিয়ন্ত্রণেই';
 
   @override
-  String get yoursToTakeWhy => 'à¦¯à§‡à¦•à§‹à¦¨à§‹ à¦¸à¦®à¦¯à¦¼ à¦¬à§à¦¯à¦¾à¦•à¦†à¦ª à¦¨à¦¿à¦¨ à¦¬à¦¾ à¦à¦•à§à¦¸à¦ªà§‹à¦°à§à¦Ÿ à¦•à¦°à§à¦¨à¥¤';
+  String get yoursToTakeWhy => 'যেকোনো সময় ব্যাকআপ নিন বা এক্সপোর্ট করুন।';
 
   @override
-  String get whatsInside => 'à¦…à§à¦¯à¦¾à¦ªà§‡à¦° à¦¬à§ˆà¦¶à¦¿à¦·à§à¦Ÿà§à¦¯à¦¸à¦®à§‚à¦¹';
+  String get whatsInside => 'অ্যাপের বৈশিষ্ট্যসমূহ';
 
   @override
   String exercisesInside(int n) {
-    return 'à¦¬à¦¿à¦¸à§à¦¤à§ƒà¦¤ à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦®à§‡à¦° à¦²à¦¾à¦‡à¦¬à§à¦°à§‡à¦°à¦¿';
+    return '$nটি ব্যায়াম';
   }
 
   @override
-  String get exercisesInsideWhy => 'à¦¸à¦ à¦¿à¦• à¦«à¦°à§à¦® à¦à¦¬à¦‚ à¦ªà¦¦à¦•à§à¦·à§‡à¦ªà¦¸à¦¹ à¦¶à¦¤ à¦¶à¦¤ à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦®à¥¤';
+  String get exercisesInsideWhy => 'সঠিক ফর্ম এবং পদক্ষেপসহ শত শত ব্যায়াম।';
 
   @override
-  String get calculatorsInside => 'à¦ªà§à¦°à¦¯à¦¼à§‹à¦œà¦¨à§€à¦¯à¦¼ à¦•à§à¦¯à¦¾à¦²à¦•à§à¦²à§‡à¦Ÿà¦°';
+  String get calculatorsInside => 'প্রয়োজনীয় ক্যালকুলেটর';
 
   @override
-  String get calculatorsInsideWhy => '1RM, BMI, à¦•à§à¦¯à¦¾à¦²à§‹à¦°à¦¿ à¦à¦¬à¦‚ à¦ªà§à¦²à§‡à¦Ÿ à¦•à§à¦¯à¦¾à¦²à¦•à§à¦²à§‡à¦Ÿà¦°à¥¤';
+  String get calculatorsInsideWhy => '1RM, BMI, ক্যালোরি এবং প্লেট ক্যালকুলেটর।';
 
   @override
-  String get mathInside => 'à¦¸à§à¦®à¦¾à¦°à§à¦Ÿ à¦¬à¦¿à¦¶à§à¦²à§‡à¦·à¦£';
+  String get mathInside => 'স্মার্ট বিশ্লেষণ';
 
   @override
-  String get mathInsideWhy => 'à¦­à¦²à¦¿à¦‰à¦®, à¦›à¦¨à§à¦¦ à¦à¦¬à¦‚ à¦°à§‡à¦•à¦°à§à¦¡à§‡à¦° à¦¨à¦¿à¦–à§à¦à¦¤ à¦¹à¦¿à¦¸à¦¾à¦¬à¥¤';
+  String get mathInsideWhy => 'ভলিউম, ছন্দ এবং রেকর্ডের নিখুঁত হিসাব।';
 
   @override
-  String get yourNumbers => 'à¦†à¦ªà¦¨à¦¾à¦° à¦ªà¦°à¦¿à¦¸à¦‚à¦–à§à¦¯à¦¾à¦¨';
+  String get yourNumbers => 'আপনার পরিসংখ্যান';
 
   @override
-  String get sessionsCaps => 'à¦¸à§‡à¦¶à¦¨';
+  String get sessionsCaps => 'সেশন';
 
   @override
-  String get liftedCaps => 'à¦‰à¦¤à§à¦¤à§‹à¦²à¦¿à¦¤';
+  String get liftedCaps => 'উত্তোলিত';
 
   @override
-  String get streakCaps => 'à¦§à¦¾à¦°à¦¾à¦¬à¦¾à¦¹à¦¿à¦•à¦¤à¦¾';
+  String get streakCaps => 'ধারাবাহিকতা';
 
   @override
   String daysUnit(int n) {
-    return 'à¦¦à¦¿à¦¨';
+    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: 'দিন', one: 'দিন');
+    return '$_temp0';
   }
 
   @override
-  String get restDefaultLabel => 'à¦¡à¦¿à¦«à¦²à§à¦Ÿ à¦¬à¦¿à¦¶à§à¦°à¦¾à¦®';
+  String get restDefaultLabel => 'ডিফল্ট বিশ্রাম';
 
   @override
   String restDefault(int s) {
-    return 'à¦¡à¦¿à¦«à¦²à§à¦Ÿ à¦¬à¦¿à¦¶à§à¦°à¦¾à¦®';
+    return 'ডিফল্ট $s সেকেন্ড — সেটিংসে পরিবর্তন করুন';
   }
 
   @override
-  String get reset => 'à¦°à¦¿à¦¸à§‡à¦Ÿ';
+  String get reset => 'রিসেট';
 
   @override
-  String get welcomeKicker => 'à¦¸à§à¦¬à¦¾à¦—à¦¤à¦®';
+  String get welcomeKicker => 'স্বাগতম';
 
   @override
-  String get welcomeBlurb => 'à¦šà¦²à§à¦¨ à¦†à¦ªà¦¨à¦¾à¦° à¦Ÿà§à¦°à§‡à¦¨à¦¿à¦‚ à¦ªà§à¦°à§‹à¦«à¦¾à¦‡à¦² à¦¸à§‡à¦Ÿ à¦†à¦ª à¦•à¦°à¦¿à¥¤';
+  String get welcomeBlurb => 'চলুন আপনার ট্রেনিং প্রোফাইল সেট আপ করি।';
 
   @override
-  String get welcomeStart => 'à¦¶à§à¦°à§ à¦•à¦°à§à¦¨';
+  String get welcomeStart => 'শুরু করুন';
 
   @override
   String onbStep(int i, int n) {
-    return 'à¦§à¦¾à¦ª $i / $n';
+    return 'ধাপ $i / $n';
   }
 
   @override
-  String get onbNameTitle => 'à¦†à¦ªà¦¨à¦¾à¦° à¦¨à¦¾à¦® à¦•à§€?';
+  String get onbNameTitle => 'আপনার নাম কী?';
 
   @override
-  String get onbNameHint => 'à¦†à¦ªà¦¨à¦¾à¦° à¦¨à¦¾à¦® à¦²à¦¿à¦–à§à¦¨';
+  String get onbNameHint => 'আপনার নাম লিখুন';
 
   @override
-  String get onbNameWhy => 'à¦…à§à¦¯à¦¾à¦ªà¦Ÿà¦¿ à¦¬à§à¦¯à¦•à§à¦¤à¦¿à¦—à¦¤à¦•à§ƒà¦¤ à¦•à¦°à¦¤à§‡ à¦à¦Ÿà¦¿ à¦¬à§à¦¯à¦¬à¦¹à§ƒà¦¤ à¦¹à¦¯à¦¼à¥¤';
+  String get onbNameWhy => 'অ্যাপটি ব্যক্তিগতকৃত করতে এটি ব্যবহৃত হয়।';
 
   @override
-  String get onbBodyTitle => 'à¦¶à¦¾à¦°à§€à¦°à¦¿à¦• à¦—à¦ à¦¨';
+  String get onbBodyTitle => 'শারীরিক গঠন';
 
   @override
-  String get onbBodyWhy => 'à¦•à§à¦¯à¦¾à¦²à¦•à§à¦²à§‡à¦Ÿà¦° à¦à¦¬à¦‚ à¦…à¦¨à§à¦ªà¦¾à¦¤ à¦¨à¦¿à¦–à§à¦à¦¤ à¦•à¦°à¦¤à§‡ à¦¬à§à¦¯à¦¬à¦¹à§ƒà¦¤ à¦¹à¦¯à¦¼à¥¤';
+  String get onbBodyWhy => 'ক্যালকুলেটর এবং অনুপাত নিখুঁত করতে ব্যবহৃত হয়।';
 
   @override
-  String get onbGoalTitle => 'à¦¸à¦¾à¦ªà§à¦¤à¦¾à¦¹à¦¿à¦• à¦²à¦•à§à¦·à§à¦¯';
+  String get onbGoalTitle => 'সাপ্তাহিক লক্ষ্য';
 
   @override
-  String get onbGoalWhy => 'à¦¸à¦ªà§à¦¤à¦¾à¦¹à§‡ à¦•à¦¤ à¦¦à¦¿à¦¨ à¦œà¦¿à¦® à¦•à¦°à¦¤à§‡ à¦šà¦¾à¦¨?';
+  String get onbGoalWhy => 'সপ্তাহে কত দিন জিম করতে চান?';
 
   @override
   String perWeek(int n) {
-    return 'à¦¸à¦ªà§à¦¤à¦¾à¦¹à§‡ $n à¦¦à¦¿à¦¨';
+    return 'সপ্তাহে $n দিন';
   }
 
   @override
-  String get onbUnitsTitle => 'à¦“à¦œà¦¨à§‡à¦° à¦à¦•à¦•';
+  String get onbUnitsTitle => 'ওজনের একক';
 
   @override
-  String get next => 'à¦ªà¦°à¦¬à¦°à§à¦¤à§€';
+  String get next => 'পরবর্তী';
 
   @override
-  String get back => 'à¦ªà¦¿à¦›à¦¨à§‡';
+  String get back => 'পিছনে';
 
   @override
-  String get skip2 => 'à¦à¦¡à¦¼à¦¿à¦¯à¦¼à§‡ à¦¯à¦¾à¦¨';
+  String get skip2 => 'এড়িয়ে যান';
 
   @override
   String get madeWithLoveBy => 'MADE BY Arafath';
 
   @override
-  String get sourceCode => 'à¦¸à§‹à¦°à§à¦¸ à¦•à§‹à¦¡';
+  String get sourceCode => 'সোর্স কোড';
 
   @override
-  String get suggested => 'à¦ªà§à¦°à¦¸à§à¦¤à¦¾à¦¬à¦¿à¦¤';
+  String get suggested => 'প্রস্তাবিত';
 
   @override
-  String get results => 'à¦«à¦²à¦¾à¦«à¦²';
+  String get results => 'ফলাফল';
 
   @override
-  String get noMatches => 'à¦•à§‹à¦¨à§‹ à¦®à¦¿à¦² à¦ªà¦¾à¦“à¦¯à¦¼à¦¾ à¦¯à¦¾à¦¯à¦¼à¦¨à¦¿';
+  String get noMatches => 'কোনো মিল পাওয়া যায়নি';
 
   @override
-  String get tapToEdit => 'à¦¸à¦®à§à¦ªà¦¾à¦¦à¦¨à¦¾ à¦•à¦°à¦¤à§‡ à¦¸à§à¦ªà¦°à§à¦¶ à¦•à¦°à§à¦¨';
+  String get tapToEdit => 'সম্পাদনা করতে স্পর্শ করুন';
 
   @override
-  String get editEntry => 'à¦à¦¨à§à¦Ÿà§à¦°à¦¿ à¦¸à¦®à§à¦ªà¦¾à¦¦à¦¨à¦¾';
+  String get editEntry => 'এন্ট্রি সম্পাদনা';
 
   @override
-  String get editEntryHint => 'à¦“à¦œà¦¨ à¦¬à¦¾ à¦°à§‡à¦ªà¦¸ à¦ªà¦°à¦¿à¦¬à¦°à§à¦¤à¦¨ à¦•à¦°à§à¦¨';
+  String get editEntryHint => 'ওজন বা রেপস পরিবর্তন করুন';
 
   @override
-  String get removeSet => 'à¦¸à§‡à¦Ÿ à¦®à§à¦›à§à¦¨';
+  String get removeSet => 'সেট মুছুন';
 
   @override
-  String get continueWorkout => 'à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦® à¦šà¦¾à¦²à¦¿à¦¯à¦¼à§‡ à¦¯à¦¾à¦¬à§‡à¦¨?';
+  String get continueWorkout => 'ব্যায়াম চালিয়ে যাবেন?';
 
   @override
-  String get continueWorkoutBody => 'à¦†à¦ªà¦¨à¦¾à¦° à¦à¦•à¦Ÿà¦¿ à¦…à¦¸à¦®à¦¾à¦ªà§à¦¤ à¦¸à§‡à¦¶à¦¨ à¦°à¦¯à¦¼à§‡à¦›à§‡à¥¤';
+  String get continueWorkoutBody => 'আপনার একটি অসমাপ্ত সেশন রয়েছে।';
 
   @override
-  String get addBodyWidget => 'à¦¬à¦¡à¦¿ à¦‰à¦‡à¦œà§‡à¦Ÿ à¦¯à§‹à¦— à¦•à¦°à§à¦¨';
+  String get addBodyWidget => 'বডি উইজেট যোগ করুন';
 
   @override
-  String get repsOnly => 'à¦¶à§à¦§à§à¦®à¦¾à¦¤à§à¦° à¦°à§‡à¦ªà¦¸';
+  String get repsOnly => 'শুধুমাত্র রেপস';
 
   @override
-  String get repsOnlyHint => 'à¦“à¦œà¦¨ à¦›à¦¾à¦¡à¦¼à¦¾ à¦¶à§à¦§à§à¦®à¦¾à¦¤à§à¦° à¦ªà§à¦¨à¦°à¦¾à¦¬à§ƒà¦¤à§à¦¤à¦¿à¦° à¦¹à¦¿à¦¸à¦¾à¦¬ à¦°à¦¾à¦–à§à¦¨';
+  String get repsOnlyHint => 'ওজন ছাড়া শুধুমাত্র পুনরাবৃত্তির হিসাব রাখুন';
 
   @override
-  String get useDefaultArt => 'à¦¡à¦¿à¦«à¦²à§à¦Ÿ à¦›à¦¬à¦¿ à¦¬à§à¦¯à¦¬à¦¹à¦¾à¦° à¦•à¦°à§à¦¨';
+  String get useDefaultArt => 'ডিফল্ট ছবি ব্যবহার করুন';
 
   @override
   String daysShort(int n) {
-    return '$n à¦¦à¦¿à¦¨';
+    return '$n দিন';
   }
 
   @override
-  String get focusCard => 'à¦†à¦œà¦•à§‡à¦° à¦«à§‹à¦•à¦¾à¦¸ à¦•à¦¾à¦°à§à¦¡';
+  String get focusCard => 'আজকের ফোকাস কার্ড';
 
   @override
-  String get autoAdvance => 'à¦¸à§à¦¬à¦¯à¦¼à¦‚à¦•à§à¦°à¦¿à¦¯à¦¼ à¦ªà¦°à¦¬à¦°à§à¦¤à§€ à¦¸à§‡à¦Ÿ';
+  String get autoAdvance => 'স্বয়ংক্রিয় পরবর্তী সেট';
 
   @override
-  String get keepScreenOn => 'à¦¸à§à¦•à§à¦°à¦¿à¦¨ à¦šà¦¾à¦²à§ à¦°à¦¾à¦–à§à¦¨';
+  String get keepScreenOn => 'স্ক্রিন চালু রাখুন';
 
   @override
-  String get lockWorkout => 'à¦¸à§‡à¦¶à¦¨ à¦²à¦• à¦•à¦°à§à¦¨';
+  String get lockWorkout => 'সেশন লক করুন';
 
   @override
-  String get unlockWorkout => 'à¦†à¦¨à¦²à¦• à¦•à¦°à§à¦¨';
+  String get unlockWorkout => 'আনলক করুন';
 
   @override
-  String get lockedCaps => 'à¦²à¦• à¦•à¦°à¦¾';
+  String get lockedCaps => 'লক করা';
 
   @override
-  String get holdToUnlock => 'à¦†à¦¨à¦²à¦• à¦•à¦°à¦¤à§‡ à¦šà§‡à¦ªà§‡ à¦°à¦¾à¦–à§à¦¨';
+  String get holdToUnlock => 'আনলক করতে চেপে রাখুন';
 
   @override
-  String get liveChannel => 'à¦²à¦¾à¦‡à¦­ à¦¸à§‡à¦¶à¦¨';
+  String get liveChannel => 'লাইভ সেশন';
 
   @override
-  String get liveChannelWhy => 'à¦šà¦²à¦®à¦¾à¦¨ à¦¸à§‡à¦¶à¦¨à§‡à¦° à¦…à¦¬à¦¸à§à¦¥à¦¾ à¦¨à§‹à¦Ÿà¦¿à¦«à¦¿à¦•à§‡à¦¶à¦¨à§‡ à¦ªà§à¦°à¦¦à¦°à§à¦¶à¦¨ à¦•à¦°à§‡';
+  String get liveChannelWhy => 'চলমান সেশনের অবস্থা নোটিফিকেশনে প্রদর্শন করে';
 
   @override
   String liveSet(int n, int total) {
-    return 'à¦¸à§‡à¦Ÿ $i/$n';
+    return 'সেট $n / $total';
   }
 
   @override
-  String get liveResting => 'à¦¬à¦¿à¦¶à§à¦°à¦¾à¦® à¦šà¦²à¦›à§‡ Â· {time}';
+  String get liveResting => 'বিশ্রাম';
 
   @override
-  String get liveAllDone => 'à¦¸à¦¬ à¦¸à§‡à¦Ÿ à¦¸à¦®à§à¦ªà¦¨à§à¦¨!';
+  String get liveAllDone => 'সব সেট সম্পন্ন!';
 
   @override
-  String get autoAdvanceHint => 'à¦¸à§‡à¦Ÿ à¦¸à¦®à§à¦ªà¦¨à§à¦¨ à¦¹à¦²à§‡ à¦¸à§à¦¬à¦¯à¦¼à¦‚à¦•à§à¦°à¦¿à¦¯à¦¼à¦­à¦¾à¦¬à§‡ à¦¬à¦¿à¦¶à§à¦°à¦¾à¦®à§‡à¦° à¦Ÿà¦¾à¦‡à¦®à¦¾à¦° à¦šà¦¾à¦²à§ à¦¹à¦¬à§‡';
+  String get autoAdvanceHint => 'সেট সম্পন্ন হলে স্বয়ংক্রিয়ভাবে বিশ্রামের টাইমার চালু হবে';
 
   @override
-  String get autoProgress => 'à¦¸à§à¦¬à¦¯à¦¼à¦‚à¦•à§à¦°à¦¿à¦¯à¦¼ à¦“à¦œà¦¨ à¦¬à§ƒà¦¦à§à¦§à¦¿';
+  String get autoProgress => 'স্বয়ংক্রিয় ওজন বৃদ্ধি';
 
   @override
   String autoProgressHint(String w) {
-    return 'à¦²à¦•à§à¦·à§à¦¯ à¦…à¦°à§à¦œà¦¨à§‡ à¦ªà§à¦°à¦¤à¦¿ à¦¸à§‡à¦¶à¦¨à§‡ à¦…à¦²à§à¦ª à¦…à¦²à§à¦ª à¦“à¦œà¦¨ à¦¬à¦¾à¦¡à¦¼à¦¾à¦¨';
+    return 'প্রতিটি রেপ সম্পন্ন করুন এবং পরবর্তী সেশন $w ভারী ওজন দিয়ে শুরু হবে।';
   }
 
   @override
-  String get placePlates => 'à¦‰à¦ªà¦²à¦¬à§à¦§ à¦ªà§à¦²à§‡à¦Ÿà¦¸à¦®à§‚à¦¹';
+  String get placePlates => 'উপলব্ধ প্লেটসমূহ';
 
   @override
-  String get platesAll => 'à¦¸à¦•à¦² à¦ªà§à¦²à§‡à¦Ÿ';
+  String get platesAll => 'সকল প্লেট';
 
   @override
   String platesOwned(int n) {
-    return 'à¦†à¦ªà¦¨à¦¾à¦° à¦ªà§à¦²à§‡à¦Ÿà¦¸à¦®à§‚à¦¹';
+    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$nটি সাইজ', one: '$nটি সাইজ');
+    return '$_temp0';
   }
 
   @override
-  String get platePairs => 'à¦ªà§à¦²à§‡à¦Ÿà§‡à¦° à¦œà§‹à¦¡à¦¼à¦¾';
+  String get platePairs => 'প্লেটের জোড়া';
 
   @override
   String plateAchievable(String w) {
-    return 'à¦¸à¦®à§à¦­à¦¬à¦ªà¦° à¦“à¦œà¦¨';
+    return 'সর্বোচ্চ কাছাকাছি লোড: $w';
   }
 
   @override
-  String get autoWarmup => 'à¦¸à§à¦¬à¦¯à¦¼à¦‚à¦•à§à¦°à¦¿à¦¯à¦¼ à¦“à¦¯à¦¼à¦¾à¦°à§à¦®à¦†à¦ª';
+  String get autoWarmup => 'স্বয়ংক্রিয় ওয়ার্মআপ';
 
   @override
-  String get autoWarmupHint => 'à¦­à¦¾à¦°à§€ à¦•à¦¾à¦œà§‡à¦° à¦¸à§‡à¦Ÿà§‡à¦° à¦†à¦—à§‡ à¦ªà§à¦°à¦¯à¦¼à§‹à¦œà¦¨à§€à¦¯à¦¼ à¦“à¦¯à¦¼à¦¾à¦°à§à¦®à¦†à¦ª à¦¸à§‡à¦Ÿ à¦¯à§‹à¦— à¦•à¦°à§‡';
+  String get autoWarmupHint => 'ভারী কাজের সেটের আগে প্রয়োজনীয় ওয়ার্মআপ সেট যোগ করে';
 
   @override
-  String get trainReminder => 'à¦Ÿà§à¦°à§‡à¦¨à¦¿à¦‚ à¦…à¦¨à§à¦¸à§à¦®à¦¾à¦°à¦•';
+  String get trainReminder => 'ট্রেনিং অনুস্মারক';
 
   @override
-  String get trainReminderHint => 'à¦ªà§à¦°à¦¤à¦¿à¦¦à¦¿à¦¨ à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦®à§‡à¦° à¦¨à¦¿à¦°à§à¦¦à¦¿à¦·à§à¦Ÿ à¦¸à¦®à¦¯à¦¼à§‡ à¦¨à§‹à¦Ÿà¦¿à¦«à¦¿à¦•à§‡à¦¶à¦¨ à¦ªà¦¾à¦¨';
+  String get trainReminderHint => 'প্রতিদিন ব্যায়ামের নির্দিষ্ট সময়ে নোটিফিকেশন পান';
 
   @override
-  String get notifTrainChannel => 'à¦Ÿà§à¦°à§‡à¦¨à¦¿à¦‚ à¦…à¦¨à§à¦¸à§à¦®à¦¾à¦°à¦•';
+  String get notifTrainChannel => 'ট্রেনিং অনুস্মারক';
 
   @override
-  String get notifTrainChannelWhy => 'à¦œà¦¿à¦® à¦•à¦°à¦¾à¦° à¦¸à¦®à¦¯à¦¼ à¦¹à¦²à§‡ à¦†à¦ªà¦¨à¦¾à¦•à§‡ à¦®à¦¨à§‡ à¦•à¦°à¦¿à¦¯à¦¼à§‡ à¦¦à§‡à¦¯à¦¼';
+  String get notifTrainChannelWhy => 'জিম করার সময় হলে আপনাকে মনে করিয়ে দেয়';
 
   @override
-  String get notifTrainTitle => 'à¦†à¦œà¦•à§‡à¦° à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦®à§‡à¦° à¦¸à¦®à¦¯à¦¼';
+  String get notifTrainTitle => 'আজকের ব্যায়ামের সময়';
 
   @override
-  String get notifTrainBody => 'à¦²à§‹à¦¹à¦¾ à¦¡à¦¾à¦•à¦¾à¦° à¦¸à¦®à¦¯à¦¼ à¦¹à¦¯à¦¼à§‡à¦›à§‡ â€” à¦†à¦ªà¦¨à¦¾à¦° à¦¸à§‡à¦¶à¦¨ à¦ªà§à¦°à¦¸à§à¦¤à§à¦¤à¥¤';
+  String get notifTrainBody => 'লোহা ডাকার সময় হয়েছে — আপনার সেশন প্রস্তুত।';
 
   @override
-  String get exportCatalog => 'à¦•à§à¦¯à¦¾à¦Ÿà¦¾à¦²à¦— à¦à¦•à§à¦¸à¦ªà§‹à¦°à§à¦Ÿ à¦•à¦°à§à¦¨';
+  String get exportCatalog => 'ক্যাটালগ এক্সপোর্ট করুন';
 
   @override
-  String get importRoutine => 'à¦°à§à¦Ÿà¦¿à¦¨ à¦‡à¦®à§à¦ªà§‹à¦°à§à¦Ÿ à¦•à¦°à§à¦¨';
+  String get importRoutine => 'রুটিন ইম্পোর্ট করুন';
 
   @override
-  String get planIntro => 'à¦ªà¦°à¦¿à¦•à¦²à§à¦ªà¦¨à¦¾ à¦¬à¦¿à¦¬à¦°à¦£';
+  String get planIntro => 'পরিকল্পনা বিবরণ';
 
   @override
-  String get planFormat => 'à¦ªà¦°à¦¿à¦•à¦²à§à¦ªà¦¨à¦¾à¦° à¦•à¦¾à¦ à¦¾à¦®à§‹';
+  String get planFormat => 'পরিকল্পনার কাঠামো';
 
   @override
   String planImported(int n) {
-    return 'à¦ªà¦°à¦¿à¦•à¦²à§à¦ªà¦¨à¦¾ à¦¸à¦«à¦²à¦­à¦¾à¦¬à§‡ à¦¯à§à¦•à§à¦¤ à¦¹à¦¯à¦¼à§‡à¦›à§‡';
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'রুটিনে $nটি ব্যায়াম যোগ করা হয়েছে',
+      one: 'রুটিনে $nটি ব্যায়াম যোগ করা হয়েছে',
+    );
+    return '$_temp0';
   }
 
   @override
-  String get planNothing => 'à¦•à§‹à¦¨à§‹ à¦ªà¦°à¦¿à¦•à¦²à§à¦ªà¦¨à¦¾ à¦ªà¦¾à¦“à¦¯à¦¼à¦¾ à¦¯à¦¾à¦¯à¦¼à¦¨à¦¿';
+  String get planNothing => 'কোনো পরিকল্পনা পাওয়া যায়নি';
 
   @override
-  String get planFailed => 'à¦ªà¦°à¦¿à¦•à¦²à§à¦ªà¦¨à¦¾ à¦‡à¦®à§à¦ªà§‹à¦°à§à¦Ÿ à¦¬à§à¦¯à¦°à§à¦¥ à¦¹à¦¯à¦¼à§‡à¦›à§‡';
+  String get planFailed => 'পরিকল্পনা ইম্পোর্ট ব্যর্থ হয়েছে';
 
   @override
-  String get routineGroup => 'à¦°à§à¦Ÿà¦¿à¦¨ à¦—à§à¦°à§à¦ª';
+  String get routineGroup => 'রুটিন গ্রুপ';
 
   @override
-  String get newGroup => 'à¦¨à¦¤à§à¦¨ à¦—à§à¦°à§à¦ª';
+  String get newGroup => 'নতুন গ্রুপ';
 
   @override
-  String get noGroup => 'à¦—à§à¦°à§à¦ª à¦›à¦¾à¦¡à¦¼à¦¾';
+  String get noGroup => 'গ্রুপ ছাড়া';
 
   @override
-  String get groupNameHint => 'à¦—à§à¦°à§à¦ªà§‡à¦° à¦¨à¦¾à¦® à¦²à¦¿à¦–à§à¦¨';
+  String get groupNameHint => 'গ্রুপের নাম লিখুন';
 
   @override
-  String get filters => 'à¦«à¦¿à¦²à§à¦Ÿà¦¾à¦°';
+  String get filters => 'ফিল্টার';
 
   @override
-  String get setsPlannedHint => 'à¦ªà¦°à¦¿à¦•à¦²à§à¦ªà¦¿à¦¤ à¦¸à§‡à¦Ÿà§‡à¦° à¦¸à¦‚à¦–à§à¦¯à¦¾';
+  String get setsPlannedHint => 'পরিকল্পিত সেটের সংখ্যা';
 
   @override
-  String get nextTime => 'à¦ªà¦°à§‡à¦° à¦¬à¦¾à¦°';
+  String get nextTime => 'পরের বার';
 
   @override
-  String get nextHold => 'à¦ªà¦°à¦¬à¦°à§à¦¤à§€ à¦§à¦°à§‡ à¦°à¦¾à¦–à§à¦¨';
+  String get nextHold => 'পরবর্তী ধরে রাখুন';
 
   @override
-  String get bgPhoto => 'à¦ªà¦Ÿà¦­à§‚à¦®à¦¿à¦° à¦›à¦¬à¦¿';
+  String get bgPhoto => 'পটভূমির ছবি';
 
   @override
-  String get bgPhotoPick => 'à¦›à¦¬à¦¿ à¦¨à¦¿à¦°à§à¦¬à¦¾à¦šà¦¨ à¦•à¦°à§à¦¨';
+  String get bgPhotoPick => 'ছবি নির্বাচন করুন';
 
   @override
-  String get bgPhotoChange => 'à¦›à¦¬à¦¿ à¦ªà¦°à¦¿à¦¬à¦°à§à¦¤à¦¨ à¦•à¦°à§à¦¨';
+  String get bgPhotoChange => 'ছবি পরিবর্তন করুন';
 
   @override
-  String get bgPhotoRemove => 'à¦›à¦¬à¦¿ à¦¸à¦°à¦¾à¦¨';
+  String get bgPhotoRemove => 'ছবি সরান';
 
   @override
-  String get bgDim => 'à¦›à¦¬à¦¿à¦° à¦…à¦¨à§à¦§à¦•à¦¾à¦° à¦®à¦¾à¦¤à§à¦°à¦¾';
+  String get bgDim => 'ছবির অন্ধকার মাত্রা';
 
   @override
-  String get dimSoft => 'à¦¹à¦¾à¦²à¦•à¦¾';
+  String get dimSoft => 'হালকা';
 
   @override
-  String get dimMedium => 'à¦®à¦¾à¦à¦¾à¦°à¦¿';
+  String get dimMedium => 'মাঝারি';
 
   @override
-  String get dimStrong => 'à¦—à¦¾à§';
+  String get dimStrong => 'গাঢ়';
 
   @override
-  String get bgPhotoHint => 'à¦…à§à¦¯à¦¾à¦ªà§‡à¦° à¦ªà¦Ÿà¦­à§‚à¦®à¦¿à¦¤à§‡ à¦†à¦ªà¦¨à¦¾à¦° à¦¨à¦¿à¦œà¦¸à§à¦¬ à¦›à¦¬à¦¿ à¦¸à§‡à¦Ÿ à¦•à¦°à§à¦¨';
+  String get bgPhotoHint => 'অ্যাপের পটভূমিতে আপনার নিজস্ব ছবি সেট করুন';
 
   @override
-  String get reminderSmart => 'à¦¸à§à¦®à¦¾à¦°à§à¦Ÿ à¦…à¦¨à§à¦¸à§à¦®à¦¾à¦°à¦•';
+  String get reminderSmart => 'স্মার্ট অনুস্মারক';
 
   @override
-  String get reminderFixed => 'à¦¨à¦¿à¦°à§à¦¦à¦¿à¦·à§à¦Ÿ à¦¸à¦®à¦¯à¦¼à§‡';
+  String get reminderFixed => 'নির্দিষ্ট সময়ে';
 
   @override
-  String get reminderSmartHint => 'à¦†à¦ªà¦¨à¦¾à¦° à¦ªà§‚à¦°à§à¦¬à¦¬à¦°à§à¦¤à§€ à¦¸à§‡à¦¶à¦¨à§‡à¦° à¦¸à¦®à¦¯à¦¼à§‡à¦° à¦“à¦ªà¦° à¦­à¦¿à¦¤à§à¦¤à¦¿ à¦•à¦°à§‡ à¦¸à§à¦¬à¦¯à¦¼à¦‚à¦•à§à¦°à¦¿à¦¯à¦¼à¦­à¦¾à¦¬à§‡ à¦®à¦¨à§‡ à¦•à¦°à¦¿à¦¯à¦¼à§‡ à¦¦à§‡à¦¯à¦¼';
+  String get reminderSmartHint =>
+      'আপনার পূর্ববর্তী সেশনের সময়ের ওপর ভিত্তি করে স্বয়ংক্রিয়ভাবে মনে করিয়ে দেয়';
 
   @override
-  String get reminderSmartEmpty => 'à¦ªà¦°à§à¦¯à¦¾à¦ªà§à¦¤ à¦¡à§‡à¦Ÿà¦¾ à¦¨à§‡à¦‡';
+  String get reminderSmartEmpty => 'পর্যাপ্ত ডেটা নেই';
 
   @override
   String habitFocus(String day) {
-    return 'à¦…à¦­à§à¦¯à¦¾à¦¸à§‡à¦° à¦«à§‹à¦•à¦¾à¦¸';
+    return 'যা সাধারণত আপনি $day-এ অনুশীলন করেন';
   }
 
   @override
-  String get duplicateRoutine => 'à¦°à§à¦Ÿà¦¿à¦¨ à¦•à¦ªà¦¿ à¦•à¦°à§à¦¨';
+  String get duplicateRoutine => 'রুটিন কপি করুন';
 
   @override
   String copySuffix(String name) {
-    return '(à¦•à¦ªà¦¿)';
+    return '$name (কপি)';
   }
 
   @override
-  String get saveAsRoutine => 'à¦°à§à¦Ÿà¦¿à¦¨ à¦¹à¦¿à¦¸à§‡à¦¬à§‡ à¦¸à¦‚à¦°à¦•à§à¦·à¦£ à¦•à¦°à§à¦¨';
+  String get saveAsRoutine => 'রুটিন হিসেবে সংরক্ষণ করুন';
 
   @override
-  String get savedAsRoutine => 'à¦°à§à¦Ÿà¦¿à¦¨ à¦¹à¦¿à¦¸à§‡à¦¬à§‡ à¦¸à¦‚à¦°à¦•à§à¦·à¦¿à¦¤ à¦¹à¦¯à¦¼à§‡à¦›à§‡';
+  String get savedAsRoutine => 'রুটিন হিসেবে সংরক্ষিত হয়েছে';
 
   @override
-  String get templates => 'à¦Ÿà§‡à¦®à¦ªà§à¦²à§‡à¦Ÿà¦¸à¦®à§‚à¦¹';
+  String get templates => 'টেমপ্লেটসমূহ';
 
   @override
-  String get templatesHint => 'à¦œà¦¨à¦ªà§à¦°à¦¿à¦¯à¦¼ à¦“à¦¯à¦¼à¦¾à¦°à§à¦•à¦†à¦‰à¦Ÿ à¦Ÿà§‡à¦®à¦ªà§à¦²à§‡à¦Ÿ à¦¥à§‡à¦•à§‡ à¦¦à§à¦°à§à¦¤ à¦¶à§à¦°à§ à¦•à¦°à§à¦¨';
+  String get templatesHint => 'জনপ্রিয় ওয়ার্কআউট টেমপ্লেট থেকে দ্রুত শুরু করুন';
 
   @override
   String templateAdded(int n) {
-    return 'à¦Ÿà§‡à¦®à¦ªà§à¦²à§‡à¦Ÿ à¦°à§à¦Ÿà¦¿à¦¨à§‡ à¦¯à§‹à¦— à¦•à¦°à¦¾ à¦¹à¦¯à¦¼à§‡à¦›à§‡';
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$nটি রুটিন যোগ করা হয়েছে',
+      one: '$nটি রুটিন যোগ করা হয়েছে',
+    );
+    return '$_temp0';
   }
 
   @override
-  String get tplFullbody => 'à¦«à§à¦² à¦¬à¦¡à¦¿ à¦“à¦¯à¦¼à¦¾à¦°à§à¦•à¦†à¦‰à¦Ÿ';
+  String get tplFullbody => 'ফুল বডি ওয়ার্কআউট';
 
   @override
-  String get tplPpl => 'à¦ªà§à¦¶ à¦ªà§à¦² à¦²à§‡à¦—à§à¦¸ (PPL)';
+  String get tplPpl => 'পুশ পুল লেগ্স (PPL)';
 
   @override
-  String get tplUpperlower => 'à¦†à¦ªà¦¾à¦° / à¦²à§‹à¦¯à¦¼à¦¾à¦° à¦¬à¦¡à¦¿';
+  String get tplUpperlower => 'আপার / লোয়ার বডি';
 
   @override
-  String get tplStronglifts => 'à¦¸à§à¦Ÿà§à¦°à¦‚à¦²à¦¿à¦«à¦Ÿà¦¸ à§«Ã—à§«';
+  String get tplStronglifts => 'স্ট্রংলিফটস ৫×৫';
 
   @override
-  String get tplStartingstrength => 'à¦¸à§à¦Ÿà¦¾à¦°à§à¦Ÿà¦¿à¦‚ à¦¸à§à¦Ÿà§à¦°à§‡à¦¨à§à¦¥';
+  String get tplStartingstrength => 'স্টার্টিং স্ট্রেন্থ';
 
   @override
-  String get tplHome => 'à¦¹à§‹à¦® à¦¬à¦¡à¦¿à¦“à¦¯à¦¼à§‡à¦Ÿ à¦“à¦¯à¦¼à¦¾à¦°à§à¦•à¦†à¦‰à¦Ÿ';
+  String get tplHome => 'হোম বডিওয়েট ওয়ার্কআউট';
 
   @override
   String dayCount(int n) {
-    return '$n à¦¦à¦¿à¦¨';
+    return '$n দিন';
   }
 
   @override
-  String get logRpe => 'RPE à¦¬à¦¾ RIR à¦²à¦— à¦•à¦°à§à¦¨';
+  String get logRpe => 'RPE বা RIR লগ করুন';
 
   @override
-  String get rpeTitle => 'à¦ªà§à¦°à¦šà§‡à¦·à§à¦Ÿà¦¾à¦° à¦¤à§€à¦¬à§à¦°à¦¤à¦¾ (RPE)';
+  String get rpeTitle => 'প্রচেষ্টার তীব্রতা (RPE)';
 
   @override
-  String get rpeHint => 'à§§ à¦¥à§‡à¦•à§‡ à§§à§¦ à¦¸à§à¦•à§‡à¦²à§‡ à¦¸à§‡à¦Ÿà§‡à¦° à¦ªà¦°à¦¿à¦¶à§à¦°à¦®à§‡à¦° à¦®à¦¾à¦¤à§à¦°à¦¾ à¦šà¦¿à¦¹à§à¦¨à¦¿à¦¤ à¦•à¦°à§à¦¨';
+  String get rpeHint => '১ থেকে ১০ স্কেলে সেটের পরিশ্রমের মাত্রা চিহ্নিত করুন';
 
   @override
-  String get superset => 'à¦¸à§à¦ªà¦¾à¦°à¦¸à§‡à¦Ÿ';
+  String get superset => 'সুপারসেট';
 
   @override
-  String get supersetLink => 'à¦¸à§à¦ªà¦¾à¦°à¦¸à§‡à¦Ÿ à¦¹à¦¿à¦¸à§‡à¦¬à§‡ à¦¯à§à¦•à§à¦¤ à¦•à¦°à§à¦¨';
+  String get supersetLink => 'সুপারসেট হিসেবে যুক্ত করুন';
 
   @override
-  String get supersetHint => 'à¦¬à¦¿à¦¶à§à¦°à¦¾à¦® à¦›à¦¾à¦¡à¦¼à¦¾ à¦ªà¦°à¦ªà¦° à¦¦à§à¦Ÿà¦¿ à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦® à¦¸à¦®à§à¦ªà¦¾à¦¦à¦¨ à¦•à¦°à§à¦¨';
+  String get supersetHint => 'বিশ্রাম ছাড়া পরপর দুটি ব্যায়াম সম্পাদন করুন';
 
   @override
-  String get aiRoutine => 'à¦¸à§à¦®à¦¾à¦°à§à¦Ÿ à¦°à§à¦Ÿà¦¿à¦¨ à¦œà§‡à¦¨à¦¾à¦°à§‡à¦Ÿà¦°';
+  String get aiRoutine => 'স্মার্ট রুটিন জেনারেটর';
 
   @override
-  String get aiIntro => 'à¦†à¦ªà¦¨à¦¾à¦° à¦²à¦•à§à¦·à§à¦¯ à¦“ à¦¸à¦°à¦žà§à¦œà¦¾à¦®à§‡à¦° à¦­à¦¿à¦¤à§à¦¤à¦¿à¦¤à§‡ à¦¨à¦¿à¦–à§à¦à¦¤ à¦°à§à¦Ÿà¦¿à¦¨ à¦¤à§ˆà¦°à¦¿ à¦•à¦°à§à¦¨';
+  String get aiIntro => 'আপনার লক্ষ্য ও সরঞ্জামের ভিত্তিতে নিখুঁত রুটিন তৈরি করুন';
 
   @override
-  String get aiStep1 => 'à¦†à¦ªà¦¨à¦¾à¦° à¦²à¦•à§à¦·à§à¦¯ à¦¬à§‡à¦›à§‡ à¦¨à¦¿à¦¨';
+  String get aiStep1 => 'আপনার লক্ষ্য বেছে নিন';
 
   @override
-  String get aiStep2 => 'à¦‰à¦ªà¦²à¦¬à§à¦§ à¦¸à¦°à¦žà§à¦œà¦¾à¦® à¦¨à¦¿à¦°à§à¦¬à¦¾à¦šà¦¨ à¦•à¦°à§à¦¨';
+  String get aiStep2 => 'উপলব্ধ সরঞ্জাম নির্বাচন করুন';
 
   @override
-  String get aiStep3 => 'à¦¸à¦¾à¦ªà§à¦¤à¦¾à¦¹à¦¿à¦• à¦¦à¦¿à¦¨ à¦¸à¦‚à¦–à§à¦¯à¦¾';
+  String get aiStep3 => 'সাপ্তাহিক দিন সংখ্যা';
 
   @override
-  String get aiStep4 => 'à¦ªà§à¦°à¦¸à§à¦¤à§à¦¤à¦•à§ƒà¦¤ à¦°à§à¦Ÿà¦¿à¦¨ à¦¯à¦¾à¦šà¦¾à¦‡ à¦•à¦°à§à¦¨';
+  String get aiStep4 => 'প্রস্তুতকৃত রুটিন যাচাই করুন';
 
   @override
   String aiMissing(int n) {
-    return 'à¦ªà§à¦°à¦¯à¦¼à§‹à¦œà¦¨à§€à¦¯à¦¼ à¦¤à¦¥à§à¦¯ à¦…à¦¨à§à¦ªà¦¸à§à¦¥à¦¿à¦¤';
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'লাইব্রেরিতে $nটি নাম ছিল না',
+      one: 'লাইব্রেরিতে ১টি নাম ছিল না',
+    );
+    return '$_temp0';
   }
 
   @override
-  String get importApps => 'à¦…à§à¦¯à¦¾à¦ª à¦¥à§‡à¦•à§‡ à¦‡à¦®à§à¦ªà§‹à¦°à§à¦Ÿ';
+  String get importApps => 'অ্যাপ থেকে ইম্পোর্ট';
 
   @override
-  String get importOtherCsv => 'à¦…à¦¨à§à¦¯à¦¾à¦¨à§à¦¯ CSV à¦«à¦¾à¦‡à¦²';
+  String get importOtherCsv => 'অন্যান্য CSV ফাইল';
 
   @override
-  String get importAskApp => 'à¦•à§‹à¦¨ à¦…à§à¦¯à¦¾à¦ªà§‡à¦° à¦¬à§à¦¯à¦¾à¦•à¦†à¦ª à¦à¦Ÿà¦¿?';
+  String get importAskApp => 'কোন অ্যাপের ব্যাকআপ এটি?';
 
   @override
-  String get awardFirstStepName => 'à¦ªà§à¦°à¦¥à¦® à¦ªà¦¦à¦•à§à¦·à§‡à¦ª';
+  String get awardFirstStepName => 'প্রথম পদক্ষেপ';
 
   @override
-  String get awardFirstStepLine => 'à¦†à¦ªà¦¨à¦¾à¦° à¦ªà§à¦°à¦¥à¦® à¦¸à§‡à¦¶à¦¨ à¦¸à¦«à¦²à¦­à¦¾à¦¬à§‡ à¦¸à¦®à§à¦ªà¦¨à§à¦¨ à¦¹à§Ÿà§‡à¦›à§‡à¥¤';
+  String get awardFirstStepLine => 'আপনার প্রথম সেশন সফলভাবে সম্পন্ন হয়েছে।';
 
   @override
-  String get awardFirstWorkoutName => 'à¦ªà§à¦°à¦¥à¦® à¦“à¦¯à¦¼à¦¾à¦°à§à¦•à¦†à¦‰à¦Ÿ';
+  String get awardFirstWorkoutName => 'প্রথম ওয়ার্কআউট';
 
   @override
-  String get awardFirstWorkoutLine => 'à¦¯à¦¾à¦¤à§à¦°à¦¾à¦° à¦¸à§‚à¦šà¦¨à¦¾ â€” à¦ªà§à¦°à¦¥à¦® à¦¦à¦¿à¦¨ à¦¸à¦®à§à¦ªà¦¨à§à¦¨à¥¤';
+  String get awardFirstWorkoutLine => 'যাত্রার সূচনা — প্রথম দিন সম্পন্ন।';
 
   @override
-  String get awardFirstRoutineName => 'à¦ªà§à¦°à¦¥à¦® à¦°à§à¦Ÿà¦¿à¦¨';
+  String get awardFirstRoutineName => 'প্রথম রুটিন';
 
   @override
-  String get awardFirstRoutineLine => 'à¦à¦•à¦Ÿà¦¿ à¦¨à¦¿à¦œà¦¸à§à¦¬ à¦°à§à¦Ÿà¦¿à¦¨ à¦¤à§ˆà¦°à¦¿ à¦•à¦°à§‡à¦›à§‡à¦¨à¥¤';
+  String get awardFirstRoutineLine => 'একটি নিজস্ব রুটিন তৈরি করেছেন।';
 
   @override
-  String get awardFirstRecordName => 'à¦ªà§à¦°à¦¥à¦® à¦ªà¦¿à¦†à¦°';
+  String get awardFirstRecordName => 'প্রথম পিআর';
 
   @override
-  String get awardFirstRecordLine => 'à¦†à¦ªà¦¨à¦¾à¦° à¦ªà§à¦°à¦¥à¦® à¦¬à§à¦¯à¦•à§à¦¤à¦¿à¦—à¦¤ à¦°à§‡à¦•à¦°à§à¦¡à¥¤';
+  String get awardFirstRecordLine => 'আপনার প্রথম ব্যক্তিগত রেকর্ড।';
 
   @override
-  String get awardStreak3Name => 'à§© à¦¦à¦¿à¦¨à§‡à¦° à¦§à¦¾à¦°à¦¾à¦¬à¦¾à¦¹à¦¿à¦•à¦¤à¦¾';
+  String get awardStreak3Name => '৩ দিনের ধারাবাহিকতা';
 
   @override
-  String get awardStreak3Line => 'à¦Ÿà¦¾à¦¨à¦¾ à§© à¦¦à¦¿à¦¨ à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦® à¦¸à¦®à§à¦ªà¦¨à§à¦¨à¥¤';
+  String get awardStreak3Line => 'টানা ৩ দিন ব্যায়াম সম্পন্ন।';
 
   @override
-  String get awardTonne1Name => 'à§§ à¦Ÿà¦¨ à¦‰à¦¤à§à¦¤à§‹à¦²à¦¨';
+  String get awardTonne1Name => '১ টন উত্তোলন';
 
   @override
-  String get awardTonne1Line => 'à¦®à§‹à¦Ÿ à§§,à§¦à§¦à§¦ à¦•à§‡à¦œà¦¿ à¦“à¦œà¦¨ à¦‰à¦¤à§à¦¤à§‹à¦²à¦¨ à¦•à¦°à§‡à¦›à§‡à¦¨à¥¤';
+  String get awardTonne1Line => 'মোট ১,০০০ কেজি ওজন উত্তোলন করেছেন।';
 
   @override
-  String get awardSets100Name => 'à§§à§¦à§¦à¦Ÿà¦¿ à¦¸à§‡à¦Ÿ';
+  String get awardSets100Name => '১০০টি সেট';
 
   @override
-  String get awardSets100Line => 'à§§à§¦à§¦à¦Ÿà¦¿ à¦•à¦¾à¦°à§à¦¯à¦•à¦°à§€ à¦¸à§‡à¦Ÿ à¦¸à¦®à§à¦ªà¦¨à§à¦¨ à¦•à¦°à§‡à¦›à§‡à¦¨à¥¤';
+  String get awardSets100Line => '১০০টি কার্যকরী সেট সম্পন্ন করেছেন।';
 
   @override
-  String get awardHours10Name => 'à§§à§¦ à¦˜à¦£à§à¦Ÿà¦¾ à¦¶à§à¦°à¦®';
+  String get awardHours10Name => '১০ ঘণ্টা শ্রম';
 
   @override
-  String get awardHours10Line => 'à¦œà¦¿à¦®à§‡ à§§à§¦ à¦˜à¦£à§à¦Ÿà¦¾ à¦˜à¦¾à¦® à¦à¦°à¦¿à¦¯à¦¼à§‡à¦›à§‡à¦¨à¥¤';
+  String get awardHours10Line => 'জিমে ১০ ঘণ্টা ঘাম ঝরিয়েছেন।';
 
   @override
-  String get awardWorkouts50Name => 'à§«à§¦à¦Ÿà¦¿ à¦¸à§‡à¦¶à¦¨';
+  String get awardWorkouts50Name => '৫০টি সেশন';
 
   @override
-  String get awardWorkouts50Line => 'à§«à§¦à¦¤à¦® à¦¸à§‡à¦¶à¦¨ à¦‰à¦¦à¦¯à¦¾à¦ªà¦¨ à¦•à¦°à§à¦¨à¥¤';
+  String get awardWorkouts50Line => '৫০তম সেশন উদযাপন করুন।';
 
   @override
-  String get awardHours50Name => 'à§«à§¦ à¦˜à¦£à§à¦Ÿà¦¾ à¦¸à¦®à§à¦ªà¦¨à§à¦¨';
+  String get awardHours50Name => '৫০ ঘণ্টা সম্পন্ন';
 
   @override
-  String get awardHours50Line => 'à§«à§¦ à¦˜à¦£à§à¦Ÿà¦¾ à¦¨à¦¿à¦·à§à¦ à¦¾à¦° à¦¸à¦¾à¦¥à§‡ à¦Ÿà§à¦°à§‡à¦¨à¦¿à¦‚ à¦•à¦°à§‡à¦›à§‡à¦¨à¥¤';
+  String get awardHours50Line => '৫০ ঘণ্টা নিষ্ঠার সাথে ট্রেনিং করেছেন।';
 
   @override
-  String get awardsTitle => 'à¦…à¦°à§à¦œà¦¨ à¦“ à¦®à§‡à¦¡à§‡à¦²';
+  String get awardsTitle => 'অর্জন ও মেডেল';
 
   @override
-  String get awardWon => 'à¦…à¦°à§à¦œà¦¿à¦¤ à¦®à§‡à¦¡à§‡à¦²!';
+  String get awardWon => 'অর্জিত মেডেল!';
 
   @override
-  String get yearTitle => 'à¦¬à¦¾à¦°à§à¦·à¦¿à¦• à¦ªà¦°à§à¦¯à¦¾à¦²à§‹à¦šà¦¨à¦¾';
+  String get yearTitle => 'বার্ষিক পর্যালোচনা';
 
   @override
-  String get yearBestMonth => 'à¦¸à§‡à¦°à¦¾ à¦®à¦¾à¦¸';
+  String get yearBestMonth => 'সেরা মাস';
 
   @override
-  String get yearMonths => 'à¦®à¦¾à¦¸à¦¿à¦• à¦¹à¦¿à¦¸à¦¾à¦¬';
+  String get yearMonths => 'মাসিক হিসাব';
 
   @override
-  String get awardSpinHint => 'à¦˜à§à¦°à¦¿à¦¯à¦¼à§‡ à¦®à§‡à¦¡à§‡à¦²à¦Ÿà¦¿ à¦¦à§‡à¦–à§à¦¨';
+  String get awardSpinHint => 'ঘুরিয়ে মেডেলটি দেখুন';
 
   @override
-  String get awardUnlocked => 'à¦¨à¦¤à§à¦¨ à¦®à§‡à¦¡à§‡à¦² à¦†à¦¨à¦²à¦• à¦¹à¦¯à¦¼à§‡à¦›à§‡!';
+  String get awardUnlocked => 'নতুন মেডেল আনলক হয়েছে!';
 
   @override
-  String get awardNice => 'à¦…à¦¸à¦¾à¦§à¦¾à¦°à¦£!';
+  String get awardNice => 'অসাধারণ!';
 
   @override
-  String get awardSaveImage => 'à¦®à§‡à¦¡à§‡à¦²à§‡à¦° à¦›à¦¬à¦¿ à¦¸à¦‚à¦°à¦•à§à¦·à¦£ à¦•à¦°à§à¦¨';
+  String get awardSaveImage => 'মেডেলের ছবি সংরক্ষণ করুন';
 
   @override
-  String get awardSaved => 'à¦®à§‡à¦¡à§‡à¦² à¦—à§à¦¯à¦¾à¦²à¦¾à¦°à¦¿à¦¤à§‡ à¦¸à¦‚à¦°à¦•à§à¦·à¦¿à¦¤ à¦¹à¦¯à¦¼à§‡à¦›à§‡';
+  String get awardSaved => 'মেডেল গ্যালারিতে সংরক্ষিত হয়েছে';
 
   @override
-  String get awardStreakBottom => 'à¦Ÿà¦¾à¦¨à¦¾ à¦¦à¦¿à¦¨';
+  String get awardStreakBottom => 'টানা দিন';
 
   @override
-  String get awardStreak7Top => 'à§§ à¦¸à¦ªà§à¦¤à¦¾à¦¹';
+  String get awardStreak7Top => '১ সপ্তাহ';
 
   @override
-  String get awardStreak7Name => 'à§­ à¦¦à¦¿à¦¨à§‡à¦° à¦§à¦¾à¦°à¦¾à¦¬à¦¾à¦¹à¦¿à¦•à¦¤à¦¾';
+  String get awardStreak7Name => '৭ দিনের ধারাবাহিকতা';
 
   @override
-  String get awardStreak7Line => 'à¦Ÿà¦¾à¦¨à¦¾ à¦à¦• à¦¸à¦ªà§à¦¤à¦¾à¦¹ à¦¸à¦•à§à¦°à¦¿à¦¯à¦¼ à¦¥à§‡à¦•à§‡à¦›à§‡à¦¨à¥¤';
+  String get awardStreak7Line => 'টানা এক সপ্তাহ সক্রিয় থেকেছেন।';
 
   @override
-  String get awardStreak30Top => 'à§§ à¦®à¦¾à¦¸';
+  String get awardStreak30Top => '১ মাস';
 
   @override
-  String get awardStreak30Name => 'à§©à§¦ à¦¦à¦¿à¦¨à§‡à¦° à¦§à¦¾à¦°à¦¾à¦¬à¦¾à¦¹à¦¿à¦•à¦¤à¦¾';
+  String get awardStreak30Name => '৩০ দিনের ধারাবাহিকতা';
 
   @override
-  String get awardStreak30Line => 'à¦Ÿà¦¾à¦¨à¦¾ à¦à¦• à¦®à¦¾à¦¸ à¦²à§‹à¦¹à¦¾à¦° à¦¸à¦¾à¦¥à§‡ à¦…à¦Ÿà§à¦Ÿà¥¤';
+  String get awardStreak30Line => 'টানা এক মাস লোহার সাথে অটুট।';
 
   @override
-  String get awardWorkouts100Top => 'à¦¶à¦¤à¦•';
+  String get awardWorkouts100Top => 'শতক';
 
   @override
-  String get awardWorkouts100Bottom => 'à¦¸à§‡à¦¶à¦¨';
+  String get awardWorkouts100Bottom => 'সেশন';
 
   @override
-  String get awardWorkouts100Name => 'à§§à§¦à§¦à¦Ÿà¦¿ à¦¸à§‡à¦¶à¦¨';
+  String get awardWorkouts100Name => '১০০টি সেশন';
 
   @override
-  String get awardWorkouts100Line => 'à§§à§¦à§¦à¦Ÿà¦¿ à¦¸à¦®à§à¦ªà§‚à¦°à§à¦£ à¦œà¦¿à¦® à¦¸à§‡à¦¶à¦¨ à¦¸à¦®à§à¦ªà¦¨à§à¦¨!';
+  String get awardWorkouts100Line => '১০০টি সম্পূর্ণ জিম সেশন সম্পন্ন!';
 
   @override
-  String get awardTonnes100Top => 'à§§à§¦à§¦ à¦Ÿà¦¨';
+  String get awardTonnes100Top => '১০০ টন';
 
   @override
-  String get awardTonnes100Bottom => 'à¦‰à¦¤à§à¦¤à§‹à¦²à¦¿à¦¤';
+  String get awardTonnes100Bottom => 'উত্তোলিত';
 
   @override
-  String get awardTonnes100Name => 'à§§à§¦à§¦ à¦Ÿà¦¨ à¦•à§à¦²à¦¾à¦¬';
+  String get awardTonnes100Name => '১০০ টন ক্লাব';
 
   @override
-  String get awardTonnes100Line => 'à§§,à§¦à§¦,à§¦à§¦à§¦ à¦•à§‡à¦œà¦¿ à¦²à§‹à¦¹à¦¾ à¦¸à§à¦¥à¦¾à¦¨à¦¾à¦¨à§à¦¤à¦°à¦¿à¦¤ à¦•à¦°à§‡à¦›à§‡à¦¨à¥¤';
+  String get awardTonnes100Line => '১,০০,০০০ কেজি লোহা স্থানান্তরিত করেছেন।';
 
   @override
-  String get awardSets1000Top => 'à§§,à§¦à§¦à§¦';
+  String get awardSets1000Top => '১,০০০';
 
   @override
-  String get awardSets1000Bottom => 'à¦¸à§‡à¦Ÿ';
+  String get awardSets1000Bottom => 'সেট';
 
   @override
-  String get awardSets1000Name => 'à§§,à§¦à§¦à§¦ à¦¸à§‡à¦Ÿ';
+  String get awardSets1000Name => '১,০০০ সেট';
 
   @override
-  String get awardSets1000Line => 'à§§,à§¦à§¦à§¦à¦Ÿà¦¿ à¦¸à§‡à¦Ÿ à¦¸à¦«à¦²à¦­à¦¾à¦¬à§‡ à¦¶à§‡à¦· à¦•à¦°à§‡à¦›à§‡à¦¨à¥¤';
+  String get awardSets1000Line => '১,০০০টি সেট সফলভাবে শেষ করেছেন।';
 
   @override
-  String get profile => 'à¦ªà§à¦°à§‹à¦«à¦¾à¦‡à¦²';
+  String get profile => 'প্রোফাইল';
 
   @override
-  String get editProfile => 'à¦ªà§à¦°à§‹à¦«à¦¾à¦‡à¦² à¦¸à¦®à§à¦ªà¦¾à¦¦à¦¨à¦¾';
+  String get editProfile => 'প্রোফাইল সম্পাদনা';
 
   @override
-  String get pickBadge => 'à¦¬à§à¦¯à¦¾à¦œ à¦¨à¦¿à¦°à§à¦¬à¦¾à¦šà¦¨ à¦•à¦°à§à¦¨';
+  String get pickBadge => 'ব্যাজ নির্বাচন করুন';
 
   @override
-  String get badgeTitle => 'à¦­à§‡à¦°à¦¿à¦«à¦¾à¦¯à¦¼à§‡à¦¡ à¦…à§à¦¯à¦¾à¦¥à¦²à¦¿à¦Ÿ à¦¬à§à¦¯à¦¾à¦œ';
+  String get badgeTitle => 'ভেরিফায়েড অ্যাথলিট ব্যাজ';
 
   @override
-  String get statWorkouts => 'à¦“à¦¯à¦¼à¦¾à¦°à§à¦•à¦†à¦‰à¦Ÿ';
+  String get statWorkouts => 'ওয়ার্কআউট';
 
   @override
-  String get statTrained => 'à¦Ÿà§à¦°à§‡à¦¨à¦¿à¦‚ à¦¸à¦®à¦¯à¦¼';
+  String get statTrained => 'ট্রেনিং সময়';
 
   @override
-  String get statSets => 'à¦¸à§‡à¦Ÿ';
+  String get statSets => 'সেট';
 
   @override
-  String get statLifted => 'à¦‰à¦¤à§à¦¤à§‹à¦²à¦¿à¦¤ à¦“à¦œà¦¨';
+  String get statLifted => 'উত্তোলিত ওজন';
 
   @override
-  String get statStreak => 'à¦§à¦¾à¦°à¦¾à¦¬à¦¾à¦¹à¦¿à¦•à¦¤à¦¾';
+  String get statStreak => 'ধারাবাহিকতা';
 
   @override
-  String get statDays => 'à¦¦à¦¿à¦¨';
+  String get statDays => 'দিন';
 
   @override
-  String get unitHours => 'à¦˜à¦£à§à¦Ÿà¦¾';
+  String get unitHours => 'ঘণ্টা';
 
   @override
-  String get unitDays => 'à¦¦à¦¿à¦¨';
+  String get unitDays => 'দিন';
 
   @override
-  String get snapshots => 'à¦¸à§à¦¨à§à¦¯à¦¾à¦ªà¦¶à¦Ÿ';
+  String get snapshots => 'স্ন্যাপশট';
 
   @override
-  String get snapNow => 'à¦à¦–à¦¨ à¦›à¦¬à¦¿ à¦¤à§à¦²à§à¦¨';
+  String get snapNow => 'এখন ছবি তুলুন';
 
   @override
-  String get calendarLegend => 'à¦•à§à¦¯à¦¾à¦²à§‡à¦¨à§à¦¡à¦¾à¦° à¦¸à¦‚à¦•à§‡à¦¤';
+  String get calendarLegend => 'ক্যালেন্ডার সংকেত';
 
   @override
-  String get addCover => 'à¦•à¦­à¦¾à¦° à¦«à¦Ÿà§‹ à¦¯à§‹à¦— à¦•à¦°à§à¦¨';
+  String get addCover => 'কভার ফটো যোগ করুন';
 
   @override
-  String get addTodayWidget => 'à¦†à¦œà¦•à§‡à¦° à¦‰à¦‡à¦œà§‡à¦Ÿ à¦¯à§‹à¦— à¦•à¦°à§à¦¨';
+  String get addTodayWidget => 'আজকের উইজেট যোগ করুন';
 
   @override
-  String get monthTitle => '{month} {year}';
+  String get monthTitle => 'এই মাস';
 
   @override
-  String get photosCard => 'à¦…à¦—à§à¦°à¦—à¦¤à¦¿à¦° à¦›à¦¬à¦¿';
+  String get photosCard => 'অগ্রগতির ছবি';
 
   @override
-  String get handleLabel => 'à¦‡à¦‰à¦œà¦¾à¦°à¦¨à§‡à¦® / à¦¹à§à¦¯à¦¾à¦¨à§à¦¡à§‡à¦²';
+  String get handleLabel => 'ইউজারনেম / হ্যান্ডেল';
 
   @override
-  String get setupTitle => 'à¦¦à§à¦°à§à¦¤ à¦¶à§à¦°à§ à¦•à¦°à§à¦¨';
+  String get setupTitle => 'দ্রুত শুরু করুন';
 
   @override
-  String get setupHint => 'à¦†à¦ªà¦¨à¦¾à¦° à¦ªà§à¦°à§‹à¦«à¦¾à¦‡à¦² à¦¸à¦®à§à¦ªà§‚à¦°à§à¦£ à¦•à¦°à§à¦¨';
+  String get setupHint => 'আপনার প্রোফাইল সম্পূর্ণ করুন';
 
   @override
-  String get setupWorkout => 'à¦ªà§à¦°à¦¥à¦® à¦¸à§‡à¦¶à¦¨ à¦¶à§à¦°à§ à¦•à¦°à§à¦¨';
+  String get setupWorkout => 'প্রথম সেশন শুরু করুন';
 
   @override
-  String get setupWeight => 'à¦¶à¦°à§€à¦°à§‡à¦° à¦“à¦œà¦¨ à¦¯à§‹à¦— à¦•à¦°à§à¦¨';
+  String get setupWeight => 'শরীরের ওজন যোগ করুন';
 
   @override
-  String get setupMeasures => 'à¦ªà¦°à¦¿à¦®à¦¾à¦ª à¦¯à§à¦•à§à¦¤ à¦•à¦°à§à¦¨';
+  String get setupMeasures => 'পরিমাপ যুক্ত করুন';
 
   @override
-  String get setupPhoto => 'à¦ªà§à¦°à¦¥à¦® à¦›à¦¬à¦¿ à¦¤à§à¦²à§à¦¨';
+  String get setupPhoto => 'প্রথম ছবি তুলুন';
 
   @override
-  String get progressTitle => 'à¦†à¦ªà¦¨à¦¾à¦° à¦¶à¦¾à¦°à§€à¦°à¦¿à¦• à¦‰à¦¨à§à¦¨à¦¤à¦¿';
+  String get progressTitle => 'আপনার শারীরিক উন্নতি';
 
   @override
-  String get tileVolume30 => 'à§©à§¦ à¦¦à¦¿à¦¨à§‡à¦° à¦­à¦²à¦¿à¦‰à¦®';
+  String get tileVolume30 => '৩০ দিনের ভলিউম';
 
   @override
-  String get tileAddWeight => 'à¦“à¦œà¦¨ à¦²à¦¿à¦–à§à¦¨';
+  String get tileAddWeight => 'ওজন লিখুন';
 
   @override
-  String get heatToneTitle => 'à¦¹à¦¿à¦Ÿà¦®à§à¦¯à¦¾à¦ªà§‡à¦° à¦°à¦™';
+  String get heatToneTitle => 'হিটম্যাপের রঙ';
 
   @override
-  String get heatToneHint => 'à¦ªà§‡à¦¶à§€à¦° à¦¸à¦•à§à¦°à¦¿à¦¯à¦¼à¦¤à¦¾à¦° à¦°à¦™à§‡à¦° à¦ªà§à¦¯à¦¾à¦²à§‡à¦Ÿ';
+  String get heatToneHint => 'পেশীর সক্রিয়তার রঙের প্যালেট';
 
   @override
-  String get thisWeekTitle => 'à¦à¦‡ à¦¸à¦ªà§à¦¤à¦¾à¦¹à§‡à¦° à¦ªà¦¾à¦°à¦«à¦°à¦®à§à¦¯à¦¾à¦¨à§à¦¸';
+  String get thisWeekTitle => 'এই সপ্তাহের পারফরম্যান্স';
 
   @override
-  String get momentsEmptyTitle => 'à¦•à§‹à¦¨à§‹ à¦¬à¦¿à¦¶à§‡à¦· à¦®à§à¦¹à§‚à¦°à§à¦¤ à¦¨à§‡à¦‡';
+  String get momentsEmptyTitle => 'কোনো বিশেষ মুহূর্ত নেই';
 
   @override
-  String get deletePhotoTitle => 'à¦›à¦¬à¦¿ à¦®à§à¦›à¦¬à§‡à¦¨?';
+  String get deletePhotoTitle => 'ছবি মুছবেন?';
 
   @override
-  String get deletePhotoBody => 'à¦à¦‡ à¦›à¦¬à¦¿à¦Ÿà¦¿ à¦Ÿà¦¾à¦‡à¦®à¦²à¦¾à¦‡à¦¨ à¦¥à§‡à¦•à§‡ à¦šà¦¿à¦°à¦¤à¦°à§‡ à¦®à§à¦›à§‡ à¦¯à¦¾à¦¬à§‡à¥¤';
+  String get deletePhotoBody => 'এই ছবিটি টাইমলাইন থেকে চিরতরে মুছে যাবে।';
 
   @override
-  String get awardsEarned => 'à¦…à¦°à§à¦œà¦¿à¦¤ à¦®à§‡à¦¡à§‡à¦²';
+  String get awardsEarned => 'অর্জিত মেডেল';
 
   @override
-  String get awardsLocked => 'à¦²à¦• à¦•à¦°à¦¾ à¦®à§‡à¦¡à§‡à¦²';
+  String get awardsLocked => 'লক করা মেডেল';
 
   @override
-  String get awardStreak100Name => 'à§§à§¦à§¦ à¦¦à¦¿à¦¨à§‡à¦° à¦§à¦¾à¦°à¦¾à¦¬à¦¾à¦¹à¦¿à¦•à¦¤à¦¾';
+  String get awardStreak100Name => '১০০ দিনের ধারাবাহিকতা';
 
   @override
-  String get awardWorkouts10Name => 'à§§à§¦à¦Ÿà¦¿ à¦¸à§‡à¦¶à¦¨';
+  String get awardWorkouts10Name => '১০টি সেশন';
 
   @override
-  String get awardWorkouts10Line => 'à§§à§¦à¦Ÿà¦¿ à¦¸à§‡à¦¶à¦¨ à¦¸à¦®à§à¦ªà§‚à¦°à§à¦£ à¦•à¦°à§‡à¦›à§‡à¦¨à¥¤';
+  String get awardWorkouts10Line => '১০টি সেশন সম্পূর্ণ করেছেন।';
 
   @override
-  String get awardWorkouts365Name => 'à§©à§¬à§«à¦Ÿà¦¿ à¦¸à§‡à¦¶à¦¨';
+  String get awardWorkouts365Name => '৩৬৫টি সেশন';
 
   @override
-  String get awardWorkouts365Line => 'à¦¬à¦›à¦°à§‡à¦° à¦ªà§à¦°à¦¤à¦¿à¦Ÿà¦¿ à¦¦à¦¿à¦¨à§‡à¦° à¦¸à¦®à¦ªà¦°à¦¿à¦®à¦¾à¦£ à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦®à¥¤';
+  String get awardWorkouts365Line => 'বছরের প্রতিটি দিনের সমপরিমাণ ব্যায়াম।';
 
   @override
-  String get awardTonnes10Name => 'à§§à§¦ à¦Ÿà¦¨ à¦•à§à¦²à¦¾à¦¬';
+  String get awardTonnes10Name => '১০ টন ক্লাব';
 
   @override
-  String get awardTonnes10Line => 'à§§à§¦,à§¦à§¦à§¦ à¦•à§‡à¦œà¦¿ à¦‰à¦¤à§à¦¤à§‹à¦²à¦¿à¦¤ à¦¹à¦¯à¦¼à§‡à¦›à§‡à¥¤';
+  String get awardTonnes10Line => '১০,০০০ কেজি উত্তোলিত হয়েছে।';
 
   @override
-  String get awardHours100Name => 'à§§à§¦à§¦ à¦˜à¦£à§à¦Ÿà¦¾ à¦Ÿà§à¦°à§‡à¦¨à¦¿à¦‚';
+  String get awardHours100Name => '১০০ ঘণ্টা ট্রেনিং';
 
   @override
-  String get awardHours100Line => 'à§§à§¦à§¦ à¦˜à¦£à§à¦Ÿà¦¾à¦° à¦¨à¦¿à¦·à§à¦ à¦¾à¦¬à¦¾à¦¨ à¦…à¦¨à§à¦¶à§€à¦²à¦¨à¥¤';
+  String get awardHours100Line => '১০০ ঘণ্টার নিষ্ঠাবান অনুশীলন।';
 
   @override
   String awardWonOn(String date) {
-    return '$date-à¦ à¦…à¦°à§à¦œà¦¿à¦¤';
+    return '$date-এ অর্জিত';
   }
 
   @override
   String awardProgressLabel(String value, String goal) {
-    return '$current / $target';
+    return '$goal-এর মধ্যে $value';
   }
 
   @override
   String badgeName(String id) {
-    return 'à¦¬à§à¦¯à¦¾à¦œà§‡à¦° à¦°à¦™';
+    String _temp0 = intl.Intl.selectLogic(id, {
+      'gold': 'গোল্ড',
+      'blue': 'ব্লু',
+      'green': 'গ্রিন',
+      'red': 'রেড',
+      'black': 'ব্ল্যাক',
+      'violet': 'ভায়োলেট',
+      'other': 'ব্যাজ',
+    });
+    return '$_temp0';
   }
 
   @override
   String memberSince(String date) {
-    return '$date à¦¥à§‡à¦•à§‡ à¦¸à¦¦à¦¸à§à¦¯';
+    return '$date থেকে সদস্য';
   }
 
   @override
   String levelShort(int n) {
-    return 'à¦²à§‡à¦­à§‡à¦² $n';
+    return 'লেভেল $n';
   }
 
   @override
   String levelToNext(int n, int next) {
-    return 'à¦ªà¦°à¦¬à¦°à§à¦¤à§€ à¦²à§‡à¦­à§‡à¦²à§‡ à¦ªà§Œà¦à¦›à¦¾à¦¤à§‡ à¦†à¦°à¦“ $n XP';
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'লেভেল $next-এ পৌঁছাতে আর $nটি ওয়ার্কআউট',
+      one: 'লেভেল $next-এ পৌঁছাতে আর ১টি ওয়ার্কআউট',
+    );
+    return '$_temp0';
   }
 
   @override
   String heightCm(int n) {
-    return '$n à¦¸à§‡à¦®à¦¿';
+    return '$n সেমি';
   }
 
   @override
   String heatToneName(String id) {
-    return 'à¦ªà§à¦¯à¦¾à¦²à§‡à¦Ÿ';
+    String _temp0 = intl.Intl.selectLogic(id, {
+      'ember': 'অ্যাম্বার',
+      'green': 'সবুজ',
+      'blue': 'নীল',
+      'mono': 'ধূসর',
+      'other': 'রং',
+    });
+    return '$_temp0';
   }
 
   @override
   String setsThisWeek(int n) {
-    return 'à¦à¦‡ à¦¸à¦ªà§à¦¤à¦¾à¦¹à§‡ $nà¦Ÿà¦¿ à¦¸à§‡à¦Ÿ';
+    return 'এই সপ্তাহে $nটি সেট';
   }
 
   @override
   String weekOfGoal(int n, int goal) {
-    return 'à¦²à¦•à§à¦·à§à¦¯à§‡à¦° $n%';
+    return 'এই সপ্তাহে $goal-এর মধ্যে $n';
   }
 
   @override
   String momentCount(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '{n', one: '{n');
+    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$nটি মুহূর্ত', one: '$nটি মুহূর্ত');
     return '$_temp0';
   }
 
   @override
-  String get badgeHint => 'à¦ªà§à¦°à§‹à¦«à¦¾à¦‡à¦²à§‡ à¦ªà§à¦°à¦¦à¦°à§à¦¶à¦¿à¦¤ à¦­à§‡à¦°à¦¿à¦«à¦¿à¦•à§‡à¦¶à¦¨ à¦Ÿà¦¿à¦• à¦šà¦¿à¦¹à§à¦¨';
+  String get badgeHint => 'প্রোফাইলে প্রদর্শিত ভেরিফিকেশন টিক চিহ্ন';
 
   @override
-  String get momentsEmptyHint => 'à¦¸à§‡à¦¶à¦¨ à¦¶à§‡à¦·à§‡ à¦›à¦¬à¦¿ à¦¤à§à¦²à§‡ à¦®à§à¦¹à§‚à¦°à§à¦¤à¦—à§à¦²à§‹ à¦§à¦°à§‡ à¦°à¦¾à¦–à§à¦¨à¥¤';
+  String get momentsEmptyHint => 'সেশন শেষে ছবি তুলে মুহূর্তগুলো ধরে রাখুন।';
 
   @override
-  String get awardStreak100Line => 'à¦Ÿà¦¾à¦¨à¦¾ à§§à§¦à§¦ à¦¦à¦¿à¦¨ à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦®à§‡à¦° à¦…à¦¨à¦¨à§à¦¯ à¦°à§‡à¦•à¦°à§à¦¡!';
+  String get awardStreak100Line => 'টানা ১০০ দিন ব্যায়ামের অনন্য রেকর্ড!';
 
   @override
-  String get coverLabel => 'à¦•à¦­à¦¾à¦° à¦«à¦Ÿà§‹';
+  String get coverLabel => 'কভার ফটো';
 
   @override
-  String get removeCover => 'à¦•à¦­à¦¾à¦° à¦¸à¦°à¦¾à¦¨';
+  String get removeCover => 'কভার সরান';
 
   @override
-  String get startTitle => 'à¦¶à§à¦°à§ à¦•à¦°à§à¦¨';
+  String get startTitle => 'শুরু করুন';
 
   @override
-  String get logTitle => 'à¦¸à§‡à¦¶à¦¨ à¦²à¦— à¦•à¦°à§à¦¨';
+  String get logTitle => 'সেশন লগ করুন';
 
   @override
-  String get logHint => 'à¦¸à¦°à¦¾à¦¸à¦°à¦¿ à¦¬à¦¾ à¦°à§à¦Ÿà¦¿à¦¨ à¦¥à§‡à¦•à§‡ à¦¶à§à¦°à§ à¦•à¦°à§à¦¨';
+  String get logHint => 'সরাসরি বা রুটিন থেকে শুরু করুন';
 
   @override
-  String get orStartFrom => 'à¦…à¦¥à¦¬à¦¾ à¦¶à§à¦°à§ à¦•à¦°à§à¦¨ à¦à¦–à¦¾à¦¨ à¦¥à§‡à¦•à§‡';
+  String get orStartFrom => 'অথবা শুরু করুন এখান থেকে';
 
   @override
-  String get pickExercisesOption => 'à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦® à¦¨à¦¿à¦°à§à¦¬à¦¾à¦šà¦¨ à¦•à¦°à§à¦¨';
+  String get pickExercisesOption => 'ব্যায়াম নির্বাচন করুন';
 
   @override
-  String get chooseFocusOption => 'à¦ªà§‡à¦¶à§€à¦° à¦«à§‹à¦•à¦¾à¦¸ à¦¬à§‡à¦›à§‡ à¦¨à¦¿à¦¨';
+  String get chooseFocusOption => 'পেশীর ফোকাস বেছে নিন';
 
   @override
-  String get plannedRoutine => 'à¦ªà¦°à¦¿à¦•à¦²à§à¦ªà¦¿à¦¤ à¦°à§à¦Ÿà¦¿à¦¨';
+  String get plannedRoutine => 'পরিকল্পিত রুটিন';
 
   @override
-  String get logWorkoutAction => 'à¦²à¦— à¦¶à§à¦°à§ à¦•à¦°à§à¦¨';
+  String get logWorkoutAction => 'লগ শুরু করুন';
 
   @override
-  String get logging => 'à¦²à¦—à¦¿à¦‚ à¦šà¦²à¦›à§‡';
+  String get logging => 'লগিং চলছে';
 
   @override
-  String get placesLabel => 'à¦¸à§à¦¥à¦¾à¦¨';
+  String get placesLabel => 'স্থান';
 
   @override
-  String get undo => 'à¦ªà§‚à¦°à§à¦¬à¦¾à¦¬à¦¸à§à¦¥à¦¾à¦¯à¦¼ à¦«à§‡à¦°à¦¾à¦¨';
+  String get undo => 'পূর্বাবস্থায় ফেরান';
 
   @override
-  String get deleteSet => 'à¦¸à§‡à¦Ÿ à¦®à§à¦›à§à¦¨';
+  String get deleteSet => 'সেট মুছুন';
 
   @override
-  String get setDeleted => 'à¦¸à§‡à¦Ÿ à¦®à§à¦›à§‡ à¦«à§‡à¦²à¦¾ à¦¹à¦¯à¦¼à§‡à¦›à§‡';
+  String get setDeleted => 'সেট মুছে ফেলা হয়েছে';
 
   @override
-  String get removeWarmup => 'à¦“à¦¯à¦¼à¦¾à¦°à§à¦®à¦†à¦ª à¦¸à¦°à¦¾à¦¨';
+  String get removeWarmup => 'ওয়ার্মআপ সরান';
 
   @override
-  String get addWeightAction => 'à¦“à¦œà¦¨ à¦¯à§‹à¦— à¦•à¦°à§à¦¨';
+  String get addWeightAction => 'ওজন যোগ করুন';
 
   @override
-  String get workoutOverview => 'à¦“à¦¯à¦¼à¦¾à¦°à§à¦•à¦†à¦‰à¦Ÿ à¦¸à¦¾à¦°à¦¾à¦‚à¦¶';
+  String get workoutOverview => 'ওয়ার্কআউট সারাংশ';
 
   @override
-  String get allExercisesShort => 'à¦¸à¦•à¦² à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦®';
+  String get allExercisesShort => 'সকল ব্যায়াম';
 
   @override
   String setsDoneOf(int done, int total) {
-    return '$total-à¦à¦° à¦®à¦§à§à¦¯à§‡ $doneà¦Ÿà¦¿ à¦¸à¦®à§à¦ªà¦¨à§à¦¨';
+    return '$total-এর মধ্যে $doneটি সম্পন্ন';
   }
 
   @override
-  String get nowLabel => 'à¦à¦–à¦¨';
+  String get nowLabel => 'এখন';
 
   @override
-  String get deleteWorkout => 'à¦“à¦¯à¦¼à¦¾à¦°à§à¦•à¦†à¦‰à¦Ÿ à¦®à§à¦›à¦¬à§‡à¦¨?';
+  String get deleteWorkout => 'ওয়ার্কআউট মুছবেন?';
 
   @override
-  String get deleteWorkoutBody => 'à¦à¦‡ à¦¸à§‡à¦¶à¦¨ à¦à¦¬à¦‚ à¦à¦° à¦¸à¦®à¦¸à§à¦¤ à¦¤à¦¥à§à¦¯ à¦¸à§à¦¥à¦¾à¦¯à¦¼à§€à¦­à¦¾à¦¬à§‡ à¦®à§à¦›à§‡ à¦¯à¦¾à¦¬à§‡à¥¤';
+  String get deleteWorkoutBody => 'এই সেশন এবং এর সমস্ত তথ্য স্থায়ীভাবে মুছে যাবে।';
 
   @override
-  String get themeAuto => 'à¦¸à¦¿à¦¸à§à¦Ÿà§‡à¦® à¦¡à¦¿à¦«à¦²à§à¦Ÿ';
+  String get themeAuto => 'সিস্টেম ডিফল্ট';
 
   @override
-  String get themeAutoHint => 'à¦¡à¦¿à¦­à¦¾à¦‡à¦¸à§‡à¦° à¦¸à¦¿à¦¸à§à¦Ÿà§‡à¦® à¦¥à¦¿à¦® à¦…à¦¨à§à¦¸à¦°à¦£ à¦•à¦°à¦¬à§‡';
+  String get themeAutoHint => 'ডিভাইসের সিস্টেম থিম অনুসরণ করবে';
 
   @override
-  String get demoSizeTitle => 'à¦¡à§‡à¦®à§‹ à¦ªà§à¦°à¦¿à¦­à¦¿à¦‰ à¦¸à¦¾à¦‡à¦œ';
+  String get demoSizeTitle => 'ডেমো প্রিভিউ সাইজ';
 
   @override
-  String get demoLarge => 'à¦¬à¦¡à¦¼';
+  String get demoLarge => 'বড়';
 
   @override
-  String get demoSmall => 'à¦›à§‹à¦Ÿ';
+  String get demoSmall => 'ছোট';
 
   @override
-  String get demoOff => 'à¦¬à¦¨à§à¦§';
+  String get demoOff => 'বন্ধ';
 
   @override
-  String get alarmStyleTitle => 'à¦…à§à¦¯à¦¾à¦²à¦¾à¦°à§à¦®à§‡à¦° à¦§à¦°à¦¨';
+  String get alarmStyleTitle => 'অ্যালার্মের ধরন';
 
   @override
-  String get alarmStyleLoud => 'à¦¶à¦¬à§à¦¦à¦¸à¦¹';
+  String get alarmStyleLoud => 'শব্দসহ';
 
   @override
-  String get alarmStyleQuiet => 'à¦®à§ƒà¦¦à§ à¦¶à¦¬à§à¦¦';
+  String get alarmStyleQuiet => 'মৃদু শব্দ';
 
   @override
-  String get alarmStyleVibrate => 'à¦¶à§à¦§à§à¦®à¦¾à¦¤à§à¦° à¦•à¦®à§à¦ªà¦¨';
+  String get alarmStyleVibrate => 'শুধুমাত্র কম্পন';
 
   @override
-  String get alarmStyleHint => 'à¦¬à¦¿à¦¶à§à¦°à¦¾à¦® à¦¶à§‡à¦· à¦¹à¦²à§‡ à¦•à§€à¦­à¦¾à¦¬à§‡ à¦¸à¦¤à¦°à§à¦• à¦•à¦°à¦¬à§‡ à¦¤à¦¾ à¦¨à¦¿à¦°à§à¦§à¦¾à¦°à¦£ à¦•à¦°à§à¦¨';
+  String get alarmStyleHint => 'বিশ্রাম শেষ হলে কীভাবে সতর্ক করবে তা নির্ধারণ করুন';
 
   @override
-  String get suggestedPicks => 'à¦ªà§à¦°à¦¸à§à¦¤à¦¾à¦¬à¦¿à¦¤ à¦ªà¦›à¦¨à§à¦¦';
+  String get suggestedPicks => 'প্রস্তাবিত পছন্দ';
 
   @override
-  String get moreOptions => 'à¦†à¦°à¦“ à¦…à¦ªà¦¶à¦¨';
+  String get moreOptions => 'আরও অপশন';
 
   @override
-  String get suggestInWorkouts => 'à¦“à¦¯à¦¼à¦¾à¦°à§à¦•à¦†à¦‰à¦Ÿà§‡ à¦ªà§à¦°à¦¸à§à¦¤à¦¾à¦¬ à¦•à¦°à§à¦¨';
+  String get suggestInWorkouts => 'ওয়ার্কআউটে প্রস্তাব করুন';
 
   @override
-  String get suggestInWorkoutsHint => 'à¦¸à§‡à¦¶à¦¨ à¦¤à§ˆà¦°à¦¿à¦° à¦¸à¦®à¦¯à¦¼ à¦à¦‡ à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦®à¦Ÿà¦¿ à¦¸à§à¦ªà¦¾à¦°à¦¿à¦¶ à¦•à¦°à¦¬à§‡';
+  String get suggestInWorkoutsHint => 'সেশন তৈরির সময় এই ব্যায়ামটি সুপারিশ করবে';
 
   @override
-  String get dontSuggest => 'à¦ªà§à¦°à¦¸à§à¦¤à¦¾à¦¬ à¦•à¦°à¦¬à§‡à¦¨ à¦¨à¦¾';
+  String get dontSuggest => 'প্রস্তাব করবেন না';
 
   @override
-  String get noLongerSuggested => 'à¦†à¦° à¦ªà§à¦°à¦¸à§à¦¤à¦¾à¦¬ à¦•à¦°à¦¾ à¦¹à¦¬à§‡ à¦¨à¦¾';
+  String get noLongerSuggested => 'আর প্রস্তাব করা হবে না';
 
   @override
-  String get onbPlaceTitle => 'à¦†à¦ªà¦¨à¦¿ à¦•à§‹à¦¥à¦¾à¦¯à¦¼ à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦® à¦•à¦°à§‡à¦¨?';
+  String get onbPlaceTitle => 'আপনি কোথায় ব্যায়াম করেন?';
 
   @override
-  String get onbPlaceWhy => 'à¦†à¦ªà¦¨à¦¾à¦° à¦¸à§à¦¥à¦¾à¦¨ à¦¨à¦¿à¦°à§à¦¬à¦¾à¦šà¦¨ à¦•à¦°à§à¦¨ à¦¯à¦¾à¦¤à§‡ à¦¸à¦ à¦¿à¦• à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦® à¦¸à§à¦ªà¦¾à¦°à¦¿à¦¶ à¦•à¦°à¦¾ à¦¯à¦¾à¦¯à¦¼à¥¤';
+  String get onbPlaceWhy => 'আপনার স্থান নির্বাচন করুন যাতে সঠিক ব্যায়াম সুপারিশ করা যায়।';
 
   @override
-  String get onbPlaceGear => 'à¦‰à¦ªà¦²à¦¬à§à¦§ à¦¸à¦°à¦žà§à¦œà¦¾à¦®';
+  String get onbPlaceGear => 'উপলব্ধ সরঞ্জাম';
 
   @override
   String distanceCol(String unit) {
-    return 'à¦¦à§‚à¦°à¦¤à§à¦¬';
+    return 'দূরত্ব ($unit)';
   }
 
   @override
-  String get timeCol => 'à¦¸à¦®à¦¯à¦¼';
+  String get timeCol => 'সময়';
 
   @override
-  String get timeMinutesTitle => 'à¦®à¦¿à¦¨à¦¿à¦Ÿ';
+  String get timeMinutesTitle => 'মিনিট';
 
   @override
-  String get timeSecondsTitle => 'à¦¸à§‡à¦•à§‡à¦¨à§à¦¡';
+  String get timeSecondsTitle => 'সেকেন্ড';
 
   @override
   String distanceTitle(String unit) {
-    return 'à¦¦à§‚à¦°à¦¤à§à¦¬';
+    return 'দূরত্ব ($unit)';
   }
 
   @override
-  String get holdLabel => 'à¦§à¦°à§‡ à¦°à¦¾à¦–à§à¦¨';
+  String get holdLabel => 'ধরে রাখুন';
 
   @override
-  String get stopLabel => 'à¦¥à¦¾à¦®à§à¦¨';
+  String get stopLabel => 'থামুন';
 
   @override
   String startHold(String time) {
-    return 'à¦§à¦°à§‡ à¦°à¦¾à¦–à¦¾ à¦¶à§à¦°à§ à¦•à¦°à§à¦¨';
+    return 'শুরু · $time';
   }
 
   @override
-  String get exerciseTypeLabel => 'à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦®à§‡à¦° à¦§à¦°à¦¨';
+  String get exerciseTypeLabel => 'ব্যায়ামের ধরন';
 
   @override
-  String get typeReps => 'à¦“à¦œà¦¨ à¦“ à¦°à§‡à¦ªà¦¸';
+  String get typeReps => 'ওজন ও রেপস';
 
   @override
-  String get typeTime => 'à¦¸à¦®à¦¯à¦¼à¦­à¦¿à¦¤à§à¦¤à¦¿à¦•';
+  String get typeTime => 'সময়ভিত্তিক';
 
   @override
-  String get typeCardio => 'à¦•à¦¾à¦°à§à¦¡à¦¿à¦“ / à¦¦à§‚à¦°à¦¤à§à¦¬';
+  String get typeCardio => 'কার্ডিও / দূরত্ব';
 
   @override
-  String get exerciseTypeHint => 'à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦®à¦Ÿà¦¿ à¦•à§€à¦­à¦¾à¦¬à§‡ à¦Ÿà§à¦°à§à¦¯à¦¾à¦• à¦•à¦°à¦¬à§‡à¦¨ à¦¤à¦¾ à¦¨à¦¿à¦°à§à¦¬à¦¾à¦šà¦¨ à¦•à¦°à§à¦¨';
+  String get exerciseTypeHint => 'ব্যায়ামটি কীভাবে ট্র্যাক করবেন তা নির্বাচন করুন';
 
   @override
-  String get howToLabel => 'à¦¨à¦¿à¦°à§à¦¦à§‡à¦¶à¦¨à¦¾';
+  String get howToLabel => 'নির্দেশনা';
 
   @override
-  String get howToHint => 'à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦®à¦Ÿà¦¿ à¦¸à¦ à¦¿à¦•à¦­à¦¾à¦¬à§‡ à¦•à¦°à¦¾à¦° à¦ªà¦¦à¦•à§à¦·à§‡à¦ªà¦—à§à¦²à§‹';
+  String get howToHint => 'ব্যায়ামটি সঠিকভাবে করার পদক্ষেপগুলো';
 
   @override
-  String get editExercise => 'à¦¬à§à¦¯à¦¾à¦¯à¦¼à¦¾à¦® à¦¸à¦®à§à¦ªà¦¾à¦¦à¦¨à¦¾';
+  String get editExercise => 'ব্যায়াম সম্পাদনা';
 
   @override
-  String get saveChanges => 'à¦ªà¦°à¦¿à¦¬à¦°à§à¦¤à¦¨ à¦¸à¦‚à¦°à¦•à§à¦·à¦£ à¦•à¦°à§à¦¨';
+  String get saveChanges => 'পরিবর্তন সংরক্ষণ করুন';
 
   @override
-  String get noStepsYet => 'à¦à¦–à¦¨à¦“ à¦•à§‹à¦¨à§‹ à¦ªà¦¦à¦•à§à¦·à§‡à¦ª à¦¯à§‹à¦— à¦•à¦°à¦¾ à¦¹à¦¯à¦¼à¦¨à¦¿';
+  String get noStepsYet => 'এখনও কোনো পদক্ষেপ যোগ করা হয়নি';
 
   @override
-  String get addSteps => 'à¦ªà¦¦à¦•à§à¦·à§‡à¦ª à¦¯à§‹à¦— à¦•à¦°à§à¦¨';
+  String get addSteps => 'পদক্ষেপ যোগ করুন';
 
   @override
-  String get setTypeRestPause => 'à¦°à§‡à¦¸à§à¦Ÿ-à¦ªà¦œ à¦¸à§‡à¦Ÿ';
+  String get setTypeRestPause => 'রেস্ট-পজ সেট';
 
   @override
-  String get planFormatNotes => 'à¦ªà¦°à¦¿à¦•à¦²à§à¦ªà¦¨à¦¾à¦° à¦•à¦¾à¦ à¦¾à¦®à§‹ à¦¸à¦‚à¦•à§à¦°à¦¾à¦¨à§à¦¤ à¦¨à§‹à¦Ÿ';
+  String get planFormatNotes => 'পরিকল্পনার কাঠামো সংক্রান্ত নোট';
 
   @override
-  String get planSets => 'à¦ªà¦°à¦¿à¦•à¦²à§à¦ªà¦¿à¦¤ à¦¸à§‡à¦Ÿ';
+  String get planSets => 'পরিকল্পিত সেট';
 
   @override
-  String get planSetsHint => 'à¦ªà§à¦°à¦¤à¦¿ à¦¸à§‡à¦¶à¦¨à§‡ à¦•à¦¾à¦™à§à¦•à§à¦·à¦¿à¦¤ à¦¸à§‡à¦Ÿà§‡à¦° à¦²à¦•à§à¦·à§à¦¯';
+  String get planSetsHint => 'প্রতি সেশনে কাঙ্ক্ষিত সেটের লক্ষ্য';
 
   @override
-  String get autoValue => 'à¦¸à§à¦¬à¦¯à¦¼à¦‚à¦•à§à¦°à¦¿à¦¯à¦¼';
+  String get autoValue => 'স্বয়ংক্রিয়';
 
   @override
-  String get clearPlan => 'à¦ªà¦°à¦¿à¦•à¦²à§à¦ªà¦¨à¦¾ à¦®à§à¦›à§à¦¨';
+  String get clearPlan => 'পরিকল্পনা মুছুন';
 
   @override
-  String get planChip => 'à¦ªà§à¦²à§à¦¯à¦¾à¦¨';
+  String get planChip => 'প্ল্যান';
 
   @override
-  String get shareRoutine => 'à¦°à§à¦Ÿà¦¿à¦¨ à¦¶à§‡à¦¯à¦¼à¦¾à¦° à¦•à¦°à§à¦¨';
+  String get shareRoutine => 'রুটিন শেয়ার করুন';
 
   @override
-  String get shareWeek => 'à¦¸à¦ªà§à¦¤à¦¾à¦¹ à¦¶à§‡à¦¯à¦¼à¦¾à¦° à¦•à¦°à§à¦¨';
+  String get shareWeek => 'সপ্তাহ শেয়ার করুন';
 
   @override
-  String get shareWeekHint => 'à¦ªà§à¦°à§‹ à¦¸à¦ªà§à¦¤à¦¾à¦¹à§‡à¦° à¦ªà¦¾à¦°à¦«à¦°à¦®à§à¦¯à¦¾à¦¨à§à¦¸ à¦•à¦¾à¦°à§à¦¡';
+  String get shareWeekHint => 'পুরো সপ্তাহের পারফরম্যান্স কার্ড';
 
   @override
   String shareMessage(String name) {
-    return 'Open GYM-à¦ à¦†à¦®à¦¾à¦° à¦…à¦—à§à¦°à¦—à¦¤à¦¿ à¦¦à§‡à¦–à§à¦¨!';
+    return '$name — এটি যোগ করতে Open GYM দিয়ে ফাইলটি খুলুন।';
   }
 
   @override
-  String get importRoutines => 'à¦°à§à¦Ÿà¦¿à¦¨ à¦‡à¦®à§à¦ªà§‹à¦°à§à¦Ÿ';
+  String get importRoutines => 'রুটিন ইম্পোর্ট';
 
   @override
-  String get importPasteHint => 'à¦•à§à¦²à¦¿à¦ªà¦¬à§‹à¦°à§à¦¡ à¦¥à§‡à¦•à§‡ à¦°à§à¦Ÿà¦¿à¦¨ à¦Ÿà§‡à¦•à§à¦¸à¦Ÿ à¦ªà§‡à¦¸à§à¦Ÿ à¦•à¦°à§à¦¨';
+  String get importPasteHint => 'ক্লিপবোর্ড থেকে রুটিন টেক্সট পেস্ট করুন';
 
   @override
-  String get pasteAction => 'à¦ªà§‡à¦¸à§à¦Ÿ à¦•à¦°à§à¦¨';
+  String get pasteAction => 'পেস্ট করুন';
 
   @override
   String routineCount(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '{n', one: '{n');
+    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$nটি রুটিন', one: '$nটি রুটিন');
     return '$_temp0';
   }
 
   @override
-  String get useTheirSchedule => 'à¦¤à¦¾à¦¦à§‡à¦° à¦¸à¦®à¦¯à¦¼à¦¸à§‚à¦šà§€ à¦—à§à¦°à¦¹à¦£ à¦•à¦°à§à¦¨';
+  String get useTheirSchedule => 'তাদের সময়সূচী গ্রহণ করুন';
 
   @override
-  String get useTheirScheduleHint => 'à¦°à§à¦Ÿà¦¿à¦¨à§‡à¦° à¦¨à¦¿à¦°à§à¦§à¦¾à¦°à¦¿à¦¤ à¦¦à¦¿à¦¨à¦—à§à¦²à§‹ à¦†à¦ªà¦¨à¦¾à¦° à¦•à§à¦¯à¦¾à¦²à§‡à¦¨à§à¦¡à¦¾à¦°à§‡ à¦¯à§à¦•à§à¦¤ à¦¹à¦¬à§‡';
+  String get useTheirScheduleHint => 'রুটিনের নির্ধারিত দিনগুলো আপনার ক্যালেন্ডারে যুক্ত হবে';
 
   @override
-  String get addToMyRoutines => 'à¦†à¦®à¦¾à¦° à¦°à§à¦Ÿà¦¿à¦¨à§‡ à¦¯à§‹à¦— à¦•à¦°à§à¦¨';
+  String get addToMyRoutines => 'আমার রুটিনে যোগ করুন';
 
   @override
   String routinesAdded(int n) {
-    return 'à¦°à§à¦Ÿà¦¿à¦¨ à¦¸à¦«à¦²à¦­à¦¾à¦¬à§‡ à¦¯à§à¦•à§à¦¤ à¦¹à¦¯à¦¼à§‡à¦›à§‡';
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$nটি রুটিন যুক্ত হয়েছে',
+      one: '১টি রুটিন যুক্ত হয়েছে',
+    );
+    return '$_temp0';
   }
 
   @override
-  String get nothingToImport => 'à¦‡à¦®à§à¦ªà§‹à¦°à§à¦Ÿ à¦•à¦°à¦¾à¦° à¦®à¦¤à§‹ à¦•à¦¿à¦›à§ à¦¨à§‡à¦‡';
+  String get nothingToImport => 'ইম্পোর্ট করার মতো কিছু নেই';
 
   @override
-  String get aiStepCopy => 'à§§. à¦¤à¦¥à§à¦¯ à¦•à¦ªà¦¿ à¦•à¦°à§à¦¨';
+  String get aiStepCopy => '১. তথ্য কপি করুন';
 
   @override
-  String get aiStepAsk => 'à§¨. à¦à¦†à¦‡-à¦•à§‡ à¦œà¦¿à¦œà§à¦žà¦¾à¦¸à¦¾ à¦•à¦°à§à¦¨';
+  String get aiStepAsk => '২. এআই-কে জিজ্ঞাসা করুন';
 
   @override
-  String get aiStepPaste => 'à§©. à¦«à¦²à¦¾à¦«à¦² à¦ªà§‡à¦¸à§à¦Ÿ à¦•à¦°à§à¦¨';
+  String get aiStepPaste => '৩. ফলাফল পেস্ট করুন';
 
   @override
-  String get copyForAi => 'à¦à¦†à¦‡-à¦à¦° à¦œà¦¨à§à¦¯ à¦•à¦ªà¦¿ à¦•à¦°à§à¦¨';
+  String get copyForAi => 'এআই-এর জন্য কপি করুন';
 
   @override
-  String get copiedDone => 'à¦•à§à¦²à¦¿à¦ªà¦¬à§‹à¦°à§à¦¡à§‡ à¦•à¦ªà¦¿ à¦•à¦°à¦¾ à¦¹à¦¯à¦¼à§‡à¦›à§‡';
+  String get copiedDone => 'ক্লিপবোর্ডে কপি করা হয়েছে';
 
   @override
-  String get aiPasteHint => 'à¦à¦†à¦‡-à¦à¦° à¦¤à§ˆà¦°à¦¿ à¦•à¦°à¦¾ à¦Ÿà§‡à¦•à§à¦¸à¦Ÿ à¦à¦–à¦¾à¦¨à§‡ à¦ªà§‡à¦¸à§à¦Ÿ à¦•à¦°à§à¦¨';
+  String get aiPasteHint => 'এআই-এর তৈরি করা টেক্সট এখানে পেস্ট করুন';
 
   @override
-  String get importAction => 'à¦‡à¦®à§à¦ªà§‹à¦°à§à¦Ÿ à¦•à¦°à§à¦¨';
+  String get importAction => 'ইম্পোর্ট করুন';
 
   @override
-  String get showFormat => 'à¦«à¦°à¦®à§à¦¯à¦¾à¦Ÿ à¦¦à§‡à¦–à§à¦¨';
+  String get showFormat => 'ফরম্যাট দেখুন';
 
   @override
-  String get shareAsFile => 'à¦«à¦¾à¦‡à¦² à¦¹à¦¿à¦¸à§‡à¦¬à§‡ à¦¶à§‡à¦¯à¦¼à¦¾à¦° à¦•à¦°à§à¦¨';
+  String get shareAsFile => 'ফাইল হিসেবে শেয়ার করুন';
 
   @override
-  String get recoveryTab => 'à¦°à¦¿à¦•à¦­à¦¾à¦°à¦¿';
+  String get recoveryTab => 'রিকভারি';
 
   @override
   String recoveryOverall(int pct) {
-    return 'à¦¸à¦¾à¦®à¦—à§à¦°à¦¿à¦• à¦°à¦¿à¦•à¦­à¦¾à¦°à¦¿';
+    return 'শরীর $pct% রিকভার হয়েছে';
   }
 
   @override
-  String get recoveryAllFresh => 'à¦¸à¦®à¦¸à§à¦¤ à¦ªà§‡à¦¶à§€ à¦ªà§à¦°à¦¸à§à¦¤à§à¦¤';
+  String get recoveryAllFresh => 'সমস্ত পেশী প্রস্তুত';
 
   @override
   String recoveryStill(String muscles) {
-    return 'à¦°à¦¿à¦•à¦­à¦¾à¦°à¦¿ à¦šà¦²à¦›à§‡';
+    return 'এখনও রিকভার হচ্ছে: $muscles';
   }
 
   @override
-  String get recoveryTired => 'à¦•à§à¦²à¦¾à¦¨à§à¦¤ à¦ªà§‡à¦¶à§€';
+  String get recoveryTired => 'ক্লান্ত পেশী';
 
   @override
-  String get recoveryFresh => 'à¦¸à¦¤à§‡à¦œ';
+  String get recoveryFresh => 'সতেজ';
 
   @override
-  String get recoveryHint => 'à¦ªà§‡à¦¶à§€à¦° à¦¬à¦¿à¦¶à§à¦°à¦¾à¦® à¦“ à¦ªà§à¦¨à¦°à¦¾à¦¯à¦¼ à¦ªà§à¦°à¦¶à¦¿à¦•à§à¦·à¦£à§‡à¦° à¦ªà§à¦°à¦¸à§à¦¤à§à¦¤à¦¿ à¦¨à¦¿à¦°à§à¦¦à§‡à¦¶ à¦•à¦°à§‡';
+  String get recoveryHint => 'পেশীর বিশ্রাম ও পুনরায় প্রশিক্ষণের প্রস্তুতি নির্দেশ করে';
 
   @override
   String recoveryPct(int pct) {
-    return '$pct% à¦ªà§à¦°à¦¸à§à¦¤à§à¦¤';
+    return '$pct% প্রস্তুত';
   }
 
   @override
   String readyInHours(int h) {
-    return '$hours à¦˜à¦£à§à¦Ÿà¦¾à¦° à¦®à¦§à§à¦¯à§‡ à¦ªà§à¦°à¦¸à§à¦¤à§à¦¤';
+    return '~$h ঘণ্টার মধ্যে প্রস্তুত';
   }
 
   @override
-  String get tplAbcd => 'à§ª-à¦¦à¦¿à¦¨à§‡à¦° à¦¸à§à¦ªà§à¦²à¦¿à¦Ÿ (ABCD)';
+  String get tplAbcd => '৪-দিনের স্প্লিট (ABCD)';
 
   @override
-  String get tplAbcde => 'à§«-à¦¦à¦¿à¦¨à§‡à¦° à¦¬à§à¦°à§‹ à¦¸à§à¦ªà§à¦²à¦¿à¦Ÿ (ABCDE)';
+  String get tplAbcde => '৫-দিনের ব্রো স্প্লিট (ABCDE)';
 
   @override
-  String get elapsedCaps => 'à¦…à¦¤à¦¿à¦¬à¦¾à¦¹à¦¿à¦¤ à¦¸à¦®à¦¯à¦¼';
+  String get elapsedCaps => 'অতিবাহিত সময়';
 
   @override
-  String get tapToSkip => 'à¦à¦¡à¦¼à¦¿à¦¯à¦¼à§‡ à¦¯à§‡à¦¤à§‡ à¦¸à§à¦ªà¦°à§à¦¶ à¦•à¦°à§à¦¨';
+  String get tapToSkip => 'এড়িয়ে যেতে স্পর্শ করুন';
 
   @override
-  String get tapToStop => 'à¦¥à¦¾à¦®à¦¾à¦¤à§‡ à¦¸à§à¦ªà¦°à§à¦¶ à¦•à¦°à§à¦¨';
+  String get tapToStop => 'থামাতে স্পর্শ করুন';
 
   @override
-  String get screenLocked => 'à¦¸à§à¦•à§à¦°à¦¿à¦¨ à¦²à¦• à¦•à¦°à¦¾';
+  String get screenLocked => 'স্ক্রিন লক করা';
 
   @override
-  String get lockedHint => 'à¦†à¦¨à¦²à¦• à¦•à¦°à¦¤à§‡ à¦šà§‡à¦ªà§‡ à¦§à¦°à§‡ à¦°à¦¾à¦–à§à¦¨';
+  String get lockedHint => 'আনলক করতে চেপে ধরে রাখুন';
 
   @override
-  String get liveDoneSet => 'à¦¸à§‡à¦Ÿ à¦¸à¦®à§à¦ªà¦¨à§à¦¨';
+  String get liveDoneSet => 'সেট সম্পন্ন';
 
   @override
-  String get liveSkipRest => 'à¦¬à¦¿à¦¶à§à¦°à¦¾à¦® à¦à¦¡à¦¼à¦¿à¦¯à¦¼à§‡ à¦¯à¦¾à¦¨';
+  String get liveSkipRest => 'বিশ্রাম এড়িয়ে যান';
 
   @override
-  String get livePause => 'à¦¬à¦¿à¦°à¦¤à¦¿';
+  String get livePause => 'বিরতি';
 
   @override
-  String get liveResume => 'à¦šà¦¾à¦²à¦¿à¦¯à¦¼à§‡ à¦¯à¦¾à¦¨';
+  String get liveResume => 'চালিয়ে যান';
 
   @override
-  String get liveNext => 'à¦ªà¦°à¦¬à¦°à§à¦¤à§€';
+  String get liveNext => 'পরবর্তী';
 
   @override
   String liveUpNext(String name) {
-    return 'à¦ªà¦°à¦¬à¦°à§à¦¤à§€à¦¤à§‡ à¦†à¦¸à¦›à§‡';
+    return 'পরবর্তীতে: $name';
   }
 
   @override
-  String get stickerOpen => 'à¦¸à§à¦Ÿà¦¿à¦•à¦¾à¦° à¦–à§à¦²à§à¦¨';
+  String get stickerOpen => 'স্টিকার খুলুন';
 
   @override
-  String get stickerNoPhoto => 'à¦•à§‹à¦¨à§‹ à¦›à¦¬à¦¿ à¦ªà¦¾à¦“à¦¯à¦¼à¦¾ à¦¯à¦¾à¦¯à¦¼à¦¨à¦¿';
+  String get stickerNoPhoto => 'কোনো ছবি পাওয়া যায়নি';
 
   @override
-  String get stickerWorkout => 'à¦“à¦¯à¦¼à¦¾à¦°à§à¦•à¦†à¦‰à¦Ÿ à¦¸à§à¦Ÿà¦¿à¦•à¦¾à¦°';
+  String get stickerWorkout => 'ওয়ার্কআউট স্টিকার';
 
   @override
-  String get stickerStreak => 'à¦§à¦¾à¦°à¦¾à¦¬à¦¾à¦¹à¦¿à¦•à¦¤à¦¾à¦° à¦¸à§à¦Ÿà¦¿à¦•à¦¾à¦°';
+  String get stickerStreak => 'ধারাবাহিকতার স্টিকার';
 
   @override
-  String get stickerDate => 'à¦¤à¦¾à¦°à¦¿à¦–à§‡à¦° à¦¸à§à¦Ÿà¦¿à¦•à¦¾à¦°';
+  String get stickerDate => 'তারিখের স্টিকার';
 
   @override
-  String get stickerHint => 'à¦¸à§‹à¦¶à§à¦¯à¦¾à¦² à¦®à¦¿à¦¡à¦¿à¦¯à¦¼à¦¾à¦° à¦œà¦¨à§à¦¯ à¦¸à§à¦Ÿà¦¾à¦‡à¦²à¦¿à¦¶ à¦¸à§à¦Ÿà¦¿à¦•à¦¾à¦°';
+  String get stickerHint => 'সোশ্যাল মিডিয়ার জন্য স্টাইলিশ স্টিকার';
 
   @override
-  String get stickerSaved => 'à¦¸à§à¦Ÿà¦¿à¦•à¦¾à¦° à¦—à§à¦¯à¦¾à¦²à¦¾à¦°à¦¿à¦¤à§‡ à¦¸à¦‚à¦°à¦•à§à¦·à¦¿à¦¤ à¦¹à¦¯à¦¼à§‡à¦›à§‡';
+  String get stickerSaved => 'স্টিকার গ্যালারিতে সংরক্ষিত হয়েছে';
 
   @override
-  String get stickerWeek => 'à¦¸à¦¾à¦ªà§à¦¤à¦¾à¦¹à¦¿à¦• à¦¸à§à¦Ÿà¦¿à¦•à¦¾à¦°';
+  String get stickerWeek => 'সাপ্তাহিক স্টিকার';
 
   @override
-  String get getReady => 'à¦ªà§à¦°à¦¸à§à¦¤à§à¦¤ à¦¹à¦¨';
+  String get getReady => 'প্রস্তুত হন';
 
   @override
-  String get stickerGallery => 'à¦—à§à¦¯à¦¾à¦²à¦¾à¦°à¦¿ à¦¥à§‡à¦•à§‡ à¦›à¦¬à¦¿';
+  String get stickerGallery => 'গ্যালারি থেকে ছবি';
 
   @override
-  String get stickerCamera => 'à¦•à§à¦¯à¦¾à¦®à§‡à¦°à¦¾ à¦¦à¦¿à¦¯à¦¼à§‡ à¦¤à§à¦²à§à¦¨';
+  String get stickerCamera => 'ক্যামেরা দিয়ে তুলুন';
 
   @override
-  String get shareIntroTitle => 'à¦†à¦ªà¦¨à¦¾à¦° à¦¸à¦¾à¦«à¦²à§à¦¯ à¦¤à§à¦²à§‡ à¦§à¦°à§à¦¨';
+  String get shareIntroTitle => 'আপনার সাফল্য তুলে ধরুন';
 
   @override
-  String get shareIntroBody => 'à¦…à¦¨à§à¦ªà§à¦°à§‡à¦°à¦£à¦¾à¦¦à¦¾à¦¯à¦¼à§€ à¦•à¦¾à¦°à§à¦¡ à¦†à¦•à¦¾à¦°à§‡ à¦¬à¦¨à§à¦§à§à¦¦à§‡à¦° à¦¸à¦¾à¦¥à§‡ à¦¶à§‡à¦¯à¦¼à¦¾à¦° à¦•à¦°à§à¦¨à¥¤';
+  String get shareIntroBody => 'অনুপ্রেরণাদায়ী কার্ড আকারে বন্ধুদের সাথে শেয়ার করুন।';
 
   @override
-  String get removedFromRoutine => 'à¦°à§à¦Ÿà¦¿à¦¨ à¦¥à§‡à¦•à§‡ à¦¸à¦°à¦¾à¦¨à§‹ à¦¹à¦¯à¦¼à§‡à¦›à§‡';
+  String get removedFromRoutine => 'রুটিন থেকে সরানো হয়েছে';
 
   @override
-  String get radarTitle => 'à¦ªà§‡à¦¶à§€à¦° à¦­à¦¾à¦°à¦¸à¦¾à¦®à§à¦¯ à¦¬à¦¿à¦¶à§à¦²à§‡à¦·à¦£';
+  String get radarTitle => 'পেশীর ভারসাম্য বিশ্লেষণ';
 
   @override
-  String get radarHint => 'à¦¶à¦°à§€à¦°à§‡à¦° à¦¬à¦¿à¦­à¦¿à¦¨à§à¦¨ à¦…à¦‚à¦¶à§‡à¦° à¦­à¦²à¦¿à¦‰à¦® à¦…à¦¨à§à¦ªà¦¾à¦¤';
+  String get radarHint => 'শরীরের বিভিন্ন অংশের ভলিউম অনুপাত';
 
   @override
-  String get radarEmpty => 'à¦­à¦¾à¦°à¦¸à¦¾à¦®à§à¦¯ à¦¦à§‡à¦–à¦¤à§‡ à¦…à¦¨à§à¦¤à¦¤ à¦•à¦¯à¦¼à§‡à¦•à¦Ÿà¦¿ à¦¸à§‡à¦¶à¦¨ à¦¸à¦®à§à¦ªà¦¨à§à¦¨ à¦•à¦°à§à¦¨';
+  String get radarEmpty => 'ভারসাম্য দেখতে অন্তত কয়েকটি সেশন সম্পন্ন করুন';
 
   @override
-  String get radarBalanced => 'à¦¶à¦¾à¦°à§€à¦°à¦¿à¦• à¦­à¦¾à¦°à¦¸à¦¾à¦®à§à¦¯ à¦šà¦®à§Žà¦•à¦¾à¦°';
+  String get radarBalanced => 'শারীরিক ভারসাম্য চমৎকার';
 
   @override
   String radarFocus(String list) {
-    return 'à¦®à¦¨à§‹à¦¯à§‹à¦—à§‡à¦° à¦ªà§à¦°à¦¯à¦¼à§‹à¦œà¦¨: $muscle';
+    return 'আরও প্রয়োজন: $list';
   }
 
   @override
-  String get countdownReady => 'à¦¶à§à¦°à§ à¦•à¦°à¦¤à§‡ à¦ªà§à¦°à¦¸à§à¦¤à§à¦¤?';
+  String get countdownReady => 'শুরু করতে প্রস্তুত?';
 
   @override
-  String get countdownSkip => 'à¦•à¦¾à¦‰à¦¨à§à¦Ÿà¦¡à¦¾à¦‰à¦¨ à¦à¦¡à¦¼à¦¿à¦¯à¦¼à§‡ à¦¯à¦¾à¦¨';
+  String get countdownSkip => 'কাউন্টডাউন এড়িয়ে যান';
 
   @override
-  String get countdownSetting => 'à¦¶à§à¦°à§à¦° à¦†à¦—à§‡ à¦•à¦¾à¦‰à¦¨à§à¦Ÿà¦¡à¦¾à¦‰à¦¨';
+  String get countdownSetting => 'শুরুর আগে কাউন্টডাউন';
 
   @override
-  String get effortSetting => 'à¦¸à§‡à¦Ÿ à¦ªà§à¦°à¦¤à¦¿ à¦ªà§à¦°à¦šà§‡à¦·à§à¦Ÿà¦¾à¦° à¦®à¦¾à¦¤à§à¦°à¦¾ à¦°à§‡à¦•à¦°à§à¦¡';
+  String get effortSetting => 'সেট প্রতি প্রচেষ্টার মাত্রা রেকর্ড';
 
   @override
-  String get effortHint => 'RPE: à§§à§¦ à¦®à¦¾à¦¨à§‡ à¦†à¦° à¦¸à¦®à§à¦­à¦¬ à¦¨à§Ÿ, à§® à¦®à¦¾à¦¨à§‡ à¦†à¦°à¦“ à§¨à¦Ÿà¦¿ à¦°à§‡à¦ª à¦¬à¦¾à¦•à¦¿ à¦›à¦¿à¦²à¥¤';
+  String get effortHint => 'RPE: ১০ মানে আর সম্ভব নয়, ৮ মানে আরও ২টি রেপ বাকি ছিল।';
 
   @override
-  String get rirTitle => 'à¦…à¦¬à¦¶à¦¿à¦·à§à¦Ÿ à¦°à§‡à¦ªà¦¸ (RIR)';
+  String get rirTitle => 'অবশিষ্ট রেপস (RIR)';
 
   @override
-  String get rirHint => 'à§¦ à¦®à¦¾à¦¨à§‡ à¦¶à¦•à§à¦¤à¦¿à¦•à§à¦·à¦¯à¦¼, à§¨ à¦®à¦¾à¦¨à§‡ à¦†à¦°à¦“ à§¨à¦Ÿà¦¿ à¦°à§‡à¦ª à¦¬à¦¾à¦•à¦¿ à¦›à¦¿à¦²à¥¤';
+  String get rirHint => '০ মানে শক্তিক্ষয়, ২ মানে আরও ২টি রেপ বাকি ছিল।';
 
   @override
-  String get addWeekWidget => 'à¦¸à¦¾à¦ªà§à¦¤à¦¾à¦¹à¦¿à¦• à¦‰à¦‡à¦œà§‡à¦Ÿ à¦¯à§‹à¦— à¦•à¦°à§à¦¨';
+  String get addWeekWidget => 'সাপ্তাহিক উইজেট যোগ করুন';
 
   @override
-  String get gamificationSetting => 'à¦®à§‡à¦¡à§‡à¦² à¦“ à¦¸à§à¦¤à¦° à¦¬à¦¿à¦¨à§à¦¯à¦¾à¦¸';
-
+  String get gamificationSetting => 'মেডেল ও স্তর বিন্যাস';
 }
-

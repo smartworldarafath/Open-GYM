@@ -256,7 +256,7 @@ class GlassSurface extends StatelessWidget {
     final shape = BorderRadius.circular(radius);
     return ClipRRect(
       borderRadius: shape,
-      child: BackdropFilter.grouped(
+      child: BackdropFilter(
         filter: ui.ImageFilter.blur(sigmaX: blur, sigmaY: blur),
         child: DecoratedBox(
           decoration: BoxDecoration(
@@ -284,3 +284,99 @@ class GlassSurface extends StatelessWidget {
     );
   }
 }
+
+class GlassBox extends StatelessWidget {
+  const GlassBox({
+    super.key,
+    this.child,
+    this.radius = 20,
+    this.borderRadius,
+    this.shape = BoxShape.rectangle,
+    this.blur = 16,
+    this.tint,
+    this.borderColor,
+    this.borderWidth = 0.9,
+    this.width,
+    this.height,
+    this.padding,
+    this.alignment,
+    this.hasShine = true,
+  });
+
+  final Widget? child;
+  final double radius;
+  final BorderRadius? borderRadius;
+  final BoxShape shape;
+  final double blur;
+  final Color? tint;
+  final Color? borderColor;
+  final double borderWidth;
+  final double? width;
+  final double? height;
+  final EdgeInsetsGeometry? padding;
+  final AlignmentGeometry? alignment;
+  final bool hasShine;
+
+  @override
+  Widget build(BuildContext context) {
+    final gc = context.gc;
+    final dark = gc.bg.computeLuminance() < 0.5;
+    final br = shape == BoxShape.circle ? null : (borderRadius ?? BorderRadius.circular(radius));
+
+    Widget content = Container(
+      width: width,
+      height: height,
+      padding: padding,
+      alignment: alignment,
+      decoration: BoxDecoration(
+        color: tint ?? gc.bgRaised.withValues(alpha: dark ? 0.40 : 0.55),
+        shape: shape,
+        borderRadius: br,
+        border: Border.all(
+          color: borderColor ?? Colors.white.withValues(alpha: dark ? 0.18 : 0.45),
+          width: borderWidth,
+        ),
+      ),
+      child: hasShine
+          ? DecoratedBox(
+              decoration: BoxDecoration(
+                shape: shape,
+                borderRadius: br,
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.white.withValues(alpha: dark ? 0.12 : 0.35),
+                    Colors.white.withValues(alpha: 0.0),
+                  ],
+                  stops: const [0, 0.65],
+                ),
+              ),
+              child: child,
+            )
+          : child,
+    );
+
+    if (blur > 0) {
+      if (shape == BoxShape.circle) {
+        content = ClipOval(
+          child: BackdropFilter(
+            filter: ui.ImageFilter.blur(sigmaX: blur, sigmaY: blur),
+            child: content,
+          ),
+        );
+      } else {
+        content = ClipRRect(
+          borderRadius: br ?? BorderRadius.circular(radius),
+          child: BackdropFilter(
+            filter: ui.ImageFilter.blur(sigmaX: blur, sigmaY: blur),
+            child: content,
+          ),
+        );
+      }
+    }
+
+    return content;
+  }
+}
+

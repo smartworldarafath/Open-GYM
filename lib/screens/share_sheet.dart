@@ -149,7 +149,7 @@ class _ShareSheetState extends State<_ShareSheet> {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 6, 20, 16),
-              child: PrimaryButton(label: t.share, height: 54, onTap: _share),
+              child: PrimaryButton(label: t.share, height: 54, onTap: _share, glass: true),
             ),
           ],
         ),
