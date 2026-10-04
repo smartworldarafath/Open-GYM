@@ -735,16 +735,16 @@ class _SegToggleState extends State<SegToggle> with SingleTickerProviderStateMix
       return ClipRRect(
         borderRadius: BorderRadius.circular(100),
         child: BackdropFilter(
-          filter: ui.ImageFilter.blur(sigmaX: 14, sigmaY: 14),
+          filter: ui.ImageFilter.blur(sigmaX: 18, sigmaY: 18),
           child: Container(
             width: width,
             padding: const EdgeInsets.all(3),
             decoration: BoxDecoration(
-              color: gc.bgRaised2.withValues(alpha: dark ? 0.35 : 0.50),
+              color: dark ? Colors.white.withValues(alpha: 0.10) : Colors.white.withValues(alpha: 0.30),
               borderRadius: BorderRadius.circular(100),
               border: Border.all(
-                color: Colors.white.withValues(alpha: dark ? 0.18 : 0.45),
-                width: 0.9,
+                color: Colors.white.withValues(alpha: dark ? 0.25 : 0.60),
+                width: 1.0,
               ),
             ),
             child: DecoratedBox(
@@ -754,10 +754,10 @@ class _SegToggleState extends State<SegToggle> with SingleTickerProviderStateMix
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Colors.white.withValues(alpha: dark ? 0.12 : 0.30),
-                    Colors.white.withValues(alpha: 0.0),
+                    Colors.white.withValues(alpha: dark ? 0.22 : 0.45),
+                    Colors.transparent,
                   ],
-                  stops: const [0, 0.65],
+                  stops: const [0, 0.5],
                 ),
               ),
               child: inner,
@@ -778,6 +778,7 @@ class _SegToggleState extends State<SegToggle> with SingleTickerProviderStateMix
   Widget build(BuildContext context) {
     if (widget.options.isEmpty) return const SizedBox.shrink();
     final gc = context.gc;
+    final dark = gc.bg.computeLuminance() < 0.5;
     final selIdx = widget.options.indexWhere((o) => o.selected);
     final activeIdx = selIdx >= 0 ? selIdx : 0;
 
@@ -816,11 +817,16 @@ class _SegToggleState extends State<SegToggle> with SingleTickerProviderStateMix
                         child: RepaintBoundary(
                           child: DecoratedBox(
                             decoration: BoxDecoration(
-                              color: gc.ember,
+                              color: widget.glass
+                                  ? (dark ? Colors.white.withValues(alpha: 0.22) : Colors.white)
+                                  : gc.ember,
                               borderRadius: BorderRadius.circular(100),
+                              border: widget.glass && !dark
+                                  ? Border.all(color: Colors.black.withValues(alpha: 0.04), width: 0.5)
+                                  : null,
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.14),
+                                  color: Colors.black.withValues(alpha: widget.glass ? 0.10 : 0.14),
                                   blurRadius: 8,
                                   offset: const Offset(0, 2),
                                 ),
@@ -850,7 +856,9 @@ class _SegToggleState extends State<SegToggle> with SingleTickerProviderStateMix
                                     style: AppTheme.f(
                                       widget.fontSize,
                                       weight: FontWeight.w600,
-                                      color: widget.options[i].selected ? gc.onEmber : gc.textSecondary,
+                                      color: widget.options[i].selected
+                                          ? (widget.glass ? (dark ? Colors.white : gc.text) : gc.onEmber)
+                                          : gc.textSecondary,
                                     ),
                                     child: Text(
                                       widget.options[i].label,
@@ -913,11 +921,16 @@ class _SegToggleState extends State<SegToggle> with SingleTickerProviderStateMix
                   child: RepaintBoundary(
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                        color: gc.ember,
+                        color: widget.glass
+                            ? (dark ? Colors.white.withValues(alpha: 0.22) : Colors.white)
+                            : gc.ember,
                         borderRadius: BorderRadius.circular(100),
+                        border: widget.glass && !dark
+                            ? Border.all(color: Colors.black.withValues(alpha: 0.04), width: 0.5)
+                            : null,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.14),
+                            color: Colors.black.withValues(alpha: widget.glass ? 0.10 : 0.14),
                             blurRadius: 8,
                             offset: const Offset(0, 2),
                           ),
@@ -949,7 +962,9 @@ class _SegToggleState extends State<SegToggle> with SingleTickerProviderStateMix
                               style: AppTheme.f(
                                 widget.fontSize,
                                 weight: FontWeight.w600,
-                                color: widget.options[i].selected ? gc.onEmber : gc.textSecondary,
+                                color: widget.options[i].selected
+                                    ? (widget.glass ? (dark ? Colors.white : gc.text) : gc.onEmber)
+                                    : gc.textSecondary,
                               ),
                               child: Text(
                                 widget.options[i].label,
@@ -1042,7 +1057,10 @@ class _LiquidDockSelectorState<T> extends State<LiquidDockSelector<T>>
     final dark = gc.bg.computeLuminance() < 0.5;
     final selIdx = widget.items.indexOf(widget.selected);
     final activeIdx = selIdx >= 0 ? selIdx : 0;
-    final pillBg = widget.pillColor ?? gc.emberSoft;
+    final pillBg = widget.pillColor ??
+        (widget.glass
+            ? (dark ? Colors.white.withValues(alpha: 0.22) : Colors.white)
+            : gc.emberSoft);
 
     final dockInner = SizedBox(
       width: widget.slotWidth * widget.items.length,
@@ -1073,9 +1091,12 @@ class _LiquidDockSelectorState<T> extends State<LiquidDockSelector<T>>
                     decoration: BoxDecoration(
                       color: pillBg,
                       borderRadius: BorderRadius.circular(widget.pillRadius),
+                      border: widget.glass && !dark
+                          ? Border.all(color: Colors.black.withValues(alpha: 0.04), width: 0.5)
+                          : null,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.12),
+                          color: Colors.black.withValues(alpha: widget.glass ? 0.10 : 0.12),
                           blurRadius: 6,
                           offset: const Offset(0, 2),
                         ),
@@ -1116,15 +1137,15 @@ class _LiquidDockSelectorState<T> extends State<LiquidDockSelector<T>>
       return ClipRRect(
         borderRadius: BorderRadius.circular(widget.pillRadius),
         child: BackdropFilter(
-          filter: ui.ImageFilter.blur(sigmaX: 14, sigmaY: 14),
+          filter: ui.ImageFilter.blur(sigmaX: 18, sigmaY: 18),
           child: Container(
             padding: const EdgeInsets.all(3),
             decoration: BoxDecoration(
-              color: gc.bgRaised2.withValues(alpha: dark ? 0.35 : 0.50),
+              color: dark ? Colors.white.withValues(alpha: 0.10) : Colors.white.withValues(alpha: 0.30),
               borderRadius: BorderRadius.circular(widget.pillRadius),
               border: Border.all(
-                color: Colors.white.withValues(alpha: dark ? 0.18 : 0.45),
-                width: 0.9,
+                color: Colors.white.withValues(alpha: dark ? 0.25 : 0.60),
+                width: 1.0,
               ),
             ),
             child: DecoratedBox(
@@ -1134,10 +1155,10 @@ class _LiquidDockSelectorState<T> extends State<LiquidDockSelector<T>>
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Colors.white.withValues(alpha: dark ? 0.12 : 0.30),
-                    Colors.white.withValues(alpha: 0.0),
+                    Colors.white.withValues(alpha: dark ? 0.22 : 0.45),
+                    Colors.transparent,
                   ],
-                  stops: const [0, 0.65],
+                  stops: const [0, 0.5],
                 ),
               ),
               child: dockInner,

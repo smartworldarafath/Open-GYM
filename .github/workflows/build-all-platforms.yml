@@ -1,0 +1,201 @@
+name: Build & Release Multiplatform
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag / version (e.g. v1.3.2)'
+        required: true
+        default: 'v1.3.2'
+        type: string
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-android:
+    name: Build Android APKs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Universal & Split APKs
+        run: |
+          flutter build apk --release
+          flutter build apk --release --split-per-abi
+
+      - name: Organize APKs
+        run: |
+          mkdir -p dist/android
+          cd build/app/outputs/flutter-apk
+          cp app-release.apk ../../../dist/android/Open-GYM-universal.apk
+          cp app-arm64-v8a-release.apk ../../../dist/android/Open-GYM-arm64-v8a.apk
+          cp app-armeabi-v7a-release.apk ../../../dist/android/Open-GYM-armeabi-v7a.apk
+          cp app-x86_64-release.apk ../../../dist/android/Open-GYM-x86_64.apk
+
+      - name: Upload Android Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apks
+          path: dist/android/*.apk
+
+  build-apple:
+    name: Build Apple Binaries (iOS/iPadOS & macOS)
+    runs-on: macos-14
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Select Xcode 16
+        run: |
+          if [ -d "/Applications/Xcode_16.2.app" ]; then
+            sudo xcode-select -s /Applications/Xcode_16.2.app
+          elif [ -d "/Applications/Xcode_16.1.app" ]; then
+            sudo xcode-select -s /Applications/Xcode_16.1.app
+          elif [ -d "/Applications/Xcode_16.0.app" ]; then
+            sudo xcode-select -s /Applications/Xcode_16.0.app
+          fi
+          xcodebuild -version
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build iOS Application (iPhone & iPad)
+        run: |
+          flutter build ios --release --no-codesign
+          mkdir -p build/ios/ipa/Payload
+          cp -r build/ios/iphoneos/Runner.app build/ios/ipa/Payload/
+          cd build/ios/ipa
+          zip -r -9 Open-GYM-iOS-v1.3.2.ipa Payload
+          mkdir -p ../../../dist/apple
+          cp Open-GYM-iOS-v1.3.2.ipa ../../../dist/apple/
+
+      - name: Build macOS Application (MacBook)
+        run: |
+          flutter build macos --release
+          cd build/macos/Build/Products/Release
+          zip -r -9 ../../../../dist/apple/Open-GYM-macOS-v1.3.2.zip Runner.app
+
+      - name: Upload Apple Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: apple-binaries
+          path: dist/apple/*
+
+  build-windows:
+    name: Build Windows Application
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Windows Application
+        run: flutter build windows --release
+
+      - name: Package Windows Bundle
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path dist/windows
+          Compress-Archive -Path build\windows\x64\runner\Release\* -DestinationPath dist/windows/Open-GYM-Windows-x64-v1.3.2.zip
+
+      - name: Upload Windows Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-binaries
+          path: dist/windows/*
+
+  build-linux:
+    name: Build Linux Application
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Linux build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Linux Application
+        run: flutter build linux --release
+
+      - name: Package Linux Bundle
+        run: |
+          mkdir -p dist/linux
+          cd build/linux/x64/release/bundle
+          tar -czvf ../../../../dist/linux/Open-GYM-Linux-x64-v1.3.2.tar.gz *
+
+      - name: Upload Linux Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-binaries
+          path: dist/linux/*
+
+  publish-release:
+    name: Publish Release to GitHub
+    needs: [build-android, build-apple, build-windows, build-linux]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: all-dist
+
+      - name: Flatten release assets
+        run: |
+          mkdir -p release-files
+          find all-dist -type f -exec cp {} release-files/ \;
+          ls -la release-files
+
+      - name: Upload all assets to GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          gh release upload "$TAG" release-files/* --clobber

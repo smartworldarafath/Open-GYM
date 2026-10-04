@@ -68,6 +68,7 @@ test/preview/
 test/preview_*.dart
 test/marketing_shots.dart
 site/
+.agents/
 
 # OS junk
 Thumbs.db

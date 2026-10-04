@@ -11,11 +11,11 @@ import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import '../widgets/donation_sheet.dart';
 import '../widgets/entrance.dart';
-import '../widgets/glass.dart';
+import '../widgets/liquid_glass.dart';
 import '../widgets/ui_kit.dart';
 import 'update_screen.dart';
 
-const _kVersion = '1.3.1 (Beta 1)';
+const _kVersion = '1.3.2 (Beta 2)';
 const _kAuthor = 'Arafath';
 const _kAuthorUrl = 'https://github.com/smartworldarafath';
 const _kRepoUrl = 'https://github.com/smartworldarafath/Open-GYM';
@@ -107,7 +107,7 @@ class AboutScreen extends StatelessWidget {
           height: 178,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(22),
-            color: gc.bgRaised.withValues(alpha: dark ? 0.35 : 0.50),
+            color: dark ? Colors.white.withValues(alpha: 0.10) : Colors.white.withValues(alpha: 0.30),
           ),
           child: Stack(
             children: [
@@ -170,7 +170,7 @@ class AboutScreen extends StatelessWidget {
                     Text('Open GYM',
                         style: AppTheme.f(33, weight: FontWeight.w800, color: gc.text, letterSpacing: -0.5)),
                     const SizedBox(height: 10),
-                    GlassBox(
+                    LiquidGlassBox(
                       radius: 100,
                       blur: 10,
                       padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 5),

@@ -12,7 +12,7 @@ import '../state/fit_state.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import '../widgets/entrance.dart';
-import '../widgets/glass.dart';
+import '../widgets/liquid_glass.dart';
 import '../widgets/medal_shelf.dart';
 import '../widgets/photo_source_sheet.dart';
 import '../widgets/profile_avatar.dart';
@@ -554,20 +554,11 @@ class _ProfileHeader extends SliverPersistentHeaderDelegate {
   }
 
   Widget _round(IconData icon, VoidCallback onTap) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
+    return LiquidGlassCircleAction(
+      size: 38,
+      tint: Colors.black.withValues(alpha: 0.28),
       onTap: onTap,
-      child: GlassBox(
-        shape: BoxShape.circle,
-        width: 38,
-        height: 38,
-        blur: 14,
-        tint: Colors.black.withValues(alpha: 0.30),
-        borderColor: Colors.white.withValues(alpha: 0.30),
-        child: Center(
-          child: Icon(icon, size: 18, color: Colors.white),
-        ),
-      ),
+      child: Icon(icon, size: 18, color: Colors.white),
     );
   }
 
@@ -606,15 +597,13 @@ class _ProfileHeader extends SliverPersistentHeaderDelegate {
           children: [
             ProfileAvatar(size: 76),
             const Spacer(),
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
+            LiquidGlassBox(
+              radius: 100,
+              interactive: true,
               onTap: onEdit,
-              child: GlassBox(
-                radius: 100,
-                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-                child: Text(t.editProfile,
-                    style: AppTheme.f(13.5, weight: FontWeight.w600, color: gc.text)),
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+              child: Text(t.editProfile,
+                  style: AppTheme.f(13.5, weight: FontWeight.w600, color: gc.text)),
             ),
           ],
         ),

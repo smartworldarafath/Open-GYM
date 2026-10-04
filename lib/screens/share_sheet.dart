@@ -12,6 +12,7 @@ import '../state/fit_state.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import '../widgets/glass.dart';
+import '../widgets/liquid_glass.dart';
 import '../widgets/liquid_notch.dart';
 import '../widgets/share_cards.dart';
 import '../widgets/ui_kit.dart';
@@ -149,7 +150,7 @@ class _ShareSheetState extends State<_ShareSheet> {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 6, 20, 16),
-              child: PrimaryButton(label: t.share, height: 54, onTap: _share, glass: true),
+              child: LiquidGlassButton(label: t.share, height: 54, onTap: _share),
             ),
           ],
         ),

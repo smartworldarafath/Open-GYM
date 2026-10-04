@@ -28,6 +28,7 @@ import '../widgets/dialogs.dart';
 import '../widgets/donation_sheet.dart';
 import '../widgets/entrance.dart';
 import '../widgets/glass.dart';
+import '../widgets/liquid_glass.dart';
 import '../widgets/liquid_notch.dart';
 import '../widgets/photo_source_sheet.dart';
 import '../widgets/profile_avatar.dart';
@@ -92,7 +93,6 @@ class SettingsScreen extends StatelessWidget {
                       glass: true,
                       slotWidth: 36,
                       slotHeight: 34,
-                      pillColor: gc.ember,
                       builder: (context, item, isSelected) {
                         final color = switch (item) {
                           'violet' => const Color(0xFF9B51E0),
@@ -722,9 +722,8 @@ class SettingsScreen extends StatelessWidget {
               const SizedBox(height: 12),
               Text(t.importHint, style: AppTheme.f(11.5, weight: FontWeight.w500, color: gc.textTertiary, height: 1.4)),
               const SizedBox(height: 18),
-              PrimaryButton(
+              LiquidGlassButton(
                 label: t.chooseFile,
-                glass: true,
                 onTap: () {
                   Navigator.pop(sheet);
                   _importFromApp(context);

@@ -17,6 +17,7 @@ import '../widgets/dialogs.dart';
 import '../widgets/entrance.dart';
 import '../widgets/exercise_media.dart';
 import '../widgets/glass.dart';
+import '../widgets/liquid_glass.dart';
 import '../widgets/muscle_radar.dart';
 import '../widgets/rolling_text.dart';
 import '../widgets/ruler_picker.dart';
@@ -54,16 +55,10 @@ class ProgressScreen extends StatelessWidget {
                 Semantics(
                   button: true,
                   label: t.share,
-                  child: GestureDetector(
+                  child: LiquidGlassCircleAction(
                     onTap: () => showShareSheet(context),
-                    child: GlassBox(
-                      shape: BoxShape.circle,
-                      width: 38,
-                      height: 38,
-                      child: Center(
-                        child: Icon(PhosphorIconsRegular.shareNetwork, size: 17, color: gc.text),
-                      ),
-                    ),
+                    size: 38,
+                    child: Icon(PhosphorIconsRegular.shareNetwork, size: 17, color: gc.text),
                   ),
                 ),
               ],

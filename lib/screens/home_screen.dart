@@ -11,6 +11,7 @@ import '../widgets/entrance.dart';
 import '../widgets/exercise_media.dart';
 import '../widgets/glass.dart';
 import '../widgets/home_folder.dart';
+import '../widgets/liquid_glass.dart';
 import '../widgets/svg_icon.dart';
 import '../widgets/ui_kit.dart';
 import 'progress_screen.dart';
@@ -130,20 +131,19 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 12),
-        GestureDetector(
-          behavior: HitTestBehavior.opaque,
+        LiquidGlassBox(
+          radius: 100,
+          interactive: true,
           onTap: fit.goProgress,
-          child: GlassBox(
-            radius: 100,
-            padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 9),
-            child: Row(
-              children: [
-                SvgPathIcon(Ic.flame, size: 15, color: gc.accent),
-                const SizedBox(width: 6),
-                Text('${fit.currentStreak}',
-                    style: AppTheme.f(14, weight: FontWeight.w800, color: gc.text)),
-              ],
-            ),
+          padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 9),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SvgPathIcon(Ic.flame, size: 15, color: gc.accent),
+              const SizedBox(width: 6),
+              Text('${fit.currentStreak}',
+                  style: AppTheme.f(14, weight: FontWeight.w800, color: gc.text)),
+            ],
           ),
         ),
       ],
@@ -238,11 +238,10 @@ class HomeScreen extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: AppTheme.f(13, weight: FontWeight.w500, color: gc.textSecondary)),
                   const SizedBox(height: 20),
-                  PrimaryButton(
+                  LiquidGlassButton(
                     label: t.startWorkout,
                     icon: Ic.play,
                     height: 52,
-                    glass: true,
                     onTap: isRoutine ? () => fit.startRoutine(routine) : fit.startFocusWorkout,
                   ),
                 ],

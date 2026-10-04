@@ -48,19 +48,20 @@ class HomeFolder extends StatelessWidget {
                   painter: _BackPainter(Color.lerp(gc.bgRaised, gc.bg, dark ? 0.45 : 0.6)!),
                 ),
               ),
-              Positioned(left: 10, right: 10, top: 22, height: _front + 6, child: peek),
+              Positioned(left: 10, right: 10, top: 16, height: 100, child: peek),
               Positioned.fill(
                 top: _front,
                 child: ClipPath(
                   clipper: const _FolderClipper(tabLeft: true),
                   child: BackdropFilter(
-                    filter: ui.ImageFilter.blur(sigmaX: 14, sigmaY: 14),
+                    filter: ui.ImageFilter.blur(sigmaX: 18, sigmaY: 18),
                     child: CustomPaint(
                       painter: _FrontPainter(
-                        top: (dark ? Colors.white : gc.bgRaised).withValues(alpha: dark ? 0.35 : 0.55),
-                        bottom: (dark ? gc.bgRaised : gc.bg).withValues(alpha: dark ? 0.20 : 0.35),
-                        edge: Colors.white.withValues(alpha: dark ? 0.22 : 0.60),
-                        shadow: Colors.black.withValues(alpha: dark ? 0.30 : 0.08),
+                        top: Colors.white.withValues(alpha: dark ? 0.20 : 0.38),
+                        bottom: Colors.white.withValues(alpha: dark ? 0.08 : 0.18),
+                        edge: Colors.white.withValues(alpha: dark ? 0.50 : 0.80),
+                        shadow: Colors.black.withValues(alpha: dark ? 0.25 : 0.06),
+                        dark: dark,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(13, 24, 10, 12),
@@ -149,16 +150,25 @@ class _BackPainter extends CustomPainter {
 }
 
 class _FrontPainter extends CustomPainter {
-  _FrontPainter({required this.top, required this.bottom, required this.edge, required this.shadow});
+  _FrontPainter({
+    required this.top,
+    required this.bottom,
+    required this.edge,
+    required this.shadow,
+    required this.dark,
+  });
   final Color top;
   final Color bottom;
   final Color edge;
   final Color shadow;
+  final bool dark;
 
   @override
   void paint(Canvas canvas, Size size) {
     final path = _folderPath(size, tabLeft: true);
-    canvas.drawShadow(path.shift(const Offset(0, -6)), shadow, 10, true);
+    canvas.drawShadow(path.shift(const Offset(0, -4)), shadow, 8, true);
+
+    // 1. Base translucent frosted tint
     canvas.drawPath(
       path,
       Paint()
@@ -168,23 +178,46 @@ class _FrontPainter extends CustomPainter {
           colors: [top, bottom],
         ).createShader(Offset.zero & size),
     );
+
+    // 2. Top Meniscus curvature sheen (Fresnel reflection)
+    canvas.drawPath(
+      path,
+      Paint()
+        ..shader = LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Colors.white.withValues(alpha: dark ? 0.25 : 0.50),
+            Colors.white.withValues(alpha: dark ? 0.05 : 0.12),
+            Colors.transparent,
+          ],
+          stops: const [0.0, 0.35, 0.75],
+        ).createShader(Offset.zero & size),
+    );
+
+    // 3. Dual Blinn-Phong directional specular rim stroke
     canvas.drawPath(
       path,
       Paint()
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 1
+        ..strokeWidth = 1.15
         ..shader = LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [edge, edge.withValues(alpha: 0)],
-          stops: const [0, 0.6],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Colors.white.withValues(alpha: dark ? 0.55 : 0.80),
+            Colors.white.withValues(alpha: dark ? 0.18 : 0.35),
+            Colors.white.withValues(alpha: dark ? 0.06 : 0.12),
+            Colors.white.withValues(alpha: dark ? 0.25 : 0.45),
+          ],
+          stops: const [0.0, 0.30, 0.70, 1.0],
         ).createShader(Offset.zero & size),
     );
   }
 
   @override
   bool shouldRepaint(_FrontPainter o) =>
-      o.top != top || o.bottom != bottom || o.edge != edge || o.shadow != shadow;
+      o.top != top || o.bottom != bottom || o.edge != edge || o.shadow != shadow || o.dark != dark;
 }
 
 class _Fan extends StatelessWidget {
@@ -234,7 +267,7 @@ class RoutinesPeek extends StatelessWidget {
     final colors = hues.isEmpty ? kFolderHues.take(3).toList() : hues;
     return _Fan(
       width: 60,
-      height: 50,
+      height: 75,
       children: [
         for (final c in colors.reversed)
           _Sheet(color: Color.lerp(c, Colors.black, dark ? 0.12 : 0)!, ink: Color.lerp(c, Colors.black, 0.45)!),
@@ -261,7 +294,7 @@ class _Sheet extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          for (final f in const [1.0, 0.7, 0.45]) ...[
+          for (final f in const [1.0, 0.7, 0.85, 0.5, 0.45]) ...[
             FractionallySizedBox(
               widthFactor: f,
               child: Container(
@@ -287,7 +320,7 @@ class ToolsPeek extends StatelessWidget {
     final base = Color.lerp(gc.bgRaised2, Colors.white, dark ? 0.1 : 0)!;
     return _Fan(
       width: 46,
-      height: 50,
+      height: 75,
       spread: 1.4,
       children: [
         for (final (icon, tint) in [
@@ -324,7 +357,7 @@ class NotesPeek extends StatelessWidget {
     final dark = gc.bg.computeLuminance() < 0.5;
     return _Fan(
       width: 48,
-      height: 48,
+      height: 75,
       children: [
         for (final c in _paper)
           Stack(
@@ -348,7 +381,7 @@ class NotesPeek extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      for (final f in const [1.0, 0.8, 0.5]) ...[
+                      for (final f in const [1.0, 0.8, 0.65, 0.5, 0.4]) ...[
                         FractionallySizedBox(
                           widthFactor: f,
                           child: Container(

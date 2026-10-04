@@ -9,6 +9,7 @@ import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import '../widgets/dialogs.dart';
 import '../widgets/glass.dart';
+import '../widgets/liquid_glass.dart';
 import '../widgets/ui_kit.dart';
 
 class PlacesScreen extends StatelessWidget {
@@ -43,23 +44,21 @@ class PlacesScreen extends StatelessWidget {
                   const SizedBox(height: 12),
                 ],
                 const SizedBox(height: 4),
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
+                LiquidGlassBox(
+                  height: 50,
+                  radius: 16,
+                  interactive: true,
                   onTap: () => _rename(context, null),
-                  child: GlassBox(
-                    height: 50,
-                    radius: 16,
-                    alignment: Alignment.center,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(PhosphorIconsRegular.plus, size: 16, color: gc.ember),
-                        const SizedBox(width: 8),
-                        Text(t.placeNew,
-                            style: AppTheme.d(13,
-                                weight: FontWeight.w600, color: gc.text, letterSpacing: 1)),
-                      ],
-                    ),
+                  alignment: Alignment.center,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(PhosphorIconsRegular.plus, size: 16, color: gc.ember),
+                      const SizedBox(width: 8),
+                      Text(t.placeNew,
+                          style: AppTheme.d(13,
+                              weight: FontWeight.w600, color: gc.text, letterSpacing: 1)),
+                    ],
                   ),
                 ),
               ],
@@ -92,22 +91,20 @@ class PlacesScreen extends StatelessWidget {
                 for (final preset in kPlacePresets) ...[
                   if (preset != kPlacePresets.first) const SizedBox(width: 8),
                   Expanded(
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.opaque,
+                    child: LiquidGlassBox(
+                      height: 44,
+                      radius: 14,
+                      interactive: true,
                       onTap: () => fit.setActivePlace(fit.addPresetPlace(preset)),
-                      child: GlassBox(
-                        height: 44,
-                        radius: 14,
-                        alignment: Alignment.center,
-                        child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: Text(t.placePresetName(preset),
-                                maxLines: 1,
-                                style: AppTheme.s(13,
-                                    weight: FontWeight.w600, color: gc.text)),
-                          ),
+                      alignment: Alignment.center,
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Text(t.placePresetName(preset),
+                              maxLines: 1,
+                              style: AppTheme.s(13,
+                                  weight: FontWeight.w600, color: gc.text)),
                         ),
                       ),
                     ),

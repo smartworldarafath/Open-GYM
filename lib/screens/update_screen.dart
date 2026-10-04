@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:archive/archive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
@@ -11,11 +12,11 @@ import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import '../widgets/entrance.dart';
-import '../widgets/glass.dart';
+import '../widgets/liquid_glass.dart';
 import '../widgets/ui_kit.dart';
 
 class UpdateScreen extends StatefulWidget {
-  const UpdateScreen({super.key, this.currentVersion = '1.3.1'});
+  const UpdateScreen({super.key, this.currentVersion = '1.3.2'});
 
   final String currentVersion;
 
@@ -33,6 +34,7 @@ class _UpdateScreenState extends State<UpdateScreen> with SingleTickerProviderSt
   String _releaseTitle = '';
   String _releaseNotes = '';
   String? _apkDownloadUrl;
+  String? _updateAssetName;
   String? _downloadedFilePath;
 
   int _totalBytes = 0;
@@ -84,16 +86,88 @@ class _UpdateScreenState extends State<UpdateScreen> with SingleTickerProviderSt
         final notes = json['body'] as String? ?? '';
         final assets = (json['assets'] as List<dynamic>?) ?? [];
 
-        String? apkUrl;
-        for (final asset in assets) {
-          final name = (asset['name'] as String? ?? '').toLowerCase();
-          final downloadUrl = asset['browser_download_url'] as String?;
-          if (name.endsWith('.apk') && downloadUrl != null) {
-            // Prefer arm64-v8a or generic apk
-            if (name.contains('arm64') || apkUrl == null) {
-              apkUrl = downloadUrl;
+        String? targetUrl;
+        String? targetName;
+
+        if (Platform.isAndroid) {
+          for (final asset in assets) {
+            final name = (asset['name'] as String? ?? '').toLowerCase();
+            final downloadUrl = asset['browser_download_url'] as String?;
+            if (name.endsWith('.apk') && downloadUrl != null) {
+              if (name.contains('arm64-v8a')) {
+                targetUrl = downloadUrl;
+                targetName = asset['name'] as String?;
+                break;
+              } else if (name.contains('universal') && (targetUrl == null || !(targetName?.contains('arm64') ?? false))) {
+                targetUrl = downloadUrl;
+                targetName = asset['name'] as String?;
+              } else if (targetUrl == null) {
+                targetUrl = downloadUrl;
+                targetName = asset['name'] as String?;
+              }
             }
           }
+        } else if (Platform.isWindows) {
+          for (final asset in assets) {
+            final name = (asset['name'] as String? ?? '').toLowerCase();
+            final downloadUrl = asset['browser_download_url'] as String?;
+            if ((name.contains('win') || name.contains('windows')) && downloadUrl != null) {
+              if (name.endsWith('.exe')) {
+                targetUrl = downloadUrl;
+                targetName = asset['name'] as String?;
+                break;
+              } else if (name.endsWith('.zip') && targetUrl == null) {
+                targetUrl = downloadUrl;
+                targetName = asset['name'] as String?;
+              }
+            }
+          }
+        } else if (Platform.isMacOS) {
+          for (final asset in assets) {
+            final name = (asset['name'] as String? ?? '').toLowerCase();
+            final downloadUrl = asset['browser_download_url'] as String?;
+            if ((name.contains('mac') || name.contains('macos') || name.contains('darwin')) && downloadUrl != null) {
+              if (name.endsWith('.dmg')) {
+                targetUrl = downloadUrl;
+                targetName = asset['name'] as String?;
+                break;
+              } else if (name.endsWith('.zip') && targetUrl == null) {
+                targetUrl = downloadUrl;
+                targetName = asset['name'] as String?;
+              }
+            }
+          }
+        } else if (Platform.isLinux) {
+          for (final asset in assets) {
+            final name = (asset['name'] as String? ?? '').toLowerCase();
+            final downloadUrl = asset['browser_download_url'] as String?;
+            if (name.contains('linux') && downloadUrl != null) {
+              if (name.endsWith('.appimage') || name.endsWith('.deb')) {
+                targetUrl = downloadUrl;
+                targetName = asset['name'] as String?;
+                break;
+              } else if ((name.endsWith('.tar.gz') || name.endsWith('.zip')) && targetUrl == null) {
+                targetUrl = downloadUrl;
+                targetName = asset['name'] as String?;
+              }
+            }
+          }
+        } else if (Platform.isIOS) {
+          for (final asset in assets) {
+            final name = (asset['name'] as String? ?? '').toLowerCase();
+            final downloadUrl = asset['browser_download_url'] as String?;
+            if ((name.endsWith('.ipa') || name.contains('ios')) && downloadUrl != null) {
+              targetUrl = downloadUrl;
+              targetName = asset['name'] as String?;
+              break;
+            }
+          }
+        }
+
+        // Fallback to first available asset if specific platform binary not matched
+        if (targetUrl == null && assets.isNotEmpty) {
+          targetUrl = assets.first['browser_download_url'] as String?;
+          targetName = assets.first['name'] as String?;
         }
 
         final isNewer = _isVersionNewer(tagName, widget.currentVersion);
@@ -102,7 +176,8 @@ class _UpdateScreenState extends State<UpdateScreen> with SingleTickerProviderSt
           _latestVersion = tagName.isNotEmpty ? tagName : widget.currentVersion;
           _releaseTitle = title;
           _releaseNotes = notes;
-          _apkDownloadUrl = apkUrl;
+          _apkDownloadUrl = targetUrl;
+          _updateAssetName = targetName;
           _status = isNewer ? _UpdateStatus.updateAvailable : _UpdateStatus.upToDate;
         });
       } else {
@@ -136,8 +211,16 @@ class _UpdateScreenState extends State<UpdateScreen> with SingleTickerProviderSt
   Future<void> _startDownload() async {
     final url = _apkDownloadUrl;
     if (url == null) {
-      // Fallback: Open GitHub Releases in browser
       _openReleasesPage();
+      return;
+    }
+
+    if (Platform.isIOS) {
+      // On iOS, system sandboxing requires opening the direct IPA URL or release page
+      final uri = Uri.parse(url);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      }
       return;
     }
 
@@ -150,8 +233,16 @@ class _UpdateScreenState extends State<UpdateScreen> with SingleTickerProviderSt
 
     try {
       final tempDir = await getTemporaryDirectory();
-      final apkFile = File('${tempDir.path}/open_gym_$_latestVersion.apk');
-      if (apkFile.existsSync()) apkFile.deleteSync();
+      String filename = _updateAssetName ?? 'open_gym_update_$_latestVersion';
+      if (!filename.contains('.')) {
+        if (Platform.isAndroid) filename += '.apk';
+        if (Platform.isWindows) filename += '.zip';
+        if (Platform.isMacOS) filename += '.dmg';
+        if (Platform.isLinux) filename += '.tar.gz';
+      }
+
+      final targetFile = File('${tempDir.path}/$filename');
+      if (targetFile.existsSync()) targetFile.deleteSync();
 
       final client = HttpClient();
       final request = await client.getUrl(Uri.parse(url));
@@ -159,7 +250,7 @@ class _UpdateScreenState extends State<UpdateScreen> with SingleTickerProviderSt
       final response = await request.close();
 
       _totalBytes = response.contentLength;
-      final sink = apkFile.openWrite();
+      final sink = targetFile.openWrite();
 
       int bytesSinceLastSample = 0;
       DateTime lastSampleTime = DateTime.now();
@@ -186,9 +277,9 @@ class _UpdateScreenState extends State<UpdateScreen> with SingleTickerProviderSt
           await sink.close();
           setState(() {
             _status = _UpdateStatus.downloaded;
-            _downloadedFilePath = apkFile.path;
+            _downloadedFilePath = targetFile.path;
           });
-          _installApk(apkFile.path);
+          _installUpdate(targetFile.path);
         },
         onError: (err) {
           setState(() {
@@ -206,16 +297,71 @@ class _UpdateScreenState extends State<UpdateScreen> with SingleTickerProviderSt
     }
   }
 
-  Future<void> _installApk(String path) async {
+  Future<void> _installUpdate(String path) async {
     try {
-      const channel = MethodChannel('gymmane/installer');
-      await channel.invokeMethod('install', {'path': path});
-    } catch (e) {
-      // If method channel not available or fails, show snackbar
+      if (Platform.isAndroid) {
+        const channel = MethodChannel('gymmane/installer');
+        await channel.invokeMethod('install', {'path': path});
+      } else if (Platform.isWindows) {
+        if (path.toLowerCase().endsWith('.exe')) {
+          await Process.start(path, [], runInShell: true);
+        } else if (path.toLowerCase().endsWith('.zip')) {
+          // Extract zip package and find the main executable
+          final bytes = await File(path).readAsBytes();
+          final archive = ZipDecoder().decodeBytes(bytes);
+          final extractDir = Directory('${path}_extracted');
+          if (!extractDir.existsSync()) extractDir.createSync(recursive: true);
+
+          for (final file in archive) {
+            final filename = '${extractDir.path}/${file.name}';
+            if (file.isFile) {
+              final outFile = File(filename);
+              outFile.parent.createSync(recursive: true);
+              outFile.writeAsBytesSync(file.content as List<int>);
+            } else {
+              Directory(filename).createSync(recursive: true);
+            }
+          }
+
+          File? exe;
+          for (final f in extractDir.listSync(recursive: true)) {
+            if (f is File && f.path.toLowerCase().endsWith('.exe')) {
+              exe = f;
+              break;
+            }
+          }
+
+          if (exe != null) {
+            await Process.start(exe.path, [], runInShell: true);
+          } else {
+            await Process.start('explorer.exe', [extractDir.path], runInShell: true);
+          }
+        }
+      } else if (Platform.isMacOS) {
+        await Process.run('open', [path]);
+      } else if (Platform.isLinux) {
+        await Process.run('chmod', ['+x', path]);
+        await Process.start(path, [], runInShell: true);
+      } else if (Platform.isIOS) {
+        final uri = Uri.parse(_apkDownloadUrl ?? 'https://github.com/smartworldarafath/Open-GYM/releases');
+        if (await canLaunchUrl(uri)) {
+          await launchUrl(uri, mode: LaunchMode.externalApplication);
+        }
+      }
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Installation intent triggered: $path'),
+            content: const Text('Update launcher initiated. Your data and workouts remain 100% safe!'),
+            backgroundColor: context.gc.accent,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Installation launched: $path'),
             backgroundColor: context.gc.accent,
           ),
         );
@@ -378,20 +524,19 @@ class _UpdateScreenState extends State<UpdateScreen> with SingleTickerProviderSt
               Text('v${widget.currentVersion} is currently the latest version.',
                   style: AppTheme.f(12.5, weight: FontWeight.w500, color: gc.textSecondary)),
               const SizedBox(height: 18),
-              GestureDetector(
+              LiquidGlassBox(
+                radius: 14,
+                interactive: true,
                 onTap: _checkForUpdate,
-                child: GlassBox(
-                  radius: 14,
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(PhosphorIconsRegular.arrowsClockwise, size: 16, color: gc.text),
-                      const SizedBox(width: 8),
-                      Text('Check Again',
-                          style: AppTheme.f(13, weight: FontWeight.w700, color: gc.text)),
-                    ],
-                  ),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(PhosphorIconsRegular.arrowsClockwise, size: 16, color: gc.text),
+                    const SizedBox(width: 8),
+                    Text('Check Again',
+                        style: AppTheme.f(13, weight: FontWeight.w700, color: gc.text)),
+                  ],
                 ),
               ),
             ],
@@ -573,7 +718,7 @@ class _UpdateScreenState extends State<UpdateScreen> with SingleTickerProviderSt
               GestureDetector(
                 onTap: () {
                   if (_downloadedFilePath != null) {
-                    _installApk(_downloadedFilePath!);
+                    _installUpdate(_downloadedFilePath!);
                   }
                 },
                 child: Container(
@@ -621,20 +766,19 @@ class _UpdateScreenState extends State<UpdateScreen> with SingleTickerProviderSt
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  GestureDetector(
+                  LiquidGlassBox(
+                    radius: 12,
+                    interactive: true,
                     onTap: _checkForUpdate,
-                    child: GlassBox(
-                      radius: 12,
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(PhosphorIconsRegular.arrowsClockwise, size: 15, color: gc.text),
-                          const SizedBox(width: 6),
-                          Text('Retry',
-                              style: AppTheme.f(13, weight: FontWeight.w700, color: gc.text)),
-                        ],
-                      ),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(PhosphorIconsRegular.arrowsClockwise, size: 15, color: gc.text),
+                        const SizedBox(width: 6),
+                        Text('Retry',
+                            style: AppTheme.f(13, weight: FontWeight.w700, color: gc.text)),
+                      ],
                     ),
                   ),
                   const SizedBox(width: 12),

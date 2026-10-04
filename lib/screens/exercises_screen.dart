@@ -13,6 +13,7 @@ import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import '../widgets/exercise_media.dart';
 import '../widgets/glass.dart';
+import '../widgets/liquid_glass.dart';
 import '../widgets/svg_icon.dart';
 import '../widgets/ui_kit.dart';
 
@@ -107,12 +108,10 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                 ],
               ),
             ),
-            RoundAction(
+            LiquidGlassCircleAction(
               size: 40,
-              label: t.newExercise,
-              glass: true,
               onTap: () => showCreateExerciseSheet(context),
-              child: Icon(PhosphorIconsRegular.plus, size: 17, color: gc.text),
+              child: Icon(PhosphorIconsRegular.plus, size: 18, color: gc.text),
             ),
           ],
         ),
