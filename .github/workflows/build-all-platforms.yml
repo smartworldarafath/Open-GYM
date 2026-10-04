@@ -122,9 +122,7 @@ jobs:
           fi
 
       - name: Install dependencies
-        run: |
-          flutter pub get
-          cd macos && pod install
+        run: flutter pub get
 
       - name: Build macOS Application
         run: |
