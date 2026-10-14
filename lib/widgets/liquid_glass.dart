@@ -157,10 +157,15 @@ class LiquidGlassButton extends StatelessWidget {
     required this.onTap,
     this.icon,
     this.height = 52.0,
-    this.tint,
-    this.textColor,
+    Color? tint,
+    Color? textColor,
+    Color? bg,
+    Color? fg,
     this.prominent = false,
-  });
+  })  : tint = tint ?? bg,
+        textColor = textColor ?? fg;
+
+
 
   final String label;
   final VoidCallback onTap;

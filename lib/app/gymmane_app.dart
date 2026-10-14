@@ -62,6 +62,7 @@ class _GymManeAppState extends State<GymManeApp> {
           child: _ButtonNavScrim(child: child!),
         ),
         home: const AppShell(),
+      ),
     );
   }
 }

@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Release tag / version (e.g. v1.3.2)'
+        description: 'Release tag / version (e.g. v1.3.3)'
         required: true
-        default: 'v1.3.2'
+        default: 'v1.3.3'
         type: string
       platform:
         description: 'Platform to build (all, macos, windows, ios, android, linux)'
@@ -97,13 +97,13 @@ jobs:
           mkdir -p build/ios/ipa/Payload
           cp -r build/ios/iphoneos/Runner.app build/ios/ipa/Payload/
           cd build/ios/ipa
-          zip -r -9 Open-GYM-iOS-v1.3.2.ipa Payload
+          zip -r -9 "Open-GYM-iOS-${{ env.TAG_NAME }}.ipa" Payload
 
       - name: Upload iOS IPA to GitHub Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload "${{ env.TAG_NAME }}" build/ios/ipa/Open-GYM-iOS-v1.3.2.ipa --clobber
+          gh release upload "${{ env.TAG_NAME }}" build/ios/ipa/Open-GYM-iOS-*.ipa --clobber
 
   build-macos:
     name: Build macOS Application (MacBook)
@@ -168,13 +168,13 @@ jobs:
             exit 1
           fi
           ln -s /Applications dist/dmg/Applications
-          hdiutil create -volname "Open-GYM" -srcfolder dist/dmg -ov -format UDZO Open-GYM-macOS-v1.3.2.dmg
+          hdiutil create -volname "Open-GYM" -srcfolder dist/dmg -ov -format UDZO "Open-GYM-macOS-${{ env.TAG_NAME }}.dmg"
 
       - name: Upload macOS DMG to GitHub Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload "${{ env.TAG_NAME }}" Open-GYM-macOS-v1.3.2.dmg --clobber
+          gh release upload "${{ env.TAG_NAME }}" Open-GYM-macOS-*.dmg --clobber
 
   build-windows:
     name: Build Windows Application (EXE Installer)
@@ -211,7 +211,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload "${{ env.TAG_NAME }}" windows\installer\Output\Open-GYM-Windows-x64-v1.3.2.exe --clobber
+          $exe = (Get-ChildItem windows\installer\Output\*.exe | Select-Object -First 1).FullName
+          gh release upload "${{ env.TAG_NAME }}" $exe --clobber
 
   build-linux:
     name: Build Linux Application
@@ -243,5 +244,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cd build/linux/x64/release/bundle
-          tar -czvf Open-GYM-Linux-x64-v1.3.2.tar.gz *
-          gh release upload "${{ env.TAG_NAME }}" Open-GYM-Linux-x64-v1.3.2.tar.gz --clobber
+          tar -czvf "Open-GYM-Linux-x64-${{ env.TAG_NAME }}.tar.gz" *
+          gh release upload "${{ env.TAG_NAME }}" Open-GYM-Linux-x64-*.tar.gz --clobber
