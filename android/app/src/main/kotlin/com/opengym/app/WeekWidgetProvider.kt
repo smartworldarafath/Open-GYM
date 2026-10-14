@@ -19,11 +19,12 @@ class WeekWidgetProvider : DayWidgetProvider() {
         widgetData: SharedPreferences
     ) {
         val now = Calendar.getInstance()
-        val monday = (now.clone() as Calendar).apply { add(Calendar.DAY_OF_YEAR, -weekdayIndex(now)) }
+        val first = widgetData.getString("week_first", null)?.toIntOrNull() ?: 1
+        val today = (weekdayIndex(now) - (first - 1) + 7) % 7
+        val start = (now.clone() as Calendar).apply { add(Calendar.DAY_OF_YEAR, -today) }
         val saved = widgetData.getString("week_start", null)
-        val fresh = saved != null && saved != dayStamp(monday)
+        val fresh = saved != null && saved != dayStamp(start)
         val key = if (fresh && widgetData.getString("week_fresh_img", null) != null) "week_fresh_img" else "week_img"
-        val today = weekdayIndex(now)
         val doneToday = !fresh && widgetData.getString("week_done", null)?.getOrNull(today) == '1'
         val geo = widgetData.getString("week_geo", null)?.split(',')?.mapNotNull { it.toFloatOrNull() }
 
@@ -45,7 +46,7 @@ class WeekWidgetProvider : DayWidgetProvider() {
         val night = image("_night", widgetData.getString("week_ring_night", null))
         appWidgetIds.forEach { widgetId ->
             val views = RemoteViews(context.packageName, R.layout.widget_week).apply {
-                bindThemedBitmaps(context, day, night)
+                bindThemedBitmaps(context, day, night, R.drawable.preview_week)
             }
             appWidgetManager.updateAppWidget(widgetId, views)
         }

@@ -15,15 +15,16 @@ class TodayWidgetProvider : DayWidgetProvider() {
     ) {
         val now = Calendar.getInstance()
         val saved = widgetData.getString("today_stamp", null)
+        val week = widgetData.getString("today_week", null).orEmpty()
         val key = when {
             saved == null || saved == dayStamp(now) -> "today_img"
-            widgetData.getString("today_week", null)?.getOrNull(weekdayIndex(now)) == '1' -> "today_plan_img"
-            else -> "today_idle_img"
+            week.getOrNull(weekdayIndex(now)) == '1' -> "today_plan_img"
+            else -> "today_rest_img"
         }
         val shown = if (widgetData.getString(key, null) == null) "today_img" else key
         appWidgetIds.forEach { widgetId ->
             val views = RemoteViews(context.packageName, R.layout.widget_today).apply {
-                bindThemedImage(context, widgetData, shown)
+                bindThemedImage(context, widgetData, shown, R.drawable.preview_today)
             }
             appWidgetManager.updateAppWidget(widgetId, views)
         }

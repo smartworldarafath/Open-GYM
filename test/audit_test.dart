@@ -54,7 +54,7 @@ void main() {
       ]));
 
       final pr = fit.personalRecords.single;
-      expect(pr.topWeight, 80, reason: 'el récord sale de las series efectivas');
+      expect(pr.best, 80, reason: 'el récord sale de las series efectivas');
       expect(pr.oneRm, closeTo(93.3, 0.1));
     });
 
@@ -136,7 +136,7 @@ void main() {
     });
 
     test('the weekly goal never reads over 100%', () {
-      fit.profile.weeklyGoal = 2;
+      fit.profile.weeklyGoal = 1;
       for (int i = 0; i < 6; i++) {
         fit.sessions.add(LoggedSession(DateTime.now(), 600, const []));
       }

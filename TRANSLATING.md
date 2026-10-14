@@ -2,30 +2,36 @@
 
 # Translating GymMane
 
-Every word in the app lives in one small file per language.
-No Dart, no build tools — just text.
+Translations happen on
+**[Crowdin](https://crowdin.com/project/gymmane)**, right in the browser.
+No Dart and no build tools, just text.
 
-There is no Weblate or Crowdin yet, so translating means editing that file on
-GitHub and opening a pull request.
+<a href="https://crowdin.com/project/gymmane"><img alt="Crowdin" src="https://badges.crowdin.net/gymmane/localized.svg" /></a>
+
+<a href="https://crowdin.com/project/gymmane"><picture><source media="(prefers-color-scheme: dark)" srcset="https://badges.crowdin.net/badge/light/crowdin-on-dark@2x.png" /><img alt="Crowdin | Agile localization for tech companies" src="https://badges.crowdin.net/badge/dark/crowdin-on-light@2x.png" height="40" /></picture></a>
 
 </div>
 
 ---
 
-## Adding a language
+## Translating
 
-1. Copy [`lib/l10n/app_en.arb`](lib/l10n/app_en.arb) to
-   `app_<code>.arb`, where `<code>` is your language code — `de`, `fr`, `pt`, `ja`…
-2. Change `"@@locale"` at the top to your code, and translate `"languageName"`
-   into your own language (`Deutsch`, `Français`…). That is the name shown in
-   the app's language picker.
-3. Translate the values — the text on the right of each `:`. Leave the keys
-   alone.
-4. Open a pull request with that one file. Nothing else needs to change: the app
-   picks up new `app_*.arb` files on its own, and a test checks that every file
-   in the folder shows up in the picker.
+1. Open the [project on Crowdin](https://crowdin.com/project/gymmane), sign in
+   and pick your language.
+2. Translate or fix any string. New strings show up there as soon as they land
+   in the app.
+3. That's it. Crowdin opens a pull request with every change, and it ships in
+   the next version.
 
-That's it. The exercise catalogue is separate and optional — see below.
+Please don't edit the `lib/l10n/app_*.arb` files directly: Crowdin writes those
+files, so changes made by hand get overwritten on the next sync.
+
+**Your language isn't there?** Open an
+[issue](https://github.com/InlitX/GymMane/issues) and it gets added. Translate
+`languageName` first: it's the name shown in the app's language picker
+(`Deutsch`, `Français`…).
+
+The exercise catalogue is separate and optional — see below.
 
 ## Rules of thumb
 
@@ -63,19 +69,6 @@ inside, translate the values, and register them in
 ```dart
 const Map<String, Map<String, String>> _catalogNames = {'es': kExerciseNameEs, 'de': kExerciseNameDe};
 ```
-
-## Checking your work
-
-If you have Flutter installed:
-
-```bash
-cd gymmane
-flutter gen-l10n
-flutter test
-```
-
-If you don't, open the pull request anyway — CI and the maintainer will check it
-for you.
 
 ## Questions
 

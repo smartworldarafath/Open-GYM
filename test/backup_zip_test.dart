@@ -212,4 +212,17 @@ void main() {
     expect(looksLikeZip(Uint8List.fromList([0x50, 0x4B, 0x03, 0x04, 0])), true);
     expect(looksLikeZip(Uint8List.fromList(utf8.encode('{"profile":{}}'))), false);
   });
+
+  test('la foto propia de un suplemento entra en la copia y vuelve al restaurar', () async {
+    final photo = await MediaStore.saveBytes('food', 'png', png);
+    fit.addSupplement('Creatina', photo: photo!);
+    final zip = await buildBackupZip();
+    final names = ZipDecoder().decodeBytes(zip).files.map((f) => f.name).toList();
+    expect(names, contains('foods/creatina.png'));
+    fit.resetAllData();
+    expect(await restoreBackupZip(zip), isTrue);
+    final back = fit.supplements.single.photo;
+    expect(back, isNotEmpty);
+    expect(await MediaStore.readBytes(back), png);
+  });
 }

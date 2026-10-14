@@ -34,9 +34,86 @@ mixin RoutinesState on FitCore, LibraryState {
 
   Routine? get todayRoutine => routineOn(DateTime.now());
 
+  DateTime? lastDoneOf(String routineId) {
+    DateTime? last;
+    for (final s in sessions) {
+      if (s.routineId == routineId && (last == null || s.date.isAfter(last))) last = s.date;
+    }
+    return last;
+  }
+
+  List<Routine> get routinesByLastDone {
+    final last = {for (final r in routines) r.id: lastDoneOf(r.id)};
+    final order = {for (final (i, r) in routines.indexed) r.id: i};
+    return [...routines]..sort((a, b) {
+        final la = last[a.id], lb = last[b.id];
+        if (la != null && lb != null && la != lb) return lb.compareTo(la);
+        if ((la == null) != (lb == null)) return la == null ? 1 : -1;
+        return order[a.id]!.compareTo(order[b.id]!);
+      });
+  }
+
+  List<String> planIdsOn(int weekday) => [
+        ?weeklyPlan[weekday],
+        if (multiPlan) ...?planExtras[weekday],
+      ];
+
+  List<Routine> routinesOn(DateTime day) => [for (final id in planIdsOn(day.weekday)) ?_routine(id)];
+
+  bool plannedOn(int weekday, String routineId) => planIdsOn(weekday).contains(routineId);
+
+  List<Routine> pendingRoutinesOn(DateTime day) {
+    final left = routinesOn(day);
+    final key = _dayKey(day);
+    var free = 0;
+    for (final s in sessions.where((s) => _dayKey(s.date) == key)) {
+      final id = s.routineId;
+      if (id == null) {
+        free++;
+      } else {
+        final i = left.indexWhere((r) => r.id == id);
+        if (i >= 0) left.removeAt(i);
+      }
+    }
+    return left.sublist(math.min(free, left.length));
+  }
+
   Routine? routineOn(DateTime day) {
-    final id = weeklyPlan[day.weekday];
-    return id == null ? null : _routine(id);
+    final list = routinesOn(day);
+    if (list.isEmpty) return null;
+    final pending = pendingRoutinesOn(day);
+    return pending.isEmpty ? list.last : pending.first;
+  }
+
+  void toggleMultiPlan() {
+    multiPlan = !multiPlan;
+    _persist();
+    _refreshWidgets();
+    syncTrainReminder();
+    notifyListeners();
+  }
+
+  void togglePlanDay(int weekday, String routineId) {
+    if (!multiPlan) return assignRoutineToDay(weekday, plannedOn(weekday, routineId) ? null : routineId);
+    final extras = planExtras.putIfAbsent(weekday, () => []);
+    if (weeklyPlan[weekday] == routineId) {
+      if (extras.isEmpty) {
+        weeklyPlan.remove(weekday);
+      } else {
+        weeklyPlan[weekday] = extras.removeAt(0);
+      }
+    } else if (!extras.remove(routineId)) {
+      if (weeklyPlan[weekday] == null) {
+        weeklyPlan[weekday] = routineId;
+      } else {
+        extras.add(routineId);
+      }
+    }
+    if (extras.isEmpty) planExtras.remove(weekday);
+    _persist();
+    _refreshWidgets();
+    syncTrainReminder();
+    notifyListeners();
   }
 
   String createRoutine([String name = '']) {
@@ -92,6 +169,7 @@ mixin RoutinesState on FitCore, LibraryState {
     made.sets.addAll(source.sets);
     made.chained.addAll(source.chained);
     made.plan.addAll({for (final e in source.plan.entries) e.key: [...e.value]});
+    made.rest.addAll(source.rest);
     made.group = source.group;
     made.color = source.color;
     _persist();
@@ -99,12 +177,43 @@ mixin RoutinesState on FitCore, LibraryState {
     return copy;
   }
 
-  void deleteRoutine(String id) {
-    routines.removeWhere((r) => r.id == id);
-    weeklyPlan.removeWhere((_, v) => v == id);
-    if (activeRoutineId == id) activeRoutineId = null;
+  void renameGroup(String from, String to) {
+    final name = to.trim();
+    for (final r in routines) {
+      if (r.group == from) r.group = name;
+    }
     _persist();
     notifyListeners();
+  }
+
+  void deleteGroup(String group) {
+    for (final id in [for (final r in routinesInGroup(group)) r.id]) {
+      _dropRoutine(id);
+    }
+    _persist();
+    notifyListeners();
+  }
+
+  void deleteRoutine(String id) {
+    _dropRoutine(id);
+    _persist();
+    notifyListeners();
+  }
+
+  void _dropRoutine(String id) {
+    routines.removeWhere((r) => r.id == id);
+    weeklyPlan.removeWhere((_, v) => v == id);
+    for (final extras in planExtras.values) {
+      extras.remove(id);
+    }
+    planExtras.removeWhere((_, v) => v.isEmpty);
+    for (final day in [...planExtras.keys]) {
+      if (weeklyPlan[day] != null) continue;
+      final extras = planExtras[day]!;
+      weeklyPlan[day] = extras.removeAt(0);
+      if (extras.isEmpty) planExtras.remove(day);
+    }
+    if (activeRoutineId == id) activeRoutineId = null;
   }
 
   void toggleRoutineExercise(String routineId, String exId) {
@@ -113,10 +222,28 @@ mixin RoutinesState on FitCore, LibraryState {
     if (r.exerciseIds.remove(exId)) {
       r.sets.remove(exId);
       r.plan.remove(exId);
+      r.rest.remove(exId);
       r.chained.remove(exId);
     } else {
       r.exerciseIds.add(exId);
     }
+    _persist();
+    notifyListeners();
+  }
+
+  void replaceRoutineExercise(String routineId, String from, String to) {
+    final r = _routine(routineId);
+    if (r == null) return;
+    final at = r.exerciseIds.indexOf(from);
+    if (at < 0 || r.exerciseIds.contains(to)) return;
+    r.exerciseIds[at] = to;
+    final sets = r.sets.remove(from);
+    if (sets != null) r.sets[to] = sets;
+    final plan = r.plan.remove(from);
+    if (plan != null) r.plan[to] = [for (final p in plan) PlannedSet(kind: p.kind)];
+    final rest = r.rest.remove(from);
+    if (rest != null) r.rest[to] = rest;
+    if (r.chained.remove(from)) r.chained.add(to);
     _persist();
     notifyListeners();
   }
@@ -128,6 +255,7 @@ mixin RoutinesState on FitCore, LibraryState {
     if (at < 0) return null;
     final sets = r.sets[exId];
     final plan = r.plan[exId];
+    final rest = r.rest[exId];
     final chained = r.chained.contains(exId);
     toggleRoutineExercise(routineId, exId);
     return () {
@@ -136,6 +264,7 @@ mixin RoutinesState on FitCore, LibraryState {
       back.exerciseIds.insert(at.clamp(0, back.exerciseIds.length), exId);
       if (sets != null) back.sets[exId] = sets;
       if (plan != null) back.plan[exId] = plan;
+      if (rest != null) back.rest[exId] = rest;
       if (chained) back.chained.add(exId);
       _persist();
       notifyListeners();
@@ -152,6 +281,21 @@ mixin RoutinesState on FitCore, LibraryState {
   }
 
   List<PlannedSet> plannedSets(Routine r, String exId) => r.plan[exId] ?? const [];
+
+  int? routineRest(String? routineId, String exId) =>
+      routineId == null ? null : _routine(routineId)?.rest[exId];
+
+  void setRoutineRest(String routineId, String exId, int? seconds) {
+    final r = _routine(routineId);
+    if (r == null || !r.exerciseIds.contains(exId)) return;
+    if (seconds == null) {
+      r.rest.remove(exId);
+    } else {
+      r.rest[exId] = seconds <= 0 ? 0 : seconds.clamp(15, 600);
+    }
+    _persist();
+    notifyListeners();
+  }
 
   void setRoutineSetCount(String routineId, String exId, int n) {
     final r = _routine(routineId);
@@ -228,6 +372,7 @@ mixin RoutinesState on FitCore, LibraryState {
   }
 
   void assignRoutineToDay(int weekday, String? routineId) {
+    planExtras.remove(weekday);
     if (routineId == null) {
       weeklyPlan.remove(weekday);
     } else {
@@ -240,14 +385,19 @@ mixin RoutinesState on FitCore, LibraryState {
 
   void openRoutine(String id) {
     activeRoutineId = id;
-    route = 'routine-edit';
-    notifyListeners();
+    pushRoute('routine-edit');
   }
+
+  void addToRoutineAndEdit(String? routineId, String exId) {
+    final id = routineId ?? createRoutine();
+    if (!routineHas(id, exId)) toggleRoutineExercise(id, exId);
+    activeRoutineId = id;
+    pushRoute('routine-edit');
+  }
+
+  int routinesWith(String exId) => routines.where((r) => r.exerciseIds.contains(exId)).length;
 
   String routineTitle(Routine r) => r.name.isEmpty ? t.newRoutineName : r.name;
 
-  void closeRoutineEdit() {
-    route = 'routines';
-    notifyListeners();
-  }
+  void closeRoutineEdit() => popRoute(fallback: 'routines');
 }

@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart' show SynchronousFuture;
 import 'package:flutter/material.dart';
@@ -19,18 +20,22 @@ const _cacheLimit = 32;
 final _cache = <String, ExerciseArtData>{};
 final _pending = <String, Future<ExerciseArtData>>{};
 
-Future<ExerciseArtData> loadExerciseArt(String slug) {
-  final hit = _cache.remove(slug);
+Future<ExerciseArtData> loadExerciseArt(String slug, {bool still = false}) {
+  final key = still ? '$slug#still' : slug;
+  final hit = _cache.remove(key) ?? (still ? _cache[slug] : null);
   if (hit != null) {
-    _cache[slug] = hit;
+    _cache[key] = hit;
     return SynchronousFuture(hit);
   }
-  return _pending.putIfAbsent(slug, () async {
+  return _pending.putIfAbsent(key, () async {
     try {
       final raw = await rootBundle.loadString('assets/art/$slug.txt');
-      final frames = [
+      final lines = [
         for (final d in raw.split('\n'))
-          if (d.trim().isNotEmpty) parseSvgPathData(d.trim())..fillType = PathFillType.evenOdd,
+          if (d.trim().isNotEmpty) d.trim(),
+      ];
+      final frames = [
+        for (final d in still ? lines.take(1) : lines) parseSvgPathData(d)..fillType = PathFillType.evenOdd,
       ];
       if (frames.isEmpty) throw StateError('sin frames');
       var bounds = frames.first.getBounds();
@@ -38,13 +43,33 @@ Future<ExerciseArtData> loadExerciseArt(String slug) {
         bounds = bounds.expandToInclude(f.getBounds());
       }
       final data = ExerciseArtData(frames, bounds);
-      _cache[slug] = data;
+      _cache[key] = data;
       if (_cache.length > _cacheLimit) _cache.remove(_cache.keys.first);
       return data;
     } finally {
-      _pending.remove(slug);
+      _pending.remove(key);
     }
   });
+}
+
+const _stillLimit = 160;
+final _stills = <(ExerciseArtData, int, int, Color), ui.Image>{};
+
+ui.Image _still(ExerciseArtData art, Size size, double dpr, Color color) {
+  final w = (size.width * dpr).round();
+  final h = (size.height * dpr).round();
+  final key = (art, w, h, color);
+  final hit = _stills.remove(key);
+  if (hit != null) return _stills[key] = hit;
+  final recorder = ui.PictureRecorder();
+  final canvas = Canvas(recorder)..scale(dpr);
+  _ArtPainter(art, color, null).paint(canvas, size);
+  final picture = recorder.endRecording();
+  final image = picture.toImageSync(w, h);
+  picture.dispose();
+  _stills[key] = image;
+  if (_stills.length > _stillLimit) _stills.remove(_stills.keys.first)?.dispose();
+  return image;
 }
 
 class ExerciseArt extends StatefulWidget {
@@ -55,6 +80,7 @@ class ExerciseArt extends StatefulWidget {
     this.radius = 20,
     this.live = false,
     this.bordered = true,
+    this.loops,
   });
 
   final String slug;
@@ -62,6 +88,7 @@ class ExerciseArt extends StatefulWidget {
   final double radius;
   final bool live;
   final bool bordered;
+  final int? loops;
 
   @override
   State<ExerciseArt> createState() => _ExerciseArtState();
@@ -83,19 +110,29 @@ class _ExerciseArtState extends State<ExerciseArt> with SingleTickerProviderStat
   @override
   void didUpdateWidget(ExerciseArt old) {
     super.didUpdateWidget(old);
+    if (old.slug != widget.slug || old.loops != widget.loops) {
+      _c?.reset();
+      _sync();
+    }
     if (old.slug != widget.slug) {
       _art = null;
       _failed = false;
       _fetch();
     }
-    if (old.live != widget.live) _sync();
+    if (old.live != widget.live) {
+      if (widget.live && (_art?.frames.length ?? 0) < 2) {
+        _fetch();
+      } else {
+        _sync();
+      }
+    }
   }
 
   Future<void> _fetch() async {
     if (widget.slug.isEmpty) return;
     final slug = widget.slug;
     try {
-      final data = await loadExerciseArt(slug);
+      final data = await loadExerciseArt(slug, still: !widget.live);
       if (!mounted || slug != widget.slug) return;
       setState(() {
         _art = data;
@@ -109,7 +146,7 @@ class _ExerciseArtState extends State<ExerciseArt> with SingleTickerProviderStat
   void _sync() {
     if (widget.live && (_art?.frames.length ?? 0) > 1) {
       final c = _c ??= AnimationController(vsync: this, duration: _cycle);
-      if (!c.isAnimating) c.repeat();
+      if (!c.isAnimating && (widget.loops == null || c.value == 0)) c.repeat(count: widget.loops);
     } else {
       _c?.stop();
     }
@@ -132,15 +169,22 @@ class _ExerciseArtState extends State<ExerciseArt> with SingleTickerProviderStat
       child = Shimmer(radius: widget.radius);
     } else if (widget.live && art.frames.length > 1 && _c != null) {
       final c = _c!;
-      child = AnimatedBuilder(
-        animation: c,
-        builder: (_, _) => CustomPaint(
-          painter: _ArtPainter(art, gc.text, c.value),
+      child = RepaintBoundary(
+        child: CustomPaint(
+          painter: _ArtPainter(art, gc.text, c),
           size: Size.infinite,
         ),
       );
     } else {
-      child = CustomPaint(painter: _ArtPainter(art, gc.text, 0), size: Size.infinite);
+      child = LayoutBuilder(builder: (context, box) {
+        final size = box.biggest;
+        if (!size.isFinite || size.isEmpty) return const SizedBox.shrink();
+        return RawImage(
+          image: _still(art, size, MediaQuery.devicePixelRatioOf(context), gc.text).clone(),
+          width: size.width,
+          height: size.height,
+        );
+      });
     }
 
     return Container(
@@ -161,11 +205,11 @@ class _ExerciseArtState extends State<ExerciseArt> with SingleTickerProviderStat
 }
 
 class _ArtPainter extends CustomPainter {
-  const _ArtPainter(this.art, this.color, this.t);
+  _ArtPainter(this.art, this.color, this.anim) : super(repaint: anim);
 
   final ExerciseArtData art;
   final Color color;
-  final double t;
+  final Animation<double>? anim;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -180,7 +224,13 @@ class _ArtPainter extends CustomPainter {
     canvas.scale(scale);
     canvas.translate(-b.center.dx, -b.center.dy);
 
+    final t = anim?.value ?? 0;
     final n = art.frames.length;
+    if (n < 2) {
+      _draw(canvas, art.frames.first, 1);
+      canvas.restore();
+      return;
+    }
     final steps = (n - 1) * 2;
     final pos = t * steps;
     final step = pos.floor() % steps;
@@ -202,5 +252,5 @@ class _ArtPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_ArtPainter old) =>
-      old.art != art || old.color != color || old.t != t;
+      old.art != art || old.color != color || old.anim != anim;
 }

@@ -2,22 +2,30 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../l10n/l10n.dart';
+import '../state/fit_state.dart' show shiftDays;
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import 'body_map.dart';
 import 'svg_icon.dart';
 
 class GoalRing extends StatelessWidget {
-  const GoalRing({super.key, required this.pct, this.size = 40});
+  const GoalRing({super.key, required this.pct, this.size = 40, this.color});
   final double pct;
   final double size;
+  final Color? color;
   @override
   Widget build(BuildContext context) {
     final gc = context.gc;
     return SizedBox(
       width: size,
       height: size,
-      child: CustomPaint(painter: _RingPainter(pct, gc.bgRaised2, gc.accent)),
+      child: TweenAnimationBuilder<double>(
+        tween: Tween(begin: 0, end: pct),
+        duration: const Duration(milliseconds: 700),
+        curve: Curves.easeOutCubic,
+        builder: (context, v, _) => CustomPaint(painter: _RingPainter(v, gc.bgRaised2, color ?? gc.accent)),
+      ),
     );
   }
 }
@@ -429,34 +437,92 @@ class _TrendPainter extends CustomPainter {
 }
 
 class Heatmap extends StatelessWidget {
-  const Heatmap({super.key, required this.levels, this.onTapDay});
+  const Heatmap({super.key, required this.levels, this.onTapDay, this.firstDay, this.labels = false});
   final List<int> levels;
   final void Function(int index)? onTapDay;
+  final DateTime? firstDay;
+  final bool labels;
 
   Color _color(int level, GymColors gc) => level <= 0 ? gc.heatEmpty : heatLevelColor(gc, level);
 
   @override
   Widget build(BuildContext context) {
     final gc = context.gc;
-    const cols = 12, gap = 4.0;
+    const rows = 7, gap = 4.0;
+    final cols = (levels.length / rows).ceil();
+    final start = firstDay;
+    final named = labels && start != null;
+    final side = named ? 16.0 : 0.0;
+    final top = named ? 16.0 : 0.0;
+    final labelStyle = AppTheme.f(9, weight: FontWeight.w600, color: gc.textTertiary);
     return LayoutBuilder(builder: (context, c) {
-      final cell = (c.maxWidth - gap * (cols - 1)) / cols;
-      return Wrap(
-        spacing: gap,
-        runSpacing: gap,
-        children: [
-          for (int i = 0; i < levels.length; i++)
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: onTapDay == null ? null : () => onTapDay!(i),
-              child: Container(
-                width: cell,
-                height: cell,
-                decoration:
-                    BoxDecoration(color: _color(levels[i], gc), borderRadius: BorderRadius.circular(3)),
-              ),
-            ),
-        ],
+      var cell = (c.maxWidth - side - gap * (cols - 1)) / cols;
+      if (c.hasBoundedHeight) cell = math.min(cell, (c.maxHeight - top - gap * (rows - 1)) / rows);
+      Widget box(int i) {
+        final level = i < levels.length ? levels[i] : -1;
+        if (level < 0) return SizedBox(width: cell, height: cell);
+        return GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: onTapDay == null ? null : () => onTapDay!(i),
+          child: Container(
+            width: cell,
+            height: cell,
+            decoration: BoxDecoration(color: _color(level, gc), borderRadius: BorderRadius.circular(3)),
+          ),
+        );
+      }
+
+      Widget spaced(Axis axis, List<Widget> items) {
+        final out = <Widget>[];
+        for (var i = 0; i < items.length; i++) {
+          if (i > 0) out.add(SizedBox(width: axis == Axis.horizontal ? gap : 0, height: axis == Axis.vertical ? gap : 0));
+          out.add(items[i]);
+        }
+        return axis == Axis.horizontal
+            ? Row(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: out)
+            : Column(mainAxisSize: MainAxisSize.min, children: out);
+      }
+
+      final grid = spaced(Axis.horizontal, [
+        for (var col = 0; col < cols; col++) spaced(Axis.vertical, [for (var r = 0; r < rows; r++) box(col * rows + r)]),
+      ]);
+      if (!named) return grid;
+
+      final months = <Widget>[];
+      int? lastMonth;
+      for (var col = 0; col < cols; col++) {
+        final month = shiftDays(start, col * rows).month;
+        if (month != lastMonth && (col > 0 || shiftDays(start, 0).day <= 7)) {
+          months.add(Positioned(
+            left: side + col * (cell + gap),
+            top: 0,
+            child: Text(t.monthShort(month), style: labelStyle),
+          ));
+        }
+        lastMonth = month;
+      }
+      return SizedBox(
+        width: side + cols * cell + (cols - 1) * gap,
+        height: top + rows * cell + (rows - 1) * gap,
+        child: Stack(clipBehavior: Clip.none, children: [
+          ...months,
+          Positioned(
+            left: 0,
+            top: top,
+            child: spaced(Axis.vertical, [
+              for (var r = 0; r < rows; r++)
+                SizedBox(
+                  width: side,
+                  height: cell,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(t.weekdayInitial(shiftDays(start, r).weekday), style: labelStyle),
+                  ),
+                ),
+            ]),
+          ),
+          Positioned(left: side, top: top, child: grid),
+        ]),
       );
     });
   }

@@ -17,12 +17,14 @@ class HomeFolder extends StatelessWidget {
     required this.detail,
     required this.peek,
     required this.onTap,
+    this.badge,
   });
 
   final String title;
   final String detail;
   final Widget peek;
   final VoidCallback onTap;
+  final Widget? badge;
 
   static const height = 150.0;
   static const _front = 60.0;
@@ -68,13 +70,18 @@ class HomeFolder extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            FittedBox(
-                              fit: BoxFit.scaleDown,
-                              alignment: Alignment.centerLeft,
-                              child: Text(title,
-                                  maxLines: 1,
-                                  style: AppTheme.f(15.5, weight: FontWeight.w800, color: gc.text)),
-                            ),
+                            Row(children: [
+                              Flexible(
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(title,
+                                      maxLines: 1,
+                                      style: AppTheme.f(15.5, weight: FontWeight.w800, color: gc.text)),
+                                ),
+                              ),
+                              if (badge != null) ...[const SizedBox(width: 7), badge!],
+                            ]),
                             const Spacer(),
                             Text(detail,
                                 maxLines: 1,
@@ -86,6 +93,7 @@ class HomeFolder extends StatelessWidget {
                     ),
                   ),
                 ),
+
               ),
             ],
           ),
@@ -413,6 +421,42 @@ class NotesPeek extends StatelessWidget {
             ],
           ),
       ],
+    );
+  }
+}
+
+class NutritionPeek extends StatelessWidget {
+  const NutritionPeek({super.key});
+
+  static const _items = [
+    ('assets/img/peek-yogurt.webp', -138.0, 50.0, -0.16, 1.03, 0.0),
+    ('assets/img/peek-protein.webp', -92.0, 62.0, -0.05, 0.68, 8.0),
+    ('assets/img/peek-water.webp', -48.0, 76.0, 0.06, 0.42, 12.0),
+    ('assets/img/peek-pan.webp', 4.0, 50.0, -0.1, 1.17, 2.0),
+    ('assets/img/peek-shake.webp', 56.0, 72.0, 0.08, 0.54, 6.0),
+    ('assets/img/peek-can.webp', 104.0, 62.0, -0.18, 0.71, 0.0),
+    ('assets/img/peek-choco.webp', 146.0, 56.0, 0.22, 0.84, -2.0),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, box) => Stack(
+        clipBehavior: Clip.none,
+        children: [
+          for (final (asset, dx, h, turn, aspect, lift) in _items)
+            Positioned(
+              left: box.maxWidth / 2 + dx - h * aspect / 2,
+              width: h * aspect,
+              top: 38 - h * 0.55 - lift,
+              height: h,
+              child: Transform.rotate(
+                angle: turn,
+                child: Image.asset(asset, fit: BoxFit.contain, cacheHeight: (h * 3).round()),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

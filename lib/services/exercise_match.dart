@@ -70,8 +70,10 @@ ExerciseFilter exerciseSearch(String query) {
   return (e) {
     final label = exerciseName(e);
     if (e.name.toLowerCase().contains(plain) || label.toLowerCase().contains(plain)) return true;
+    if (e.aliases.any((a) => a.toLowerCase().contains(plain))) return true;
     if (key.isEmpty) return false;
     if (_keyOf(e.name).contains(key) || _keyOf(label).contains(key)) return true;
+    if (e.aliases.any((a) => _keyOf(a).contains(key))) return true;
     return kExerciseAliases[e.name]?.any((a) => _keyOf(a).contains(key)) ?? false;
   };
 }
@@ -100,7 +102,8 @@ bool _sameMuscle(String? hint, Exercise e) =>
     hint == null ||
     e.primary == hint ||
     e.secondary.contains(hint) ||
-    (_legs.contains(hint) && _legs.contains(e.primary));
+    (_legs.contains(hint) && _legs.contains(e.primary)) ||
+    (hint == 'lowerback' && (e.primary == 'hamstrings' || e.primary == 'glutes'));
 
 int _score(Set<String> q, Set<String> c) {
   final shared = q.intersection(c);
@@ -109,6 +112,7 @@ int _score(Set<String> q, Set<String> c) {
 }
 
 const _muscleHints = <List<String>, String>{
+  ['hyperextension', 'back extension', 'superman', 'lower back', 'erector', 'deadlift']: 'lowerback',
   ['calf', 'calves', 'soleus']: 'calves',
   ['hamstring', 'leg curl', 'good morning', 'nordic']: 'hamstrings',
   ['glute', 'hip thrust', 'bridge', 'kickback']: 'glutes',
@@ -121,7 +125,7 @@ const _muscleHints = <List<String>, String>{
   ['biceps', 'curl', 'preacher', 'chin up']: 'biceps',
   ['lateral raise', 'shoulder', 'overhead press', 'military', 'arnold', 'face pull', 'delt', 'upright']:
       'shoulders',
-  ['row', 'pulldown', 'pull up', 'pullover', 'lateral pull', 'back extension', 'deadlift']: 'back',
+  ['row', 'pulldown', 'pull up', 'pullover', 'lateral pull']: 'back',
   ['bench press', 'chest', 'fly', 'pec', 'push up', 'press']: 'chest',
 };
 
@@ -141,6 +145,10 @@ Exercise? matchExercise(String name, Iterable<Exercise> pool) {
 
   for (final e in pool) {
     if (_keyOf(e.name) == key) return e;
+  }
+
+  for (final e in pool) {
+    if (e.aliases.any((a) => _keyOf(a) == key)) return e;
   }
 
   final alias = _aliasIndex[sortedKey(name)];

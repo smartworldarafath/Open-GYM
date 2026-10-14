@@ -133,7 +133,7 @@ class ShareCard extends StatelessWidget {
         Text(t.sessionsLogged(fit.sessionsThisWeek),
             style: AppTheme.f(12, weight: FontWeight.w500, color: gc.textSecondary)),
         const SizedBox(height: 18),
-        SizedBox(height: 118, child: Heatmap(levels: fit.heatmapLevelsFor(60))),
+        SizedBox(height: 118, child: Heatmap(levels: fit.heatmapWeeksFor(16))),
         const Spacer(),
         Row(
           children: [

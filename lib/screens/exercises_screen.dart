@@ -1,7 +1,9 @@
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../catalog/exercise_catalog.dart';
@@ -25,10 +27,25 @@ class ExercisesScreen extends StatefulWidget {
 
 class _ExercisesScreenState extends State<ExercisesScreen> {
   late final TextEditingController _c = TextEditingController(text: fit.exSearch);
+  final ScrollController _scroll = ScrollController();
+  final ValueNotifier<bool> _deep = ValueNotifier(false);
+
+  @override
+  void initState() {
+    super.initState();
+    _scroll.addListener(_track);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _track());
+  }
+
+  void _track() {
+    if (_scroll.hasClients) _deep.value = _scroll.offset > 900;
+  }
 
   @override
   void dispose() {
     _c.dispose();
+    _scroll.dispose();
+    _deep.dispose();
     super.dispose();
   }
 
@@ -47,7 +64,11 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
             child: _header(context, gc, list.length),
           ),
           Expanded(
-            child: ListView.builder(
+            child: Stack(children: [
+              Positioned.fill(
+                child: ListView.builder(
+              key: const PageStorageKey('exercises'),
+              controller: _scroll,
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 110),
               itemCount: list.isEmpty ? 1 : list.length,
               itemBuilder: (context, i) {
@@ -73,7 +94,36 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                   ],
                 );
               },
-            ),
+                ),
+              ),
+              Positioned(
+                right: 20,
+                bottom: 112,
+                child: ValueListenableBuilder<bool>(
+                  valueListenable: _deep,
+                  builder: (context, deep, _) => IgnorePointer(
+                    ignoring: !deep,
+                    child: AnimatedScale(
+                      scale: deep ? 1 : 0.6,
+                      duration: const Duration(milliseconds: 220),
+                      curve: Curves.easeOutCubic,
+                      child: AnimatedOpacity(
+                        opacity: deep ? 1 : 0,
+                        duration: const Duration(milliseconds: 220),
+                        child: RoundAction(
+                          size: 44,
+                          filled: true,
+                          label: t.backToTop,
+                          onTap: () => _scroll.animateTo(0,
+                              duration: const Duration(milliseconds: 520), curve: Curves.easeOutCubic),
+                          child: Icon(PhosphorIconsBold.arrowUp, size: 18, color: gc.onEmber),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ]),
           ),
         ],
       ),
@@ -84,7 +134,8 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
       (fit.activePlaceId.isEmpty ? 0 : 1) +
       (fit.exMuscleFilter == null ? 0 : 1) +
       (fit.exEquipmentFilter == null ? 0 : 1) +
-      (fit.exDifficultyFilter == null ? 0 : 1);
+      (fit.exDifficultyFilter == null ? 0 : 1) +
+      (fit.exKindFilter == null || fit.exKindFilter == 'cardio' ? 0 : 1);
 
   void _clearAll() {
     _c.clear();
@@ -110,9 +161,10 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
             ),
             LiquidGlassCircleAction(
               size: 40,
-              onTap: () => showCreateExerciseSheet(context),
+              onTap: () => showCreateExerciseSheet(context, initialName: _c.text),
               child: Icon(PhosphorIconsRegular.plus, size: 18, color: gc.text),
             ),
+
           ],
         ),
         const SizedBox(height: 14),
@@ -125,9 +177,15 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
 
   Widget _quickChips(BuildContext context, GymColors gc) {
     final active = _activeFilters;
-    final anyOn = active > 0 || fit.exNoGearOnly || fit.exFavouritesOnly;
+    final anyOn = active > 0 ||
+        fit.exKindFilter != null ||
+        fit.exNoGearOnly ||
+        fit.exFavouritesOnly ||
+        fit.exMineOnly ||
+        fit.exArchivedOnly;
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
+      clipBehavior: Clip.none,
       child: Row(children: [
         Pill(
           label: active > 0 ? '${t.filters} · $active' : t.filters,
@@ -160,6 +218,40 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
           vPad: 7,
           fontSize: 12.5,
         ),
+        const SizedBox(width: 8),
+        Pill(
+          label: t.kindCardio,
+          bg: fit.exKindFilter == 'cardio' ? gc.ember : gc.bgRaised2,
+          fg: fit.exKindFilter == 'cardio' ? gc.onEmber : gc.textSecondary,
+          onTap: () => fit.setKindFilter('cardio'),
+          hPad: 14,
+          vPad: 7,
+          fontSize: 12.5,
+        ),
+        if (fit.customExercises.isNotEmpty || fit.exMineOnly) ...[
+          const SizedBox(width: 8),
+          Pill(
+            label: t.mineOnly,
+            bg: fit.exMineOnly ? gc.ember : gc.bgRaised2,
+            fg: fit.exMineOnly ? gc.onEmber : gc.textSecondary,
+            onTap: fit.toggleMineFilter,
+            hPad: 14,
+            vPad: 7,
+            fontSize: 12.5,
+          ),
+        ],
+        if (fit.archived.isNotEmpty) ...[
+          const SizedBox(width: 8),
+          Pill(
+            label: '${t.archivedFilter} · ${fit.archived.length}',
+            bg: fit.exArchivedOnly ? gc.ember : gc.bgRaised2,
+            fg: fit.exArchivedOnly ? gc.onEmber : gc.textSecondary,
+            onTap: fit.toggleArchivedFilter,
+            hPad: 14,
+            vPad: 7,
+            fontSize: 12.5,
+          ),
+        ],
         if (anyOn) ...[
           const SizedBox(width: 8),
           Pill(
@@ -292,14 +384,21 @@ class _FilterChipData {
 }
 
 void showCreateExerciseSheet(BuildContext context,
-    {void Function(String id)? onCreated, Exercise? editing}) {
+    {void Function(String id)? onCreated, Exercise? editing, String initialName = ''}) {
   final gc = context.gc;
-  final nameCtrl = TextEditingController(text: editing?.name ?? '');
+  final nameCtrl = TextEditingController(text: editing?.name ?? initialName.trim());
   final stepsCtrl = TextEditingController(text: editing?.steps.join('\n') ?? '');
+  final aliasCtrl = TextEditingController(text: editing?.aliases.join(', ') ?? '');
+  final nameFocus = FocusNode();
+  final scroll = ScrollController();
+  bool nameMissing = false;
+  int shakes = 0;
   String muscle = editing?.primary ?? kMuscles.first.id;
+  final secondary = <String>{...?editing?.secondary};
   String equipment = editing?.equipment ?? kEquipment.first;
   String difficulty = editing?.difficulty ?? kDifficulties.first;
   String mode = editing?.mode ?? '';
+  String kind = editing?.kind ?? '';
   bool advanced = false;
   String? mediaPath;
   bool busy = false;
@@ -321,8 +420,24 @@ void showCreateExerciseSheet(BuildContext context,
             } catch (_) {}
           }
 
+          void flagName() {
+            HapticFeedback.heavyImpact();
+            Future.delayed(const Duration(milliseconds: 120), HapticFeedback.mediumImpact);
+            setSheet(() {
+              nameMissing = true;
+              shakes++;
+            });
+            nameFocus.requestFocus();
+            if (scroll.hasClients) {
+              scroll.animateTo(0, duration: const Duration(milliseconds: 380), curve: Curves.easeOutCubic);
+            }
+          }
+
+          final nameLine = BorderSide(color: nameMissing ? gc.danger : gc.border, width: nameMissing ? 1.5 : 1);
+          final nameFocusLine = BorderSide(color: nameMissing ? gc.danger : gc.accent, width: nameMissing ? 1.5 : 1);
           return SafeArea(
             child: SingleChildScrollView(
+              controller: scroll,
               padding: const EdgeInsets.fromLTRB(20, 18, 20, 20),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -331,23 +446,44 @@ void showCreateExerciseSheet(BuildContext context,
                   Text(titleCase(editing == null ? t.newExercise : t.editExercise),
                       style: AppTheme.f(19, weight: FontWeight.w800, color: gc.text)),
                   const SizedBox(height: 16),
-                  TextField(
-                    controller: nameCtrl,
-                    autofocus: editing == null,
-                    style: AppTheme.f(15, weight: FontWeight.w500, color: gc.text),
-                    cursorColor: gc.accent,
-                    textCapitalization: TextCapitalization.words,
-                    decoration: InputDecoration(
-                      hintText: t.exerciseName,
-                      hintStyle: AppTheme.f(15, weight: FontWeight.w500, color: gc.textTertiary),
-                      filled: true,
-                      fillColor: gc.bgRaised2,
-                      contentPadding: const EdgeInsets.all(14),
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: gc.border)),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: gc.accent)),
+                  _Shake(
+                    count: shakes,
+                    child: TextField(
+                      controller: nameCtrl,
+                      focusNode: nameFocus,
+                      autofocus: editing == null,
+                      style: AppTheme.f(15, weight: FontWeight.w500, color: gc.text),
+                      cursorColor: nameMissing ? gc.danger : gc.accent,
+                      textCapitalization: TextCapitalization.words,
+                      onChanged: (v) {
+                        if (nameMissing && v.trim().isNotEmpty) setSheet(() => nameMissing = false);
+                      },
+                      decoration: InputDecoration(
+                        hintText: t.exerciseName,
+                        hintStyle: AppTheme.f(15, weight: FontWeight.w500, color: gc.textTertiary),
+                        filled: true,
+                        fillColor: nameMissing ? gc.danger.withValues(alpha: 0.08) : gc.bgRaised2,
+                        contentPadding: const EdgeInsets.all(14),
+                        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: nameLine),
+                        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: nameFocusLine),
+                      ),
                     ),
+                  ),
+                  AnimatedSize(
+                    duration: const Duration(milliseconds: 220),
+                    curve: Curves.easeOutCubic,
+                    alignment: Alignment.topLeft,
+                    child: nameMissing
+                        ? Padding(
+                            padding: const EdgeInsets.only(top: 8, left: 4),
+                            child: Row(children: [
+                              Icon(PhosphorIconsFill.warningCircle, size: 15, color: gc.danger),
+                              const SizedBox(width: 6),
+                              Text(t.exerciseNameMissing,
+                                  style: AppTheme.f(12.5, weight: FontWeight.w600, color: gc.danger)),
+                            ]),
+                          )
+                        : const SizedBox(width: double.infinity),
                   ),
                   const SizedBox(height: 16),
                   _filterLabel(gc, t.muscleFilter),
@@ -358,10 +494,30 @@ void showCreateExerciseSheet(BuildContext context,
                         label: t.muscle(m.id),
                         bg: muscle == m.id ? gc.ember : gc.bgRaised2,
                         fg: muscle == m.id ? gc.onEmber : gc.textSecondary,
-                        onTap: () => setSheet(() => muscle = m.id),
+                        onTap: () => setSheet(() {
+                          muscle = m.id;
+                          secondary.remove(m.id);
+                        }),
                         vPad: 7,
                         fontSize: 12,
                       ),
+                  ]),
+                  const SizedBox(height: 16),
+                  _filterLabel(gc, t.secondaryLabel),
+                  const SizedBox(height: 8),
+                  Wrap(spacing: 8, runSpacing: 8, children: [
+                    for (final m in kMuscles)
+                      if (m.id != muscle)
+                        Pill(
+                          label: t.muscle(m.id),
+                          bg: secondary.contains(m.id) ? gc.ember : gc.bgRaised2,
+                          fg: secondary.contains(m.id) ? gc.onEmber : gc.textSecondary,
+                          onTap: () => setSheet(() {
+                            if (!secondary.remove(m.id)) secondary.add(m.id);
+                          }),
+                          vPad: 7,
+                          fontSize: 12,
+                        ),
                   ]),
                   const SizedBox(height: 16),
                   _filterLabel(gc, t.equipmentLabel),
@@ -410,6 +566,27 @@ void showCreateExerciseSheet(BuildContext context,
                       ),
                   ]),
                   const SizedBox(height: 16),
+                  _filterLabel(gc, t.kindLabel),
+                  const SizedBox(height: 8),
+                  Builder(builder: (_) {
+                    final shown = kind.isNotEmpty
+                        ? kind
+                        : mode == 'cardio'
+                            ? 'cardio'
+                            : (kCalisthenicsEquipment.contains(equipment) ? 'calisthenics' : 'strength');
+                    return Wrap(spacing: 8, runSpacing: 8, children: [
+                      for (final k in kExerciseKinds)
+                        Pill(
+                          label: t.exerciseKind(k),
+                          bg: shown == k ? gc.ember : gc.bgRaised2,
+                          fg: shown == k ? gc.onEmber : gc.textSecondary,
+                          onTap: () => setSheet(() => kind = k),
+                          vPad: 7,
+                          fontSize: 12,
+                        ),
+                    ]);
+                  }),
+                  const SizedBox(height: 16),
                   _filterLabel(gc, t.howToLabel),
                   const SizedBox(height: 8),
                   TextField(
@@ -422,6 +599,26 @@ void showCreateExerciseSheet(BuildContext context,
                     cursorColor: gc.accent,
                     decoration: InputDecoration(
                       hintText: t.howToHint,
+                      hintStyle: AppTheme.f(14, weight: FontWeight.w500, color: gc.textTertiary),
+                      filled: true,
+                      fillColor: gc.bgRaised2,
+                      contentPadding: const EdgeInsets.all(14),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: gc.border)),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: gc.accent)),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  _filterLabel(gc, t.aliasesLabel),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: aliasCtrl,
+                    style: AppTheme.f(14, weight: FontWeight.w500, color: gc.text),
+                    cursorColor: gc.accent,
+                    textCapitalization: TextCapitalization.words,
+                    decoration: InputDecoration(
+                      hintText: t.aliasesHint,
                       hintStyle: AppTheme.f(14, weight: FontWeight.w500, color: gc.textTertiary),
                       filled: true,
                       fillColor: gc.bgRaised2,
@@ -527,9 +724,11 @@ void showCreateExerciseSheet(BuildContext context,
                   PrimaryButton(
                     label: editing == null ? t.addExercise : t.saveChanges,
                     onTap: () async {
-                      if (busy || nameCtrl.text.trim().isEmpty) return;
+                      if (busy) return;
+                      if (nameCtrl.text.trim().isEmpty) return flagName();
                       busy = true;
                       final steps = stepsCtrl.text.split('\n');
+                      final aliases = aliasCtrl.text.split(RegExp(r'[,;\n]'));
                       if (editing != null) {
                         fit.updateCustomExercise(editing.id,
                             name: nameCtrl.text,
@@ -537,7 +736,10 @@ void showCreateExerciseSheet(BuildContext context,
                             equipment: equipment,
                             difficulty: difficulty,
                             steps: steps,
-                            mode: mode);
+                            mode: mode,
+                            secondary: secondary.toList(),
+                            aliases: aliases,
+                            kind: kind);
                         Navigator.pop(sheetCtx);
                         return;
                       }
@@ -547,7 +749,10 @@ void showCreateExerciseSheet(BuildContext context,
                           equipment: equipment,
                           difficulty: difficulty,
                           steps: steps,
-                          mode: mode);
+                          mode: mode,
+                          secondary: secondary.toList(),
+                          aliases: aliases,
+                          kind: kind);
                       if (mediaPath != null) {
                         await fit.attachExerciseMedia(id, mediaPath!);
                       }
@@ -570,6 +775,23 @@ void showCreateExerciseSheet(BuildContext context,
   );
 }
 
+
+class _Shake extends StatelessWidget {
+  const _Shake({required this.count, required this.child});
+  final int count;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => TweenAnimationBuilder<double>(
+        tween: Tween(begin: 0, end: count.toDouble()),
+        duration: const Duration(milliseconds: 460),
+        builder: (_, v, child) {
+          final p = v - v.floorToDouble();
+          return Transform.translate(offset: Offset(math.sin(p * math.pi * 6) * 8 * (1 - p), 0), child: child);
+        },
+        child: child,
+      );
+}
 
 void _clearFilters(VoidCallback? onClear) {
   fit.clearExFilters();
@@ -615,6 +837,14 @@ void showExerciseFilters(BuildContext context, {VoidCallback? onClear}) {
                   fit.goPlaces();
                 }),
               ], gc, hPad: 14, vPad: 8, fontSize: 13),
+              const SizedBox(height: 16),
+              _filterLabel(gc, t.kindLabel),
+              const SizedBox(height: 8),
+              _chipRow([
+                for (final k in kExerciseKinds)
+                  _FilterChipData(t.exerciseKind(k), fit.exKindFilter == k,
+                      () => setSheet(() => fit.setKindFilter(k))),
+              ], gc, hPad: 12, vPad: 6, fontSize: 12),
               const SizedBox(height: 16),
               _filterLabel(gc, t.muscleFilter),
               const SizedBox(height: 8),

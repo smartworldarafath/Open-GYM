@@ -305,6 +305,13 @@ void main() {
       expect(fit.routineSets(a, a.exerciseIds.first), 5);
     });
 
+    test('la Recommended Routine es una sola rutina puesta lunes, miércoles y viernes', () {
+      final made = fit.applyTemplate(kProgramTemplates.firstWhere((x) => x.id == 'rr'));
+      expect(made, 1);
+      final id = fit.routinesInGroup('Recommended Routine').single.id;
+      expect(fit.weeklyPlan, {1: id, 3: id, 5: id});
+    });
+
     test('coloca los días solo si el plan semanal estaba vacío', () {
       fit.applyTemplate(kProgramTemplates.firstWhere((x) => x.id == 'stronglifts'));
       expect(fit.weeklyPlan.length, 2);
@@ -335,7 +342,7 @@ void main() {
       fit.bumpRoutineSets(r.id, bench(), 1);
       fit.startRoutine(r);
 
-      final id = fit.saveSessionAsRoutine();
+      final id = fit.saveSessionAsRoutine('Copy');
       final made = fit.routines.firstWhere((x) => x.id == id);
       expect(made.exerciseIds, [bench()]);
       expect(fit.routineSets(made, bench()), 4);

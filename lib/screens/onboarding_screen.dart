@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../catalog/exercise_catalog.dart';
@@ -9,6 +11,7 @@ import '../theme/app_theme.dart';
 import '../widgets/app_background.dart';
 import '../widgets/body_rulers.dart';
 import '../widgets/entrance.dart';
+import '../widgets/photo_source_sheet.dart';
 import '../widgets/ui_kit.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -22,7 +25,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final _page = PageController();
   late final TextEditingController _name = TextEditingController();
   int _index = 0;
-  static const _last = 5;
+  static const _last = 6;
   final Map<String, Set<String>> _places = {};
 
   @override
@@ -54,6 +57,69 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   Widget _in(int order, Widget child) => Rise(index: order, child: child);
 
+  Future<void> _pickPhoto() async {
+    final source = await pickPhotoSource(context);
+    if (source == null) return;
+    final shot = await ImagePicker().pickImage(source: source, maxWidth: 512, maxHeight: 512, imageQuality: 80);
+    if (shot == null) return;
+    final bytes = await shot.readAsBytes();
+    if (!mounted) return;
+    HapticFeedback.lightImpact();
+    setState(() => fit.setProfilePhoto(bytes));
+  }
+
+  Widget _photo(GymColors gc) {
+    final bytes = fit.profile.photo.isEmpty ? null : fit.profilePhoto;
+    return Center(
+      child: Semantics(
+        button: true,
+        label: bytes == null ? t.onbPhotoAdd : t.onbPhotoChange,
+        child: Pressable(
+          onTap: _pickPhoto,
+          scale: 0.95,
+          child: Column(children: [
+            SizedBox(
+              width: 104,
+              height: 104,
+              child: Stack(clipBehavior: Clip.none, children: [
+                Container(
+                  width: 104,
+                  height: 104,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: BoxDecoration(color: gc.bgRaised, shape: BoxShape.circle),
+                  foregroundDecoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: gc.border, width: 1.5),
+                  ),
+                  child: bytes == null
+                      ? Icon(PhosphorIconsRegular.user, size: 42, color: gc.textTertiary)
+                      : Image.memory(bytes, fit: BoxFit.cover, gaplessPlayback: true),
+                ),
+                Positioned(
+                  right: 0,
+                  bottom: 2,
+                  child: Container(
+                    width: 34,
+                    height: 34,
+                    decoration: BoxDecoration(
+                      color: gc.accent,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: gc.bg, width: 3),
+                    ),
+                    child: Icon(PhosphorIconsBold.camera, size: 15, color: gc.onEmber),
+                  ),
+                ),
+              ]),
+            ),
+            const SizedBox(height: 10),
+            Text(bytes == null ? t.onbPhotoAdd : t.onbPhotoChange,
+                style: AppTheme.f(13, weight: FontWeight.w700, color: gc.accent)),
+          ]),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final gc = context.gc;
@@ -75,6 +141,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     children: [
                       _welcome(gc),
                       _nameStep(gc),
+                      _photoStep(gc),
                       _unitsStep(gc),
                       _bodyStep(gc),
                       _goalStep(gc),
@@ -149,7 +216,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
           Expanded(
             child: PrimaryButton(
-              label: _index == _last ? t.welcomeStart : t.next,
+              label: _index == _last
+                  ? t.welcomeStart
+                  : _index == 2 && fit.profile.photo.isEmpty
+                      ? t.onbPhotoLater
+                      : t.next,
               onTap: () => _index == _last ? _finish() : _go(_index + 1),
             ),
           ),
@@ -342,11 +413,25 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
+  Widget _photoStep(GymColors gc) {
+    return _step(
+      gc,
+      step: 2,
+      title: t.onbPhotoTitle,
+      why: t.onbPhotoWhy,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 28),
+        decoration: BoxDecoration(color: gc.bgRaised, borderRadius: BorderRadius.circular(20)),
+        child: _photo(gc),
+      ),
+    );
+  }
+
   Widget _bodyStep(GymColors gc) {
     final p = fit.profile;
     return _step(
       gc,
-      step: 3,
+      step: 4,
       title: t.onbBodyTitle,
       why: t.onbBodyWhy,
       child: _group(gc, [
@@ -411,7 +496,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final goal = fit.profile.weeklyGoal;
     return _step(
       gc,
-      step: 4,
+      step: 5,
       title: t.onbGoalTitle,
       why: t.onbGoalWhy,
       child: Container(
@@ -462,7 +547,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget _unitsStep(GymColors gc) {
     return _step(
       gc,
-      step: 2,
+      step: 3,
       title: t.onbUnitsTitle,
       why: t.autofills,
       child: Row(
@@ -529,7 +614,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget _placeStep(GymColors gc) {
     return _step(
       gc,
-      step: 5,
+      step: 6,
       title: t.onbPlaceTitle,
       why: t.onbPlaceWhy,
       child: Column(

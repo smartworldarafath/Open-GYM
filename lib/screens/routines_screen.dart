@@ -75,7 +75,7 @@ class RoutinesScreen extends StatelessWidget {
               )
             else ...[
               for (final group in fit.routineGroups) ...[
-                _groupHeader(gc, group, fit.routinesInGroup(group).length),
+                _groupHeader(context, gc, group, fit.routinesInGroup(group).length),
                 _folders(context, fit.routinesInGroup(group)),
                 const SizedBox(height: 10),
               ],
@@ -112,7 +112,7 @@ class RoutinesScreen extends StatelessWidget {
 
   void _shareMenu(BuildContext context) {
     final gc = context.gc;
-    final planned = fit.routines.where((r) => fit.weeklyPlan.containsValue(r.id)).toList();
+    final planned = fit.routines.where((r) => [for (var d = 1; d <= 7; d++) ...fit.planIdsOn(d)].contains(r.id)).toList();
     showAppSheet<void>(
       context: context,
       backgroundColor: Colors.transparent,
@@ -283,9 +283,9 @@ class RoutinesScreen extends StatelessWidget {
   }
 
   Widget _dayRow(BuildContext context, GymColors gc, int i) {
-    final weekday = i + 1;
-    final r = fit.routines.where((x) => x.id == fit.weeklyPlan[weekday]);
-    final assigned = r.isNotEmpty ? r.first : null;
+    final weekday = fit.weekdayAt(i);
+    final day = fit.dateForWeekday(i);
+    final assigned = fit.routinesOn(day);
     final isToday = DateTime.now().weekday == weekday;
     return GestureDetector(
       onTap: () => _pickRoutine(context, weekday),
@@ -300,11 +300,11 @@ class RoutinesScreen extends StatelessWidget {
                 style: AppTheme.f(14, weight: FontWeight.w600, color: isToday ? gc.ember : gc.text)),
             const SizedBox(width: 14),
             Expanded(
-              child: Text(assigned == null ? t.restDayShort : fit.routineTitle(assigned),
+              child: Text(assigned.isEmpty ? t.restDayShort : assigned.map(fit.routineTitle).join(' + '),
                   textAlign: TextAlign.right,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: AppTheme.f(14, weight: FontWeight.w500, color: assigned != null ? gc.text : gc.textTertiary)),
+                  style: AppTheme.f(14, weight: FontWeight.w500, color: assigned.isNotEmpty ? gc.text : gc.textTertiary)),
             ),
             const SizedBox(width: 8),
             SvgPathIcon(Ic.chevronRight, size: 14, color: gc.textTertiary),
@@ -314,44 +314,36 @@ class RoutinesScreen extends StatelessWidget {
     );
   }
 
-  Widget _groupHeader(GymColors gc, String name, int count) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8, left: 4),
-      child: Row(
-        children: [
-          Icon(PhosphorIconsRegular.folderSimple, size: 15, color: gc.brass),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(name,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppTheme.f(13, weight: FontWeight.w700, color: gc.text, letterSpacing: 1)),
+  Widget _groupHeader(BuildContext context, GymColors gc, String name, int count) {
+    return Semantics(
+      button: true,
+      label: name,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => _groupMenu(context, name, count),
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 8, left: 4, top: 4),
+          child: Row(
+            children: [
+              Icon(PhosphorIconsRegular.folderSimple, size: 15, color: gc.brass),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTheme.f(13, weight: FontWeight.w700, color: gc.text, letterSpacing: 1)),
+              ),
+              Text('$count', style: AppTheme.f(12, weight: FontWeight.w500, color: gc.textTertiary)),
+              const SizedBox(width: 6),
+              Icon(PhosphorIconsBold.dotsThree, size: 18, color: gc.textTertiary),
+            ],
           ),
-          Text('$count', style: AppTheme.f(12, weight: FontWeight.w500, color: gc.textTertiary)),
-        ],
+        ),
       ),
     );
   }
 
-  Widget _folders(BuildContext context, List<Routine> list) {
-    return Column(children: [
-      for (var i = 0; i < list.length; i += 2)
-        Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Expanded(child: RoutineFolder(routine: list[i], onMenu: () => _routineMenu(context, list[i]))),
-            const SizedBox(width: 12),
-            Expanded(
-              child: i + 1 < list.length
-                  ? RoutineFolder(routine: list[i + 1], onMenu: () => _routineMenu(context, list[i + 1]))
-                  : const SizedBox.shrink(),
-            ),
-          ]),
-        ),
-    ]);
-  }
-
-  void _routineMenu(BuildContext context, Routine r) {
+  void _groupMenu(BuildContext context, String name, int count) {
     final gc = context.gc;
     showAppSheet<void>(
       context: context,
@@ -368,42 +360,52 @@ class RoutinesScreen extends StatelessWidget {
           children: [
             const SheetHandle(),
             const SizedBox(height: 16),
-            SheetTitle(fit.routineTitle(r), subtitle: t.exerciseCount(r.exerciseIds.length)),
+            SheetTitle(name, subtitle: t.routineCount(count)),
             const SizedBox(height: 14),
             OptionGroup([
-              OptionItem(t.editEntry, icon: PhosphorIconsRegular.pencilSimple, onTap: () {
+              OptionItem(t.groupRename, icon: PhosphorIconsRegular.pencilSimple, onTap: () async {
                 Navigator.pop(sheet);
-                fit.openRoutine(r.id);
+                final next = await askText(context, title: t.groupRename, initial: name, hint: t.groupNameHint);
+                if (next != null && next != name) fit.renameGroup(name, next);
               }),
-              if (r.exerciseIds.isNotEmpty)
-                OptionItem(titleCase(t.startWorkout), icon: PhosphorIconsRegular.play, onTap: () {
-                  Navigator.pop(sheet);
-                  fit.startRoutine(r);
-                }),
-              OptionItem(t.shareRoutine, icon: PhosphorIconsRegular.shareNetwork, onTap: () {
+              OptionItem(t.groupUngroup, icon: PhosphorIconsRegular.folderSimpleMinus, onTap: () {
                 Navigator.pop(sheet);
-                sharePlan([r]);
+                fit.renameGroup(name, '');
               }),
-              OptionItem(t.duplicateRoutine, icon: PhosphorIconsRegular.copy, onTap: () {
-                Navigator.pop(sheet);
-                fit.duplicateRoutine(r.id);
-              }),
-              OptionItem(t.delete, icon: PhosphorIconsRegular.trash, danger: true, onTap: () async {
+              OptionItem(t.groupDeleteAll, icon: PhosphorIconsRegular.trash, danger: true, onTap: () async {
                 Navigator.pop(sheet);
                 final ok = await askConfirm(
                   context,
-                  title: t.deleteRoutine,
-                  body: fit.routineTitle(r),
+                  title: t.groupDeleteTitle(name),
+                  body: t.groupDeleteBody(t.routineCount(count)),
                   confirmLabel: t.delete,
                   danger: true,
                 );
-                if (ok) fit.deleteRoutine(r.id);
+                if (ok) fit.deleteGroup(name);
               }),
             ]),
           ],
         ),
       ),
     );
+  }
+
+  Widget _folders(BuildContext context, List<Routine> list) {
+    return Column(children: [
+      for (var i = 0; i < list.length; i += 2)
+        Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Expanded(child: RoutineFolder(routine: list[i], onMenu: () => showRoutineMenu(context, list[i]))),
+            const SizedBox(width: 12),
+            Expanded(
+              child: i + 1 < list.length
+                  ? RoutineFolder(routine: list[i + 1], onMenu: () => showRoutineMenu(context, list[i + 1]))
+                  : const SizedBox.shrink(),
+            ),
+          ]),
+        ),
+    ]);
   }
 
   void _pickRoutine(BuildContext context, int weekday) {
@@ -416,7 +418,9 @@ class RoutinesScreen extends StatelessWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (sheet) => Container(
+      builder: (sheet) => AnimatedBuilder(
+        animation: fit,
+        builder: (sheet, _) => Container(
         constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(sheet).height * 0.72),
         padding: sheetPad(sheet),
         decoration: BoxDecoration(
@@ -430,6 +434,10 @@ class RoutinesScreen extends StatelessWidget {
             const SheetHandle(),
             const SizedBox(height: 16),
             SheetTitle(titleCase(t.setDay(t.weekday(weekday).toUpperCase()))),
+            if (fit.multiPlan) ...[
+              const SizedBox(height: 4),
+              Text(t.multiPlanHint, style: AppTheme.f(12.5, weight: FontWeight.w500, color: gc.textSecondary)),
+            ],
             const SizedBox(height: 14),
             Flexible(
               child: OptionGroup(
@@ -438,7 +446,7 @@ class RoutinesScreen extends StatelessWidget {
                   OptionItem(
                     t.restDayShort,
                     icon: PhosphorIconsRegular.moonStars,
-                    selected: fit.weeklyPlan[weekday] == null,
+                    selected: fit.planIdsOn(weekday).isEmpty,
                     onTap: () {
                       fit.assignRoutineToDay(weekday, null);
                       Navigator.pop(sheet);
@@ -448,8 +456,9 @@ class RoutinesScreen extends StatelessWidget {
                     OptionItem(
                       fit.routineTitle(r),
                       detail: r.group.isEmpty ? null : r.group,
-                      selected: fit.weeklyPlan[weekday] == r.id,
+                      selected: fit.plannedOn(weekday, r.id),
                       onTap: () {
+                        if (fit.multiPlan) return fit.togglePlanDay(weekday, r.id);
                         fit.assignRoutineToDay(weekday, r.id);
                         Navigator.pop(sheet);
                       },
@@ -460,6 +469,62 @@ class RoutinesScreen extends StatelessWidget {
           ],
         ),
       ),
+      ),
     );
   }
+}
+
+void showRoutineMenu(BuildContext context, Routine r) {
+  final gc = context.gc;
+  showAppSheet<void>(
+    context: context,
+    backgroundColor: Colors.transparent,
+    builder: (sheet) => Container(
+      padding: sheetPad(sheet),
+      decoration: BoxDecoration(
+        color: gc.bgRaised,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const SheetHandle(),
+          const SizedBox(height: 16),
+          SheetTitle(fit.routineTitle(r), subtitle: t.exerciseCount(r.exerciseIds.length)),
+          const SizedBox(height: 14),
+          OptionGroup([
+            OptionItem(t.editEntry, icon: PhosphorIconsRegular.pencilSimple, onTap: () {
+              Navigator.pop(sheet);
+              fit.openRoutine(r.id);
+            }),
+            if (r.exerciseIds.isNotEmpty)
+              OptionItem(titleCase(t.startWorkout), icon: PhosphorIconsRegular.play, onTap: () {
+                Navigator.pop(sheet);
+                fit.startRoutine(r);
+              }),
+            OptionItem(t.shareRoutine, icon: PhosphorIconsRegular.shareNetwork, onTap: () {
+              Navigator.pop(sheet);
+              sharePlan([r]);
+            }),
+            OptionItem(t.duplicateRoutine, icon: PhosphorIconsRegular.copy, onTap: () {
+              Navigator.pop(sheet);
+              fit.duplicateRoutine(r.id);
+            }),
+            OptionItem(t.delete, icon: PhosphorIconsRegular.trash, danger: true, onTap: () async {
+              Navigator.pop(sheet);
+              final ok = await askConfirm(
+                context,
+                title: t.deleteRoutine,
+                body: fit.routineTitle(r),
+                confirmLabel: t.delete,
+                danger: true,
+              );
+              if (ok) fit.deleteRoutine(r.id);
+            }),
+          ]),
+        ],
+      ),
+    ),
+  );
 }

@@ -67,7 +67,7 @@ class NoteCalendar extends StatelessWidget {
     final today = DateTime.now();
     final first = DateTime(month.year, month.month);
     final days = DateTime(month.year, month.month + 1, 0).day;
-    final lead = (first.weekday - t.firstWeekday + 7) % 7;
+    final lead = (first.weekday - fit.weekStartDay + 7) % 7;
 
     return Column(
       children: [
@@ -87,7 +87,7 @@ class NoteCalendar extends StatelessWidget {
           children: [
             for (int i = 0; i < 7; i++)
               Expanded(
-                child: Text(t.weekdayInitial((t.firstWeekday + i - 1) % 7 + 1).toUpperCase(),
+                child: Text(t.weekdayInitial(fit.weekdayAt(i)).toUpperCase(),
                     textAlign: TextAlign.center,
                     style: AppTheme.f(10.5,
                         weight: FontWeight.w600, color: gc.textTertiary, letterSpacing: 1)),

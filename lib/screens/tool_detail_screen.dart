@@ -95,6 +95,15 @@ class ToolDetailScreen extends StatelessWidget {
         return (t.toolTitle('plate'), '${fit.weightValue(fit.plateTarget)} ${fit.units}', t.toolResultHint('plate'));
       case 'warmup':
         return (t.toolTitle('warmup'), '${fit.weightValue(fit.warmupTarget)} ${fit.units}', t.toolResultHint('warmup'));
+      case 'rpe':
+        return (t.toolTitle('rpe'), '${fit.weightValue(fit.rpeResult)} ${fit.units}',
+            t.rpeResultHint(fit.rpeTargetReps, fmt(fit.rpeTargetRpe)));
+      case 'dots':
+        return (t.toolTitle('dots'), fmt(fit.dotsScore), t.dotsLevelName(fit.dotsLevel));
+      case 'wilks':
+        return (t.toolTitle('wilks'), fmt(fit.wilksScore), t.dotsLevelName(fit.wilksLevel));
+      case 'ffmi':
+        return (t.toolTitle('ffmi'), fmt(fit.ffmiScore), t.ffmiLevelName(fit.ffmiLevel));
       default:
         return ('', '', '');
     }
@@ -107,6 +116,10 @@ class ToolDetailScreen extends StatelessWidget {
           ToolRow(label: t.weightLifted, control: StepperControl(value: '${fit.weightValue(fit.rmWeight)} ${fit.units}', onDec: () => fit.bumpRmWeight(-fit.fromDisplayWeight(fit.weightStep)), onInc: () => fit.bumpRmWeight(fit.fromDisplayWeight(fit.weightStep)), onEdit: () => _editNumber(context, title: t.weightLifted, current: fit.toDisplayWeight(fit.rmWeight), decimal: true, apply: (v) => fit.bumpRmWeight(fit.fromDisplayWeight(v) - fit.rmWeight)))),
           const SizedBox(height: 10),
           ToolRow(label: t.repsPerformed, control: StepperControl(value: '${fit.rmReps}', minWidth: 40, onDec: () => fit.bumpRmReps(-1), onInc: () => fit.bumpRmReps(1), onEdit: () => _editNumber(context, title: t.repsPerformed, current: fit.rmReps.toDouble(), decimal: false, apply: (v) => fit.bumpRmReps(v.round() - fit.rmReps)))),
+          const SizedBox(height: 10),
+          ToolRow(label: t.rmPercent, control: StepperControl(value: '${fit.rmPct}%', minWidth: 52, onDec: () => fit.bumpRmPct(-1), onInc: () => fit.bumpRmPct(1), onEdit: () => _editNumber(context, title: t.rmPercent, current: fit.rmPct.toDouble(), decimal: false, apply: (v) => fit.bumpRmPct(v.round() - fit.rmPct)))),
+          const SizedBox(height: 10),
+          _rmPctCard(context, gc),
         ];
       case 'bmi':
         return [
@@ -158,10 +171,74 @@ class ToolDetailScreen extends StatelessWidget {
           const SizedBox(height: 10),
           _warmupCard(gc),
         ];
+      case 'rpe':
+        final step = fit.fromDisplayWeight(fit.weightStep);
+        return [
+          _sectionLabel(gc, t.rpeYourSet),
+          ToolRow(label: t.weightLifted, control: StepperControl(value: '${fit.weightValue(fit.rpeWeight)} ${fit.units}', onDec: () => fit.bumpRpeWeight(-step), onInc: () => fit.bumpRpeWeight(step), onEdit: () => _editNumber(context, title: t.weightLifted, current: fit.toDisplayWeight(fit.rpeWeight), decimal: true, apply: (v) => fit.bumpRpeWeight(fit.fromDisplayWeight(v) - fit.rpeWeight)))),
+          ToolRow(label: t.repsPerformed, control: StepperControl(value: '${fit.rpeReps}', minWidth: 40, onDec: () => fit.bumpRpeReps(-1), onInc: () => fit.bumpRpeReps(1))),
+          ToolRow(label: t.rpeEffortLabel, control: StepperControl(value: fmt(fit.rpeRpe), minWidth: 40, onDec: () => fit.bumpRpe(-0.5), onInc: () => fit.bumpRpe(0.5))),
+          _sectionLabel(gc, t.rpeGoal),
+          ToolRow(label: t.repsCol, control: StepperControl(value: '${fit.rpeTargetReps}', minWidth: 40, onDec: () => fit.bumpRpeTargetReps(-1), onInc: () => fit.bumpRpeTargetReps(1))),
+          ToolRow(label: t.rpeEffortLabel, control: StepperControl(value: fmt(fit.rpeTargetRpe), minWidth: 40, onDec: () => fit.bumpRpeTarget(-0.5), onInc: () => fit.bumpRpeTarget(0.5))),
+          _note(gc, '${t.rpeOneRmLine(fit.weightLabel(fit.rpeOneRm))}\n${t.rpeExplain}'),
+        ];
+      case 'dots':
+      case 'wilks':
+        final step = fit.fromDisplayWeight(fit.weightStep);
+        Widget lift(String label, double kg, void Function(double) bump) => ToolRow(
+              label: label,
+              control: StepperControl(
+                value: '${fit.weightValue(kg)} ${fit.units}',
+                onDec: () => bump(-step),
+                onInc: () => bump(step),
+                onEdit: () => _editNumber(context, title: label, current: fit.toDisplayWeight(kg), decimal: true, apply: (v) => bump(fit.fromDisplayWeight(v) - kg)),
+              ),
+            );
+        return [
+          ToolRow(
+            label: t.sexLabel,
+            control: SegToggle([
+              SegOption(t.male, fit.dotsSex == 'male', () => fit.setDotsSex('male')),
+              SegOption(t.female, fit.dotsSex == 'female', () => fit.setDotsSex('female')),
+            ]),
+          ),
+          lift(t.bodyweight, fit.dotsBody, fit.bumpDotsBody),
+          _sectionLabel(gc, t.dotsBestLifts),
+          lift(t.dotsSquat, fit.dotsSquat, fit.bumpDotsSquat),
+          lift(t.dotsBench, fit.dotsBench, fit.bumpDotsBench),
+          lift(t.dotsDeadlift, fit.dotsDeadlift, fit.bumpDotsDeadlift),
+          _note(gc, '${t.dotsTotalLine(fit.weightLabel(fit.dotsTotal))}\n${id == 'wilks' ? t.wilksExplain : t.dotsExplain}'),
+        ];
+      case 'ffmi':
+        return [
+          ToolRow(
+            label: t.sexLabel,
+            control: SegToggle([
+              SegOption(t.male, fit.ffmiSex == 'male', () => fit.setFfmiSex('male')),
+              SegOption(t.female, fit.ffmiSex == 'female', () => fit.setFfmiSex('female')),
+            ]),
+          ),
+          ToolRow(label: t.heightLabel, control: StepperControl(value: fit.heightLabel(fit.ffmiHeight), onDec: () => fit.bumpFfmiHeight(-fit.heightStep), onInc: () => fit.bumpFfmiHeight(fit.heightStep), onEdit: () => _editNumber(context, title: t.heightLabel, current: fit.toDisplayCm(fit.ffmiHeight), decimal: true, apply: (v) => fit.bumpFfmiHeight(fit.fromDisplayCm(v) - fit.ffmiHeight)))),
+          ToolRow(label: t.weightLabel, control: StepperControl(value: '${fit.weightValue(fit.ffmiWeight)} ${fit.units}', onDec: () => fit.bumpFfmiWeight(-fit.fromDisplayWeight(fit.isLb ? 1 : 0.5)), onInc: () => fit.bumpFfmiWeight(fit.fromDisplayWeight(fit.isLb ? 1 : 0.5)), onEdit: () => _editNumber(context, title: t.weightLabel, current: fit.toDisplayWeight(fit.ffmiWeight), decimal: true, apply: (v) => fit.bumpFfmiWeight(fit.fromDisplayWeight(v) - fit.ffmiWeight)))),
+          ToolRow(label: t.ffmiBodyFat, control: StepperControl(value: '${fmt(fit.ffmiBf)}%', minWidth: 52, onDec: () => fit.bumpFfmiBf(-0.5), onInc: () => fit.bumpFfmiBf(0.5), onEdit: () => _editNumber(context, title: t.ffmiBodyFat, current: fit.ffmiBf, decimal: true, apply: (v) => fit.bumpFfmiBf(v - fit.ffmiBf)))),
+          _note(gc, '${t.ffmiLeanLine(fit.weightLabel(fit.ffmiLean))}\n${t.ffmiExplain}'),
+        ];
       default:
         return const [];
     }
   }
+
+  Widget _sectionLabel(GymColors gc, String label) => Padding(
+        padding: const EdgeInsets.fromLTRB(4, 6, 4, 0),
+        child: Text(label.toUpperCase(),
+            style: AppTheme.f(10.5, weight: FontWeight.w700, color: gc.textTertiary, letterSpacing: 1.4)),
+      );
+
+  Widget _note(GymColors gc, String text) => Padding(
+        padding: const EdgeInsets.fromLTRB(4, 4, 4, 0),
+        child: Text(text, style: AppTheme.f(12, weight: FontWeight.w500, color: gc.textSecondary, height: 1.5)),
+      );
 
   Future<void> _editNumber(
     BuildContext context, {
@@ -303,6 +380,41 @@ class ToolDetailScreen extends StatelessWidget {
     );
   }
 
+  Widget _rmPctCard(BuildContext context, GymColors gc) {
+    final weight = fit.rmAtPct;
+    final bar = fit.defaultBar;
+    final plates = weight > bar ? fit.platesPerSide(weight, bar) : const <({double weight, int count})>[];
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: weight > bar ? () => showPlateSheet(context, weight) : null,
+      child: SoftCard(
+        radius: 20,
+        borderColor: Colors.transparent,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(t.rmAtPercent('${fit.rmPct}%'),
+                      style: AppTheme.f(13, weight: FontWeight.w500, color: gc.textSecondary)),
+                  if (plates.isNotEmpty) ...[
+                    const SizedBox(height: 3),
+                    Text(plates.map((p) => p.count == 1 ? fmt(p.weight) : '${fmt(p.weight)}×${p.count}').join(' · '),
+                        style: AppTheme.f(11.5, weight: FontWeight.w500, color: gc.textTertiary)),
+                  ],
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            Text('${fmt(weight)} ${fit.units}', style: AppTheme.f(17, weight: FontWeight.w800, color: gc.text)),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _warmupCard(GymColors gc) {
     final sets = fit.warmupSets;
     return SoftCard(
@@ -320,7 +432,7 @@ class ToolDetailScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(t.rampSet(sets[i].pct, sets[i].reps), style: AppTheme.f(13, weight: FontWeight.w500, color: gc.textSecondary)),
+                  Text('${sets[i].pct} · ${t.repCount(sets[i].reps)}', style: AppTheme.f(13, weight: FontWeight.w500, color: gc.textSecondary)),
                   Text('${fmt(sets[i].weight)} ${fit.units}', style: AppTheme.f(15, weight: FontWeight.w700, color: gc.text)),
                 ],
               ),
@@ -331,9 +443,9 @@ class ToolDetailScreen extends StatelessWidget {
   }
 }
 
-void showPlateSheet(BuildContext context, double displayTarget) {
+void showPlateSheet(BuildContext context, double displayTarget, {double? startBar}) {
   final gc = context.gc;
-  var bar = fit.defaultBar;
+  var bar = startBar ?? fit.defaultBar;
   showAppSheet<void>(
     context: context,
     backgroundColor: Colors.transparent,

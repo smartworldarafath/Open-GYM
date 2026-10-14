@@ -52,6 +52,22 @@ class LoggedSet {
       );
 }
 
+enum PrKind {
+  weight,
+  distance,
+  time,
+  reps;
+
+  double score(LoggedSet s) => switch (this) {
+        PrKind.weight => s.weight,
+        PrKind.distance => s.km ?? 0,
+        PrKind.time => (s.sec ?? 0).toDouble(),
+        PrKind.reps => s.reps.toDouble(),
+      };
+}
+
+typedef PersonalRecord = ({String id, String name, PrKind kind, double best, double oneRm});
+
 class LoggedExercise {
   LoggedExercise(this.id, this.name, this.primary, this.sets);
   final String id;
@@ -87,10 +103,12 @@ class LoggedExercise {
 }
 
 class LoggedSession {
-  LoggedSession(this.date, this.durationSec, this.exercises);
+  LoggedSession(this.date, this.durationSec, this.exercises, {this.routineId, this.name});
   final DateTime date;
-  final int durationSec;
+  int durationSec;
   final List<LoggedExercise> exercises;
+  final String? routineId;
+  String? name;
 
   double get volume => exercises.fold(0.0, (s, e) => s + e.volume);
   int get setCount => exercises.fold(0, (s, e) => s + e.workingSets.length);
@@ -99,11 +117,15 @@ class LoggedSession {
         'd': date.toIso8601String(),
         'dur': durationSec,
         'ex': exercises.map((e) => e.toJson()).toList(),
+        if (routineId != null) 'r': routineId,
+        if (name != null) 'n': name,
       };
   factory LoggedSession.fromJson(Map<String, dynamic> j) => LoggedSession(
         DateTime.parse(j['d'] as String),
         (j['dur'] as num?)?.toInt() ?? 0,
         (j['ex'] as List).map((e) => LoggedExercise.fromJson(e as Map<String, dynamic>)).toList(),
+        routineId: j['r'] as String?,
+        name: j['n'] as String?,
       );
 }
 
@@ -162,11 +184,13 @@ class Routine {
       {Map<String, int>? sets,
       Set<String>? chained,
       Map<String, List<PlannedSet>>? plan,
+      Map<String, int>? rest,
       this.group = '',
       this.color = -1})
       : sets = sets ?? {},
         chained = chained ?? {},
-        plan = plan ?? {};
+        plan = plan ?? {},
+        rest = rest ?? {};
   final String id;
   String name;
   String group;
@@ -175,11 +199,13 @@ class Routine {
   final Map<String, int> sets;
   final Set<String> chained;
   final Map<String, List<PlannedSet>> plan;
+  final Map<String, int> rest;
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'n': name,
         'ex': exerciseIds,
+        if (rest.isNotEmpty) 'r': rest,
         if (sets.isNotEmpty) 's': sets,
         if (chained.isNotEmpty) 'c': chained.toList(),
         if (group.isNotEmpty) 'g': group,
@@ -198,6 +224,8 @@ class Routine {
               k as String,
               (v as List).map((s) => PlannedSet.fromJson((s as Map).cast<String, dynamic>())).toList(),
             )),
+        rest: ((j['r'] as Map?) ?? const {})
+            .map((k, v) => MapEntry(k as String, ((v as num).toInt()).clamp(0, 600))),
         group: (j['g'] as String?) ?? '',
         color: (j['k'] as num?)?.toInt() ?? -1,
       );

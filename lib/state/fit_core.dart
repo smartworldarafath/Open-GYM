@@ -2,7 +2,7 @@ part of 'fit_state.dart';
 
 String fmt(num n) {
   if (n == n.round()) return n.round().toString();
-  return n.toString();
+  return decimalText(n.toString());
 }
 
 double _round1(double n) => (n * 10).round() / 10;
@@ -46,6 +46,8 @@ abstract class FitCore extends ChangeNotifier {
   final Set<String> checkins = {};
   final List<Routine> routines = [];
   final Map<int, String> weeklyPlan = {};
+  final Map<int, List<String>> planExtras = {};
+  bool multiPlan = false;
   final List<Exercise> customExercises = [];
   final List<GymPlace> places = [];
 
@@ -63,7 +65,23 @@ abstract class FitCore extends ChangeNotifier {
 
   final Set<String> noSuggest = {};
 
+  final Set<String> archived = {};
+
+  final Set<String> levelStay = {};
+
+  final Map<String, int> levelSeen = {};
+
+  final Map<String, List<int>> levelShown = {};
+
+  final Map<String, ({double target, DateTime? due})> exerciseGoals = {};
+
+  final Map<String, Map<int, int>> videoMarks = {};
+
+  final Map<String, double> exerciseBar = {};
+
   final Map<String, String> modeOverride = {};
+
+  final Map<String, List<String>> secondaryOverride = {};
   VoidCallback? onWidgetsShouldUpdate;
 
   void refreshWidgets() => _refreshWidgets();
@@ -81,6 +99,9 @@ abstract class FitCore extends ChangeNotifier {
   double? get placeBarKg => null;
 
   String units = 'kg';
+  double stepKg = 2.5;
+  double stepLb = 5;
+  int weekStartDay = DateTime.monday;
   bool _loading = false;
   Timer? _saveDebounce;
 
@@ -162,7 +183,8 @@ abstract class FitCore extends ChangeNotifier {
 
   String weightValue(double kg) => fmt(_round1(toDisplayWeight(kg)));
 
-  double get weightStep => isLb ? 5 : 2.5;
+  double get weightStep => isLb ? stepLb : stepKg;
+  double get plateStep => isLb ? 5 : 2.5;
   String get volumeUnit => isLb ? 'k lb' : 't';
 
   String volumeValue(double kg) => fmt(_round1(toDisplayWeight(kg) / 1000));

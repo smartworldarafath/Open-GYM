@@ -150,8 +150,8 @@ void main() {
     });
 
     test('el nombre exacto gana', () {
-      expect(match('Lever Seated Reverse Fly'), 'Lever Seated Reverse Fly');
-      expect(match('Smith Seated Shoulder Press'), 'Smith Seated Shoulder Press');
+      expect(match('Machine Reverse Fly'), 'Machine Reverse Fly');
+      expect(match('Smith Hack Squat'), 'Smith Hack Squat');
     });
 
     test('encuentra el ejercicio aunque el nombre traiga más cosas', () {

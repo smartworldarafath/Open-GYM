@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -11,6 +12,8 @@ import '../theme/app_colors.dart';
 import 'exercise_art.dart';
 import 'shimmer.dart';
 
+const _shortDemo = Duration(seconds: 10);
+
 class ExerciseMedia extends StatelessWidget {
   const ExerciseMedia({
     super.key,
@@ -19,6 +22,7 @@ class ExerciseMedia extends StatelessWidget {
     this.radius = 20,
     this.live = false,
     this.bordered = true,
+    this.loops,
   });
 
   final Exercise ex;
@@ -26,6 +30,7 @@ class ExerciseMedia extends StatelessWidget {
   final double radius;
   final bool live;
   final bool bordered;
+  final int? loops;
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +38,17 @@ class ExerciseMedia extends StatelessWidget {
     final path = media.isEmpty ? null : MediaStore.pathFor(media);
     if (path == null) {
       return ExerciseArt(
-          slug: ex.art, height: height, radius: radius, live: live, bordered: bordered);
+          slug: ex.art,
+          height: height,
+          radius: radius,
+          live: live,
+          bordered: bordered,
+          loops: loops);
     }
     final isVideo = MediaStore.isVideo(media);
     if (isVideo && live) {
-      return _VideoTile(key: ValueKey(path), path: path, height: height, radius: radius);
+      return _VideoTile(
+          key: ValueKey(path), path: path, height: height, radius: radius, short: loops != null);
     }
     return _MediaFrame(
       height: height,
@@ -106,10 +117,16 @@ class _VideoPoster extends StatelessWidget {
 }
 
 class _VideoTile extends StatefulWidget {
-  const _VideoTile({super.key, required this.path, required this.height, required this.radius});
+  const _VideoTile(
+      {super.key,
+      required this.path,
+      required this.height,
+      required this.radius,
+      this.short = false});
   final String path;
   final double height;
   final double radius;
+  final bool short;
 
   @override
   State<_VideoTile> createState() => _VideoTileState();
@@ -117,6 +134,7 @@ class _VideoTile extends StatefulWidget {
 
 class _VideoTileState extends State<_VideoTile> {
   VideoPlayerController? _c;
+  Timer? _stop;
   bool _ok = false;
   bool _failed = false;
 
@@ -141,6 +159,7 @@ class _VideoTileState extends State<_VideoTile> {
         _c = c;
         _ok = true;
       });
+      if (widget.short) _stop = Timer(_shortDemo, () => c.setLooping(false));
     } catch (_) {
       if (mounted) setState(() => _failed = true);
     }
@@ -148,6 +167,7 @@ class _VideoTileState extends State<_VideoTile> {
 
   @override
   void dispose() {
+    _stop?.cancel();
     _c?.dispose();
     super.dispose();
   }
@@ -157,7 +177,7 @@ class _VideoTileState extends State<_VideoTile> {
     Widget child;
     if (_ok && _c != null) {
       child = FittedBox(
-        fit: BoxFit.cover,
+        fit: BoxFit.contain,
         clipBehavior: Clip.hardEdge,
         child: SizedBox(
           width: _c!.value.size.width,

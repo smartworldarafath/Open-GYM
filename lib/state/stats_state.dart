@@ -3,7 +3,7 @@ part of 'fit_state.dart';
 mixin StatsState on FitCore, ToolsState, LibraryState, TimelineState {
   List<Exercise> recommendedExercises(int n) {
     final muscles = suggestedFocus.muscles;
-    final pool = kExercises.where((e) => !noSuggest.contains(e.id));
+    final pool = kExercises.where((e) => !noSuggest.contains(e.id) && !isArchived(e.id) && fitsHere(e));
     final picks = [
       for (final m in muscles) ...pool.where((e) => e.primary == m).take(1),
     ];
@@ -18,6 +18,22 @@ mixin StatsState on FitCore, ToolsState, LibraryState, TimelineState {
   int get athleteLevel => 1 + totalSessions ~/ 10;
 
   int get sessionsToNextLevel => 10 - totalSessions % 10;
+
+  List<BodyweightEntry> get bodyweightTrend {
+    final list = [...bodyweight]..sort((a, b) => a.date.compareTo(b.date));
+    final out = <BodyweightEntry>[];
+    for (final e in list) {
+      if (out.isEmpty) {
+        out.add(BodyweightEntry(e.date, e.kg));
+        continue;
+      }
+      final prev = out.last;
+      final days = math.max(1, e.date.difference(prev.date).inHours / 24);
+      final keep = math.pow(0.9, days).toDouble();
+      out.add(BodyweightEntry(e.date, prev.kg * keep + e.kg * (1 - keep)));
+    }
+    return out;
+  }
 
   BodyweightEntry? get latestBodyweight =>
       bodyweight.isEmpty ? null : bodyweight.reduce((a, b) => a.date.isAfter(b.date) ? a : b);
@@ -35,14 +51,13 @@ mixin StatsState on FitCore, ToolsState, LibraryState, TimelineState {
     notifyListeners();
   }
 
-  int get todayIndex => DateTime.now().weekday - 1;
+  int get todayIndex => (DateTime.now().weekday - weekStartDay + 7) % 7;
+
+  int weekdayAt(int i) => (weekStartDay - 1 + i) % 7 + 1;
 
   DateTime get weekStartDate => _weekStart;
 
-  DateTime get _weekStart {
-    final t = _dayKey(DateTime.now());
-    return shiftDays(t, 1 - t.weekday);
-  }
+  DateTime get _weekStart => shiftDays(_dayKey(DateTime.now()), -todayIndex);
 
   Iterable<LoggedSession> get _thisWeekSessions {
     final start = _weekStart;
@@ -84,7 +99,7 @@ mixin StatsState on FitCore, ToolsState, LibraryState, TimelineState {
     final shown = toDisplayWeight(kg);
     if (shown < 1000) return (shown.round().toString(), units);
     final k = shown / 1000;
-    return (k >= 10 ? k.round().toString() : k.toStringAsFixed(1), units == 'kg' ? 't' : 'k $units');
+    return (k >= 10 ? k.round().toString() : decimalText(k.toStringAsFixed(1)), units == 'kg' ? 't' : 'k $units');
   }
 
   (String, String) get liftedSpan => liftedSpanOf(totalVolumeKg);
@@ -173,10 +188,27 @@ mixin StatsState on FitCore, ToolsState, LibraryState, TimelineState {
   List<int> get heatmapLevels => heatmapLevelsFor(kHeatmapDays);
 
   List<int> heatmapLevelsFor(int days) {
-    final daily = _dailyVolumes(days);
-    final maxV = daily.fold(0.0, (m, v) => v > m ? v : m);
-    if (maxV <= 0) return List.filled(days, 0);
-    return daily.map((v) => heatLevel(v / maxV)).toList();
+    final active = <DateTime>{..._checkinDays};
+    final load = <DateTime, double>{};
+    for (final s in sessions) {
+      final k = _dayKey(s.date);
+      active.add(k);
+      load[k] = (load[k] ?? 0) + s.volume;
+    }
+    final today = _dayKey(DateTime.now());
+    final keys = List.generate(days, (i) => shiftDays(today, i - (days - 1)));
+    final lifted = [for (final k in keys) if ((load[k] ?? 0) > 0) load[k]!]..sort();
+    return [
+      for (final k in keys)
+        if (!active.contains(k))
+          0
+        else if ((load[k] ?? 0) <= 0)
+          1
+        else if (lifted.length < 2)
+          heatLevels
+        else
+          1 + (lifted.indexOf(load[k]!) / (lifted.length - 1) * (heatLevels - 1)).round(),
+    ];
   }
 
   DateTime heatmapDate(int i) =>
@@ -188,16 +220,75 @@ mixin StatsState on FitCore, ToolsState, LibraryState, TimelineState {
       ..sort((a, b) => b.date.compareTo(a.date));
   }
 
+  void _releaseLevel(LoggedSession s, Iterable<String> ids) {
+    final ms = s.date.millisecondsSinceEpoch;
+    for (final id in ids) {
+      final shown = levelShown[id];
+      if (shown == null || shown.first != ms) continue;
+      if (shown.last == 0) {
+        levelSeen.remove(id);
+      } else {
+        levelSeen[id] = shown.last;
+      }
+      levelShown.remove(id);
+    }
+  }
+
+  String? sessionTitle(LoggedSession s) {
+    final name = s.name;
+    if (name != null) return name;
+    final r = routines.where((r) => r.id == s.routineId).firstOrNull;
+    if (r == null) return null;
+    return r.name.isEmpty ? t.newRoutineName : r.name;
+  }
+
+  String workoutText(LoggedSession s) {
+    String line(LoggedSet x) {
+      if (x.km != null) return '${distanceLabel(x.km!)} · ${durationLabel(x.sec ?? 0)}';
+      if (x.sec != null && x.reps == 0) return durationLabel(x.sec!);
+      return x.weight > 0 ? '${weightLabel(x.weight)} × ${x.reps}' : t.repCount(x.reps);
+    }
+
+    final title = sessionTitle(s);
+    final out = [
+      ?title,
+      s.durationSec > 0 ? '${t.longDate(s.date)} · ${s.durationSec ~/ 60} min' : t.longDate(s.date),
+    ];
+    var reps = 0;
+    for (final e in s.exercises) {
+      out
+        ..add('')
+        ..add(t.catalogName(e.id, e.name));
+      for (final x in e.sets) {
+        if (x.counts) reps += x.reps;
+        out.add('  ${line(x)}');
+      }
+    }
+    out
+      ..add('')
+      ..add('${t.setCount(s.setCount)} · ${t.repCount(reps)} · ${volumeLabel(s.volume)}');
+    return out.join('\n');
+  }
+
   void deleteSession(LoggedSession s) {
     sessions.remove(s);
+    _releaseLevel(s, s.exercises.map((e) => e.id));
     persistNow();
     _refreshWidgets();
+    notifyListeners();
+  }
+
+  void setSessionDuration(LoggedSession s, int seconds) {
+    if (!sessions.contains(s) || seconds < 0 || seconds == s.durationSec) return;
+    s.durationSec = seconds;
+    persistNow();
     notifyListeners();
   }
 
   void deleteLoggedExercise(LoggedSession s, LoggedExercise e) {
     s.exercises.remove(e);
     if (s.exercises.isEmpty) sessions.remove(s);
+    _releaseLevel(s, [e.id]);
     persistNow();
     notifyListeners();
   }
@@ -284,24 +375,29 @@ mixin StatsState on FitCore, ToolsState, LibraryState, TimelineState {
     );
   }
 
-  int get currentStreak {
-    final days = sessions.map((s) => _dayKey(s.date)).toSet();
+  Iterable<DateTime> get _checkinDays sync* {
     for (final id in checkins) {
       final p = id.split('-');
-      if (p.length == 3) {
-        final y = int.tryParse(p[0]), m = int.tryParse(p[1]), d = int.tryParse(p[2]);
-        if (y != null && m != null && d != null) days.add(DateTime(y, m, d));
-      }
+      if (p.length != 3) continue;
+      final y = int.tryParse(p[0]), m = int.tryParse(p[1]), d = int.tryParse(p[2]);
+      if (y != null && m != null && d != null) yield DateTime(y, m, d);
     }
+  }
+
+  int get currentStreak {
+    final days = {...sessions.map((s) => _dayKey(s.date)), ..._checkinDays};
     if (days.isEmpty) return 0;
+    final first = days.reduce((a, b) => a.isBefore(b) ? a : b);
+    bool rest(DateTime d) => weeklyPlan.isNotEmpty && !weeklyPlan.containsKey(d.weekday);
     var cursor = _dayKey(DateTime.now());
-    if (!days.contains(cursor)) {
-      cursor = shiftDays(cursor, -1);
-      if (!days.contains(cursor)) return 0;
-    }
+    if (!days.contains(cursor)) cursor = shiftDays(cursor, -1);
     var n = 0;
-    while (days.contains(cursor)) {
-      n++;
+    while (!cursor.isBefore(first)) {
+      if (days.contains(cursor)) {
+        n++;
+      } else if (!rest(cursor)) {
+        break;
+      }
       cursor = shiftDays(cursor, -1);
     }
     return n;
@@ -353,6 +449,8 @@ mixin StatsState on FitCore, ToolsState, LibraryState, TimelineState {
 
   double get volumeThisWeekKg => _thisWeekSessions.fold(0.0, (a, s) => a + s.volume);
 
+  int get weekSetCount => _thisWeekSessions.fold(0, (a, s) => a + s.setCount);
+
   int get setsToday {
     final t = _dayKey(DateTime.now());
     return sessions.where((s) => _dayKey(s.date) == t).fold(0, (a, s) => a + s.setCount);
@@ -360,35 +458,89 @@ mixin StatsState on FitCore, ToolsState, LibraryState, TimelineState {
 
   int get weeklyTarget => profile.weeklyGoal <= 0 ? 4 : profile.weeklyGoal;
 
-  int get goalPct => ((sessionsThisWeek / weeklyTarget) * 100).round().clamp(0, 100);
+  int get daysDoneThisWeek => [for (var i = 0; i < 7; i++) isDayDone(i)].where((d) => d).length;
 
-  List<({String id, String name, double topWeight, double oneRm})> get personalRecords {
-    final best = <String, ({String id, String name, double topWeight, double oneRm})>{};
-    for (final s in sessions) {
-      for (final e in s.exercises) {
-        for (final st in e.workingSets) {
-          final c = best[e.id];
-          best[e.id] = (
-            id: e.id,
-            name: e.name,
-            topWeight: c == null ? st.weight : math.max(c.topWeight, st.weight),
-            oneRm: c == null ? st.oneRm : math.max(c.oneRm, st.oneRm),
-          );
-        }
-      }
-    }
-    final list = best.values.toList()..sort((a, b) => b.oneRm.compareTo(a.oneRm));
-    return list;
+  int get goalPct => ((daysDoneThisWeek / weeklyTarget) * 100).round().clamp(0, 100);
+
+  PersonalRecord _record(String id, String name, List<LoggedSet> sets) {
+    double top(double Function(LoggedSet) f) => sets.fold(0.0, (m, s) => math.max(m, f(s)));
+    final kind = PrKind.values.firstWhere((k) => top(k.score) > 0, orElse: () => PrKind.reps);
+    return (id: id, name: name, kind: kind, best: top(kind.score), oneRm: top((s) => s.oneRm));
   }
 
+  List<PersonalRecord> get personalRecords {
+    final sets = <String, List<LoggedSet>>{};
+    final names = <String, String>{};
+    for (final s in sessions) {
+      for (final e in s.exercises) {
+        (sets[e.id] ??= []).addAll(e.workingSets);
+        names[e.id] = e.name;
+      }
+    }
+    return [
+      for (final e in sets.entries)
+        if (e.value.isNotEmpty) _record(e.key, names[e.key]!, e.value),
+    ]..sort((a, b) => a.kind != b.kind
+        ? a.kind.index.compareTo(b.kind.index)
+        : (a.kind == PrKind.weight ? b.oneRm.compareTo(a.oneRm) : b.best.compareTo(a.best)));
+  }
+
+  PersonalRecord? exerciseRecord(String id) {
+    final sets = [for (final h in exerciseHistory(id)) ...h.ex.workingSets];
+    return sets.isEmpty ? null : _record(id, '', sets);
+  }
+
+  ({LoggedSet set, DateTime date})? bestSet(String id) {
+    ({LoggedSet set, DateTime date})? best;
+    for (final h in exerciseHistory(id)) {
+      for (final st in h.ex.workingSets) {
+        if (st.weight <= 0 || st.reps <= 0) continue;
+        if (best == null || st.oneRm > best.set.oneRm) best = (set: st, date: h.date);
+      }
+    }
+    return best;
+  }
+
+  ({double score, DateTime date})? bestWorkout(String id, PrKind kind) {
+    double score(LoggedExercise e) => switch (kind) {
+          PrKind.weight => e.volume,
+          PrKind.reps => e.workingSets.fold(0.0, (n, st) => n + st.reps),
+          _ => 0,
+        };
+    ({double score, DateTime date})? best;
+    for (final h in exerciseHistory(id)) {
+      final v = score(h.ex);
+      if (v > 0 && (best == null || v > best.score)) best = (score: v, date: h.date);
+    }
+    return best;
+  }
+
+  String bestWorkoutLabel(double score, PrKind kind) => kind == PrKind.weight
+      ? '${fmt(toDisplayWeight(score).roundToDouble())} $units'
+      : t.repCount(score.round());
+
+  String recordLabel(PersonalRecord r) => switch (r.kind) {
+        PrKind.weight => weightLabel(r.best),
+        PrKind.distance => distanceLabel(r.best),
+        PrKind.time => durationLabel(r.best.round()),
+        PrKind.reps => t.repCount(r.best.round()),
+      };
+
+  String recordDetail(PersonalRecord r) =>
+      r.kind == PrKind.weight ? t.oneRmEst(weightLabel(r.oneRm)) : t.prBestSet;
+
   int get prsThisWeek {
-    final bestOrm = <String, double>{};
+    final kinds = {for (final r in personalRecords) r.id: r.kind};
+    final bestScore = <String, double>{};
     final bestDate = <String, DateTime>{};
     for (final s in sessions) {
       for (final e in s.exercises) {
-        for (final st in e.sets) {
-          if (!bestOrm.containsKey(e.id) || st.oneRm > bestOrm[e.id]!) {
-            bestOrm[e.id] = st.oneRm;
+        final kind = kinds[e.id];
+        if (kind == null) continue;
+        for (final st in e.workingSets) {
+          final score = kind == PrKind.weight ? st.oneRm : kind.score(st);
+          if (score > (bestScore[e.id] ?? 0)) {
+            bestScore[e.id] = score;
             bestDate[e.id] = s.date;
           }
         }
@@ -514,6 +666,7 @@ mixin StatsState on FitCore, ToolsState, LibraryState, TimelineState {
   static const Map<String, double> _recoveryHours = {
     'chest': 60,
     'back': 60,
+    'lowerback': 72,
     'quads': 72,
     'hamstrings': 72,
     'glutes': 72,
@@ -626,17 +779,6 @@ mixin StatsState on FitCore, ToolsState, LibraryState, TimelineState {
     return '${weightValue(s.weight)}×${s.reps}';
   }
 
-  ({double topWeight, double oneRm})? exercisePr(String id) {
-    final h = exerciseHistory(id);
-    if (h.isEmpty) return null;
-    double tw = 0, orm = 0;
-    for (final r in h) {
-      tw = math.max(tw, r.ex.topWeight);
-      orm = math.max(orm, r.ex.bestOneRm);
-    }
-    return (topWeight: tw, oneRm: orm);
-  }
-
   String? strengthExerciseId;
 
   List<({String id, String name, int sessions})> get trackedExercises {
@@ -644,6 +786,7 @@ mixin StatsState on FitCore, ToolsState, LibraryState, TimelineState {
     final names = <String, String>{};
     for (final s in sessions) {
       for (final e in s.exercises) {
+        if (e.topWeight <= 0) continue;
         count[e.id] = (count[e.id] ?? 0) + 1;
         names[e.id] = e.name;
       }
@@ -670,10 +813,56 @@ mixin StatsState on FitCore, ToolsState, LibraryState, TimelineState {
     notifyListeners();
   }
 
+  @override
+  double bestLift(String id) => oneRmSeries(id).fold(0.0, math.max);
+
   List<double> oneRmSeries(String id) {
     final h = exerciseHistory(id).reversed;
     return h.map((r) => _round1(r.ex.bestOneRm)).toList();
   }
+
+  bool goalFits(String id) => modeOf(id).isEmpty;
+
+  PrKind goalKind(String id) {
+    final kind = exerciseRecord(id)?.kind;
+    if (kind == PrKind.weight || kind == PrKind.reps) return kind!;
+    return isRepsOnly(id) ? PrKind.reps : PrKind.weight;
+  }
+
+  double goalBest(String id) {
+    final r = exerciseRecord(id);
+    return r != null && r.kind == goalKind(id) ? r.best : 0;
+  }
+
+  String goalLabel(String id, double value) =>
+      goalKind(id) == PrKind.reps ? t.repCount(value.round()) : weightLabel(value);
+
+  void setExerciseGoal(String id, double target, DateTime? due) {
+    exerciseGoals[id] = (target: target, due: due == null ? null : _dayKey(due));
+    persistNow();
+    notifyListeners();
+  }
+
+  void clearExerciseGoal(String id) {
+    if (exerciseGoals.remove(id) == null) return;
+    persistNow();
+    notifyListeners();
+  }
+
+  List<int> heatmapWeeksFor(int weeks) {
+    final tail = 6 - todayIndex;
+    return [...heatmapLevelsFor(weeks * 7 - tail), for (var i = 0; i < tail; i++) -1];
+  }
+
+  List<int> get heatmapWeeks => heatmapWeeksFor(kHeatmapDays ~/ 7);
+
+  DateTime heatmapWeekDate(int i, {int weeks = kHeatmapDays ~/ 7}) =>
+      shiftDays(_weekStart, i - (weeks - 1) * 7);
+
+  List<double> bestRepsSeries(String id) => [
+        for (final r in exerciseHistory(id).reversed)
+          r.ex.sets.where((s) => s.counts).fold(0, (m, s) => math.max(m, s.reps)).toDouble(),
+      ];
 
   static const _habitWindowDays = 120;
 

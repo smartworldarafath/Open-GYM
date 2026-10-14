@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
+import '../services/beeper.dart';
 import '../theme/app_theme.dart';
 
 @immutable
@@ -304,6 +305,7 @@ Future<void> showNotchToast(
   String? action,
   VoidCallback? onTap,
   Duration? duration,
+  bool sound = true,
 }) {
   final overlay = Overlay.maybeOf(context, rootOverlay: true);
   final words = '$title ${subtitle ?? ''}'.trim().split(RegExp(r'\s+')).length;
@@ -321,6 +323,7 @@ Future<void> showNotchToast(
   );
   final session = _sessions[overlay] ??= _ToastSession(overlay);
   session.show(request);
+  if (sound) Beeper.instance.chime();
   return request.done.future;
 }
 

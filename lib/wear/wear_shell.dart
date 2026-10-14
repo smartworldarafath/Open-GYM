@@ -152,7 +152,7 @@ class _WearShellState extends State<WearShell> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: fit,
+      animation: Listenable.merge([fit, fit.clock]),
       builder: (context, _) {
         final gc = context.gc;
         return PopScope(
@@ -353,7 +353,7 @@ class WearHome extends StatelessWidget {
     final planned = fit.todayRoutine;
     final canStart = planned != null && planned.exerciseIds.isNotEmpty;
     return WearPage(children: [
-      Center(child: _WeekRing(gc: gc, done: fit.sessionsThisWeek, goal: fit.weeklyTarget)),
+      Center(child: _WeekRing(gc: gc, done: fit.daysDoneThisWeek, goal: fit.weeklyTarget)),
       const SizedBox(height: 8),
       Center(
         child: Row(mainAxisSize: MainAxisSize.min, children: [
@@ -1144,7 +1144,7 @@ class WearSession extends StatelessWidget {
       _stat(gc, t.setsCaps, '${s.summarySets ?? 0}'),
       _stat(gc, t.volume, fit.volumeLabel(fit.summaryVolumeKg)),
       const SizedBox(height: 10),
-      WearButton(label: t.saveAndExit, icon: PhosphorIconsBold.check, filled: true, onTap: fit.saveAndExit),
+      WearButton(label: t.done, icon: PhosphorIconsBold.check, filled: true, onTap: fit.saveAndExit),
       const SizedBox(height: 8),
       WearButton(label: t.keepTraining, icon: PhosphorIconsBold.arrowCounterClockwise, onTap: fit.continueSession),
     ]);

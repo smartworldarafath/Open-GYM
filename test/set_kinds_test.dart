@@ -125,13 +125,18 @@ void main() {
       expect(fit.session!.exercises.first.sets, hasLength(after));
     });
 
-    test('with no weight on the bar there is nothing to ramp up to', () {
+    test('with no weight on the bar the warm-up is one set at half the reps', () {
       startChestSession();
-      for (var i = 0; i < fit.session!.exercises.first.sets.length; i++) {
+      final sets = fit.session!.exercises.first.sets;
+      for (var i = 0; i < sets.length; i++) {
         fit.setSessionWeight(0, i, 0);
       }
+      final reps = sets.map((s) => s.reps).reduce((a, b) => a > b ? a : b);
       fit.addWarmupSets(0);
-      expect(fit.hasWarmup(0), false);
+      expect(sets.first.kind, SetKind.warmup);
+      expect(sets.first.weight, 0);
+      expect(sets.first.reps, (reps / 2).ceil());
+      expect(sets.where((s) => s.kind == SetKind.warmup), hasLength(1));
     });
 
     test('the ramp rounds to the plates you actually have', () {

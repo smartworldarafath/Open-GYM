@@ -162,7 +162,7 @@ mixin NotesState on FitCore, LibraryState {
   }
 
   void backFromNotes() {
-    if (notesAllView) {
+    if (notesAllView && noteScope.isEmpty) {
       notesAllView = false;
       notifyListeners();
       return;

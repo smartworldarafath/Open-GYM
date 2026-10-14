@@ -26,11 +26,11 @@ class StartSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gc = context.gc;
-    final planned = day == null ? fit.todayRoutine : fit.routineOn(day!);
+    final planned = fit.routinesOn(day ?? DateTime.now()).where((r) => r.exerciseIds.isNotEmpty).toList();
     final others = [
       for (final group in fit.routineGroups) ...fit.routinesInGroup(group),
       ...fit.routinesInGroup(''),
-    ].where((r) => r.id != planned?.id && r.exerciseIds.isNotEmpty).toList();
+    ].where((r) => !planned.contains(r) && r.exerciseIds.isNotEmpty).toList();
     return Container(
       constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.82),
       padding: sheetPad(context),
@@ -60,8 +60,8 @@ class StartSheet extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  if (planned != null && planned.exerciseIds.isNotEmpty) ...[
-                    _plannedCard(context, gc, planned),
+                  for (final r in planned) ...[
+                    _plannedCard(context, gc, r),
                     const SizedBox(height: 10),
                   ],
                   if (others.isNotEmpty) ...[

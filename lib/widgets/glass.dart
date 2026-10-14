@@ -6,6 +6,55 @@ import '../theme/app_colors.dart';
 
 const double kSheetBlur = 14;
 
+final glassOpen = ValueNotifier<int>(0);
+final glassShown = ValueNotifier<int>(0);
+
+mixin _GlassCount<T> on ModalRoute<T> {
+  static final _live = <_GlassCount>{};
+
+  bool _open = false;
+  bool _handoff = false;
+  bool _handedOff = false;
+
+  bool get blurFull => _handoff;
+  bool get blurOff => _handedOff;
+
+  @override
+  void install() {
+    super.install();
+    final closing = _live.where((r) => !r._open);
+    if (glassOpen.value == 0 && closing.isNotEmpty) {
+      _handoff = true;
+      for (final r in closing) {
+        r._handedOff = true;
+      }
+    }
+    _open = true;
+    _live.add(this);
+    glassOpen.value++;
+    glassShown.value++;
+  }
+
+  void _close() {
+    if (!_open) return;
+    _open = false;
+    glassOpen.value--;
+  }
+
+  @override
+  bool didPop(T? result) {
+    _close();
+    return super.didPop(result);
+  }
+
+  @override
+  void dispose() {
+    _close();
+    if (_live.remove(this)) glassShown.value--;
+    super.dispose();
+  }
+}
+
 Future<T?> showAppSheet<T>({
   required BuildContext context,
   required WidgetBuilder builder,
@@ -31,7 +80,7 @@ Future<T?> showAppSheet<T>({
   ));
 }
 
-class _GlassSheetRoute<T> extends ModalBottomSheetRoute<T> {
+class _GlassSheetRoute<T> extends ModalBottomSheetRoute<T> with _GlassCount<T> {
   _GlassSheetRoute({
     required super.builder,
     required super.isScrollControlled,
@@ -46,7 +95,7 @@ class _GlassSheetRoute<T> extends ModalBottomSheetRoute<T> {
   });
 
   @override
-  Widget buildModalBarrier() => _BlurBarrier(animation: animation!, child: super.buildModalBarrier());
+  Widget buildModalBarrier() => _BlurBarrier(route: this, animation: animation!, child: super.buildModalBarrier());
 }
 
 Future<T?> showAppDialog<T>({required BuildContext context, required WidgetBuilder builder}) {
@@ -60,7 +109,7 @@ Future<T?> showAppDialog<T>({required BuildContext context, required WidgetBuild
   ));
 }
 
-class _GlassDialogRoute<T> extends DialogRoute<T> {
+class _GlassDialogRoute<T> extends DialogRoute<T> with _GlassCount<T> {
   _GlassDialogRoute({
     required super.context,
     required super.builder,
@@ -70,7 +119,7 @@ class _GlassDialogRoute<T> extends DialogRoute<T> {
   });
 
   @override
-  Widget buildModalBarrier() => _BlurBarrier(animation: animation!, child: super.buildModalBarrier());
+  Widget buildModalBarrier() => _BlurBarrier(route: this, animation: animation!, child: super.buildModalBarrier());
 
   @override
   Widget buildTransitions(
@@ -84,8 +133,9 @@ class _GlassDialogRoute<T> extends DialogRoute<T> {
 }
 
 class _BlurBarrier extends StatelessWidget {
-  const _BlurBarrier({required this.animation, required this.child});
+  const _BlurBarrier({required this.route, required this.animation, required this.child});
 
+  final _GlassCount route;
   final Animation<double> animation;
   final Widget child;
 
@@ -95,7 +145,11 @@ class _BlurBarrier extends StatelessWidget {
       animation: animation,
       child: child,
       builder: (context, barrier) {
-        final sigma = kSheetBlur * Curves.easeOut.transform(animation.value.clamp(0.0, 1.0));
+        if (route.blurOff) return barrier!;
+        final full = route.blurFull && animation.status != AnimationStatus.reverse;
+        final sigma = full
+            ? kSheetBlur
+            : kSheetBlur * Curves.easeOut.transform(animation.value.clamp(0.0, 1.0));
         if (sigma < 0.3) return barrier!;
         return BackdropFilter(
           filter: ui.ImageFilter.blur(sigmaX: sigma, sigmaY: sigma),

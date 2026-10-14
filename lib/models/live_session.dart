@@ -39,12 +39,13 @@ class SessionSet {
 }
 
 class SessionExercise {
-  SessionExercise(this.id, this.name, this.primary, this.sets, {this.linkedNext = false});
+  SessionExercise(this.id, this.name, this.primary, this.sets, {this.linkedNext = false, this.swappedFrom});
   final String id;
   final String name;
   final String primary;
   final List<SessionSet> sets;
   bool linkedNext;
+  final String? swappedFrom;
 
   bool get hasUndone => sets.any((s) => !s.done);
 
@@ -54,6 +55,7 @@ class SessionExercise {
         'p': primary,
         's': sets.map((s) => s.toJson()).toList(),
         if (linkedNext) 'l': true,
+        if (swappedFrom != null) 'sw': swappedFrom,
       };
   factory SessionExercise.fromJson(Map<String, dynamic> j) => SessionExercise(
         j['id'] as String,
@@ -61,6 +63,7 @@ class SessionExercise {
         j['p'] as String,
         (j['s'] as List).map((e) => SessionSet.fromJson((e as Map).cast<String, dynamic>())).toList(),
         linkedNext: j['l'] as bool? ?? false,
+        swappedFrom: j['sw'] as String?,
       );
 }
 
@@ -71,6 +74,8 @@ class WorkoutSession {
   int currentIndex = 0;
   bool complete = false;
   bool manual = false;
+  String? routineId;
+  String? name;
   DateTime? loggedAt;
   DateTime? restEndsAt;
   int? restFrozen;
@@ -97,6 +102,8 @@ class WorkoutSession {
         'i': currentIndex,
         'c': complete,
         if (manual) 'm': true,
+        if (routineId != null) 'r': routineId,
+        if (name != null) 'n': name,
         'at': loggedAt?.toIso8601String(),
         if (restEndsAt != null) 're': restEndsAt!.toIso8601String(),
         if (restFrozen != null) 'rf': restFrozen,
@@ -111,6 +118,8 @@ class WorkoutSession {
     ..currentIndex = (j['i'] as num?)?.toInt() ?? 0
     ..complete = j['c'] as bool? ?? false
     ..manual = j['m'] as bool? ?? false
+    ..routineId = j['r'] as String?
+    ..name = j['n'] as String?
     ..loggedAt = DateTime.tryParse((j['at'] as String?) ?? '')
     ..restEndsAt = DateTime.tryParse((j['re'] as String?) ?? '')
     ..restFrozen = (j['rf'] as num?)?.toInt()

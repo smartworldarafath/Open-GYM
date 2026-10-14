@@ -9,6 +9,13 @@ import 'catalog_zh.dart';
 
 export 'app_localizations.dart';
 
+final Map<String, String> _decimalSeparators = {};
+
+String get decimalSeparator =>
+    _decimalSeparators.putIfAbsent(intlLocale, () => NumberFormat.decimalPattern(intlLocale).symbols.DECIMAL_SEP);
+
+String decimalText(String s) => s.replaceFirst('.', decimalSeparator);
+
 const Map<String, Map<String, String>> _catalogNames = {'es': kExerciseNameEs, 'it': kExerciseNameIt, 'zh': kExerciseNameZh};
 const Map<String, Map<String, List<String>>> _catalogSteps = {'es': kExerciseStepsEs, 'it': kExerciseStepsIt, 'zh': kExerciseStepsZh};
 
@@ -79,6 +86,10 @@ extension GymL10n on AppLocalizations {
         'cal' => toolNameCal,
         'bf' => toolNameBf,
         'plate' => toolNamePlate,
+        'rpe' => toolNameRpe,
+        'dots' => toolNameDots,
+        'wilks' => toolNameWilks,
+        'ffmi' => toolNameFfmi,
         _ => toolNameWarmup,
       };
 
@@ -88,6 +99,10 @@ extension GymL10n on AppLocalizations {
         'cal' => toolTitleCal,
         'bf' => toolTitleBf,
         'plate' => toolTitlePlate,
+        'rpe' => toolTitleRpe,
+        'dots' => toolTitleDots,
+        'wilks' => toolTitleWilks,
+        'ffmi' => toolTitleFfmi,
         _ => toolTitleWarmup,
       };
 
@@ -107,6 +122,7 @@ extension GymL10n on AppLocalizations {
         'abcde' => tplAbcde,
         'stronglifts' => tplStronglifts,
         'startingstrength' => tplStartingstrength,
+        'rr' => tplRr,
         _ => tplHome,
       };
 
@@ -116,7 +132,27 @@ extension GymL10n on AppLocalizations {
         'cal' => toolDescCal,
         'bf' => toolDescBf,
         'plate' => toolDescPlate,
+        'rpe' => toolDescRpe,
+        'dots' => toolDescDots,
+        'wilks' => toolDescWilks,
+        'ffmi' => toolDescFfmi,
         _ => toolDescWarmup,
+      };
+
+  String dotsLevelName(int level) => switch (level) {
+        0 => dotsLevel0,
+        1 => dotsLevel1,
+        2 => dotsLevel2,
+        3 => dotsLevel3,
+        _ => dotsLevel4,
+      };
+
+  String ffmiLevelName(int level) => switch (level) {
+        0 => ffmiLevel0,
+        1 => ffmiLevel1,
+        2 => ffmiLevel2,
+        3 => ffmiLevel3,
+        _ => ffmiLevel4,
       };
 
   String bmiCategory(String key) => switch (key) {
@@ -136,6 +172,7 @@ extension GymL10n on AppLocalizations {
   String muscle(String id) => switch (id) {
         'chest' => muscleChest,
         'back' => muscleBack,
+        'lowerback' => muscleLowerBack,
         'shoulders' => muscleShoulders,
         'biceps' => muscleBiceps,
         'triceps' => muscleTriceps,
@@ -200,6 +237,13 @@ extension GymL10n on AppLocalizations {
         _ => equipOther,
       };
 
+  String exerciseKind(String id) => switch (id) {
+        'calisthenics' => kindCalisthenics,
+        'cardio' => kindCardio,
+        'stretch' => kindStretch,
+        _ => kindStrength,
+      };
+
   String difficulty(String id) => switch (id) {
         'Beginner' => diffBeginner,
         'Advanced' => diffAdvanced,
@@ -215,11 +259,11 @@ extension GymL10n on AppLocalizations {
   String weekdayInitial(int w) =>
       _dates((l) => DateFormat('', l)).dateSymbols.NARROWWEEKDAYS[w % 7];
 
-  int get firstWeekday =>
-      _dates((l) => DateFormat('', l)).dateSymbols.FIRSTDAYOFWEEK + 1;
-
   String monthInitial(int m) =>
       _dates((l) => DateFormat('', l)).dateSymbols.NARROWMONTHS[m - 1];
+
+  String monthShort(int m) =>
+      _capitalize(_dates(DateFormat.MMM).format(DateTime(2024, m)).replaceAll('.', ''));
 
   String monthName(int m) =>
       _capitalize(_dates(DateFormat.MMMM).format(DateTime(2024, m)));

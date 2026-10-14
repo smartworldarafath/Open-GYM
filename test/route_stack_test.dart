@@ -45,6 +45,25 @@ void main() {
     expect(fit.route, 'home');
   });
 
+  test('a routine opened from home goes back home', () {
+    fit.goHome();
+    fit.openRoutine(fit.createRoutine());
+    fit.handleBack();
+    expect(fit.route, 'home');
+  });
+
+  test('a routine opened from the routines list goes back to the list', () {
+    fit.goHome();
+    fit.goRoutines();
+    final id = fit.createRoutine();
+    fit.openRoutine(id);
+    fit.openRoutine(fit.duplicateRoutine(id));
+    fit.closeRoutineEdit();
+    expect(fit.route, 'routines');
+    fit.handleBack();
+    expect(fit.route, 'home');
+  });
+
   test('a route never comes back to itself', () {
     fit.goSettings();
     fit.goPlaces();

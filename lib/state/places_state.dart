@@ -24,6 +24,7 @@ mixin PlacesState on FitCore, LibraryState {
     return place == null ? kEquipment.toSet() : {...place.equipment, 'Bodyweight'};
   }
 
+  @override
   bool fitsHere(Exercise ex) =>
       activePlace == null || gearHere.contains(ex.equipment) || isCustom(ex.id);
 
@@ -151,21 +152,36 @@ mixin PlacesState on FitCore, LibraryState {
   }
 
   bool exNoGearOnly = false;
+  bool exMineOnly = false;
 
   void toggleNoGearFilter() {
     exNoGearOnly = !exNoGearOnly;
+    if (exNoGearOnly) exEquipmentFilter = null;
     notifyListeners();
+  }
+
+  void toggleMineFilter() {
+    exMineOnly = !exMineOnly;
+    notifyListeners();
+  }
+
+  @override
+  void setEquipmentFilter(String e) {
+    exNoGearOnly = false;
+    super.setEquipmentFilter(e);
   }
 
   @override
   List<Exercise> exercisesMatching(String query) => super
       .exercisesMatching(query)
-      .where((ex) => (!exNoGearOnly || ex.equipment == 'Bodyweight') && fitsHere(ex))
+      .where((ex) =>
+          (!exNoGearOnly || isNoKit(ex)) && (!exMineOnly || isCustom(ex.id)) && fitsHere(ex))
       .toList();
 
   @override
   void clearExFilters() {
     exNoGearOnly = false;
+    exMineOnly = false;
     super.clearExFilters();
   }
 

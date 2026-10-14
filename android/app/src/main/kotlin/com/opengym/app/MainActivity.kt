@@ -202,6 +202,13 @@ class MainActivity : FlutterActivity() {
             }
             result.success(packageManager.hasSystemFeature(PackageManager.FEATURE_WATCH))
         }
+
+        HealthBridge.attach(this, MethodChannel(messenger, HealthBridge.CHANNEL))
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if (HealthBridge.onPermissionResult(requestCode, grantResults)) return
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     override fun dispatchGenericMotionEvent(event: MotionEvent): Boolean {
@@ -224,6 +231,7 @@ class MainActivity : FlutterActivity() {
     override fun cleanUpFlutterEngine(flutterEngine: FlutterEngine) {
         rotaryChannel = null
         LiveNotifier.dart = null
+        HealthBridge.channel = null
         if (isFinishing) LiveNotifier.cancel(this)
         super.cleanUpFlutterEngine(flutterEngine)
     }
@@ -231,12 +239,16 @@ class MainActivity : FlutterActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
+        if (HealthBridge.takeUsage(intent)) {
+            HealthBridge.channel?.invokeMethod("usage", null)
+            return
+        }
         val text = takeIncoming(intent) ?: return
         incomingChannel?.invokeMethod("incoming", text)
     }
 
     private fun takeIncoming(intent: Intent?): String? {
-        if (intent == null) return null
+        if (intent == null || intent.action == Intent.ACTION_VIEW_PERMISSION_USAGE) return null
         val text = when (intent.action) {
             Intent.ACTION_VIEW -> intent.data?.let { readText(it) }
             Intent.ACTION_SEND -> streamOf(intent)?.let { readText(it) }

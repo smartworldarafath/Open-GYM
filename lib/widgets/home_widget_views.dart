@@ -12,8 +12,11 @@ const _kDisplay = 'Nunito';
 const _kBody = 'Nunito';
 const _kBorder = 1.0;
 
-Color _heat(int level, GymColors gc) =>
-    level <= 0 ? gc.heatEmpty : heatLevelColor(gc, level);
+Color _heat(int level, GymColors gc) => level < 0
+    ? Colors.transparent
+    : level == 0
+        ? gc.heatEmpty
+        : heatLevelColor(gc, level);
 
 BoxDecoration _card(GymColors gc, bool framed, double radius) => BoxDecoration(
       color: gc.bgRaised,
@@ -246,6 +249,7 @@ class TodayWidgetView extends StatelessWidget {
     required this.done,
     required this.planned,
     required this.streak,
+    this.rest = false,
     this.size = const Size(120, 120),
     this.framed = true,
   });
@@ -253,6 +257,7 @@ class TodayWidgetView extends StatelessWidget {
   final GymColors gc;
   final bool done;
   final bool planned;
+  final bool rest;
   final int streak;
   final Size size;
   final bool framed;
@@ -270,14 +275,16 @@ class TodayWidgetView extends StatelessWidget {
           width: side * 0.62,
           height: side * 0.62,
           decoration: BoxDecoration(
-            color: done ? gc.accent : Colors.transparent,
+            color: done ? gc.accent : (rest ? gc.sageSoft : Colors.transparent),
             shape: BoxShape.circle,
-            border: done ? null : Border.all(color: planned ? gc.brass : gc.border, width: side * 0.035),
+            border: done || rest ? null : Border.all(color: planned ? gc.brass : gc.border, width: side * 0.035),
           ),
           child: Center(
             child: done
                 ? Icon(Icons.check_rounded, size: side * 0.34, color: gc.bgRaised)
-                : Icon(Icons.fitness_center_rounded, size: side * 0.22, color: tone),
+                : rest
+                    ? Icon(Icons.local_cafe_rounded, size: side * 0.24, color: gc.sage)
+                    : Icon(Icons.fitness_center_rounded, size: side * 0.22, color: tone),
           ),
         ),
       ),
@@ -390,7 +397,7 @@ class WeekWidgetView extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(t.weekdayInitial(i + 1),
+                      Text(t.weekdayInitial(fit.weekdayAt(i)),
                           style: TextStyle(
                               fontFamily: _kBody,
                               fontSize: 10,

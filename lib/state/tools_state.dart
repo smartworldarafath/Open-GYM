@@ -4,6 +4,7 @@ mixin ToolsState on FitCore {
   String? activeToolId;
   double rmWeight = 100;
   int rmReps = 5;
+  int rmPct = 75;
   double bmiHeight = 175;
   double bmiWeight = 75;
   int calAge = 28;
@@ -19,6 +20,23 @@ mixin ToolsState on FitCore {
   double plateTarget = 100;
   double plateBar = 20;
   double warmupTarget = 100;
+  double rpeWeight = 100;
+  int rpeReps = 5;
+  double rpeRpe = 8;
+  int rpeTargetReps = 3;
+  double rpeTargetRpe = 9;
+  String dotsSex = 'male';
+  double dotsBody = 80;
+  double dotsSquat = 140;
+  double dotsBench = 100;
+  double dotsDeadlift = 180;
+  bool _dotsSeeded = false;
+  String ffmiSex = 'male';
+  double ffmiHeight = 175;
+  double ffmiWeight = 75;
+  double ffmiBf = 15;
+
+  static const dotsLifts = ['qXTaZnJ', 'EIeI8Vf', 'ila4NZS'];
 
   void _seedCalculatorsFromProfile() {
     calAge = profile.age;
@@ -30,11 +48,28 @@ mixin ToolsState on FitCore {
     bmiWeight = profile.weightKg;
     bfHeight = profile.heightCm;
     bfSex = profile.sex;
+    dotsBody = profile.weightKg;
+    dotsSex = profile.sex;
+    ffmiHeight = profile.heightCm;
+    ffmiWeight = profile.weightKg;
+    ffmiSex = profile.sex;
+  }
+
+  double bestLift(String id) => 0;
+
+  void _seedDots() {
+    if (_dotsSeeded) return;
+    _dotsSeeded = true;
+    final best = [for (final id in dotsLifts) bestLift(id)];
+    if (best[0] > 0) dotsSquat = _round1(best[0]);
+    if (best[1] > 0) dotsBench = _round1(best[1]);
+    if (best[2] > 0) dotsDeadlift = _round1(best[2]);
   }
 
   void goTools() => pushRoute('tools');
 
   void openTool(String id) {
+    if (id == 'dots' || id == 'wilks') _seedDots();
     activeToolId = id;
     pushRoute('tools-detail');
   }
@@ -134,11 +169,30 @@ mixin ToolsState on FitCore {
     return _round1(displayBar + parts.fold<double>(0, (a, p) => a + p.weight * p.count) * 2);
   }
 
-  String? plateHint(String equipment, double weightKg) {
-    if (equipment != 'Barbell') return null;
+  bool hasOwnBar(String id) => exerciseBar.containsKey(id);
+
+  double barFor(String id, {String equipment = 'Barbell'}) {
+    final kg = exerciseBar[id];
+    if (kg != null) return _round1(toDisplayWeight(kg));
+    return equipment == 'Barbell' ? defaultBar : 0;
+  }
+
+  void setExerciseBar(String id, double? displayKg) {
+    if (displayKg == null) {
+      exerciseBar.remove(id);
+    } else {
+      exerciseBar[id] = fromDisplayWeight(displayKg.clamp(0, isLb ? 1100 : 500).toDouble());
+    }
+    _persist();
+    notifyListeners();
+  }
+
+  String? plateHint(String equipment, double weightKg, {String id = ''}) {
+    if (equipment != 'Barbell' && !hasOwnBar(id)) return null;
+    final bar = barFor(id, equipment: equipment);
     final target = _round1(toDisplayWeight(weightKg));
-    if (target <= defaultBar) return null;
-    final parts = platesPerSide(target, defaultBar);
+    if (target <= bar) return null;
+    final parts = platesPerSide(target, bar);
     if (parts.isEmpty) return null;
     return parts
         .map((p) => p.count == 1 ? fmt(p.weight) : '${fmt(p.weight)}×${p.count}')
@@ -171,6 +225,14 @@ mixin ToolsState on FitCore {
 
   void bumpRmWeight(double d) { rmWeight = _clamp(rmWeight + d, 0, null); notifyListeners(); }
 
+  void bumpRmPct(int d) { rmPct = (rmPct + d).clamp(30, 100); notifyListeners(); }
+
+  double get rmAtPct {
+    final target = toDisplayWeight(rmResult * rmPct / 100);
+    final bar = defaultBar;
+    return target <= bar ? _roundTo(target, isLb ? 5.0 : 2.5) : loadableTotal(target, bar);
+  }
+
   void bumpRmReps(int d) { rmReps = _clamp(rmReps + d.toDouble(), 1, 20).round(); notifyListeners(); }
 
   void bumpBmiHeight(double d) { bmiHeight = _clamp(bmiHeight + d, 100, 250); notifyListeners(); }
@@ -202,6 +264,96 @@ mixin ToolsState on FitCore {
   void setPlateBar(double b) { plateBar = fromDisplayWeight(b); notifyListeners(); }
 
   double get plateBarDisplay => _round1(toDisplayWeight(plateBar));
+
+  static double _effortShare(int reps, double rpe) => rpePercent(reps, rpe) ?? 1 / (1 + reps / 30);
+
+  double get rpeOneRm => _round1(rpeWeight / _effortShare(rpeReps, rpeRpe));
+
+  double get rpeResult {
+    final kg = rpeOneRm * _effortShare(rpeTargetReps, rpeTargetRpe);
+    return fromDisplayWeight(_roundTo(toDisplayWeight(kg), isLb ? 5.0 : 2.5));
+  }
+
+  void bumpRpeWeight(double d) { rpeWeight = _clamp(rpeWeight + d, 0, null); notifyListeners(); }
+
+  void bumpRpeReps(int d) { rpeReps = (rpeReps + d).clamp(1, 12); notifyListeners(); }
+
+  void bumpRpe(double d) { rpeRpe = (rpeRpe + d).clamp(6, 10).toDouble(); notifyListeners(); }
+
+  void bumpRpeTargetReps(int d) { rpeTargetReps = (rpeTargetReps + d).clamp(1, 12); notifyListeners(); }
+
+  void bumpRpeTarget(double d) { rpeTargetRpe = (rpeTargetRpe + d).clamp(6, 10).toDouble(); notifyListeners(); }
+
+  double get dotsTotal => dotsSquat + dotsBench + dotsDeadlift;
+
+  double get dotsScore {
+    final male = dotsSex == 'male';
+    final bw = dotsBody.clamp(40, male ? 210 : 150).toDouble();
+    final c = male
+        ? const [-307.75076, 24.0900756, -0.1918759221, 0.0007391293, -0.000001093]
+        : const [-57.96288, 13.6175032, -0.1126655495, 0.0005158568, -0.0000010706];
+    final den = c[0] + c[1] * bw + c[2] * bw * bw + c[3] * math.pow(bw, 3) + c[4] * math.pow(bw, 4);
+    return _round1(dotsTotal * 500 / den);
+  }
+
+  int get dotsLevel => strengthLevel(dotsScore);
+
+  double get wilksScore {
+    final male = dotsSex == 'male';
+    final bw = dotsBody.clamp(male ? 40 : 26.51, male ? 201.9 : 154.53).toDouble();
+    final c = male
+        ? const [-216.0475144, 16.2606339, -0.002388645, -0.00113732, 7.01863e-6, -1.291e-8]
+        : const [594.31747775582, -27.23842536447, 0.82112226871, -0.00930733913, 4.731582e-5, -9.054e-8];
+    var den = 0.0;
+    for (var i = 0; i < c.length; i++) {
+      den += c[i] * math.pow(bw, i);
+    }
+    return _round1(dotsTotal * 500 / den);
+  }
+
+  int get wilksLevel => strengthLevel(wilksScore);
+
+  static int strengthLevel(double s) {
+    if (s < 250) return 0;
+    if (s < 325) return 1;
+    if (s < 400) return 2;
+    if (s < 475) return 3;
+    return 4;
+  }
+
+  void setDotsSex(String s) { dotsSex = s; notifyListeners(); }
+
+  void bumpDotsBody(double d) { dotsBody = _clamp(dotsBody + d, 30, 250); notifyListeners(); }
+
+  void bumpDotsSquat(double d) { dotsSquat = _clamp(dotsSquat + d, 0, null); notifyListeners(); }
+
+  void bumpDotsBench(double d) { dotsBench = _clamp(dotsBench + d, 0, null); notifyListeners(); }
+
+  void bumpDotsDeadlift(double d) { dotsDeadlift = _clamp(dotsDeadlift + d, 0, null); notifyListeners(); }
+
+  double get ffmiLean => ffmiWeight * (1 - ffmiBf / 100);
+
+  double get ffmiScore {
+    final m = ffmiHeight / 100;
+    return _round1(ffmiLean / (m * m) + 6.1 * (1.8 - m));
+  }
+
+  int get ffmiLevel {
+    final s = ffmiScore + (ffmiSex == 'male' ? 0 : 3);
+    if (s < 18) return 0;
+    if (s < 20) return 1;
+    if (s < 22) return 2;
+    if (s < 25) return 3;
+    return 4;
+  }
+
+  void setFfmiSex(String s) { ffmiSex = s; notifyListeners(); }
+
+  void bumpFfmiHeight(double d) { ffmiHeight = _clamp(ffmiHeight + d, 100, 250); notifyListeners(); }
+
+  void bumpFfmiWeight(double d) { ffmiWeight = _clamp(ffmiWeight + d, 30, 300); notifyListeners(); }
+
+  void bumpFfmiBf(double d) { ffmiBf = _clamp(ffmiBf + d, 3, 60); notifyListeners(); }
 
   void bumpWarmupTarget(double d) { warmupTarget = _clamp(warmupTarget + d, 0, null); notifyListeners(); }
 }

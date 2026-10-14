@@ -480,10 +480,12 @@ class ScreenHeader extends StatelessWidget {
     this.titleSize = 20,
     this.titleSpacing = 2,
     this.actions = const [],
+    this.badge,
   });
 
   final String title;
   final VoidCallback onBack;
+  final Widget? badge;
   final String? subtitle;
   final double titleSize;
   final double titleSpacing;
@@ -500,7 +502,14 @@ class ScreenHeader extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ScreenTitle(title, size: titleSize, spacing: titleSpacing),
+              if (badge == null)
+                ScreenTitle(title, size: titleSize, spacing: titleSpacing)
+              else
+                Row(children: [
+                  Flexible(child: ScreenTitle(title, size: titleSize, spacing: titleSpacing)),
+                  const SizedBox(width: 8),
+                  badge!,
+                ]),
               if (subtitle != null) ...[
                 const SizedBox(height: 2),
                 Text(subtitle!,
@@ -516,9 +525,77 @@ class ScreenHeader extends StatelessWidget {
   }
 }
 
+class BetaTag extends StatelessWidget {
+  const BetaTag(this.label, {super.key, this.small = false});
+
+  final String label;
+  final bool small;
+
+  @override
+  Widget build(BuildContext context) {
+    final gc = context.gc;
+    return Container(
+      padding: EdgeInsets.fromLTRB(small ? 5 : 6, small ? 2 : 3, small ? 6 : 7, small ? 2 : 3),
+      decoration: BoxDecoration(
+        color: gc.accent.withValues(alpha: 0.14),
+        borderRadius: BorderRadius.circular(100),
+        border: Border.all(color: gc.accent.withValues(alpha: 0.4), width: 0.8),
+      ),
+      child: Row(mainAxisSize: MainAxisSize.min, children: [
+        Icon(PhosphorIconsFill.flask, size: small ? 9 : 10.5, color: gc.accent),
+        const SizedBox(width: 3),
+        Text(label.toUpperCase(),
+            style: AppTheme.f(small ? 8.5 : 9.5, weight: FontWeight.w800, color: gc.accent, letterSpacing: 1.1, height: 1.1)),
+      ]),
+    );
+  }
+}
+
 String sentenceCase(String s) {
   if (s.isEmpty || s != s.toUpperCase() || s == s.toLowerCase()) return s;
   return s[0] + s.substring(1).toLowerCase();
+}
+
+ReorderItemProxyDecorator liftedRow(double radius) => (child, _, animation) => AnimatedBuilder(
+      animation: animation,
+      child: child,
+      builder: (context, kid) {
+        final t = Curves.easeOutCubic.transform(animation.value);
+        return Transform.scale(
+          scale: 1 + 0.03 * t,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(radius),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.35 * t),
+                  blurRadius: 18 * t,
+                  offset: Offset(0, 8 * t),
+                ),
+              ],
+            ),
+            child: Material(type: MaterialType.transparency, child: kid),
+          ),
+        );
+      },
+    );
+
+void reorderPicked(int _) => HapticFeedback.selectionClick();
+
+void reorderDropped(int _) => HapticFeedback.lightImpact();
+
+class FitText extends StatelessWidget {
+  const FitText(this.text, {super.key, required this.style});
+
+  final String text;
+  final TextStyle style;
+
+  @override
+  Widget build(BuildContext context) => FittedBox(
+        fit: BoxFit.scaleDown,
+        alignment: AlignmentDirectional.centerStart,
+        child: Text(text, maxLines: 1, style: style),
+      );
 }
 
 String titleCase(String s) {
@@ -535,10 +612,113 @@ class ScreenTitle extends StatelessWidget {
   final double spacing;
   @override
   Widget build(BuildContext context) =>
-      Text(titleCase(text),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: AppTheme.f(size, weight: FontWeight.w800, color: context.gc.text));
+      MarqueeText(titleCase(text), style: AppTheme.f(size, weight: FontWeight.w800, color: context.gc.text));
+}
+
+class MarqueeText extends StatefulWidget {
+  const MarqueeText(this.text, {super.key, required this.style});
+  final String text;
+  final TextStyle style;
+
+  @override
+  State<MarqueeText> createState() => _MarqueeTextState();
+}
+
+class _MarqueeTextState extends State<MarqueeText> with SingleTickerProviderStateMixin {
+  static const _gap = 48.0;
+  static const _speed = 38.0;
+  static const _holdMs = 1600;
+
+  late final AnimationController _c;
+  double _run = 0;
+  bool _paused = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _c = AnimationController(vsync: this);
+  }
+
+  int get _scrollMs => (_run / _speed * 1000).round();
+
+  void _sync(double run, bool still) {
+    if (run == _run) return;
+    _run = run;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || _run != run) return;
+      if (run == 0) {
+        _c.stop();
+        _c.value = 0;
+        return;
+      }
+      _c.duration = Duration(milliseconds: _holdMs + _scrollMs);
+      _c.value = 0;
+      if (!_paused && !still) _c.repeat();
+    });
+  }
+
+  void _toggle() {
+    setState(() => _paused = !_paused);
+    if (_paused) {
+      _c.stop();
+    } else {
+      _c.repeat();
+    }
+  }
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, box) {
+      final tp = TextPainter(
+        text: TextSpan(text: widget.text, style: widget.style),
+        textDirection: Directionality.of(context),
+        textScaler: MediaQuery.textScalerOf(context),
+        maxLines: 1,
+      )..layout();
+      final fits = tp.width <= box.maxWidth;
+      _sync(fits ? 0 : tp.width + _gap, MediaQuery.disableAnimationsOf(context));
+      final plain = Text(widget.text, maxLines: 1, overflow: TextOverflow.ellipsis, style: widget.style);
+      if (fits) return plain;
+      final rtl = Directionality.of(context) == TextDirection.rtl;
+      return GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: _toggle,
+        child: SizedBox(
+          width: box.maxWidth,
+          height: tp.height,
+          child: ClipRect(
+            child: AnimatedBuilder(
+              animation: _c,
+              builder: (context, child) {
+                final total = _holdMs + _scrollMs;
+                final ms = _c.value * total;
+                final dx = ms <= _holdMs ? 0.0 : (ms - _holdMs) / _scrollMs * _run;
+                return Transform.translate(offset: Offset(rtl ? dx : -dx, 0), child: child);
+              },
+              child: OverflowBox(
+                alignment: rtl ? Alignment.centerRight : Alignment.centerLeft,
+                maxWidth: double.infinity,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(widget.text, maxLines: 1, softWrap: false, style: widget.style),
+                    const SizedBox(width: _gap),
+                    Text(widget.text, maxLines: 1, softWrap: false, style: widget.style),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    });
+  }
 }
 
 class Kicker extends StatelessWidget {

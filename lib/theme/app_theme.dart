@@ -10,10 +10,21 @@ class AppTheme {
   static const String round = 'Nunito';
 
   static ThemeData get dark => darkWith('default');
+  static ThemeData get amoled => amoledWith('default');
   static ThemeData get light => lightWith('default');
 
   static ThemeData darkWith([String uiColor = 'default']) => _build(Brightness.dark, GymColors.darkWith(uiColor));
+  static ThemeData amoledWith([String uiColor = 'default']) => _build(
+      Brightness.dark,
+      uiColor == 'default'
+          ? GymColors.amoled
+          : GymColors.darkWith(uiColor).copyWith(
+              pageBg: Colors.black,
+              bg: Colors.black,
+              navBg: const Color(0xF2000000),
+            ));
   static ThemeData lightWith([String uiColor = 'default']) => _build(Brightness.light, GymColors.lightWith(uiColor));
+
 
   static ThemeData _build(Brightness brightness, GymColors gc) {
     final base = ThemeData(brightness: brightness, useMaterial3: true, fontFamily: sans);
@@ -34,6 +45,25 @@ class AppTheme {
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       dividerColor: gc.border,
+      timePickerTheme: TimePickerThemeData(
+        backgroundColor: gc.bgRaised,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+        hourMinuteShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        hourMinuteColor: WidgetStateColor.resolveWith(
+            (s) => s.contains(WidgetState.selected) ? gc.accentSoft : gc.bgRaised2),
+        hourMinuteTextColor: WidgetStateColor.resolveWith(
+            (s) => s.contains(WidgetState.selected) ? gc.accent : gc.text),
+        dayPeriodColor: WidgetStateColor.resolveWith(
+            (s) => s.contains(WidgetState.selected) ? gc.accentSoft : Colors.transparent),
+        dayPeriodTextColor: WidgetStateColor.resolveWith(
+            (s) => s.contains(WidgetState.selected) ? gc.accent : gc.textSecondary),
+        dayPeriodBorderSide: BorderSide(color: gc.border),
+        helpTextStyle: TextStyle(
+            fontFamily: sans, fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 1.2, color: gc.textSecondary),
+        entryModeIconColor: gc.textSecondary,
+        cancelButtonStyle: TextButton.styleFrom(foregroundColor: gc.textSecondary),
+        confirmButtonStyle: TextButton.styleFrom(foregroundColor: gc.accent),
+      ),
       extensions: [gc],
     );
   }

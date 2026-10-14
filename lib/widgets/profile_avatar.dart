@@ -20,7 +20,7 @@ class ProfileAvatar extends StatelessWidget {
       width: size,
       height: size,
       clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(color: gc.accentSoft, shape: BoxShape.circle),
+      decoration: BoxDecoration(color: gc.bgRaised, shape: BoxShape.circle),
       foregroundDecoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(color: gc.border),

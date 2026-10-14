@@ -8,7 +8,8 @@ Yours, completely. No account, no ads, no subscription — and no Android INTERN
 • Reps, weight and a rest timer with your own alarm sound
 • Set types — warm-up, working, drop set, to failure — and the plates per side worked out while you load the bar
 • A live session survives a reboot — carry on where you left off
-• Routines you can reorder and schedule per weekday
+• Routines you can group, reorder and schedule per weekday, several a day if you like
+• Warm-up and cardio sessions, and a next step when an exercise gets easy
 • Places — say what kit you have at home, at the gym or in the park and you only get offered what you can actually do there
 
 📊 PROGRESS
@@ -32,8 +33,9 @@ Yours, completely. No account, no ads, no subscription — and no Android INTERN
 💾 YOUR DATA
 • Export to CSV or a full ZIP backup — your data plus the media you uploaded — and import it back
 • Import your history from Hevy, Strong, Lyfta, FitNotes or openGym — workouts and bodyweight
+• Export a workout to Strava as a .fit file
 • Delete everything in one tap
-• Dark and light themes, kg or lb, and 16 languages
+• Dark and light themes, kg or lb, and 17 languages
 
 🔒 PRIVACY
 GymMane has no analytics, no advertising SDK and no network code. It never asks for the INTERNET permission, so there is no way for your data to leave the phone. The only outbound actions are links you tap yourself.

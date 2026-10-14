@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
@@ -70,22 +71,28 @@ class _BgPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     if (pattern == 'dots') {
-      final p = Paint()..color = color.withValues(alpha: 0.5);
-      for (double y = _gap; y < size.height; y += _gap) {
-        for (double x = _gap; x < size.width; x += _gap) {
-          canvas.drawCircle(Offset(x, y), 1.1, p);
-        }
-      }
+      canvas.drawPoints(
+        ui.PointMode.points,
+        [
+          for (double y = _gap; y < size.height; y += _gap)
+            for (double x = _gap; x < size.width; x += _gap) Offset(x, y),
+        ],
+        Paint()
+          ..color = color.withValues(alpha: 0.5)
+          ..strokeWidth = 2.2
+          ..strokeCap = StrokeCap.round,
+      );
     } else {
-      final p = Paint()
-        ..color = color.withValues(alpha: 0.35)
-        ..strokeWidth = 1;
-      for (double x = _gap; x < size.width; x += _gap) {
-        canvas.drawLine(Offset(x, 0), Offset(x, size.height), p);
-      }
-      for (double y = _gap; y < size.height; y += _gap) {
-        canvas.drawLine(Offset(0, y), Offset(size.width, y), p);
-      }
+      canvas.drawPoints(
+        ui.PointMode.lines,
+        [
+          for (double x = _gap; x < size.width; x += _gap) ...[Offset(x, 0), Offset(x, size.height)],
+          for (double y = _gap; y < size.height; y += _gap) ...[Offset(0, y), Offset(size.width, y)],
+        ],
+        Paint()
+          ..color = color.withValues(alpha: 0.35)
+          ..strokeWidth = 1,
+      );
     }
   }
 

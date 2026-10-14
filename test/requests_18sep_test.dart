@@ -263,7 +263,7 @@ void main() {
       fit.toggleChain(r.id, ids.first);
       fit.startRoutine(r);
       fit.setSessionWeight(0, 0, 62.5);
-      final saved = fit.saveSessionAsRoutine();
+      final saved = fit.saveSessionAsRoutine('Copy');
       final made = fit.routines.firstWhere((x) => x.id == saved);
       expect(made.chained, contains(ids.first));
       expect(fit.plannedSets(made, ids.first).first.weightKg, 62.5);

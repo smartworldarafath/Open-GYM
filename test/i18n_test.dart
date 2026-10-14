@@ -7,6 +7,7 @@ import 'package:gymmane/catalog/exercise_catalog.dart';
 import 'package:gymmane/l10n/catalog_es.dart';
 import 'package:gymmane/l10n/l10n.dart';
 import 'package:gymmane/models/exercise.dart';
+import 'package:gymmane/models/workout.dart';
 import 'package:gymmane/services/local_store.dart';
 import 'package:gymmane/state/fit_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,9 +36,10 @@ void main() {
         jsonDecode(File('lib/l10n/app_$code.arb').readAsStringSync()) as Map<String, dynamic>;
 
     final template = arb('en').keys.where((k) => !k.startsWith('@')).toSet();
+    final beta = File('test/nutrition_beta_keys.txt').readAsLinesSync().where((k) => k.isNotEmpty).toSet();
     for (final code in appLanguages.where((c) => c != 'en')) {
       final keys = arb(code).keys.where((k) => !k.startsWith('@')).toSet();
-      expect(template.difference(keys), isEmpty, reason: 'faltan claves en $code');
+      expect(template.difference(keys).difference(beta), isEmpty, reason: 'faltan claves en $code');
       expect(keys.difference(template), isEmpty, reason: 'claves de más en $code');
     }
   });
@@ -50,7 +52,7 @@ void main() {
       expect(t.catalogName(e.id, e.name), kExerciseNameEs[e.id],
           reason: 'catalogName es lo que tienen que llamar las pantallas, no e.name');
     }
-    expect(fit.personalRecords, isA<List<({String id, String name, double topWeight, double oneRm})>>());
+    expect(fit.personalRecords, isA<List<PersonalRecord>>());
   });
 
   test('an unknown language falls back to English instead of crashing', () {

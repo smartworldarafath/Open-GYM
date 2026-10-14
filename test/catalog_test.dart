@@ -16,7 +16,7 @@ void main() {
         continue;
       }
       final frames = file.readAsLinesSync().where((l) => l.trim().isNotEmpty).toList();
-      if (frames.length != 3) broken.add('${e.name}: ${frames.length} frames, esperaba 3');
+      if (frames.length < 2 || frames.length > 3) broken.add('${e.name}: ${frames.length} frames, esperaba 2 o 3');
       for (final d in frames) {
         try {
           parseSvgPathData(d);

@@ -29,10 +29,10 @@ void main() {
   test('a mis-logged exercise can be removed, and the records follow', () {
     log('Bench', 60);
     final fat = log('Bench Typo', 1000);
-    expect(fit.personalRecords.first.topWeight, 1000);
+    expect(fit.personalRecords.first.best, 1000);
 
     fit.deleteLoggedExercise(fat, fat.exercises.first);
-    expect(fit.personalRecords.first.topWeight, 60, reason: 'el récord falso desaparece');
+    expect(fit.personalRecords.first.best, 60, reason: 'el récord falso desaparece');
   });
 
   test('removing the last exercise takes the whole session with it', () {

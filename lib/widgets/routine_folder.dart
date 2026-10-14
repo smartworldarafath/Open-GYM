@@ -21,10 +21,11 @@ Color folderHue(Routine r) =>
     kFolderHues[(r.color >= 0 ? r.color : r.id.codeUnits.fold<int>(0, (a, c) => a + c)) % kFolderHues.length];
 
 class RoutineFolder extends StatelessWidget {
-  const RoutineFolder({super.key, required this.routine, required this.onMenu});
+  const RoutineFolder({super.key, required this.routine, required this.onMenu, this.lastDone = false});
 
   final Routine routine;
   final VoidCallback onMenu;
+  final bool lastDone;
 
   static const _tab = 16.0;
 
@@ -38,6 +39,11 @@ class RoutineFolder extends StatelessWidget {
     final back = Color.lerp(hue, Colors.black, dark ? 0.42 : 0.18)!;
     final front = Color.lerp(gc.bgRaised2, hue, dark ? 0.14 : 0.3)!;
     final ink = Color.lerp(hue, Colors.black, 0.35)!;
+    final last = lastDone ? fit.lastDoneOf(r.id) : null;
+    final now = DateTime.now();
+    final ago = last == null
+        ? null
+        : DateTime(now.year, now.month, now.day).difference(DateTime(last.year, last.month, last.day)).inDays;
 
     return Pressable(
       onTap: () => fit.openRoutine(r.id),
@@ -160,7 +166,11 @@ class RoutineFolder extends StatelessWidget {
                     ),
                     const Spacer(),
                     Text(
-                      [if (r.group.isNotEmpty) r.group, t.exerciseCount(n)].join(' · '),
+                      [
+                        if (r.group.isNotEmpty && ago == null) r.group,
+                        t.exerciseCount(n),
+                        if (ago != null) t.lastDoneAgo(ago),
+                      ].join(' · '),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: AppTheme.f(11.5, weight: FontWeight.w600, color: gc.textSecondary),
@@ -181,8 +191,12 @@ class RoutineFolder extends StatelessWidget {
                   child: Row(mainAxisSize: MainAxisSize.min, children: [
                     Icon(n > 0 ? PhosphorIconsFill.play : PhosphorIconsBold.plus, size: 12, color: gc.textSecondary),
                     const SizedBox(width: 7),
-                    Text(n > 0 ? titleCase(t.startWorkout) : t.addExercises,
-                        style: AppTheme.f(13.5, weight: FontWeight.w700, color: gc.textSecondary)),
+                    Flexible(
+                      child: Text(n > 0 ? titleCase(t.startWorkout) : t.addExercises,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTheme.f(13.5, weight: FontWeight.w700, color: gc.textSecondary)),
+                    ),
                   ]),
                 ),
               ),

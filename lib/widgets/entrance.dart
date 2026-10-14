@@ -168,8 +168,9 @@ class _RollInState extends State<RollIn> with SingleTickerProviderStateMixin {
     final chars = widget.text.characters.toList();
     final digits = [for (var i = 0; i < chars.length; i++) if (_isDigit(chars[i])) i];
     final total = int.parse(digits.map((i) => chars[i]).join());
-    final line = (widget.style.fontSize ?? 14) * (widget.style.height ?? 1.2);
-    final cell = digitCell(widget.style, MediaQuery.textScalerOf(context));
+    final scaler = MediaQuery.textScalerOf(context);
+    final line = scaler.scale(widget.style.fontSize ?? 14) * (widget.style.height ?? 1.2);
+    final cell = digitCell(widget.style, scaler);
     return Semantics(
       label: widget.text,
       excludeSemantics: true,

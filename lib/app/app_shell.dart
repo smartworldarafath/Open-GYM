@@ -19,6 +19,7 @@ import '../screens/home_screen.dart';
 import '../screens/measures_screen.dart';
 import '../screens/note_edit_screen.dart';
 import '../screens/notes_screen.dart';
+import '../screens/nutrition_screen.dart';
 import '../screens/onboarding_screen.dart';
 import '../screens/places_screen.dart';
 import '../screens/plan_import_sheet.dart';
@@ -35,6 +36,7 @@ import '../screens/timeline_screen.dart';
 import '../screens/tool_detail_screen.dart';
 import '../screens/tools_screen.dart';
 import '../screens/train_screen.dart';
+import '../services/health_steps.dart';
 import '../services/incoming_share.dart';
 import '../state/fit_state.dart';
 import '../theme/app_colors.dart';
@@ -42,9 +44,11 @@ import '../theme/app_theme.dart';
 import '../widgets/app_background.dart';
 import '../widgets/award_celebration.dart';
 import '../widgets/dialogs.dart';
+import '../widgets/steps_card.dart';
 import '../widgets/glass.dart';
 import '../widgets/liquid_notch.dart';
 import '../widgets/start_countdown.dart';
+import '../widgets/ui_kit.dart';
 
 class AppShell extends StatefulWidget {
   const AppShell({super.key});
@@ -69,6 +73,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
     'tools-detail',
   };
 
+  static const _pillSpace = 68.0;
   static const _firstAwardWait = Duration(milliseconds: 4000);
   static const _nextAwardWait = Duration(milliseconds: 6000);
 
@@ -84,11 +89,17 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
   int _restTick = fit.restDoneTick;
   String? _availableUpdateTag;
   bool _dismissedUpdate = false;
+  final _snap = SnapshotController();
+  bool _changedUnder = false;
+
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    glassOpen.addListener(_syncSnap);
+    glassShown.addListener(_syncSnap);
+    fit.addListener(_fitChanged);
     fit.refreshAlarmPermission();
     fit.addListener(_queueCelebration);
     fit.addListener(_offerIncoming);
@@ -96,10 +107,18 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
     _queueCelebration();
     _checkUpdateOnLaunch();
     IncomingShare.listen(_receive);
+    HealthSteps.listen(_showStepsInfo);
+    fit.refreshSteps();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final text = await IncomingShare.take();
       if (text != null) _receive(text);
+      if (await HealthSteps.takeUsage()) _showStepsInfo();
     });
+  }
+
+  void _showStepsInfo() {
+    if (!mounted || !fit.onboarded) return;
+    showStepsSheet(context);
   }
 
   void _receive(String text) {
@@ -112,7 +131,17 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
     if (text == null || !mounted || !fit.onboarded || fit.isSessionActive) return;
     _incoming = null;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) showPlanImportSheet(context, text: text);
+      if (!mounted) return;
+      if (fit.isMealPlanText(text)) {
+        final n = fit.importMealPlans(text);
+        if (n > 0) {
+          fit.setNutritionBeta(true);
+          fit.goNutrition();
+        }
+        showMealPlanImportResult(context, n);
+        return;
+      }
+      showPlanImportSheet(context, text: text);
     });
   }
 
@@ -130,18 +159,41 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
       subtitle: '${t.catalogName(ex.id, ex.name)} · $next',
       icon: PhosphorIconsFill.timer,
       accent: context.gc.sage,
+      sound: false,
     );
   }
 
   bool _onScroll(ScrollNotification n) {
     if (n.depth != 0 || n.metrics.axis != Axis.vertical) return false;
     final scrolled = n.metrics.pixels > 6;
-    if (scrolled != _scrolled) setState(() => _scrolled = scrolled);
+    if (scrolled == _scrolled) return false;
+    if (_blurTop.contains(fit.route)) {
+      setState(() => _scrolled = scrolled);
+    } else {
+      _scrolled = scrolled;
+    }
     return false;
   }
 
+  void _fitChanged() {
+    if (_snap.allowSnapshotting) _changedUnder = true;
+    _syncSnap();
+  }
+
+  void _syncSnap() => scheduleMicrotask(() {
+        if (!mounted) return;
+        final on = fit.route == 'nutrition' && (glassOpen.value > 0 || (glassShown.value > 0 && !_changedUnder));
+        if (on == _snap.allowSnapshotting) return;
+        _changedUnder = false;
+        _snap.allowSnapshotting = on;
+      });
+
   @override
   void dispose() {
+    glassOpen.removeListener(_syncSnap);
+    glassShown.removeListener(_syncSnap);
+    fit.removeListener(_fitChanged);
+    _snap.dispose();
     fit.removeListener(_restOver);
     fit.removeListener(_offerIncoming);
     fit.removeListener(_queueCelebration);
@@ -184,6 +236,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
       fit.refreshAlarmPermission();
       fit.syncRest();
       fit.refreshWidgets();
+      fit.refreshSteps();
     }
   }
 
@@ -193,6 +246,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
       animation: fit,
       builder: (context, _) {
         if (!fit.onboarded) return const OnboardingScreen();
+        final parked = fit.sessionParked && fit.showNav;
 
         return PopScope(
           canPop: false,
@@ -217,22 +271,35 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
             child: BackdropGroup(
               child: Stack(
               children: [
-                Positioned.fill(child: ColoredBox(color: context.gc.bg)),
                 Positioned.fill(
-                  child: AppBackground(
-                    pattern: fit.bgPattern,
-                    photo: fit.bgPhotoPath,
-                    dim: fit.bgDim,
-                  ),
-                ),
-                Scaffold(
-                  backgroundColor: Colors.transparent,
-                  body: Padding(
-                    padding: EdgeInsets.only(bottom: MediaQuery.viewPaddingOf(context).bottom),
-                    child: NotificationListener<ScrollNotification>(
-                      onNotification: _onScroll,
-                      child: _animatedScreen(),
-                    ),
+                  child: SnapshotWidget(
+                    controller: _snap,
+                    mode: SnapshotMode.permissive,
+                    autoresize: true,
+                    child: Stack(children: [
+                      Positioned.fill(child: ColoredBox(color: context.gc.bg)),
+                      Positioned.fill(
+                        child: AppBackground(
+                          pattern: fit.bgPattern,
+                          photo: fit.bgPhotoPath,
+                          dim: fit.bgDim,
+                        ),
+                      ),
+                      Scaffold(
+                        backgroundColor: Colors.transparent,
+                        body: Padding(
+                          padding: EdgeInsets.only(
+                              bottom: (MediaQuery.viewInsetsOf(context).bottom > 0
+                                      ? 0
+                                      : MediaQuery.viewPaddingOf(context).bottom) +
+                                  (parked ? _pillSpace : 0)),
+                          child: NotificationListener<ScrollNotification>(
+                            onNotification: _onScroll,
+                            child: _animatedScreen(),
+                          ),
+                        ),
+                      ),
+                    ]),
                   ),
                 ),
                 Positioned(
@@ -250,15 +317,35 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    child: EdgeBlur(top: false, height: 128 + MediaQuery.viewPaddingOf(context).bottom),
+                    child: EdgeBlur(
+                        top: false, height: 128 + MediaQuery.viewPaddingOf(context).bottom + (parked ? _pillSpace : 0)),
                   ),
-                if (fit.showNav && MediaQuery.viewInsetsOf(context).bottom < 60)
+                if (fit.showNav && MediaQuery.viewInsetsOf(context).bottom < 60) ...[
                   Positioned(
                     left: 18,
                     right: 18,
                     bottom: 18 + MediaQuery.viewPaddingOf(context).bottom,
                     child: Directionality(textDirection: TextDirection.ltr, child: _NavBar()),
                   ),
+                  Positioned(
+                    left: 18,
+                    right: 18,
+                    bottom: 18 + _NavBarState.height + 10 + MediaQuery.viewPaddingOf(context).bottom,
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 320),
+                      switchInCurve: Curves.easeOutCubic,
+                      switchOutCurve: Curves.easeInCubic,
+                      transitionBuilder: (child, a) => FadeTransition(
+                        opacity: a,
+                        child: SlideTransition(
+                          position: Tween(begin: const Offset(0, 0.4), end: Offset.zero).animate(a),
+                          child: child,
+                        ),
+                      ),
+                      child: parked ? const _ParkedPill() : const SizedBox(width: double.infinity),
+                    ),
+                  ),
+                ],
                 if (fit.countdownUntil != null && fit.session != null)
                   Positioned.fill(
                     child: StartCountdown(key: ValueKey(fit.countdownUntil), until: fit.countdownUntil!),
@@ -532,6 +619,8 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
         return CompareScreen();
       case 'notes':
         return NotesScreen();
+      case 'nutrition':
+        return NutritionScreen();
       case 'note-edit':
         return NoteEditScreen(key: ValueKey(fit.editingNoteId ?? 'new'));
       case 'home':
@@ -561,6 +650,69 @@ final _overlayLight = _overlayBase.copyWith(
   systemNavigationBarIconBrightness: Brightness.dark,
 );
 
+class _ParkedPill extends StatelessWidget {
+  const _ParkedPill();
+
+  @override
+  Widget build(BuildContext context) {
+    final gc = context.gc;
+    final ex = fit.currentExercise;
+    return Pressable(
+      onTap: fit.stepBackIntoSession,
+      scale: 0.97,
+      child: Semantics(
+        button: true,
+        label: t.resumeWorkout,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(22),
+            boxShadow: const [BoxShadow(color: Color(0x40000000), blurRadius: 24, offset: Offset(0, 10))],
+          ),
+          child: GlassSurface(
+            radius: 22,
+            blur: 16,
+            padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
+            child: Material(
+              type: MaterialType.transparency,
+              child: Row(children: [
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(t.paused,
+                        style: AppTheme.f(10.5,
+                            weight: FontWeight.w700, color: gc.textTertiary, letterSpacing: 1.2)),
+                    const SizedBox(height: 2),
+                    Text(ex == null ? '' : t.catalogName(ex.id, ex.name),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTheme.f(14.5, weight: FontWeight.w700, color: gc.text)),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+              ValueListenableBuilder<int>(
+                valueListenable: fit.clock,
+                builder: (_, _, _) =>
+                    Text(fit.elapsedLabel, style: AppTheme.f(14, weight: FontWeight.w700, color: gc.textSecondary)),
+              ),
+              const SizedBox(width: 12),
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(color: gc.ember, shape: BoxShape.circle),
+                child: Icon(PhosphorIconsFill.play, size: 16, color: gc.onEmber),
+              ),
+              ]),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _NavBar extends StatefulWidget {
   const _NavBar();
 
@@ -569,6 +721,7 @@ class _NavBar extends StatefulWidget {
 }
 
 class _NavBarState extends State<_NavBar> {
+  static const height = 74.0;
   static const _iw = 58.0;
   static const _fabW = 54.0;
   static const _routes = ['home', 'progress', 'exercises', 'settings'];
@@ -624,7 +777,7 @@ class _NavBarState extends State<_NavBar> {
     final gc = context.gc;
 
     return SizedBox(
-      height: 74,
+      height: height,
       child: LayoutBuilder(
         builder: (context, c) {
           _slotW = c.maxWidth - 16;
@@ -688,7 +841,7 @@ class _NavBarState extends State<_NavBar> {
                       _fab(context),
                       _item(context, 2, PhosphorIconsRegular.barbell, PhosphorIconsFill.barbell, t.exercises,
                           fit.goExercises),
-                      _item(context, 3, PhosphorIconsRegular.userCircle, PhosphorIconsFill.userCircle, t.profile,
+                      _item(context, 3, PhosphorIconsRegular.userCircle, PhosphorIconsFill.userCircle, t.profile.toUpperCase(),
                           fit.goSettings),
                     ],
                   ),
@@ -760,6 +913,10 @@ class _NavBarState extends State<_NavBar> {
   }
 
   void _play(BuildContext context) {
+    if (fit.sessionParked) {
+      fit.stepBackIntoSession();
+      return;
+    }
     final planned = fit.todayRoutine;
     if (planned != null && planned.exerciseIds.isNotEmpty) {
       fit.startRoutine(planned);

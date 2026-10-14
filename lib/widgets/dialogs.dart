@@ -63,6 +63,45 @@ Future<bool> askConfirm(
   return ok ?? false;
 }
 
+Future<String?> askText(
+  BuildContext context, {
+  required String title,
+  String initial = '',
+  String hint = '',
+}) async {
+  final gc = context.gc;
+  final controller = TextEditingController(text: initial)
+    ..selection = TextSelection(baseOffset: 0, extentOffset: initial.length);
+  final raw = await showAppDialog<String>(
+    context: context,
+    builder: (dctx) => appDialog(
+      gc,
+      title: Text(title, style: AppTheme.d(18, weight: FontWeight.w700, color: gc.text)),
+      content: TextField(
+        controller: controller,
+        autofocus: true,
+        textCapitalization: TextCapitalization.sentences,
+        style: AppTheme.s(15, color: gc.text),
+        cursorColor: gc.accent,
+        decoration: InputDecoration(
+          hintText: hint,
+          hintStyle: AppTheme.s(15, color: gc.textTertiary),
+          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: gc.border)),
+          focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: gc.accent)),
+        ),
+        onSubmitted: (v) => Navigator.of(dctx).pop(v),
+      ),
+      actions: [
+        dialogAction(t.cancel, gc.textSecondary, () => Navigator.of(dctx).pop(), strong: false),
+        dialogAction(t.save, gc.accent, () => Navigator.of(dctx).pop(controller.text)),
+      ],
+    ),
+  );
+  controller.dispose();
+  final text = raw?.trim() ?? '';
+  return text.isEmpty ? null : text;
+}
+
 Future<double?> askNumber(
   BuildContext context, {
   required String title,

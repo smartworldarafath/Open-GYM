@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/workout.dart';
@@ -32,12 +33,21 @@ class Store {
 
   Future<void> save(Map<String, dynamic> data) async {
     try {
-      await _prefs?.setString(_key, jsonEncode(data));
-    } catch (_) {}
+      await _prefs?.setString(_key, jsonEncode(finite(data)));
+    } catch (e) {
+      debugPrint('Store.save failed: $e');
+    }
   }
 
+  static Object? finite(Object? v) => switch (v) {
+        double d when !d.isFinite => 0.0,
+        Map m => {for (final e in m.entries) '${e.key}': finite(e.value)},
+        List l => [for (final x in l) finite(x)],
+        _ => v,
+      };
+
   String exportJson(Map<String, dynamic> data) =>
-      const JsonEncoder.withIndent('  ').convert(data);
+      const JsonEncoder.withIndent('  ').convert(finite(data));
 
   String exportCsv(List<LoggedSession> sessions) {
     final rows = StringBuffer(

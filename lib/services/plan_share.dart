@@ -24,6 +24,7 @@ class PlanItem {
     this.level,
     this.steps = const [],
     this.mode = '',
+    this.secondary = const [],
   });
   final String name;
   final int? sets;
@@ -34,6 +35,7 @@ class PlanItem {
   final bool superset;
   final List<PlanSet> plan;
   final String? muscle;
+  final List<String> secondary;
   final String? equipment;
   final String? level;
   final List<String> steps;
@@ -307,6 +309,10 @@ List<PlanItem> _items(Object? raw, bool lb) {
       level: _string(_value(info, ['level', 'difficulty', 'nivel'])),
       steps: steps is List ? steps.whereType<String>().toList() : const [],
       mode: _string(_value(info, ['track', 'mode', 'type'])),
+      secondary: switch (_value(info, ['secondary', 'secondarymuscles'])) {
+        final List list => list.whereType<String>().toList(),
+        _ => const [],
+      },
     ));
   }
   return out;

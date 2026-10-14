@@ -80,7 +80,7 @@ void main() {
         reason: 'lo ya hecho se queda listado, pero con su tic');
   });
 
-  testWidgets('a fresh install leads with what to fill in, not with empty cards', (tester) async {
+  testWidgets('a fresh install leads with what to fill in and still shows the empty grid', (tester) async {
     fit.route = 'progress';
     await tester.pumpWidget(const GymManeApp());
     await tester.pumpAndSettle();
@@ -89,7 +89,7 @@ void main() {
     final volume = await yOf(tester, t.tileVolume30.toUpperCase());
 
     expect(setup, lessThan(volume));
-    expect(find.text(t.consistency.toUpperCase()), findsNothing,
-        reason: 'una rejilla vacía no dice nada a quien acaba de instalar');
+    expect(find.text(t.consistency.toUpperCase()), findsOneWidget,
+        reason: 'la rejilla vacía invita a rellenarla');
   });
 }

@@ -12,9 +12,13 @@ import '../widgets/exercise_media.dart';
 import '../widgets/glass.dart';
 import '../widgets/home_folder.dart';
 import '../widgets/liquid_glass.dart';
+import '../widgets/routine_folder.dart';
+import '../widgets/steps_card.dart';
+
 import '../widgets/svg_icon.dart';
 import '../widgets/ui_kit.dart';
 import 'progress_screen.dart';
+import 'routines_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -23,12 +27,14 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final gc = context.gc;
     final recommended = fit.recommendedExercises(8);
+    final routines = fit.routinesByLastDone;
 
     return RiseScope(
       id: 'home',
       child: SafeArea(
       bottom: false,
       child: SingleChildScrollView(
+        key: const PageStorageKey('home'),
         clipBehavior: Clip.none,
         padding: const EdgeInsets.fromLTRB(20, 14, 20, 116),
         child: Column(
@@ -36,17 +42,49 @@ class HomeScreen extends StatelessWidget {
           children: riseAll([
             _topBar(gc),
             const SizedBox(height: 20),
-            _hero(context, gc),
-            const SizedBox(height: 14),
+            if (fit.showFocus || fit.todayRoutine?.exerciseIds.isNotEmpty == true) ...[
+              _hero(context, gc),
+              const SizedBox(height: 14),
+            ],
             _weekCard(context, gc),
+            if (fit.stepsOn && fit.stepsAvailable) ...[
+              const SizedBox(height: 14),
+              StepsCard(),
+            ],
             if (fit.photoDue) ...[
               const SizedBox(height: 14),
               _photoNudge(gc),
             ],
-            const SizedBox(height: 30),
-            _heading(gc, t.thisWeek),
-            const SizedBox(height: 14),
-            _weekStats(context, gc),
+            if (fit.showWeekStats) ...[
+              const SizedBox(height: 30),
+              _heading(gc, t.thisWeek),
+              const SizedBox(height: 14),
+              _weekStats(context, gc),
+            ],
+            if (fit.showRoutineRow && routines.isNotEmpty) ...[
+              const SizedBox(height: 30),
+              _heading(gc, t.routines, onMore: fit.goRoutines),
+              const SizedBox(height: 14),
+              LayoutBuilder(
+                builder: (context, box) => SizedBox(
+                  height: 196,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    clipBehavior: Clip.none,
+                    itemCount: routines.length,
+                    separatorBuilder: (_, _) => const SizedBox(width: 12),
+                    itemBuilder: (_, i) => SizedBox(
+                      width: (box.maxWidth - 12) / 2,
+                      child: RoutineFolder(
+                        routine: routines[i],
+                        lastDone: true,
+                        onMenu: () => showRoutineMenu(context, routines[i]),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
             const SizedBox(height: 30),
             _heading(gc, t.activityLabel, onMore: fit.goProgress),
             const SizedBox(height: 14),
@@ -54,11 +92,13 @@ class HomeScreen extends StatelessWidget {
               radius: 22,
               padding: const EdgeInsets.fromLTRB(18, 18, 18, 16),
               child: Heatmap(
-                levels: fit.heatmapLevels,
-                onTapDay: (i) => showDaySheet(context, fit.heatmapDate(i)),
+                levels: fit.heatmapWeeks,
+                firstDay: fit.heatmapWeekDate(0),
+                labels: fit.heatmapLabels,
+                onTapDay: (i) => showDaySheet(context, fit.heatmapWeekDate(i)),
               ),
             ),
-            if (recommended.isNotEmpty) ...[
+            if (fit.showRecommended && recommended.isNotEmpty) ...[
               const SizedBox(height: 30),
               _heading(gc, t.recommended, onMore: fit.goExercises),
               const SizedBox(height: 14),
@@ -104,6 +144,16 @@ class HomeScreen extends StatelessWidget {
                 ),
               ],
             ),
+            if (fit.nutritionBeta) ...[
+              const SizedBox(height: 12),
+              HomeFolder(
+                title: _tc(t.nutrition),
+                detail: _nutritionDetail,
+                peek: const NutritionPeek(),
+                badge: BetaTag(t.sectionBeta, small: true),
+                onTap: fit.goNutrition,
+              ),
+            ],
           ]),
         ),
       ),
@@ -152,6 +202,14 @@ class HomeScreen extends StatelessWidget {
 
   String _tc(String s) => titleCase(s);
 
+  String get _nutritionDetail {
+    final now = DateTime.now();
+    final total = fit.totalOn(now);
+    final water = fit.waterOn(now);
+    if (total.isEmpty && water == 0) return t.nutritionHomeEmpty;
+    return t.nutritionHomeDetail('${fit.energyOf(total.kcal)} ${fit.energyUnit}', total.protein.round());
+  }
+
   Widget _heading(GymColors gc, String title, {VoidCallback? onMore}) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -173,8 +231,15 @@ class HomeScreen extends StatelessWidget {
     final isRoutine = routine != null && routine.exerciseIds.isNotEmpty;
     final label = isRoutine ? t.todaysRoutine : t.todaysFocus;
     final title = isRoutine ? fit.routineTitle(routine) : focus.title;
-    final subtitle = isRoutine
-        ? t.exerciseCount(routine.exerciseIds.length)
+    final today = fit.routinesOn(DateTime.now());
+    final done = isRoutine && fit.pendingRoutinesOn(DateTime.now()).isEmpty;
+    final subtitle = done
+        ? t.routineDoneToday
+        : isRoutine
+        ? [
+            t.exerciseCount(routine.exerciseIds.length),
+            if (today.length > 1) t.routineOfDay(today.indexOf(routine) + 1, today.length),
+          ].join(' · ')
         : (fit.hasData
             ? '${focus.subtitle} · ${t.exerciseCount(fit.getFilteredExercises(focus.muscles).length)}'
             : t.firstSessionHint);
@@ -220,9 +285,20 @@ class HomeScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(label.toUpperCase(),
-                      style: AppTheme.f(10.5,
-                          weight: FontWeight.w700, color: gc.textTertiary, letterSpacing: 1.4)),
+                  Row(children: [
+                    if (done) ...[
+                      Container(
+                        width: 16,
+                        height: 16,
+                        decoration: BoxDecoration(color: gc.ember, shape: BoxShape.circle),
+                        child: Center(child: SvgPathIcon(Ic.checkBold, size: 8, color: gc.onEmber)),
+                      ),
+                      const SizedBox(width: 7),
+                    ],
+                    Text(label.toUpperCase(),
+                        style: AppTheme.f(10.5,
+                            weight: FontWeight.w700, color: gc.textTertiary, letterSpacing: 1.4)),
+                  ]),
                   const SizedBox(height: 9),
                   Padding(
                     padding: const EdgeInsets.only(right: 96),
@@ -239,9 +315,12 @@ class HomeScreen extends StatelessWidget {
                       style: AppTheme.f(13, weight: FontWeight.w500, color: gc.textSecondary)),
                   const SizedBox(height: 20),
                   LiquidGlassButton(
-                    label: t.startWorkout,
+                    label: done ? t.trainAgain : t.startWorkout,
+
                     icon: Ic.play,
                     height: 52,
+                    bg: done ? gc.bgRaised2 : null,
+                    fg: done ? gc.text : null,
                     onTap: isRoutine ? () => fit.startRoutine(routine) : fit.startFocusWorkout,
                   ),
                 ],
@@ -280,7 +359,7 @@ class HomeScreen extends StatelessWidget {
         opacity: isFuture ? 0.5 : 1,
         child: Column(
           children: [
-            Text(t.weekdayInitial(i + 1),
+            Text(t.weekdayInitial(fit.weekdayAt(i)),
                 style: AppTheme.f(10,
                     weight: FontWeight.w700,
                     color: isToday ? gc.text : gc.textTertiary,
@@ -319,7 +398,7 @@ class HomeScreen extends StatelessWidget {
                   child: _stat(gc, t.volume, fit.volumeValue(fit.volumeThisWeekKg),
                       unit: fit.volumeUnit),
                 ),
-                Expanded(child: _stat(gc, t.setsToday, '${fit.setsToday}')),
+                Expanded(child: _stat(gc, t.statSets, '${fit.weekSetCount}')),
                 Expanded(child: _stat(gc, t.prs, '${fit.prsThisWeek}')),
               ],
             ),
@@ -331,7 +410,7 @@ class HomeScreen extends StatelessWidget {
               children: [
                 GoalRing(pct: fit.goalPct.toDouble(), size: 44),
                 const SizedBox(height: 7),
-                Text('${fit.sessionsThisWeek}/${fit.weeklyTarget}',
+                Text(t.goalDaysShort(fit.daysDoneThisWeek, fit.weeklyTarget),
                     style: AppTheme.f(11, weight: FontWeight.w700, color: gc.textSecondary)),
               ],
             ),
@@ -342,12 +421,12 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _stat(GymColors gc, String label, String value, {String unit = ''}) {
-    return Column(
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(end: 8),
+      child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label.toUpperCase(),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+        FitText(label.toUpperCase(),
             style: AppTheme.f(9.5,
                 weight: FontWeight.w600, color: gc.textTertiary, letterSpacing: 0.9)),
         const SizedBox(height: 6),
@@ -370,6 +449,7 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ],
+      ),
     );
   }
 

@@ -104,8 +104,8 @@ void main() {
     await tester.pump();
     expect(fit.isSessionComplete, isTrue);
 
-    await _reveal(tester, _label(t.saveAndExit));
-    await tester.tap(_label(t.saveAndExit));
+    await _reveal(tester, _label(t.done));
+    await tester.tap(_label(t.done));
     await tester.pump();
     expect(fit.session, isNull);
     expect(fit.sessions.length, 1);

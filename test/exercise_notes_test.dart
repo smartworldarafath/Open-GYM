@@ -74,7 +74,7 @@ void main() {
     expect(find.text(t.noteNoneForExercise), findsOneWidget);
   });
 
-  testWidgets('the notes button opens the journal of that exercise', (tester) async {
+  testWidgets('the notes button opens the list of that exercise', (tester) async {
     addNotes(10);
     await tester.pumpWidget(_host(ExerciseDetailScreen.new));
 
@@ -83,7 +83,7 @@ void main() {
     await tapVisible(tester, find.text(titleCase(t.notes)));
     expect(fit.route, 'notes');
     expect(fit.noteScope, exId);
-    expect(fit.notesAllView, isFalse);
+    expect(fit.notesAllView, isTrue);
   });
 
   testWidgets('the journal scoped to one exercise leaves the rest out', (tester) async {
