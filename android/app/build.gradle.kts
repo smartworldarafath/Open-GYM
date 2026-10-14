@@ -42,24 +42,18 @@ android {
         includeInBundle = false
     }
 
-    if (keystorePropertiesFile.exists()) {
-        signingConfigs {
-            create("release") {
-                keyAlias = keystoreProperties["keyAlias"] as String
-                keyPassword = keystoreProperties["keyPassword"] as String
-                storeFile = keystoreProperties["storeFile"]?.let { file(it) }
-                storePassword = keystoreProperties["storePassword"] as String
-            }
+    signingConfigs {
+        create("release") {
+            keyAlias = keystoreProperties["keyAlias"] as? String ?: "androiddebugkey"
+            keyPassword = keystoreProperties["keyPassword"] as? String ?: "android"
+            storeFile = keystoreProperties["storeFile"]?.let { file(it) } ?: file("opengym.jks")
+            storePassword = keystoreProperties["storePassword"] as? String ?: "android"
         }
     }
 
     buildTypes {
         release {
-            signingConfig = if (keystorePropertiesFile.exists()) {
-                signingConfigs.getByName("release")
-            } else {
-                signingConfigs.getByName("debug")
-            }
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 }

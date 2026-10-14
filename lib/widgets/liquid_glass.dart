@@ -156,6 +156,7 @@ class LiquidGlassButton extends StatelessWidget {
     required this.label,
     required this.onTap,
     this.icon,
+    this.iconData,
     this.height = 52.0,
     Color? tint,
     Color? textColor,
@@ -165,11 +166,10 @@ class LiquidGlassButton extends StatelessWidget {
   })  : tint = tint ?? bg,
         textColor = textColor ?? fg;
 
-
-
   final String label;
   final VoidCallback onTap;
   final List<IconPath>? icon;
+  final IconData? iconData;
   final double height;
   final Color? tint;
   final Color? textColor;
@@ -283,6 +283,9 @@ class LiquidGlassButton extends StatelessWidget {
                 children: [
                   if (icon != null) ...[
                     SvgPathIcon(icon!, size: 15, color: fg),
+                    const SizedBox(width: 9),
+                  ] else if (iconData != null) ...[
+                    Icon(iconData, size: 16, color: fg),
                     const SizedBox(width: 9),
                   ],
                   Flexible(

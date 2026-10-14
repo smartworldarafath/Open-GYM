@@ -387,7 +387,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
         final body = await response.transform(utf8.decoder).join();
         final json = jsonDecode(body) as Map<String, dynamic>;
         final tagName = (json['tag_name'] as String? ?? '').replaceAll('v', '').trim();
-        if (_isVersionNewer(tagName, '1.3.2')) {
+        if (_isVersionNewer(tagName, '1.3.4')) {
           if (mounted) {
             setState(() {
               _availableUpdateTag = tagName;
@@ -481,7 +481,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
                 setState(() => _dismissedUpdate = true);
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (_) => const UpdateScreen(currentVersion: '1.3.2'),
+                    builder: (_) => const UpdateScreen(currentVersion: '1.3.4 (beta2.2)'),
                   ),
                 );
               },

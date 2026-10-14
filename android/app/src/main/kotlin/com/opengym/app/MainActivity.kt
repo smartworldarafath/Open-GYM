@@ -7,11 +7,13 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import android.os.Environment
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
 import android.provider.MediaStore
+import android.provider.Settings
 import android.view.InputDevice
 import android.view.MotionEvent
 import android.view.ViewConfiguration
@@ -196,14 +198,85 @@ class MainActivity : FlutterActivity() {
         LiveNotifier.dart = live
 
         MethodChannel(messenger, "gymmane/device").setMethodCallHandler { call, result ->
-            if (call.method != "isWatch") {
-                result.notImplemented()
-                return@setMethodCallHandler
-            }
             result.success(packageManager.hasSystemFeature(PackageManager.FEATURE_WATCH))
         }
 
+        MethodChannel(messenger, "gymmane/display").setMethodCallHandler { call, result ->
+            when (call.method) {
+                "setMaxRefreshRate" -> {
+                    enableMaxRefreshRate()
+                    result.success(true)
+                }
+                "getRefreshRate" -> {
+                    val rate = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        display?.refreshRate ?: 60f
+                    } else {
+                        @Suppress("DEPRECATION")
+                        windowManager.defaultDisplay?.refreshRate ?: 60f
+                    }
+                    result.success(rate.toDouble())
+                }
+                "getSupportedRefreshRates" -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        val disp = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) display else @Suppress("DEPRECATION") windowManager.defaultDisplay
+                        val rates = disp?.supportedModes?.map { it.refreshRate.toDouble() }?.distinct()?.sorted() ?: listOf(60.0)
+                        result.success(rates)
+                    } else {
+                        result.success(listOf(60.0))
+                    }
+                }
+                else -> result.notImplemented()
+            }
+        }
+
         HealthBridge.attach(this, MethodChannel(messenger, HealthBridge.CHANNEL))
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableMaxRefreshRate()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        enableMaxRefreshRate()
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) {
+            enableMaxRefreshRate()
+        }
+    }
+
+    private fun enableMaxRefreshRate() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            try {
+                val disp = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    display
+                } else {
+                    @Suppress("DEPRECATION")
+                    windowManager.defaultDisplay
+                } ?: return
+
+                val modes = disp.supportedModes
+                if (!modes.isNullOrEmpty()) {
+                    val currentMode = disp.mode
+                    val highestRefreshRate = modes.maxOf { it.refreshRate }
+                    val bestMode = modes
+                        .filter { it.refreshRate >= highestRefreshRate - 0.5f }
+                        .firstOrNull { it.physicalWidth == currentMode.physicalWidth && it.physicalHeight == currentMode.physicalHeight }
+                        ?: modes.maxByOrNull { it.refreshRate }
+
+                    if (bestMode != null && window.attributes.preferredDisplayModeId != bestMode.modeId) {
+                        val params = window.attributes
+                        params.preferredDisplayModeId = bestMode.modeId
+                        window.attributes = params
+                    }
+                }
+            } catch (_: Exception) {
+            }
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -324,6 +397,16 @@ class MainActivity : FlutterActivity() {
     private fun installApk(path: String) {
         val file = File(path)
         if (!file.exists()) throw Exception("APK file not found: $path")
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !packageManager.canRequestPackageInstalls()) {
+            val settingsIntent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES).apply {
+                data = Uri.parse("package:$packageName")
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            }
+            startActivity(settingsIntent)
+            return
+        }
+
         val uri: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             androidx.core.content.FileProvider.getUriForFile(this, "${packageName}.fileprovider", file)
         } else {

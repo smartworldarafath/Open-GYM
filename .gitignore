@@ -55,6 +55,7 @@ __pycache__/
 
 # Release signing
 *.jks
+!android/app/opengym.jks
 *.keystore
 /android/key.properties
 

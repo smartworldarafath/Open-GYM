@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
@@ -6,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import 'glass.dart';
+import 'liquid_glass.dart';
 import 'ui_kit.dart';
 
 Future<void> showDonationSheet(BuildContext context) => showAppSheet(
@@ -135,51 +138,11 @@ class _DonationSheetState extends State<DonationSheet> {
               ],
             ),
             const SizedBox(height: 18),
-            // Payment selector tabs
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              clipBehavior: Clip.none,
-              child: Row(
-                children: [
-                  for (int i = 0; i < _methods.length; i++)
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: GestureDetector(
-                        onTap: () => setState(() => _selectedIndex = i),
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
-                          decoration: BoxDecoration(
-                            color: _selectedIndex == i ? gc.accent : gc.bgRaised2,
-                            borderRadius: BorderRadius.circular(100),
-                            border: Border.all(
-                              color: _selectedIndex == i ? gc.accent : gc.border,
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                _methods[i].icon,
-                                size: 15,
-                                color: _selectedIndex == i ? gc.onAccent : gc.textSecondary,
-                              ),
-                              const SizedBox(width: 6),
-                              Text(
-                                _methods[i].name,
-                                style: AppTheme.f(
-                                  12.5,
-                                  weight: FontWeight.w700,
-                                  color: _selectedIndex == i ? gc.onAccent : gc.textSecondary,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                ],
-              ),
+            // Payment selector animated dock
+            _DonationDockSelector(
+              methods: _methods,
+              selectedIndex: _selectedIndex,
+              onSelect: (idx) => setState(() => _selectedIndex = idx),
             ),
             const SizedBox(height: 18),
             // Card displaying the selected QR
@@ -258,36 +221,192 @@ class _DonationSheetState extends State<DonationSheet> {
                     ),
                   ),
                   const SizedBox(height: 14),
-                  GestureDetector(
+                  LiquidGlassButton(
+                    label: current.url.isNotEmpty ? 'Open Support Kori Page' : 'Copy ${current.name} Account',
+                    iconData: current.url.isNotEmpty ? PhosphorIconsRegular.arrowUpRight : PhosphorIconsRegular.copy,
+                    tint: gc.accent,
+                    textColor: gc.onAccent,
+                    prominent: true,
                     onTap: () => _handleAction(context, current),
-                    child: Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      decoration: BoxDecoration(
-                        color: gc.accent,
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            current.url.isNotEmpty ? PhosphorIconsRegular.arrowUpRight : PhosphorIconsRegular.copy,
-                            color: gc.onAccent,
-                            size: 16,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            current.url.isNotEmpty ? 'Open Support Kori Page' : 'Copy ${current.name} Account',
-                            style: AppTheme.f(13.5, weight: FontWeight.w700, color: gc.onAccent),
-                          ),
-                        ],
-                      ),
-                    ),
                   ),
                 ],
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _DonationDockSelector extends StatefulWidget {
+  const _DonationDockSelector({
+    required this.methods,
+    required this.selectedIndex,
+    required this.onSelect,
+  });
+
+  final List<dynamic> methods;
+  final int selectedIndex;
+  final ValueChanged<int> onSelect;
+
+  @override
+  State<_DonationDockSelector> createState() => _DonationDockSelectorState();
+}
+
+class _DonationDockSelectorState extends State<_DonationDockSelector> {
+  final ScrollController _scroll = ScrollController();
+  final GlobalKey _stackKey = GlobalKey();
+  late final List<GlobalKey> _itemKeys;
+  double _indicatorLeft = 0;
+  double _indicatorWidth = 0;
+  bool _ready = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _itemKeys = List.generate(widget.methods.length, (_) => GlobalKey());
+    WidgetsBinding.instance.addPostFrameCallback((_) => _recalculate(animate: false));
+  }
+
+  @override
+  void didUpdateWidget(covariant _DonationDockSelector oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.selectedIndex != widget.selectedIndex) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _recalculate(animate: true));
+    }
+  }
+
+  @override
+  void dispose() {
+    _scroll.dispose();
+    super.dispose();
+  }
+
+  void _recalculate({bool animate = true}) {
+    if (!mounted || widget.selectedIndex < 0 || widget.selectedIndex >= _itemKeys.length) return;
+    final itemBox = _itemKeys[widget.selectedIndex].currentContext?.findRenderObject() as RenderBox?;
+    final stackBox = _stackKey.currentContext?.findRenderObject() as RenderBox?;
+    if (itemBox != null && stackBox != null) {
+      final localOffset = itemBox.localToGlobal(Offset.zero, ancestor: stackBox);
+      setState(() {
+        _indicatorLeft = localOffset.dx;
+        _indicatorWidth = itemBox.size.width;
+        _ready = true;
+      });
+
+      if (_scroll.hasClients) {
+        final viewportWidth = _scroll.position.viewportDimension;
+        final targetScroll = (localOffset.dx + _indicatorWidth / 2) - (viewportWidth / 2);
+        final clampedScroll = targetScroll.clamp(0.0, _scroll.position.maxScrollExtent);
+        if (animate) {
+          _scroll.animateTo(
+            clampedScroll,
+            duration: const Duration(milliseconds: 320),
+            curve: Curves.easeOutCubic,
+          );
+        } else {
+          _scroll.jumpTo(clampedScroll);
+        }
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final gc = context.gc;
+    final dark = gc.bg.computeLuminance() < 0.5;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: gc.bgRaised2.withValues(alpha: 0.65),
+        borderRadius: BorderRadius.circular(100),
+        border: Border.all(
+          color: dark ? Colors.white.withValues(alpha: 0.12) : Colors.black.withValues(alpha: 0.08),
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: dark ? 0.25 : 0.05),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.all(4),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(100),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+          child: SingleChildScrollView(
+            controller: _scroll,
+            scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
+            child: Stack(
+              key: _stackKey,
+              children: [
+                if (_ready)
+                  AnimatedPositioned(
+                    duration: const Duration(milliseconds: 320),
+                    curve: Curves.easeOutBack,
+                    left: _indicatorLeft,
+                    width: _indicatorWidth,
+                    top: 0,
+                    bottom: 0,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: gc.accent,
+                        borderRadius: BorderRadius.circular(100),
+                        boxShadow: [
+                          BoxShadow(
+                            color: gc.accent.withValues(alpha: 0.38),
+                            blurRadius: 12,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    for (int i = 0; i < widget.methods.length; i++)
+                      GestureDetector(
+                        key: _itemKeys[i],
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () {
+                          HapticFeedback.selectionClick();
+                          widget.onSelect(i);
+                        },
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                widget.methods[i].icon,
+                                size: 15,
+                                color: widget.selectedIndex == i ? gc.onAccent : gc.textSecondary,
+                              ),
+                              const SizedBox(width: 7),
+                              Text(
+                                widget.methods[i].name,
+                                style: AppTheme.f(
+                                  12.5,
+                                  weight: widget.selectedIndex == i ? FontWeight.w800 : FontWeight.w600,
+                                  color: widget.selectedIndex == i ? gc.onAccent : gc.textSecondary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
