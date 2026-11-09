@@ -26,6 +26,7 @@ import '../widgets/ui_kit.dart';
 import 'gym_pass_screen.dart';
 import 'recap_screen.dart';
 import 'settings_screen.dart';
+import 'share_sheet.dart';
 
 const List<String> kProfileBadges = ['gold', 'blue', 'green', 'red', 'black', 'violet'];
 
@@ -796,7 +797,14 @@ class _ProfileHeader extends SliverPersistentHeaderDelegate {
         Positioned(
           top: top + 9,
           right: 16,
-          child: _round(PhosphorIconsRegular.gearSix, fit.goPreferences),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _round(PhosphorIconsRegular.shareNetwork, () => showShareSheet(context)),
+              const SizedBox(width: 8),
+              _round(PhosphorIconsRegular.gearSix, fit.goPreferences),
+            ],
+          ),
         ),
         Positioned(
           left: 0,
@@ -870,12 +878,12 @@ class _ProfileHeader extends SliverPersistentHeaderDelegate {
       onTap: onEdit,
       scale: 0.94,
       child: LiquidGlassBox(
-        radius: 13,
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+        radius: 100,
+        padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 6),
         child: Row(mainAxisSize: MainAxisSize.min, children: [
-          Icon(PhosphorIconsRegular.pencilSimple, size: 11.5, color: gc.textSecondary),
+          Icon(PhosphorIconsRegular.pencilSimple, size: 12.5, color: gc.textSecondary),
           const SizedBox(width: 5),
-          Text(t.editProfile, style: AppTheme.f(11.5, weight: FontWeight.w700, color: gc.textSecondary)),
+          Text(t.editProfile, style: AppTheme.f(12.5, weight: FontWeight.w700, color: gc.textSecondary)),
         ]),
       ),
     );

@@ -542,7 +542,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver, Single
         final body = await response.transform(utf8.decoder).join();
         final json = jsonDecode(body) as Map<String, dynamic>;
         final tagName = (json['tag_name'] as String? ?? '').replaceAll('v', '').trim();
-        if (_isVersionNewer(tagName, '1.3.4')) {
+        if (_isVersionNewer(tagName, '1.3.6')) {
           if (mounted) {
             setState(() {
               _availableUpdateTag = tagName;
@@ -1102,6 +1102,7 @@ class _NavBarState extends State<_NavBar> {
     final selected = _selectedIndex == index;
     final lifted = selected && _dragX != null;
     final pressed = _pressed == index && _dragX == null;
+    final color = selected ? gc.text : gc.textSecondary;
 
     return Semantics(
       button: true,
@@ -1129,17 +1130,36 @@ class _NavBarState extends State<_NavBar> {
           child: SizedBox(
             width: _iw,
             height: height,
-            child: TweenAnimationBuilder<double>(
-              tween: Tween(begin: selected ? 1 : 0, end: selected ? 1 : 0),
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.easeOut,
-              builder: (context, v, _) => Stack(
-                alignment: Alignment.center,
-                children: [
-                  Opacity(opacity: 0.7 * (1 - v), child: Icon(icon, size: 24, color: gc.text)),
-                  Opacity(opacity: v, child: Icon(iconFill, size: 24, color: gc.text)),
-                ],
-              ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TweenAnimationBuilder<double>(
+                  tween: Tween(begin: selected ? 1 : 0, end: selected ? 1 : 0),
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.easeOut,
+                  builder: (context, v, _) => Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Opacity(opacity: 0.7 * (1 - v), child: Icon(icon, size: 20, color: gc.text)),
+                      Opacity(opacity: v, child: Icon(iconFill, size: 20, color: gc.text)),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 2),
+                ExcludeSemantics(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        label,
+                        maxLines: 1,
+                        style: AppTheme.f(9.5, weight: selected ? FontWeight.w800 : FontWeight.w600, color: color),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),

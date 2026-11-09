@@ -208,119 +208,119 @@ class AppLocalizationsBn extends AppLocalizations {
   String get restOff => 'বন্ধ';
 
   @override
-  String get miniRest => 'Rest-pause and cluster rest';
+  String get miniRest => 'রেস্ট-পজ ও ক্লাস্টার রেস্ট';
 
   @override
-  String get miniRestHint => 'Before rest-pause or cluster sets';
+  String get miniRestHint => 'রেস্ট-পজ বা ক্লাস্টার সেটের আগে';
 
   @override
-  String get gymPass => 'Gym pass';
+  String get gymPass => 'জিম পাস';
 
   @override
-  String get gymPassEmpty => 'Keep your gym\'s code here and get in without the card';
+  String get gymPassEmpty => 'আপনার জিমের কোড এখানে রাখুন এবং কার্ড ছাড়াই প্রবেশ করুন';
 
   @override
-  String get gymPassAdd => 'Add pass';
+  String get gymPassAdd => 'পাস যোগ করুন';
 
   @override
-  String get gymPassScan => 'Take a photo of the code';
+  String get gymPassScan => 'কোডের ছবি তুলুন';
 
   @override
-  String get gymPassScanHint => 'With your phone\'s camera';
+  String get gymPassScanHint => 'আপনার ফোনের ক্যামেরা দিয়ে';
 
   @override
-  String get gymPassPhoto => 'From a photo or screenshot';
+  String get gymPassPhoto => 'ছবি বা স্ক্রিনশট থেকে';
 
   @override
-  String get gymPassPhotoHint => 'For example, a screenshot from your gym\'s app';
+  String get gymPassPhotoHint => 'যেমন: আপনার জিম অ্যাপের স্ক্রিনশট';
 
   @override
-  String get gymPassType => 'Type the number';
+  String get gymPassType => 'নম্বর লিখুন';
 
   @override
-  String get gymPassTypeHint => 'For barcodes: the number printed under it';
+  String get gymPassTypeHint => 'বারকোডের নিচে মুদ্রিত নম্বরটি';
 
   @override
-  String get gymPassNotFound => 'No QR code in that picture. Try a sharper one or type the number.';
+  String get gymPassNotFound => 'ছবিতে কোনো কোড পাওয়া যায়নি। স্পষ্ট ছবি তুলুন অথবা নম্বর লিখুন।';
 
   @override
-  String get gymPassName => 'Gym name';
+  String get gymPassName => 'জিমের নাম';
 
   @override
-  String get gymPassDefaultName => 'My gym';
+  String get gymPassDefaultName => 'আমার জিম';
 
   @override
   String get gymPassCode => 'Code';
 
   @override
-  String get gymPassFormat => 'Code type';
+  String get gymPassFormat => 'কোডের ধরন';
 
   @override
-  String get gymPassInvalid => 'That number doesn\'t fit this code type';
+  String get gymPassInvalid => 'এই নম্বরটি এই কোড ধরনের সাথে মেলে না';
 
   @override
-  String get gymPassShowHint => 'Hold it to the reader. Brightness goes up on its own.';
+  String get gymPassShowHint => 'স্ক্যানারের সামনে ধরুন। উজ্জ্বলতা নিজে থেকেই বৃদ্ধি পাবে।';
 
   @override
-  String get gymPassDeleted => 'Pass deleted';
+  String get gymPassDeleted => 'পাস মুছে ফেলা হয়েছে';
 
   @override
-  String get gymPassEdit => 'Edit pass';
+  String get gymPassEdit => 'পাস সম্পাদনা করুন';
 
   @override
-  String get gymPassShow => 'Show at the door';
+  String get gymPassShow => 'দরজায় দেখান';
 
   @override
-  String get gymPassPrivate => 'Stays on your phone only. Nothing is uploaded.';
+  String get gymPassPrivate => 'শুধুমাত্র আপনার ফোনে সংরক্ষিত থাকবে। কোনো তথ্য আপলোড হবে না।';
 
   @override
-  String get gymPassColor => 'Colour';
+  String get gymPassColor => 'রং';
 
   @override
-  String get gymPassRescan => 'Read the code again';
+  String get gymPassRescan => 'কোড পুনরায় স্ক্যান করুন';
 
   @override
-  String get gymPassReading => 'Reading the code…';
+  String get gymPassReading => 'কোড পড়া হচ্ছে…';
 
   @override
-  String get gymPassSettingHint => 'Your gym card in your profile';
+  String get gymPassSettingHint => 'আপনার প্রোফাইলে জিম কার্ড';
 
   @override
-  String get gymPassMember => 'Member';
+  String get gymPassMember => 'সদস্য';
 
   @override
-  String get widgetHintActivity => 'Your map of trained days';
+  String get widgetHintActivity => 'আপনার অনুশীলনের দিনের মানচিত্র';
 
   @override
-  String get widgetHintStats => 'Streak, volume and sessions this week';
+  String get widgetHintStats => 'এই সপ্তাহের স্ট্রিক, ভলিউম এবং সেশন';
 
   @override
-  String get widgetHintBody => 'The muscles you have worked';
+  String get widgetHintBody => 'যেসব পেশীতে আপনি কাজ করেছেন';
 
   @override
-  String get widgetHintToday => 'At a glance: did you train today?';
+  String get widgetHintToday => 'আজকের দিনে আপনি কি ব্যায়াম করেছেন?';
 
   @override
-  String get widgetHintWeek => 'Your week\'s plan, day by day';
+  String get widgetHintWeek => 'দিন অনুযায়ী আপনার পুরো সপ্তাহের পরিকল্পনা';
 
   @override
-  String get supportHintBug => 'Tell me what broke, on GitHub';
+  String get supportHintBug => 'কী সমস্যা হয়েছে GitHub-এ জানান';
 
   @override
-  String get supportHintFeature => 'Suggest an idea for the app';
+  String get supportHintFeature => 'অ্যাপের জন্য নতুন আইডিয়া প্রস্তাব করুন';
 
   @override
-  String get supportHintStar => 'Helps more people find it';
+  String get supportHintStar => 'অন্যান্য ব্যবহারকারীদের অ্যাপটি খুঁজে পেতে সাহায্য করে';
 
   @override
-  String get supportHintCoffee => 'Supports development. Free and with no ads';
+  String get supportHintCoffee => 'উন্নয়নে সহায়তা করুন। সম্পূর্ণ ফ্রি এবং বিজ্ঞাপনহীন';
 
   @override
-  String get bodyweightNoteHint => 'Add a note: how you feel, what you are trying… (optional)';
+  String get bodyweightNoteHint => 'নোট যোগ করুন: কেমন লাগছে, কী চেষ্টা করছেন… (ঐচ্ছিক)';
 
   @override
   String exerciseUnitSwitch(String unit) {
-    return 'Use $unit for this exercise';
+    return 'এই অনুশীলনের জন্য $unit ব্যবহার করুন';
   }
 
   @override
@@ -665,7 +665,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get clearFilters => 'ফিল্টার মুছুন';
 
   @override
-  String get quickAddAmount => 'How much you had';
+  String get quickAddAmount => 'কতটুকু নিয়েছিলেন';
 
   @override
   String get homeCardsTitle => 'Home cards';
@@ -3685,10 +3685,10 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mergedToast => 'ইতিহাস একত্রিত হয়েছে';
 
   @override
-  String get nutrition => 'পুষ্টি';
+  String get nutrition => 'পুষ্টি ও ডায়েট';
 
   @override
-  String get nutritionHomeEmpty => 'পানি, প্রোটিন ও ক্যালোরি';
+  String get nutritionHomeEmpty => 'আজকের খাবার ও পানি ট্র্যাক করুন';
 
   @override
   String nutritionHomeDetail(String energy, int protein) {
@@ -4540,7 +4540,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get nutritionAboutWhat =>
-      'আপনার ওয়ার্কআউটের পাশাপাশি খাবার, পানি, প্রোটিন ও সাপ্লিমেন্ট লগের সহজ উপায়। Open-GYM মূলত জিম অ্যাপ: নিউট্রিশন যুক্ত করা হয়েছে যাতে সবকিছু এক জায়গায় থাকে, কোনো আলাদা ডায়েট অ্যাপের বিকল্প হিসেবে নয়।';
+      'আপনার ওয়ার্কআউটের পাশাপাশি খাবার, পানি, প্রোটিন ও সাপ্লিমেন্ট ট্র্যাক করার সহজ উপায়। Open-GYM মূলত একটি জিম অ্যাপ: সবকিছু এক জায়গায় রাখার সুবিধার্থে পুষ্টি ফিচারটি দেওয়া হয়েছে।';
 
   @override
   String get nutritionAboutScanTitle => 'স্ক্যানার কখনোই থাকবে না';
@@ -4554,7 +4554,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get nutritionAboutLocal =>
-      'অ্যাপের ভেতর ৫০০টির বেশি ছবির সাথে খাবার দেওয়া আছে। আপনি নিজের খাবার যুক্ত করতে, ছবি বদলাতে এবং পুষ্টিমান সম্পাদনা করতে পারেন। সবকিছু ফোনেই থাকে।';
+      'অ্যাপটিতে ৫০০টিরও বেশি খাবারের পুষ্টিমান দেওয়া আছে। আপনি নিজের খাবার যোগ করতে, ছবি পরিবর্তন করতে এবং মান সম্পাদনা করতে পারবেন। বাকি Open-GYM-এর মতোই সবকিছু আপনার ফোনেই সংরক্ষিত থাকে।';
 
   @override
   String get nutritionAboutBetaTitle => 'এখনও বেটা সংস্করণে রয়েছে';
@@ -4620,7 +4620,7 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get notifSuppTap => 'Tick it off in GymMane once you\'ve taken it.';
+  String get notifSuppTap => 'নেওয়ার পর Open-GYM-এ সম্পন্ন হিসেবে চিহ্নিত করুন।';
 
   @override
   String get suppNoneToday => 'Nothing to take today.';
@@ -5509,7 +5509,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get ladderHint =>
-      'Order the steps from easiest to hardest. When you do 3 sets of 8 two sessions in a row (5 on slow ones), GymMane offers the next step.';
+      'ধাপগুলো সহজ থেকে কঠিন ক্রমে সাজান। পরপর দুটি সেশনে ৩ সেটে ৮টি রেপ সম্পন্ন করলে, Open-GYM পরবর্তী ধাপ প্রস্তাব করবে।';
 
   @override
   String get ladderBuiltIn =>
@@ -6251,22 +6251,22 @@ class AppLocalizationsBn extends AppLocalizations {
   String get clearWorkoutsDone => 'Workouts deleted';
 
   @override
-  String get reportTitle => 'Report';
+  String get reportTitle => 'রিপোর্ট';
 
   @override
-  String get reportHint => 'Pick the dates and share it as a PDF or CSV';
+  String get reportHint => 'আপনার অগ্রগতি ও পরিসংখ্যানের সারাংশ শেয়ার বা সংরক্ষণ করুন。';
 
   @override
-  String get reportCustom => 'Other';
+  String get reportCustom => 'কাস্টম রেঞ্জ';
 
   @override
-  String get reportPickRange => 'Choose dates';
+  String get reportPickRange => 'একটি তারিখের সীমা নির্বাচন করুন';
 
   @override
-  String get reportEmpty => 'Nothing logged between these dates.';
+  String get reportEmpty => 'এই সময়ের জন্য কোনো ওয়ার্কআউট নেই';
 
   @override
-  String get reportKicker => 'TRAINING REPORT';
+  String get reportKicker => 'ওয়ার্কআউট রিপোর্ট';
 
   @override
   String reportDays(int n) {
@@ -6275,19 +6275,19 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get reportWorkouts => 'WORKOUTS';
+  String get reportWorkouts => 'অনুশীলনসমূহ';
 
   @override
-  String get reportPerWeek => 'PER WEEK';
+  String get reportPerWeek => 'প্রতি সপ্তাহে';
 
   @override
-  String get reportHours => 'HOURS';
+  String get reportHours => 'ঘণ্টা';
 
   @override
   String get reportVsPrev => 'Percentages compare with the same number of days just before.';
 
   @override
-  String get reportRecords => 'New records';
+  String get reportRecords => 'রেকর্ডসমূহ';
 
   @override
   String get reportLifts => 'Exercises';
@@ -6306,7 +6306,7 @@ class AppLocalizationsBn extends AppLocalizations {
       'Best 1RM is estimated from your sets. Change compares the first and last day of the exercise in this report.';
 
   @override
-  String get reportMuscles => 'Sets per muscle';
+  String get reportMuscles => 'পেশীসমূহ';
 
   @override
   String get reportBody => 'Body and recovery';
@@ -6345,10 +6345,10 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get reportSharePdf => 'Share PDF';
+  String get reportSharePdf => 'পিডিএফ শেয়ার করুন';
 
   @override
-  String get reportShareCsv => 'Export CSV';
+  String get reportShareCsv => 'সিএসভি শেয়ার করুন';
 
   @override
   String get reportShareCsvBoth => 'Export CSV (workouts and nutrition)';
@@ -6369,7 +6369,7 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get fastTracker => 'Intermittent fasting';
+  String get fastTracker => 'রোজা / ফাস্টিং';
 
   @override
   String fastTitle(int fast, int eat) {
@@ -6490,13 +6490,14 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get supportThanksBody =>
-      'GymMane is free and always will be, with no ads and nothing hidden.\n\nIf it helps you train, buying me a coffee makes my day ☕\nAnd if you can\'t, no worries: a star on GitHub does too ⭐';
+      'Open-GYM সম্পূর্ণ ফ্রি এবং সবসময় থাকবে, কোনো বিজ্ঞাপন বা লুকানো খরচ নেই।\n\nএটি যদি আপনার অনুশীলনে সাহায্য করে, তবে আমাকে এক কাপ কফি খাওয়াতে পারেন ☕\nআর সম্ভব না হলেও সমস্যা নেই: GitHub-এ একটি স্টারও অনুপ্রেরণা দেয় ⭐';
 
   @override
   String get perfSetting => 'Performance';
 
   @override
-  String get perfSheetHint => 'How much of your phone GymMane uses. You can change each part below.';
+  String get perfSheetHint =>
+      'Open-GYM আপনার ফোনের কতটা রিসোর্স ব্যবহার করবে। আপনি নিচের অংশগুলো পরিবর্তন করতে পারেন।';
 
   @override
   String get perfLite => 'Saver';
@@ -7016,23 +7017,23 @@ class AppLocalizationsBn extends AppLocalizations {
   String get workoutNoteAdd => 'Pinned note: seat, grip, machine…';
 
   @override
-  String get autoProgressSetting => 'Auto progression';
+  String get autoProgressSetting => 'স্বয়ংক্রিয় প্রগ্রেস';
 
   @override
-  String get autoProgressRowHint => 'What it suggests for next time';
+  String get autoProgressRowHint => 'প্রতি সেশনে ওজন ও রেপ বৃদ্ধি পরিচালনা করুন';
 
   @override
-  String get autoProgressOff => 'Off';
+  String get autoProgressOff => 'বন্ধ';
 
   @override
-  String get autoProgressWeight => 'Add weight';
+  String get autoProgressWeight => 'ওজন যোগ করুন';
 
   @override
-  String get autoProgressReps => 'Add reps';
+  String get autoProgressReps => 'রেপ যোগ করুন';
 
   @override
   String get autoProgressHint =>
-      'ওয়ার্কআউট শুরু করলে, GymMane প্রতিটি অনুশীলনের পরবর্তী ধাপ নিজে থেকেই ঠিক করে নেয়। রেপ যোগ করার মাধ্যমে আপনি প্রতি সেটে ১২টি পর্যন্ত একটি করে রেপ বাড়াবেন, তারপর ওজন বাড়বে এবং আবার ৮ থেকে শুরু হবে। আপনি চাইলে যেকোনো অনুশীলনের পাতায় এটি পরিবর্তন করতে পারেন।';
+      'ওয়ার্কআউট শুরু করলে, Open-GYM প্রতিটি অনুশীলনের পরবর্তী ধাপ নিজে থেকেই ঠিক করে নেয়। রেপ যোগ করার মাধ্যমে আপনি প্রতি সেটে ১২টি পর্যন্ত একটি করে রেপ বাড়াবেন, তারপর ওজন বাড়বে এবং আবার ৮ থেকে শুরু হবে। আপনি চাইলে যেকোনো অনুশীলনের পাতায় এটি পরিবর্তন করতে পারেন।';
 
   @override
   String get noteFolders => 'Folders';
@@ -7296,10 +7297,10 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mealAiRow => 'Ask an AI';
 
   @override
-  String get mealAiRowHint => 'Copy a request, paste the answer';
+  String get mealAiRowHint => 'আপনার খাবার বা উপাদানের তালিকা লিখুন, এআই ম্যাক্রো হিসাব করে দেবে।';
 
   @override
-  String get mealAiTitle => 'Meals with AI';
+  String get mealAiTitle => 'এআই মিল সহকারী';
 
   @override
   String get mealAiSubtitle => 'Works with any chatbot. The app stays offline.';

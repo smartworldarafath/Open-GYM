@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Release tag / version (e.g. v1.3.4)'
+        description: 'Release tag / version (e.g. v1.3.6)'
         required: true
-        default: 'v1.3.4'
+        default: 'v1.3.6'
         type: string
       platform:
         description: 'Platform to build (all, macos, windows, ios, android, linux)'

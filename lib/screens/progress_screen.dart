@@ -126,9 +126,12 @@ class ProgressScreen extends StatelessWidget {
           Container(width: 1, height: 18, color: gc.border),
         ],
         half(t.share, () => showShareSheet(context), [
-          Icon(PhosphorIconsBold.export, size: 15, color: gc.accent),
+          Icon(PhosphorIconsRegular.shareNetwork, size: 16, color: gc.accent),
           const SizedBox(width: 7),
-          Text(sentenceCase(t.share), style: AppTheme.f(13, weight: FontWeight.w700, color: gc.text)),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(sentenceCase(t.share), style: AppTheme.f(13, weight: FontWeight.w700, color: gc.text)),
+          ),
         ], EdgeInsets.fromLTRB(fit.sessions.isNotEmpty ? 12 : 14, 0, 16, 0)),
       ]),
     );

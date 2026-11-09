@@ -713,6 +713,7 @@ class FitText extends StatelessWidget {
 
 String titleCase(String s) {
   if (s.isEmpty || s != s.toUpperCase()) return s;
+  if (s == s.toLowerCase()) return s;
   if (s.length <= 4 && !s.contains(' ')) return s;
   if (RegExp(r'[0-9]').hasMatch(s)) return s;
   return s[0] + s.substring(1).toLowerCase();

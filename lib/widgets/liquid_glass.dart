@@ -289,15 +289,18 @@ class LiquidGlassButton extends StatelessWidget {
                     const SizedBox(width: 9),
                   ],
                   Flexible(
-                    child: Text(
-                      label,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTheme.f(
-                        15.5,
-                        weight: FontWeight.w700,
-                        color: fg,
-                        letterSpacing: 0.25,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        label,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTheme.f(
+                          15.5,
+                          weight: FontWeight.w700,
+                          color: fg,
+                          letterSpacing: 0.25,
+                        ),
                       ),
                     ),
                   ),
