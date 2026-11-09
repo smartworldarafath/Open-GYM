@@ -79,19 +79,19 @@ jobs:
 
       - name: Select Xcode 16 & Ensure iOS Platform
         run: |
-          if [ -d "/Applications/Xcode_16.1.app" ]; then
-            sudo xcode-select -s /Applications/Xcode_16.1.app
-          elif [ -d "/Applications/Xcode_16.0.app" ]; then
-            sudo xcode-select -s /Applications/Xcode_16.0.app
-          elif [ -d "/Applications/Xcode_16.2.app" ]; then
-            sudo xcode-select -s /Applications/Xcode_16.2.app
+          if [ -d "/Applications/Xcode_16.2.app" ]; then
+            sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
+          elif [ -d "/Applications/Xcode_16.1.app" ]; then
+            sudo xcode-select -s /Applications/Xcode_16.1.app/Contents/Developer
+          elif [ -d "/Applications/Xcode.app" ]; then
+            sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
           fi
           sudo xcodebuild -runFirstLaunch 2>/dev/null || true
+          sudo xcodebuild -license accept 2>/dev/null || true
           xcodebuild -version
-          if ! xcrun simctl list runtimes --json | grep -q "com.apple.CoreSimulator.SimRuntime.iOS"; then
-            echo "Downloading iOS platform runtime..."
-            sudo xcodebuild -downloadPlatform iOS || true
-          fi
+          sudo launchctl kickstart -k system/com.apple.CoreSimulator.CoreSimulatorService 2>/dev/null || true
+          echo "Downloading iOS Platform..."
+          xcodebuild -downloadPlatform iOS
 
       - name: Clean stale simulators & install dependencies
         run: |
