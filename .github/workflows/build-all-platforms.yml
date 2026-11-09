@@ -95,7 +95,7 @@ jobs:
 
       - name: Build iOS Application (iPhone & iPad)
         run: |
-          flutter build ios --release --no-codesign
+          flutter build ios --release --no-codesign --verbose
           mkdir -p build/ios/ipa/Payload
           cp -r build/ios/iphoneos/Runner.app build/ios/ipa/Payload/
           cd build/ios/ipa
