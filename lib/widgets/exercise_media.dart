@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:flutter/cupertino.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
@@ -10,6 +11,7 @@ import '../services/media_store.dart';
 import '../state/fit_state.dart';
 import '../theme/app_colors.dart';
 import 'exercise_art.dart';
+import 'file_thumb.dart';
 import 'shimmer.dart';
 
 const _shortDemo = Duration(seconds: 10);
@@ -39,6 +41,7 @@ class ExerciseMedia extends StatelessWidget {
     if (path == null) {
       return ExerciseArt(
           slug: ex.art,
+          icon: sportIcon(ex.id),
           height: height,
           radius: radius,
           live: live,
@@ -50,22 +53,25 @@ class ExerciseMedia extends StatelessWidget {
       return _VideoTile(
           key: ValueKey(path), path: path, height: height, radius: radius, short: loops != null);
     }
+    if (isVideo) {
+      return Stack(children: [
+        _VideoTile(
+            key: ValueKey('still-$path'), path: path, height: height, radius: radius, bordered: bordered, still: true),
+        Positioned(right: 6, bottom: 6, child: _PlayBadge(height: height)),
+      ]);
+    }
     return _MediaFrame(
       height: height,
       radius: radius,
       bordered: bordered,
-      child: isVideo
-          ? _VideoPoster(height: height)
-          : Center(
-              child: Image.file(
-                File(path),
-                key: ValueKey(media),
-                fit: BoxFit.contain,
-                alignment: Alignment.center,
-                gaplessPlayback: true,
-                errorBuilder: (_, _, _) => _fallbackIcon(context, height),
-              ),
-            ),
+      child: Center(
+        child: FileThumb(
+          path,
+          key: ValueKey(media),
+          fit: BoxFit.contain,
+          errorBuilder: (_, _, _) => _fallbackIcon(context, height),
+        ),
+      ),
     );
   }
 }
@@ -102,16 +108,19 @@ class _MediaFrame extends StatelessWidget {
   }
 }
 
-class _VideoPoster extends StatelessWidget {
-  const _VideoPoster({required this.height});
+class _PlayBadge extends StatelessWidget {
+  const _PlayBadge({required this.height});
   final double height;
 
   @override
   Widget build(BuildContext context) {
     final gc = context.gc;
-    return Center(
-      child: Icon(PhosphorIconsFill.playCircle,
-          size: (height * 0.34).clamp(18.0, 54.0), color: gc.textSecondary),
+    final size = (height * 0.2).clamp(16.0, 30.0);
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(color: gc.bg.withValues(alpha: 0.72), shape: BoxShape.circle),
+      child: Icon(PhosphorIconsFill.play, size: size * 0.5, color: gc.text),
     );
   }
 }
@@ -122,11 +131,15 @@ class _VideoTile extends StatefulWidget {
       required this.path,
       required this.height,
       required this.radius,
-      this.short = false});
+      this.short = false,
+      this.still = false,
+      this.bordered = true});
   final String path;
   final double height;
   final double radius;
   final bool short;
+  final bool still;
+  final bool bordered;
 
   @override
   State<_VideoTile> createState() => _VideoTileState();
@@ -146,11 +159,16 @@ class _VideoTileState extends State<_VideoTile> {
 
   Future<void> _load() async {
     try {
-      final c = VideoPlayerController.file(File(widget.path));
+      final c = VideoPlayerController.file(File(widget.path), videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true));
       await c.initialize();
-      await c.setLooping(true);
       await c.setVolume(0);
-      await c.play();
+      if (widget.still) {
+        final ms = c.value.duration.inMilliseconds;
+        await c.seekTo(Duration(milliseconds: math.min(500, ms ~/ 3)));
+      } else {
+        await c.setLooping(true);
+        await c.play();
+      }
       if (!mounted) {
         c.dispose();
         return;
@@ -193,6 +211,6 @@ class _VideoTileState extends State<_VideoTile> {
         const Center(child: CupertinoActivityIndicator()),
       ]);
     }
-    return _MediaFrame(height: widget.height, radius: widget.radius, child: child);
+    return _MediaFrame(height: widget.height, radius: widget.radius, bordered: widget.bordered, child: child);
   }
 }

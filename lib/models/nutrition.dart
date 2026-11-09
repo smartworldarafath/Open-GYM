@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 extension type const Meal(String id) {
   static const breakfast = Meal('breakfast');
   static const lunch = Meal('lunch');
@@ -58,6 +60,7 @@ class Macros {
     this.sodium = 0,
     this.animal = 0,
     this.sat = 0,
+    this.trans = 0,
     this.mono = 0,
     this.poly = 0,
     this.aminoProtein = 0,
@@ -73,6 +76,7 @@ class Macros {
   final double sodium;
   final double animal;
   final double sat;
+  final double trans;
   final double mono;
   final double poly;
   final double aminoProtein;
@@ -96,6 +100,7 @@ class Macros {
         sodium: sodium + o.sodium,
         animal: animal + o.animal,
         sat: sat + o.sat,
+        trans: trans + o.trans,
         mono: mono + o.mono,
         poly: poly + o.poly,
         aminoProtein: aminoProtein + o.aminoProtein,
@@ -112,6 +117,7 @@ class Macros {
         sodium: sodium * k,
         animal: animal * k,
         sat: sat * k,
+        trans: trans * k,
         mono: mono * k,
         poly: poly * k,
         aminoProtein: aminoProtein * k,
@@ -122,7 +128,7 @@ class Macros {
 
   bool get hasExtras => fiber > 0 || sugar > 0 || sodium > 0;
 
-  bool get hasFatTypes => sat > 0 || mono > 0 || poly > 0;
+  bool get hasFatTypes => sat > 0 || trans > 0 || mono > 0 || poly > 0;
 
   double get plant => (protein - animal).clamp(0, double.infinity).toDouble();
 
@@ -155,6 +161,7 @@ class Macros {
         if (sodium > 0) 'na': sodium,
         if (animal > 0) 'an': animal,
         if (sat > 0) 'sa': sat,
+        if (trans > 0) 'tf': trans,
         if (mono > 0) 'mu': mono,
         if (poly > 0) 'po': poly,
         if (aminoProtein > 0 && amino.length == Amino.values.length) ...{
@@ -176,6 +183,7 @@ class Macros {
       sodium: _num(j?['na']),
       animal: _num(j?['an']),
       sat: _num(j?['sa']),
+      trans: _num(j?['tf']),
       mono: _num(j?['mu']),
       poly: _num(j?['po']),
       aminoProtein: ok ? _num(j?['ap']) : 0,
@@ -200,6 +208,21 @@ String assetOfPhoto(String photo) => photo.substring(6);
 
 enum FoodCat { fruit, veg, meat, fish, egg, dairy, grain, bakery, legume, nut, oil, pantry, drink, sauce, spice }
 
+class FoodGroup {
+  FoodGroup(this.id, this.name);
+
+  final String id;
+  String name;
+
+  Map<String, dynamic> toJson() => {'id': id, 'n': name};
+
+  static FoodGroup? fromJson(Map<String, dynamic> j) {
+    final id = j['id'] as String? ?? '';
+    final name = (j['n'] as String? ?? '').trim();
+    return id.isEmpty || name.isEmpty ? null : FoodGroup(id, name);
+  }
+}
+
 class FoodItem {
   const FoodItem({
     required this.id,
@@ -214,6 +237,8 @@ class FoodItem {
     this.cookedYield = 0,
     this.approx = false,
     this.cat,
+    this.water = 0,
+    this.group = '',
   });
 
   final String id;
@@ -222,12 +247,14 @@ class FoodItem {
   final String serving;
   final double grams;
   final bool liquid;
+  final int water;
   final PortionKind? portion;
   final double portionGrams;
   final Macros macros;
   final double cookedYield;
   final bool approx;
   final FoodCat? cat;
+  final String group;
 
   bool get isLibrary => id.startsWith(kLibraryPrefix);
 
@@ -243,6 +270,9 @@ class FoodItem {
     bool? liquid,
     Macros? macros,
     double? cookedYield,
+    FoodCat? Function()? cat,
+    int? water,
+    String? group,
   }) =>
       FoodItem(
         id: id,
@@ -256,7 +286,9 @@ class FoodItem {
         macros: macros ?? this.macros,
         cookedYield: cookedYield ?? this.cookedYield,
         approx: approx,
-        cat: cat,
+        cat: cat == null ? this.cat : cat(),
+        water: water ?? this.water,
+        group: group ?? this.group,
       );
 
   Map<String, dynamic> toJson() => {
@@ -267,6 +299,9 @@ class FoodItem {
         if (grams > 0) 'g': grams,
         if (liquid) 'lq': true,
         if (cookedYield > 0) 'cy': cookedYield,
+        if (cat != null) 'c': cat!.name,
+        if (water > 0) 'w': water,
+        if (group.isNotEmpty) 'uc': group,
         'm': macros.toJson(),
       };
 
@@ -279,8 +314,13 @@ class FoodItem {
         liquid: j['lq'] as bool? ?? false,
         cookedYield: _num(j['cy']).clamp(0, 5).toDouble(),
         macros: Macros.fromJson((j['m'] as Map?)?.cast<String, dynamic>()),
+        cat: FoodCat.values.asNameMap()[j['c']],
+        water: _waterMl(j['w']),
+        group: j['uc'] as String? ?? '',
       );
 }
+
+int _waterMl(Object? v) => ((v as num?)?.toInt() ?? 0).clamp(0, 5000);
 
 class FoodEntry {
   const FoodEntry({
@@ -294,6 +334,7 @@ class FoodEntry {
     this.liquid = false,
     this.cooked = 0,
     this.per = Macros.zero,
+    this.water = 0,
   });
 
   final String id;
@@ -306,8 +347,11 @@ class FoodEntry {
   final bool liquid;
   final double cooked;
   final Macros per;
+  final int water;
 
   Macros get total => per * servings;
+
+  int get waterMl => water <= 0 ? 0 : (water * servings).round();
 
   double get totalGrams => grams * servings;
 
@@ -324,6 +368,7 @@ class FoodEntry {
         liquid: liquid,
         cooked: cooked,
         per: per ?? this.per,
+        water: water,
       );
 
   Map<String, dynamic> toJson() => {
@@ -336,6 +381,7 @@ class FoodEntry {
         if (grams > 0) 'g': grams,
         if (liquid) 'lq': true,
         if (cooked > 0) 'ck': cooked,
+        if (water > 0) 'w': water,
         'm': per.toJson(),
       };
 
@@ -350,6 +396,7 @@ class FoodEntry {
         liquid: j['lq'] as bool? ?? false,
         cooked: _num(j['ck']).clamp(0, 5).toDouble(),
         per: Macros.fromJson((j['m'] as Map?)?.cast<String, dynamic>()),
+        water: _waterMl(j['w']),
       );
 }
 
@@ -428,11 +475,41 @@ class WaterSip {
       );
 }
 
+const kSuppUnits = ['capsule', 'pill', 'scoop', 'g', 'mg', 'ml', 'drop', 'iu', 'serving'];
+
+const _suppUnitWords = {
+  'capsule': ['capsule', 'capsules', 'caps', 'cap', 'cápsula', 'cápsulas', 'capsula', 'capsulas'],
+  'pill': ['pill', 'pills', 'tablet', 'tablets', 'tab', 'tabs', 'pastilla', 'pastillas', 'comprimido', 'comprimidos'],
+  'scoop': ['scoop', 'scoops', 'cazo', 'cazos', 'cacito', 'cacitos', 'medida', 'medidas'],
+  'g': ['g', 'gr', 'grs', 'gram', 'grams', 'gramo', 'gramos'],
+  'mg': ['mg'],
+  'ml': ['ml'],
+  'drop': ['drop', 'drops', 'gota', 'gotas'],
+  'iu': ['iu', 'ui'],
+  'serving': ['serving', 'servings', 'ración', 'raciones', 'racion'],
+};
+
+({double amount, String unit})? parseSuppDose(String text) {
+  final m = RegExp(r'^(\d+(?:[.,]\d+)?)\s*([^\d\s].*)?$').firstMatch(text.trim().toLowerCase());
+  if (m == null) return null;
+  final amount = double.tryParse(m.group(1)!.replaceAll(',', '.'));
+  if (amount == null || amount <= 0) return null;
+  final word = (m.group(2) ?? '').trim();
+  if (word.isEmpty) return (amount: amount, unit: '');
+  for (final e in _suppUnitWords.entries) {
+    if (e.value.contains(word)) return (amount: amount, unit: e.key);
+  }
+  return null;
+}
+
 class Supplement {
   const Supplement({
     required this.id,
     required this.name,
     this.dose = '',
+    this.amount,
+    this.unit = '',
+    this.stock,
     this.photo = '',
     this.at,
     this.days = 0,
@@ -444,6 +521,9 @@ class Supplement {
   final String id;
   final String name;
   final String dose;
+  final double? amount;
+  final String unit;
+  final double? stock;
   final String photo;
   final int? at;
   final int days;
@@ -452,6 +532,8 @@ class Supplement {
   final DateTime? until;
 
   bool get everyDay => days == 0 && every <= 1;
+
+  double get perTake => amount ?? 1;
 
   bool onWeekday(int weekday) => days == 0 || days & (1 << weekday) != 0;
 
@@ -468,6 +550,11 @@ class Supplement {
   Supplement copyWith({
     String? name,
     String? dose,
+    double? amount,
+    bool clearAmount = false,
+    String? unit,
+    double? stock,
+    bool clearStock = false,
     String? photo,
     int? at,
     bool clearAt = false,
@@ -481,6 +568,9 @@ class Supplement {
         id: id,
         name: name ?? this.name,
         dose: dose ?? this.dose,
+        amount: clearAmount ? null : (amount ?? this.amount),
+        unit: unit ?? this.unit,
+        stock: clearStock ? null : (stock ?? this.stock),
         photo: photo ?? this.photo,
         at: clearAt ? null : (at ?? this.at),
         days: days ?? this.days,
@@ -501,6 +591,9 @@ class Supplement {
         'id': id,
         'n': name,
         if (dose.isNotEmpty) 'd': dose,
+        'q': ?amount,
+        if (unit.isNotEmpty) 'un': unit,
+        'st': ?stock,
         if (photo.isNotEmpty) 'p': photo,
         'at': ?at,
         if (days != 0) 'w': days,
@@ -509,10 +602,19 @@ class Supplement {
         if (until != null) 'u': _date(until!),
       };
 
-  factory Supplement.fromJson(Map<String, dynamic> j) => Supplement(
+  factory Supplement.fromJson(Map<String, dynamic> j) {
+    final dose = j['d'] as String? ?? '';
+    final q = (j['q'] as num?)?.toDouble();
+    final unit = j['un'] as String? ?? '';
+    final parsed = q == null ? parseSuppDose(dose) : null;
+    final stock = (j['st'] as num?)?.toDouble();
+    return Supplement(
         id: j['id'] as String? ?? '',
         name: j['n'] as String? ?? '',
-        dose: j['d'] as String? ?? '',
+        dose: dose,
+        amount: q != null && q > 0 ? q : parsed?.amount,
+        unit: q != null ? (kSuppUnits.contains(unit) ? unit : '') : parsed?.unit ?? '',
+        stock: stock == null ? null : math.max(0.0, stock),
         photo: j['p'] as String? ?? '',
         at: (j['at'] as num?)?.toInt().clamp(0, 24 * 60 - 1),
         days: ((j['w'] as num?)?.toInt() ?? 0) & 0xFE,
@@ -520,6 +622,7 @@ class Supplement {
         from: _readDate(j['f']),
         until: _readDate(j['u']),
       );
+  }
 }
 
 class NutritionGoals {
@@ -602,6 +705,7 @@ class Batch {
     required this.created,
     this.cookedGrams = 0,
     this.leftGrams = 0,
+    this.portions = 4,
   });
 
   final String id;
@@ -610,6 +714,7 @@ class Batch {
   final DateTime created;
   final double cookedGrams;
   final double leftGrams;
+  final int portions;
 
   Macros get total => items.fold(Macros.zero, (s, e) => s + e.total);
 
@@ -623,13 +728,14 @@ class Batch {
 
   Macros get per100 => totalGrams <= 0 ? Macros.zero : total * (100 / totalGrams);
 
-  Batch copyWith({String? name, List<FoodEntry>? items, double? cookedGrams, double? leftGrams}) => Batch(
+  Batch copyWith({String? name, List<FoodEntry>? items, double? cookedGrams, double? leftGrams, int? portions}) => Batch(
         id: id,
         name: name ?? this.name,
         items: items ?? this.items,
         created: created,
         cookedGrams: cookedGrams ?? this.cookedGrams,
         leftGrams: leftGrams ?? this.leftGrams,
+        portions: portions ?? this.portions,
       );
 
   Map<String, dynamic> toJson() => {
@@ -639,6 +745,7 @@ class Batch {
         'at': created.toIso8601String(),
         if (cookedGrams > 0) 'cg': cookedGrams,
         'left': leftGrams,
+        if (portions != 4) 'p': portions,
       };
 
   static Batch? fromJson(Map<String, dynamic> j) {
@@ -654,8 +761,29 @@ class Batch {
       items: items,
       created: DateTime.tryParse(j['at'] as String? ?? '') ?? DateTime.now(),
       cookedGrams: _num(j['cg']),
+      portions: ((j['p'] as num?)?.toInt() ?? 4).clamp(2, 12),
     );
     return b.copyWith(leftGrams: _num(j['left']).clamp(0, b.totalGrams).toDouble());
+  }
+}
+
+class FastRecord {
+  const FastRecord(this.start, this.end, this.goalHours);
+  final DateTime start;
+  final DateTime end;
+  final int goalHours;
+
+  Duration get length => end.difference(start);
+  bool get reached => length.inMinutes >= goalHours * 60;
+
+  Map<String, dynamic> toJson() => {'s': start.toIso8601String(), 'e': end.toIso8601String(), 'g': goalHours};
+
+  static FastRecord? fromJson(Map<String, dynamic> j) {
+    final s = DateTime.tryParse(j['s'] as String? ?? '');
+    final e = DateTime.tryParse(j['e'] as String? ?? '');
+    final g = (j['g'] as num?)?.toInt() ?? 16;
+    if (s == null || e == null || !e.isAfter(s)) return null;
+    return FastRecord(s, e, g.clamp(1, 72));
   }
 }
 
@@ -677,6 +805,14 @@ enum Tracker {
   prep,
   foods,
   plans,
+  fasting,
 }
 
-const kTrackersOffByDefault = {Tracker.fiber, Tracker.animal, Tracker.quality, Tracker.fats, Tracker.sugarSodium};
+const kTrackersOffByDefault = {
+  Tracker.fiber,
+  Tracker.animal,
+  Tracker.quality,
+  Tracker.fats,
+  Tracker.sugarSodium,
+  Tracker.fasting,
+};

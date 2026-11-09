@@ -231,10 +231,7 @@ class _StickerEditorState extends State<StickerEditor> {
     final swatches = _swatches(gc);
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 14, 16, 12),
-      decoration: BoxDecoration(
-        color: gc.bgRaised,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(26)),
-      ),
+      decoration: sheetDecoration(gc),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -500,14 +497,14 @@ class _Sticker extends StatelessWidget {
           if (showDate) ...[const SizedBox(height: 3), _date()],
           const SizedBox(height: 12),
           for (final e in shown) ...[
-            Row(crossAxisAlignment: CrossAxisAlignment.baseline, textBaseline: TextBaseline.alphabetic, children: [
+            Ltr(child: Row(crossAxisAlignment: CrossAxisAlignment.baseline, textBaseline: TextBaseline.alphabetic, children: [
               Expanded(
                 child: Text(t.catalogName(e.id, e.name),
                     maxLines: 1, overflow: TextOverflow.ellipsis, style: _s(14, FontWeight.w800, height: 1.2)),
               ),
               const SizedBox(width: 10),
               Text(_best(e), style: _s(12.5, FontWeight.w700, alpha: 0.8)),
-            ]),
+            ])),
             const SizedBox(height: 7),
           ],
           if (more > 0) ...[
@@ -564,7 +561,7 @@ class _Sticker extends StatelessWidget {
     final sets = e.workingSets.isEmpty ? e.sets : e.workingSets;
     if (sets.isEmpty) return '';
     final top = sets.reduce((a, b) => a.weight * (a.reps + 1) >= b.weight * (b.reps + 1) ? a : b);
-    if (top.weight > 0 && top.reps > 0 && (top.km ?? 0) <= 0) return '${fit.weightLabel(top.weight)} × ${top.reps}';
+    if (top.weight > 0 && top.reps > 0 && (top.km ?? 0) <= 0) return ltr('${fit.weightLabel(top.weight)} × ${top.reps}');
     return fit.loggedSetLabel(top);
   }
 
@@ -572,7 +569,7 @@ class _Sticker extends StatelessWidget {
     final start = fit.weekStartDate;
     final trained = <int>{};
     for (final s in fit.sessions) {
-      final d = DateTime(s.date.year, s.date.month, s.date.day).difference(start).inDays;
+      final d = DateTime(s.day.year, s.day.month, s.day.day).difference(start).inDays;
       if (d >= 0 && d < 7) trained.add(d);
     }
     final now = DateTime.now();
@@ -671,7 +668,7 @@ class _Sticker extends StatelessWidget {
             _mark(size: 11),
             if (showDate) ...[
               const SizedBox(width: 10),
-              Flexible(child: Text(t.longDate(session.date), maxLines: 1, overflow: TextOverflow.ellipsis,
+              Flexible(child: Text(t.longDate(session.day), maxLines: 1, overflow: TextOverflow.ellipsis,
                   style: _s(11, FontWeight.w600, alpha: 0.7))),
             ],
           ]),

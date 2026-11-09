@@ -25,8 +25,10 @@ import java.io.File
 import java.io.FileOutputStream
 
 class MainActivity : FlutterActivity() {
+    private var pendingSound: MethodChannel.Result? = null
     private var incomingChannel: MethodChannel? = null
     private var rotaryChannel: MethodChannel? = null
+    private var openChannel: MethodChannel? = null
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -167,6 +169,13 @@ class MainActivity : FlutterActivity() {
                     }
                     result.success(null)
                 }
+                "bright" -> {
+                    val params = window.attributes
+                    params.screenBrightness =
+                        if (on) WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL else WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE
+                    window.attributes = params
+                    result.success(null)
+                }
                 "dim" -> {
                     val params = window.attributes
                     params.screenBrightness =
@@ -179,6 +188,16 @@ class MainActivity : FlutterActivity() {
         }
 
         rotaryChannel = MethodChannel(messenger, "gymmane/rotary")
+
+        val open = MethodChannel(messenger, "gymmane/open")
+        open.setMethodCallHandler { call, result ->
+            if (call.method != "take") {
+                result.notImplemented()
+                return@setMethodCallHandler
+            }
+            result.success(takeOpen(intent))
+        }
+        openChannel = open
 
         val live = MethodChannel(messenger, "gymmane/live")
         live.setMethodCallHandler { call, result ->
@@ -198,7 +217,23 @@ class MainActivity : FlutterActivity() {
         LiveNotifier.dart = live
 
         MethodChannel(messenger, "gymmane/device").setMethodCallHandler { call, result ->
-            result.success(packageManager.hasSystemFeature(PackageManager.FEATURE_WATCH))
+            when (call.method) {
+                "isWatch" -> result.success(packageManager.hasSystemFeature(PackageManager.FEATURE_WATCH))
+                "pickSound" -> pickSound(call.argument<String>("current"), result)
+                "isLowEnd" -> {
+                    val am = getSystemService(Context.ACTIVITY_SERVICE) as android.app.ActivityManager
+                    val info = android.app.ActivityManager.MemoryInfo()
+                    am.getMemoryInfo(info)
+                    result.success(am.isLowRamDevice || info.totalMem < 3_500_000_000L)
+                }
+                "headphones" -> result.success(headphonesConnected())
+                "maxRefresh" -> result.success(maxRefreshRate())
+                "setHighRefresh" -> {
+                    setHighRefresh(call.argument<Boolean>("on") ?: false)
+                    result.success(null)
+                }
+                else -> result.notImplemented()
+            }
         }
 
         MethodChannel(messenger, "gymmane/display").setMethodCallHandler { call, result ->
@@ -230,6 +265,101 @@ class MainActivity : FlutterActivity() {
         }
 
         HealthBridge.attach(this, MethodChannel(messenger, HealthBridge.CHANNEL))
+        BackupBridge.attach(this, MethodChannel(messenger, BackupBridge.CHANNEL))
+        SoundBridge.attach(this, MethodChannel(messenger, SoundBridge.CHANNEL))
+        VoiceBridge.attach(this, MethodChannel(messenger, VoiceBridge.CHANNEL))
+    }
+
+    private fun currentDisplay(): android.view.Display? =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) display else @Suppress("DEPRECATION") windowManager.defaultDisplay
+
+    private fun headphonesConnected(): Boolean {
+        return try {
+            val am = getSystemService(Context.AUDIO_SERVICE) as android.media.AudioManager
+            am.getDevices(android.media.AudioManager.GET_DEVICES_OUTPUTS).any {
+                when (it.type) {
+                    android.media.AudioDeviceInfo.TYPE_WIRED_HEADSET,
+                    android.media.AudioDeviceInfo.TYPE_WIRED_HEADPHONES,
+                    android.media.AudioDeviceInfo.TYPE_BLUETOOTH_A2DP,
+                    android.media.AudioDeviceInfo.TYPE_BLUETOOTH_SCO,
+                    android.media.AudioDeviceInfo.TYPE_USB_HEADSET,
+                    android.media.AudioDeviceInfo.TYPE_HEARING_AID -> true
+                    else -> Build.VERSION.SDK_INT >= 31 && it.type == android.media.AudioDeviceInfo.TYPE_BLE_HEADSET
+                }
+            }
+        } catch (_: Exception) {
+            false
+        }
+    }
+
+    private fun maxRefreshRate(): Double {
+        val d = currentDisplay() ?: return 60.0
+        return d.supportedModes.maxOfOrNull { it.refreshRate.toDouble() } ?: d.refreshRate.toDouble()
+    }
+
+    private fun setHighRefresh(on: Boolean) {
+        val d = currentDisplay() ?: return
+        val params = window.attributes
+        if (on) {
+            val now = d.mode
+            val best = d.supportedModes
+                .filter { it.physicalWidth == now.physicalWidth && it.physicalHeight == now.physicalHeight }
+                .maxByOrNull { it.refreshRate } ?: return
+            params.preferredDisplayModeId = best.modeId
+            params.preferredRefreshRate = best.refreshRate
+        } else {
+            params.preferredDisplayModeId = 0
+            params.preferredRefreshRate = 0f
+        }
+        window.attributes = params
+    }
+
+    @Deprecated("Deprecated in Java")
+    private fun pickSound(current: String?, result: MethodChannel.Result) {
+        pendingSound?.success(null)
+        pendingSound = result
+        val intent = Intent(android.media.RingtoneManager.ACTION_RINGTONE_PICKER).apply {
+            putExtra(android.media.RingtoneManager.EXTRA_RINGTONE_TYPE, android.media.RingtoneManager.TYPE_NOTIFICATION)
+            putExtra(android.media.RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, false)
+            putExtra(android.media.RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false)
+            if (!current.isNullOrEmpty()) {
+                putExtra(android.media.RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Uri.parse(current))
+            }
+        }
+        try {
+            startActivityForResult(intent, SOUND_REQUEST)
+        } catch (_: Exception) {
+            pendingSound = null
+            result.success(null)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == SOUND_REQUEST) {
+            val result = pendingSound
+            pendingSound = null
+            val uri: Uri? = if (resultCode == RESULT_OK && data != null) {
+                if (Build.VERSION.SDK_INT >= 33) {
+                    data.getParcelableExtra(android.media.RingtoneManager.EXTRA_RINGTONE_PICKED_URI, Uri::class.java)
+                } else {
+                    @Suppress("DEPRECATION")
+                    data.getParcelableExtra(android.media.RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
+                }
+            } else null
+            if (uri == null) {
+                result?.success(null)
+            } else {
+                val name = try {
+                    android.media.RingtoneManager.getRingtone(this, uri)?.getTitle(this)
+                } catch (_: Exception) {
+                    null
+                }
+                result?.success(mapOf("uri" to uri.toString(), "name" to (name ?: "")))
+            }
+            return
+        }
+        if (BackupBridge.onActivityResult(this, requestCode, resultCode, data)) return
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -303,6 +433,7 @@ class MainActivity : FlutterActivity() {
 
     override fun cleanUpFlutterEngine(flutterEngine: FlutterEngine) {
         rotaryChannel = null
+        openChannel = null
         LiveNotifier.dart = null
         HealthBridge.channel = null
         if (isFinishing) LiveNotifier.cancel(this)
@@ -312,12 +443,23 @@ class MainActivity : FlutterActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
+        val open = takeOpen(intent)
+        if (open != null) {
+            openChannel?.invokeMethod("open", open)
+            return
+        }
         if (HealthBridge.takeUsage(intent)) {
             HealthBridge.channel?.invokeMethod("usage", null)
             return
         }
         val text = takeIncoming(intent) ?: return
         incomingChannel?.invokeMethod("incoming", text)
+    }
+
+    private fun takeOpen(intent: Intent?): String? {
+        val route = intent?.getStringExtra(OPEN_EXTRA) ?: return null
+        intent.removeExtra(OPEN_EXTRA)
+        return route
     }
 
     private fun takeIncoming(intent: Intent?): String? {
@@ -417,5 +559,9 @@ class MainActivity : FlutterActivity() {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
         }
         startActivity(intent)
+    }
+
+    companion object {
+        private const val SOUND_REQUEST = 7311
     }
 }

@@ -18,7 +18,7 @@ mixin ToolsState on FitCore {
   double bfWaist = 84;
   double bfHip = 95;
   double plateTarget = 100;
-  double plateBar = 20;
+  double? plateBar;
   double warmupTarget = 100;
   double rpeWeight = 100;
   int rpeReps = 5;
@@ -132,18 +132,20 @@ mixin ToolsState on FitCore {
       isLb ? const [45, 35, 25, 10, 5, 2.5] : const [25, 20, 15, 10, 5, 2.5, 1.25];
 
   List<({double weight, int count})> get plateBreakdown =>
-      platesPerSide(toDisplayWeight(plateTarget), toDisplayWeight(plateBar));
+      platesPerSide(toDisplayWeight(plateTarget), plateBarDisplay);
 
   double get defaultBar {
     final placeBar = placeBarKg;
-    if (placeBar != null) return _round1(toDisplayWeight(placeBar));
+    if (placeBar != null) return _roundWeight(toDisplayWeight(placeBar));
+    final own = plateBar;
+    if (own != null) return _roundWeight(toDisplayWeight(own));
     return isLb ? 45 : 20;
   }
 
   Map<double, int>? get plateStockDisplay {
     final stock = plateStockKg;
     if (stock == null) return null;
-    return {for (final e in stock.entries) _round1(toDisplayWeight(e.key)): e.value};
+    return {for (final e in stock.entries) _roundWeight(toDisplayWeight(e.key)): e.value};
   }
 
   List<({double weight, int count})> platesPerSide(double displayTarget, double displayBar) {
@@ -173,7 +175,7 @@ mixin ToolsState on FitCore {
 
   double barFor(String id, {String equipment = 'Barbell'}) {
     final kg = exerciseBar[id];
-    if (kg != null) return _round1(toDisplayWeight(kg));
+    if (kg != null) return _roundWeight(toDisplayWeight(kg));
     return equipment == 'Barbell' ? defaultBar : 0;
   }
 
@@ -190,7 +192,7 @@ mixin ToolsState on FitCore {
   String? plateHint(String equipment, double weightKg, {String id = ''}) {
     if (equipment != 'Barbell' && !hasOwnBar(id)) return null;
     final bar = barFor(id, equipment: equipment);
-    final target = _round1(toDisplayWeight(weightKg));
+    final target = _roundWeight(toDisplayWeight(weightKg));
     if (target <= bar) return null;
     final parts = platesPerSide(target, bar);
     if (parts.isEmpty) return null;
@@ -261,9 +263,16 @@ mixin ToolsState on FitCore {
 
   void bumpPlateTarget(double d) { plateTarget = _clamp(plateTarget + d, 0, null); notifyListeners(); }
 
-  void setPlateBar(double b) { plateBar = fromDisplayWeight(b); notifyListeners(); }
+  void setPlateBar(double b) {
+    plateBar = fromDisplayWeight(b.clamp(0, isLb ? 220 : 100).toDouble());
+    _persist();
+    notifyListeners();
+  }
 
-  double get plateBarDisplay => _round1(toDisplayWeight(plateBar));
+  double get plateBarDisplay {
+    final own = plateBar;
+    return own == null ? (isLb ? 45 : 20) : _roundWeight(toDisplayWeight(own));
+  }
 
   static double _effortShare(int reps, double rpe) => rpePercent(reps, rpe) ?? 1 / (1 + reps / 30);
 

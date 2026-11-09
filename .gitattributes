@@ -13,3 +13,8 @@
 *.m4a binary
 *.jar binary
 *.keystore binary
+
+*.kt linguist-detectable=false
+*.kts linguist-detectable=false
+*.frag linguist-detectable=false
+*.py linguist-detectable=false

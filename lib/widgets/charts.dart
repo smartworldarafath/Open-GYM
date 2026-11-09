@@ -8,6 +8,7 @@ import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import 'body_map.dart';
 import 'svg_icon.dart';
+import 'ui_kit.dart';
 
 class GoalRing extends StatelessWidget {
   const GoalRing({super.key, required this.pct, this.size = 40, this.color});
@@ -77,7 +78,7 @@ class VolumeChart extends StatelessWidget {
     final top = points.isEmpty ? 0.0 : points.reduce(math.max);
     final style = AppTheme.d(10, weight: FontWeight.w600, color: gc.textTertiary);
 
-    return Column(
+    return Ltr(child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         SizedBox(
@@ -117,7 +118,7 @@ class VolumeChart extends StatelessWidget {
           ),
         ],
       ],
-    );
+    ));
   }
 }
 
@@ -437,11 +438,21 @@ class _TrendPainter extends CustomPainter {
 }
 
 class Heatmap extends StatelessWidget {
-  const Heatmap({super.key, required this.levels, this.onTapDay, this.firstDay, this.labels = false});
+  const Heatmap({
+    super.key,
+    required this.levels,
+    this.onTapDay,
+    this.firstDay,
+    this.labels = false,
+    this.cellSize,
+    this.weekdays = true,
+  });
   final List<int> levels;
   final void Function(int index)? onTapDay;
   final DateTime? firstDay;
   final bool labels;
+  final double? cellSize;
+  final bool weekdays;
 
   Color _color(int level, GymColors gc) => level <= 0 ? gc.heatEmpty : heatLevelColor(gc, level);
 
@@ -452,12 +463,13 @@ class Heatmap extends StatelessWidget {
     final cols = (levels.length / rows).ceil();
     final start = firstDay;
     final named = labels && start != null;
-    final side = named ? 16.0 : 0.0;
+    final side = named && weekdays ? 16.0 : 0.0;
     final top = named ? 16.0 : 0.0;
     final labelStyle = AppTheme.f(9, weight: FontWeight.w600, color: gc.textTertiary);
-    return LayoutBuilder(builder: (context, c) {
-      var cell = (c.maxWidth - side - gap * (cols - 1)) / cols;
-      if (c.hasBoundedHeight) cell = math.min(cell, (c.maxHeight - top - gap * (rows - 1)) / rows);
+    final yearStyle = AppTheme.f(9, weight: FontWeight.w800, color: gc.textSecondary);
+    return Ltr(child: LayoutBuilder(builder: (context, c) {
+      var cell = cellSize ?? (c.maxWidth - side - gap * (cols - 1)) / cols;
+      if (cellSize == null && c.hasBoundedHeight) cell = math.min(cell, (c.maxHeight - top - gap * (rows - 1)) / rows);
       Widget box(int i) {
         final level = i < levels.length ? levels[i] : -1;
         if (level < 0) return SizedBox(width: cell, height: cell);
@@ -491,12 +503,14 @@ class Heatmap extends StatelessWidget {
       final months = <Widget>[];
       int? lastMonth;
       for (var col = 0; col < cols; col++) {
-        final month = shiftDays(start, col * rows).month;
+        final day = shiftDays(start, col * rows);
+        final month = day.month;
         if (month != lastMonth && (col > 0 || shiftDays(start, 0).day <= 7)) {
+          final year = cellSize != null && month == 1;
           months.add(Positioned(
             left: side + col * (cell + gap),
             top: 0,
-            child: Text(t.monthShort(month), style: labelStyle),
+            child: Text(year ? '${day.year}' : t.monthShort(month), style: year ? yearStyle : labelStyle),
           ));
         }
         lastMonth = month;
@@ -506,6 +520,7 @@ class Heatmap extends StatelessWidget {
         height: top + rows * cell + (rows - 1) * gap,
         child: Stack(clipBehavior: Clip.none, children: [
           ...months,
+          if (weekdays)
           Positioned(
             left: 0,
             top: top,
@@ -524,7 +539,61 @@ class Heatmap extends StatelessWidget {
           Positioned(left: side, top: top, child: grid),
         ]),
       );
-    });
+    }));
+  }
+}
+
+class HeatmapYear extends StatelessWidget {
+  const HeatmapYear({super.key, required this.levels, required this.firstDay, this.onTapDay, this.weekdays = true});
+  final List<int> levels;
+  final DateTime firstDay;
+  final void Function(int index)? onTapDay;
+  final bool weekdays;
+
+  static const cell = 13.0;
+
+  @override
+  Widget build(BuildContext context) {
+    final gc = context.gc;
+    final labelStyle = AppTheme.f(9, weight: FontWeight.w600, color: gc.textTertiary);
+    return Ltr(child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      if (weekdays)
+        Padding(
+          padding: const EdgeInsets.only(top: 16),
+          child: Column(children: [
+            for (var r = 0; r < 7; r++)
+              Container(
+                width: 16,
+                height: cell,
+                margin: EdgeInsets.only(top: r == 0 ? 0 : 4),
+                alignment: Alignment.centerLeft,
+                child: Text(t.weekdayInitial(shiftDays(firstDay, r).weekday), style: labelStyle),
+              ),
+          ]),
+        ),
+      Expanded(
+        child: ShaderMask(
+          shaderCallback: (r) => const LinearGradient(
+            colors: [Color(0x00FFFFFF), Color(0xFFFFFFFF)],
+            stops: [0, 0.08],
+          ).createShader(r),
+          blendMode: BlendMode.dstIn,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            reverse: true,
+            padding: const EdgeInsets.only(left: 18),
+            child: Heatmap(
+              levels: levels,
+              firstDay: firstDay,
+              labels: true,
+              weekdays: false,
+              cellSize: cell,
+              onTapDay: onTapDay,
+            ),
+          ),
+        ),
+      ),
+    ]));
   }
 }
 

@@ -1,12 +1,13 @@
 import 'dart:io';
 import 'dart:math' as math;
-import 'dart:ui' as ui show Image, PictureRecorder;
+import 'dart:ui' as ui show Image, Picture, PictureRecorder;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../models/nutrition.dart';
+import '../services/food_library.dart';
 import '../services/media_store.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
@@ -185,6 +186,13 @@ class FoodSticker extends StatelessWidget {
 
   static const _faded = AlwaysStoppedAnimation(0.45);
 
+  static Future<void> warm(BuildContext context, String photo) async {
+    if (!isAssetPhoto(photo)) return;
+    try {
+      await precacheImage(AssetImage(assetOfPhoto(photo)), context);
+    } catch (_) {}
+  }
+
   @override
   Widget build(BuildContext context) {
     final gc = context.gc;
@@ -192,7 +200,8 @@ class FoodSticker extends StatelessWidget {
     final path = photo.isEmpty || asset ? null : MediaStore.pathFor(photo);
     final file = path == null ? null : File(path);
     final angle = tilt ? ((name.hashCode % 9) - 4) * 0.012 : 0.0;
-    final cache = (size * MediaQuery.devicePixelRatioOf(context)).round();
+    final px = (size * MediaQuery.devicePixelRatioOf(context)).round();
+    final cache = asset && px >= 300 ? null : px;
     Widget art;
     if (asset || file != null) {
       final image = asset
@@ -492,6 +501,78 @@ class _PhotoVesselState extends State<PhotoVessel> with SingleTickerProviderStat
   }
 }
 
+Color shakeColor(FoodItem? shake) {
+  final name = foldText('${shake?.name ?? ''} ${FoodLibrary.byId(shake?.id ?? '')?.names['en'] ?? ''}');
+  bool has(List<String> words) => words.any(name.contains);
+  if (has(['choc', 'cacao', 'cocoa', 'kakao', 'coffee', 'cafe', 'mocha'])) return const Color(0xFF8A5A3C);
+  if (has(['fresa', 'strawberr', 'berry', 'frutos rojos', 'erdbeer', 'fraise'])) return const Color(0xFFE3A7AE);
+  if (has(['platano', 'banana', 'mango'])) return const Color(0xFFE6D08E);
+  return const Color(0xFFE2D5BC);
+}
+
+class VesselLook {
+  const VesselLook({
+    required this.asset,
+    required this.top,
+    required this.bottom,
+    required this.curve,
+    required this.liquid,
+    this.texture,
+  });
+
+  final String asset;
+  final double top;
+  final double bottom;
+  final double curve;
+  final Color liquid;
+  final String? texture;
+
+  static const water = VesselLook(
+    asset: 'assets/img/vessel-water.webp',
+    top: 0.269,
+    bottom: 0.989,
+    curve: 0.08,
+    liquid: Color(0xFF4FB4F2),
+  );
+
+  static VesselLook shake(Color liquid) => VesselLook(
+        asset: 'assets/img/vessel-shake.webp',
+        top: 0.407,
+        bottom: 0.975,
+        curve: 0.066,
+        liquid: liquid,
+        texture: 'assets/img/shake-texture.webp',
+      );
+}
+
+ui.Picture paintVesselFrame({
+  required VesselLook look,
+  required ui.Image image,
+  required ui.Image mask,
+  ui.Image? texture,
+  required double level,
+  required double phase,
+  required Size size,
+  double scale = 1,
+}) {
+  final recorder = ui.PictureRecorder();
+  final canvas = Canvas(recorder)..scale(scale);
+  final spin = ValueNotifier<double>(phase);
+  _VesselPainter(
+    image: image,
+    mask: mask,
+    texture: texture,
+    level: level.clamp(0.0, 1.0),
+    spin: spin,
+    top: look.top,
+    bottom: look.bottom,
+    curve: look.curve,
+    liquid: look.liquid,
+  ).paint(canvas, size);
+  spin.dispose();
+  return recorder.endRecording();
+}
+
 class _VesselPainter extends CustomPainter {
   _VesselPainter({
     required this.image,
@@ -777,10 +858,11 @@ class _VesselPainter extends CustomPainter {
 }
 
 class FoodPlate extends StatelessWidget {
-  const FoodPlate({super.key, required this.items, this.size = 150});
+  const FoodPlate({super.key, required this.items, this.size = 150, this.wrap});
 
   final List<(String photo, String name)> items;
   final double size;
+  final Widget Function(int i, Widget child)? wrap;
 
   static const _layouts = <List<(double, double, double)>>[
     [],
@@ -823,7 +905,9 @@ class FoodPlate extends StatelessWidget {
           Positioned(
             left: size / 2 + layout[i].$1 * size - layout[i].$3 * size / 2,
             top: size / 2 + layout[i].$2 * size - layout[i].$3 * size / 2,
-            child: FoodSticker(photo: shown[i].$1, name: shown[i].$2, size: layout[i].$3 * size),
+            child: wrap == null
+                ? FoodSticker(photo: shown[i].$1, name: shown[i].$2, size: layout[i].$3 * size)
+                : wrap!(i, FoodSticker(photo: shown[i].$1, name: shown[i].$2, size: layout[i].$3 * size)),
           ),
       ]),
     );

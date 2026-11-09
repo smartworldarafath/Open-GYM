@@ -83,10 +83,23 @@ class HomeFolder extends StatelessWidget {
                               if (badge != null) ...[const SizedBox(width: 7), badge!],
                             ]),
                             const Spacer(),
-                            Text(detail,
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              alignment: Alignment.centerLeft,
+                              child: Text.rich(
+                                TextSpan(children: [
+                                  for (final (i, part) in detail.split('☆').indexed) ...[
+                                    if (i > 0)
+                                      WidgetSpan(
+                                        alignment: PlaceholderAlignment.middle,
+                                        child: Icon(PhosphorIconsRegular.star, size: 11, color: gc.textSecondary),
+                                      ),
+                                    TextSpan(text: part),
+                                  ],
+                                ]),
                                 maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
                                 style: AppTheme.f(11, weight: FontWeight.w600, color: gc.textSecondary)),
+                            ),
                           ],
                         ),
                       ),
@@ -271,7 +284,7 @@ class RoutinesPeek extends StatelessWidget {
   Widget build(BuildContext context) {
     final gc = context.gc;
     final dark = gc.bg.computeLuminance() < 0.5;
-    final hues = [for (final r in fit.routines.take(3)) folderHue(r)];
+    final hues = [for (final r in fit.activeRoutines.take(3)) folderHue(r)];
     final colors = hues.isEmpty ? kFolderHues.take(3).toList() : hues;
     return _Fan(
       width: 60,

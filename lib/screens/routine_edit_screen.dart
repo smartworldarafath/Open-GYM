@@ -16,11 +16,13 @@ import '../widgets/ruler_picker.dart';
 import '../widgets/glass.dart';
 import '../widgets/routine_folder.dart';
 import '../widgets/liquid_notch.dart';
+import '../widgets/progression_sheet.dart';
 import '../widgets/set_kind.dart';
 import '../widgets/svg_icon.dart';
 import '../widgets/timer_panel.dart';
 import '../widgets/ui_kit.dart';
 import 'exercises_screen.dart';
+import 'ladder_sheet.dart';
 import 'plan_import_sheet.dart';
 
 class RoutineEditScreen extends StatefulWidget {
@@ -36,6 +38,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
       TextEditingController(text: fit.activeRoutine?.name ?? '');
   final TextEditingController _search = TextEditingController();
   String _q = '';
+  late final Set<String> _seen = {...?fit.activeRoutine?.exerciseIds};
 
   @override
   void dispose() {
@@ -88,24 +91,47 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
       child: Stack(
         children: [
           Positioned.fill(
-            child: ListView.builder(
-              padding: EdgeInsets.fromLTRB(20, 12, 20, start ? 104 : 20),
-              itemCount: (list.isEmpty ? 1 : list.length) + (create ? 2 : 1),
-              itemBuilder: (context, i) {
-                if (i == 0) return _header(gc, routine.exerciseIds.length);
-                if (list.isEmpty) return _noMatches(gc);
-                if (i > list.length) return _createLink(gc);
-                return _pickRow(gc, list[i - 1]);
-              },
+            child: CustomScrollView(
+              slivers: [
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                  sliver: SliverToBoxAdapter(child: _header(gc, routine.exerciseIds.length)),
+                ),
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  sliver: _chosenList(gc),
+                ),
+                SliverPadding(
+                  padding: EdgeInsets.fromLTRB(20, 0, 20, start ? 104 : 20),
+                  sliver: SliverList.builder(
+                    itemCount: (list.isEmpty ? 1 : list.length) + (create ? 2 : 1),
+                    itemBuilder: (context, i) {
+                      if (i == 0) return _searchBar(gc);
+                      if (list.isEmpty) return _noMatches(gc);
+                      if (i > list.length) return _createLink(gc);
+                      return _pickRow(gc, list[i - 1]);
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
-          if (start) ...[
+          if (start)
             const Positioned(left: 0, right: 0, bottom: 0, child: EdgeBlur(top: false, height: 112, sigma: 11, shade: 0.35)),
-            Positioned(
-              left: 20,
-              right: 20,
-              bottom: 16,
-              child: Row(children: [
+          Positioned(
+            left: 20,
+            right: 20,
+            bottom: 16,
+            child: IgnorePointer(
+              ignoring: !start,
+              child: AnimatedSlide(
+                offset: start ? Offset.zero : const Offset(0, 1.6),
+                duration: const Duration(milliseconds: 340),
+                curve: start ? Curves.easeOutBack : Curves.easeInCubic,
+                child: AnimatedOpacity(
+                  opacity: start ? 1 : 0,
+                  duration: const Duration(milliseconds: 220),
+                  child: Row(children: [
                 Expanded(
                   flex: 2,
                   child: Pressable(
@@ -133,8 +159,10 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                   ),
                 ),
               ]),
+                ),
+              ),
             ),
-          ],
+          ),
         ],
       ),
     );
@@ -190,6 +218,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
               cursorColor: gc.accent,
               textCapitalization: TextCapitalization.words,
               onChanged: (v) => fit.renameRoutine(_id, v),
+              onTapOutside: (_) => FocusScope.of(context).unfocus(),
               decoration: InputDecoration(
                 isCollapsed: true,
                 border: InputBorder.none,
@@ -202,7 +231,8 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
             Semantics(
               button: true,
               label: t.shareRoutine,
-              child: GestureDetector(
+              child: Pressable(
+                scale: 0.85,
                 onTap: () => _shareIntro(routine),
                 child: Padding(
                   padding: const EdgeInsets.all(6),
@@ -214,7 +244,8 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
           Semantics(
             button: true,
             label: t.duplicateRoutine,
-            child: GestureDetector(
+            child: Pressable(
+              scale: 0.85,
               onTap: () => fit.openRoutine(fit.duplicateRoutine(_id)),
               child: Padding(
                 padding: const EdgeInsets.all(6),
@@ -223,7 +254,8 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
             ),
           ),
           const SizedBox(width: 4),
-          GestureDetector(
+          Pressable(
+            scale: 0.85,
             onTap: _confirmDelete,
             child: Padding(
               padding: const EdgeInsets.all(6),
@@ -234,21 +266,21 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
         const SizedBox(height: 18),
         _colors(gc, routine),
         const SizedBox(height: 22),
-        Text(t.schedule, style: AppTheme.f(12, weight: FontWeight.w600, color: gc.textSecondary, letterSpacing: 1.5)),
-        const SizedBox(height: 10),
+        _label(gc, t.schedule),
+        const SizedBox(height: 12),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [for (int i = 0; i < 7; i++) _dayToggle(gc, i)],
         ),
         const SizedBox(height: 18),
-        GestureDetector(
-          behavior: HitTestBehavior.opaque,
+        Pressable(
+          scale: 0.98,
           onTap: () => _pickGroup(routine),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
             decoration: BoxDecoration(
               color: gc.bgRaised,
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(18),
             ),
             child: Row(
               children: [
@@ -267,8 +299,8 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
           ),
         ),
         const SizedBox(height: 24),
-        Text(t.exercisesWithCount(count), style: AppTheme.f(12, weight: FontWeight.w600, color: gc.textSecondary, letterSpacing: 1.5)),
-        const SizedBox(height: 10),
+        _label(gc, t.exercisesWithCount(count)),
+        const SizedBox(height: 12),
         if (routine.exerciseIds.isEmpty)
           Padding(
             padding: const EdgeInsets.only(bottom: 6),
@@ -277,20 +309,34 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
         else ...[
           Text(t.setsPlannedHint, style: AppTheme.f(11, weight: FontWeight.w500, color: gc.textTertiary)),
           const SizedBox(height: 8),
-          ReorderableListView(
-            shrinkWrap: true,
-            buildDefaultDragHandles: false,
-            physics: const NeverScrollableScrollPhysics(),
-            proxyDecorator: liftedRow(14),
-            onReorderStart: reorderPicked,
-            onReorderEnd: reorderDropped,
-            onReorder: (from, to) => fit.reorderRoutineExercise(routine.id, from, to),
-            children: [
-              for (int i = 0; i < fit.routineExercises(routine).length; i++)
-                _chosenRow(gc, routine, fit.routineExercises(routine)[i], i),
-            ],
-          ),
         ],
+      ],
+    );
+  }
+
+  Widget _label(GymColors gc, String text) => Padding(
+        padding: const EdgeInsetsDirectional.only(start: 4),
+        child: Text(text.toUpperCase(),
+            style: AppTheme.f(10.5, weight: FontWeight.w700, color: gc.textTertiary, letterSpacing: 1.4)),
+      );
+
+  Widget _chosenList(GymColors gc) {
+    final routine = fit.activeRoutine!;
+    final chosen = fit.routineExercises(routine);
+    return SliverReorderableList(
+      itemCount: chosen.length,
+      proxyDecorator: liftedRow(14),
+      onReorderStart: reorderPicked,
+      onReorderEnd: reorderDropped,
+      onReorder: (from, to) => fit.reorderRoutineExercise(routine.id, from, to),
+      itemBuilder: (context, i) => _chosenRow(gc, routine, chosen[i], i),
+    );
+  }
+
+  Widget _searchBar(GymColors gc) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
         const SizedBox(height: 20),
         SearchField(
           controller: _search,
@@ -306,7 +352,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
 
   Widget _filterChips(GymColors gc) {
     Widget chip(String label, bool active, VoidCallback onTap) => Padding(
-          padding: const EdgeInsets.only(right: 8),
+          padding: const EdgeInsetsDirectional.only(end: 8),
           child: Pill(
             label: label,
             bg: active ? gc.ember : gc.bgRaised2,
@@ -317,7 +363,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
             fontSize: 12,
           ),
         );
-    final picked = (fit.exMuscleFilter == null ? 0 : 1) +
+    final picked = (fit.exMuscleFilter == null && fit.exZoneFilter == null ? 0 : 1) +
         (fit.exEquipmentFilter == null ? 0 : 1) +
         (fit.exDifficultyFilter == null ? 0 : 1);
     return SingleChildScrollView(
@@ -372,9 +418,15 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
   Widget _dayToggle(GymColors gc, int i) {
     final weekday = fit.weekdayAt(i);
     final on = fit.plannedOn(weekday, _id);
-    return GestureDetector(
-      onTap: () => fit.togglePlanDay(weekday, _id),
-      child: Container(
+    return Pressable(
+      scale: 0.86,
+      onTap: () {
+        HapticFeedback.selectionClick();
+        fit.togglePlanDay(weekday, _id);
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 220),
+        curve: Curves.easeOutCubic,
         width: 38,
         height: 38,
         decoration: BoxDecoration(
@@ -382,8 +434,11 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
           shape: BoxShape.circle,
         ),
         alignment: Alignment.center,
-        child: Text(t.weekdayInitial(weekday),
-            style: AppTheme.f(14, weight: FontWeight.w700, color: on ? gc.onEmber : gc.textSecondary)),
+        child: AnimatedDefaultTextStyle(
+          duration: const Duration(milliseconds: 220),
+          style: AppTheme.f(14, weight: FontWeight.w700, color: on ? gc.onEmber : gc.textSecondary),
+          child: Text(t.weekdayInitial(weekday)),
+        ),
       ),
     );
   }
@@ -452,10 +507,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
         final gc = sheet.gc;
         return Container(
           padding: sheetPad(sheet),
-          decoration: BoxDecoration(
-            color: gc.bgRaised,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
-          ),
+          decoration: sheetDecoration(gc),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -511,8 +563,11 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
     final anyChain = [
       for (var i = 0; i < routine.exerciseIds.length - 1; i++) fit.chainsToNext(routine, routine.exerciseIds[i]),
     ].any((x) => x);
-    return Padding(
+    final fresh = _seen.add(ex.id);
+    return _GrowIn(
       key: ValueKey(ex.id),
+      play: fresh,
+      child: Padding(
       padding: EdgeInsets.only(bottom: linksNext ? 0 : 8),
       child: Dismissible(
         key: ValueKey('swipe-${ex.id}'),
@@ -521,8 +576,8 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
         background: Container(
           margin: EdgeInsets.only(bottom: linksNext ? 4 : 0),
           alignment: Alignment.centerRight,
-          padding: const EdgeInsets.only(right: 22),
-          decoration: BoxDecoration(color: gc.warn.withValues(alpha: 0.16), borderRadius: BorderRadius.circular(14)),
+          padding: const EdgeInsetsDirectional.only(end: 22),
+          decoration: BoxDecoration(color: gc.warn.withValues(alpha: 0.16), borderRadius: BorderRadius.circular(18)),
           child: Icon(PhosphorIconsFill.trash, size: 20, color: gc.warn),
         ),
         child: IntrinsicHeight(
@@ -539,6 +594,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
           ),
         ),
       ),
+      ),
     );
   }
 
@@ -549,7 +605,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: gc.bgRaised,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(18),
       ),
       child: Row(children: [
         ReorderableDragStartListener(
@@ -566,6 +622,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
         GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () => _openPlan(ex),
+          onLongPress: () => showExercisePreview(context, ex),
           child: SizedBox(width: 44, child: ExerciseMedia(ex: ex, height: 44, radius: 10)),
         ),
         const SizedBox(width: 12),
@@ -579,6 +636,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () => _openPlan(ex),
+                  onLongPress: () => showExercisePreview(context, ex),
                   child: Row(children: [
                     Flexible(
                       child: Text(exerciseName(ex),
@@ -596,6 +654,11 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                 const SizedBox(height: 2),
                 Text(t.superset.toUpperCase(),
                     style: AppTheme.f(9.5, weight: FontWeight.w700, color: gc.brass, letterSpacing: 1)),
+              ],
+              if (fit.ladderIn(routine, ex.id) case final ladder?) ...[
+                const SizedBox(height: 2),
+                Text('${t.ladderTitle} · ${ladder.indexOf(ex.id) + 1}/${ladder.length}'.toUpperCase(),
+                    style: AppTheme.f(9.5, weight: FontWeight.w700, color: gc.sage, letterSpacing: 1)),
               ],
               const SizedBox(height: 2),
               FittedBox(
@@ -640,12 +703,18 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                 width: 38,
                 height: 44,
                 child: Center(
-                  child: Icon(
-                    routine.chained.contains(ex.id)
-                        ? PhosphorIconsFill.link
-                        : PhosphorIconsRegular.link,
-                    size: 17,
-                    color: routine.chained.contains(ex.id) ? gc.ember : gc.textTertiary,
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 240),
+                    transitionBuilder: (child, a) => ScaleTransition(
+                      scale: Tween(begin: 0.5, end: 1.0).animate(CurvedAnimation(parent: a, curve: Curves.easeOutBack)),
+                      child: FadeTransition(opacity: a, child: child),
+                    ),
+                    child: Icon(
+                      routine.chained.contains(ex.id) ? PhosphorIconsFill.link : PhosphorIconsRegular.link,
+                      key: ValueKey(routine.chained.contains(ex.id)),
+                      size: 17,
+                      color: routine.chained.contains(ex.id) ? gc.ember : gc.textTertiary,
+                    ),
                   ),
                 ),
               ),
@@ -668,23 +737,31 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
     );
   }
 
+  void _preview(Exercise ex) => showExercisePreview(context, ex,
+      added: () => fit.routineHas(_id, ex.id), onAdd: () => fit.toggleRoutineExercise(_id, ex.id));
+
   Widget _pickRow(GymColors gc, Exercise ex) {
     final inRoutine = fit.routineHas(_id, ex.id);
-    return GestureDetector(
-      onTap: () => fit.toggleRoutineExercise(_id, ex.id),
-      onLongPress: () => showExercisePreview(context, ex),
-      behavior: HitTestBehavior.opaque,
-      child: Container(
+    return Pressable(
+      scale: 0.98,
+      onTap: () {
+        HapticFeedback.selectionClick();
+        fit.toggleRoutineExercise(_id, ex.id);
+      },
+      onLongPress: () => _preview(ex),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 220),
+        curve: Curves.easeOutCubic,
         margin: const EdgeInsets.only(bottom: 8),
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: gc.bgRaised,
-          border: Border.all(color: inRoutine ? gc.ember : gc.border),
-          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: inRoutine ? gc.ember.withValues(alpha: 0.75) : Colors.transparent),
+          borderRadius: BorderRadius.circular(18),
         ),
         child: Row(children: [
           GestureDetector(
-            onTap: () => showExercisePreview(context, ex),
+            onTap: () => _preview(ex),
             child: SizedBox(width: 44, child: ExerciseMedia(ex: ex, height: 44, radius: 10)),
           ),
           const SizedBox(width: 12),
@@ -698,7 +775,9 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
               ],
             ),
           ),
-          Container(
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 220),
+            curve: Curves.easeOutCubic,
             width: 30,
             height: 30,
             decoration: BoxDecoration(
@@ -706,9 +785,19 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
               shape: BoxShape.circle,
               border: Border.all(color: inRoutine ? gc.ember : gc.border, width: 2),
             ),
-            child: inRoutine
-                ? SvgPathIcon(Ic.checkBold, size: 14, color: gc.onEmber)
-                : Icon(PhosphorIconsRegular.plus, size: 15, color: gc.textSecondary),
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 260),
+              transitionBuilder: (child, a) => ScaleTransition(
+                scale: CurvedAnimation(parent: a, curve: Curves.easeOutBack),
+                child: child,
+              ),
+              child: KeyedSubtree(
+                key: ValueKey(inRoutine),
+                child: inRoutine
+                    ? SvgPathIcon(Ic.checkBold, size: 14, color: gc.onEmber)
+                    : Icon(PhosphorIconsRegular.plus, size: 15, color: gc.textSecondary),
+              ),
+            ),
           ),
         ]),
       ),
@@ -737,10 +826,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
           return Container(
             padding: sheetPad(sheet),
             constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(sheet).height * 0.9),
-            decoration: BoxDecoration(
-              color: gc.bgRaised,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
-            ),
+            decoration: sheetDecoration(gc),
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -748,7 +834,17 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                 children: [
                   const SheetHandle(),
                   const SizedBox(height: 18),
-                  Text(exerciseName(ex), style: AppTheme.f(19, weight: FontWeight.w800, color: gc.text)),
+                  Row(children: [
+                    Expanded(
+                      child: Text(exerciseName(ex), style: AppTheme.f(19, weight: FontWeight.w800, color: gc.text)),
+                    ),
+                    const SizedBox(width: 12),
+                    RoundAction(
+                      label: t.favouritesOnly,
+                      onTap: () => fit.toggleFavorite(ex.id),
+                      child: FavoriteStar(on: fit.favorites[ex.id] ?? false),
+                    ),
+                  ]),
                   const SizedBox(height: 4),
                   Text(
                       switch (mode) {
@@ -800,6 +896,16 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                     ),
                   const SizedBox(height: 10),
                   _restRow(sheet, gc, routine, ex),
+                  if (mode.isEmpty) ...[
+                    const SizedBox(height: 8),
+                    _progressRow(sheet, gc, ex),
+                  ],
+                  const SizedBox(height: 8),
+                  _altsRow(sheet, gc, routine, ex),
+                  if (fit.modeOf(ex.id).isEmpty) ...[
+                    const SizedBox(height: 8),
+                    _ladderRow(sheet, gc, routine, ex),
+                  ],
                   const SizedBox(height: 14),
                   PrimaryButton(label: t.done, onTap: () => Navigator.of(sheet).pop()),
                 ],
@@ -807,6 +913,135 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _progressRow(BuildContext sheet, GymColors gc, Exercise ex) {
+    final kind = fit.progressRule(ex.id).kind;
+    final on = fit.hasProgress(ex.id);
+    return Pressable(
+      scale: 0.98,
+      onTap: () => showProgressionSheet(sheet, ex.id),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(16, 12, 12, 12),
+        decoration: BoxDecoration(color: gc.bgRaised2, borderRadius: BorderRadius.circular(18)),
+        child: Row(children: [
+          SvgPathIcon(Ic.trendUp, size: 19, color: on ? gc.text : gc.textSecondary),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(t.progSchemeTitle, style: AppTheme.f(14, weight: FontWeight.w600, color: gc.text)),
+          ),
+          const SizedBox(width: 8),
+          Text(progressKindName(kind),
+              style: AppTheme.f(13, weight: FontWeight.w600, color: on ? gc.accent : gc.textSecondary)),
+          const SizedBox(width: 6),
+          Icon(PhosphorIconsBold.caretRight, size: 13, color: gc.textTertiary),
+        ]),
+      ),
+    );
+  }
+
+  Widget _altsRow(BuildContext sheet, GymColors gc, Routine routine, Exercise ex) {
+    final alts = [for (final id in fit.routineAlts(routine.id, ex.id)) ?fit.exerciseById(id)];
+    return Pressable(
+      scale: 0.98,
+      onTap: () => _pickAlts(sheet, routine.id, ex),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(16, 12, 12, 12),
+        decoration: BoxDecoration(color: gc.bgRaised2, borderRadius: BorderRadius.circular(18)),
+        child: Row(children: [
+          Icon(PhosphorIconsRegular.arrowsLeftRight, size: 19, color: alts.isNotEmpty ? gc.text : gc.textSecondary),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(t.altsTitle, style: AppTheme.f(14, weight: FontWeight.w600, color: gc.text)),
+              const SizedBox(height: 3),
+              Text(alts.isEmpty ? t.altsHint : alts.map(exerciseName).join(' · '),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTheme.f(11.5, weight: FontWeight.w500, color: gc.textSecondary, height: 1.3)),
+            ]),
+          ),
+          const SizedBox(width: 8),
+          Icon(PhosphorIconsBold.caretRight, size: 13, color: gc.textTertiary),
+        ]),
+      ),
+    );
+  }
+
+  void _pickAlts(BuildContext context, String routineId, Exercise ex) {
+    showAppSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (sheet) => AnimatedBuilder(
+        animation: fit,
+        builder: (sheet, _) {
+          final routine = fit.routines.where((r) => r.id == routineId).firstOrNull;
+          if (routine == null) return const SizedBox.shrink();
+          final chosen = fit.routineAlts(routineId, ex.id);
+          final pool = [
+            for (final id in chosen) ?fit.exerciseById(id),
+            for (final e in fit.swapOptions(ex.id, n: 18))
+              if (!chosen.contains(e.id) && !routine.exerciseIds.contains(e.id)) e,
+          ];
+          return AppSheet(children: [
+            SheetTitle(t.altsTitle, subtitle: t.altsPickHint(RoutinesState.maxAlts)),
+            const SizedBox(height: 16),
+            OptionGroup([
+              for (final e in pool)
+                OptionItem(
+                  exerciseName(e),
+                  leading: SizedBox(width: 38, child: ExerciseMedia(ex: e, height: 38, radius: 10)),
+                  detail: t.equipment(e.equipment),
+                  selected: chosen.contains(e.id),
+                  onTap: () {
+                    HapticFeedback.selectionClick();
+                    fit.toggleRoutineAlt(routineId, ex.id, e.id);
+                  },
+                ),
+            ]),
+            const SizedBox(height: 16),
+            PrimaryButton(label: t.done, onTap: () => Navigator.of(sheet).pop()),
+          ]);
+        },
+      ),
+    );
+  }
+
+  Widget _ladderRow(BuildContext sheet, GymColors gc, Routine routine, Exercise ex) {
+    final own = fit.ladderIn(routine, ex.id);
+    final next = fit.nextStepIn(routine, ex.id);
+    final nextEx = next == null ? null : fit.exerciseById(next);
+    return Pressable(
+      scale: 0.98,
+      onTap: () => showLadderSheet(sheet, routine.id, ex),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(16, 12, 12, 12),
+        decoration: BoxDecoration(color: gc.bgRaised2, borderRadius: BorderRadius.circular(18)),
+        child: Row(children: [
+          Icon(PhosphorIconsRegular.stairs, size: 19, color: own != null ? gc.sage : gc.textSecondary),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(t.ladderTitle, style: AppTheme.f(14, weight: FontWeight.w600, color: gc.text)),
+              const SizedBox(height: 3),
+              Text(
+                  nextEx == null
+                      ? t.ladderNone
+                      : [
+                          if (own != null) t.ladderStep(own.indexOf(ex.id) + 1, own.length),
+                          t.rotationRestUpNext(exerciseName(nextEx)),
+                        ].join(' · '),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTheme.f(11.5, weight: FontWeight.w500, color: gc.textSecondary, height: 1.3)),
+            ]),
+          ),
+          const SizedBox(width: 8),
+          Icon(PhosphorIconsBold.caretRight, size: 13, color: gc.textTertiary),
+        ]),
       ),
     );
   }
@@ -870,7 +1105,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
       'time' => [t.timeCol, if (!repsOnly) t.weightCol(fit.units.toUpperCase())],
       _ => [t.repsCol, if (!repsOnly) t.weightCol(fit.units.toUpperCase())],
     };
-    final style = AppTheme.f(10.5, weight: FontWeight.w700, color: gc.textTertiary, letterSpacing: 1);
+    final style = AppTheme.f(10.5, weight: FontWeight.w700, color: gc.textTertiary, letterSpacing: 1.4);
     return Row(children: [
       SizedBox(width: 40, child: Center(child: Text(t.setCol, style: style))),
       const SizedBox(width: 8),
@@ -944,8 +1179,8 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
       () => ask(
           t.weightTitle(fit.units.toUpperCase()),
           p.weightKg == null ? (fit.isLb ? 45 : 20) : fit.toDisplayWeight(p.weightKg!),
-          fit.isLb ? 660 : 300,
-          fit.isLb ? 1 : 0.5,
+          fit.isLb ? 1540 : 700,
+          fit.rulerStep,
           10,
           fit.units,
           (v) => edit(i, v <= 0 ? p.copyWith(autoWeight: true) : p.copyWith(weightKg: fit.fromDisplayWeight(v)))),
@@ -966,7 +1201,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
       () => cardio
           ? ask(t.timeMinutesTitle, ((p.sec ?? 1200) / 60).roundToDouble(), 300, 1, 5, 'min',
               (v) => edit(i, p.copyWith(sec: (v * 60).round())))
-          : ask(t.timeSecondsTitle, (p.sec ?? 30).toDouble(), 900, 5, 6, '',
+          : ask(t.timeSecondsTitle, (p.sec ?? 30).toDouble(), 3600, 5, 6, '',
               (v) => edit(i, p.copyWith(sec: v.round())),
               format: (v) => clockLabel(v.round())),
     );
@@ -1033,10 +1268,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
       backgroundColor: Colors.transparent,
       builder: (sheet) => Container(
         padding: sheetPad(sheet),
-        decoration: BoxDecoration(
-          color: gc.bgRaised,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
-        ),
+        decoration: sheetDecoration(gc),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -1119,7 +1351,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
     showAppSheet<void>(
       context: context,
       backgroundColor: gc.bgRaised,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      shape: sheetShape(gc),
       builder: (_) => SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
@@ -1192,4 +1424,42 @@ class _ShareArt extends StatelessWidget {
       ),
     );
   }
+}
+
+class _GrowIn extends StatefulWidget {
+  const _GrowIn({super.key, required this.play, required this.child});
+
+  final bool play;
+  final Widget child;
+
+  @override
+  State<_GrowIn> createState() => _GrowInState();
+}
+
+class _GrowInState extends State<_GrowIn> with SingleTickerProviderStateMixin {
+  late final AnimationController _c = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 380),
+    value: widget.play ? 0 : 1,
+  )..forward();
+  late final Animation<double> _v = CurvedAnimation(parent: _c, curve: Curves.easeOutCubic);
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => SizeTransition(
+        sizeFactor: _v,
+        axisAlignment: -1,
+        child: FadeTransition(
+          opacity: _v,
+          child: SlideTransition(
+            position: Tween(begin: const Offset(0, -0.15), end: Offset.zero).animate(_v),
+            child: widget.child,
+          ),
+        ),
+      );
 }

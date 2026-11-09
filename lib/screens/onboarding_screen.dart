@@ -1,17 +1,25 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
+import '../catalog/body_art.dart';
 import '../catalog/exercise_catalog.dart';
 import '../l10n/l10n.dart';
+import '../services/device_kind.dart';
 import '../state/fit_state.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import '../widgets/app_background.dart';
 import '../widgets/body_rulers.dart';
+import '../widgets/body_map.dart';
 import '../widgets/entrance.dart';
 import '../widgets/photo_source_sheet.dart';
+import '../widgets/rolling_text.dart';
+import '../widgets/speed_panel.dart';
 import '../widgets/ui_kit.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -24,13 +32,53 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final _page = PageController();
   late final TextEditingController _name = TextEditingController();
-  int _index = 0;
-  static const _last = 6;
+  final _at = ValueNotifier<int>(0);
+
+  int get _index => _at.value;
+  int get _last => _slow ? 7 : 6;
   final Map<String, Set<String>> _places = {};
+  final _frames = <FrameTiming>[];
+  bool _slow = false;
+  bool _probing = false;
+  bool _blur = false;
+  bool _motion = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (fit.lowEndAsked || !fit.blurOn) return;
+    DeviceKind.isLowEnd().then((low) {
+      if (low) _markSlow();
+    });
+    _probing = true;
+    SchedulerBinding.instance.addTimingsCallback(_timings);
+  }
+
+  void _timings(List<FrameTiming> list) {
+    _frames.addAll(list);
+    if (_frames.length < 45) return;
+    _stopProbe();
+    final heavy = _frames.where((f) => (f.buildDuration + f.rasterDuration).inMilliseconds > 24).length;
+    if (heavy > _frames.length * 0.25) _markSlow();
+  }
+
+  void _stopProbe() {
+    if (!_probing) return;
+    _probing = false;
+    SchedulerBinding.instance.removeTimingsCallback(_timings);
+  }
+
+  void _markSlow() {
+    if (!mounted || _slow) return;
+    _stopProbe();
+    setState(() => _slow = true);
+  }
 
   @override
   void dispose() {
+    _stopProbe();
     _page.dispose();
+    _at.dispose();
     _name.dispose();
     super.dispose();
   }
@@ -39,7 +87,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     _page.animateToPage(i, duration: const Duration(milliseconds: 340), curve: Curves.easeOutCubic);
   }
 
-  void _onPage(int i) => setState(() => _index = i);
+  void _onPage(int i) => _at.value = i;
 
   void _finish() {
     final typed = _name.text.trim();
@@ -52,6 +100,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       if (id.isNotEmpty) first ??= id;
     }
     if (first != null && fit.activePlaceId != first) fit.setActivePlace(first);
+    if (_slow) {
+      fit.setPerfLevel(_blur ? 'balanced' : 'lite');
+      fit.setBlur(_blur);
+      fit.setCalmMotion(!_motion);
+      fit.markLowEndAsked();
+    }
     fit.completeOnboarding();
   }
 
@@ -68,8 +122,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     setState(() => fit.setProfilePhoto(bytes));
   }
 
-  Widget _photo(GymColors gc) {
+  Widget _photo(GymColors gc, {double size = 104}) {
     final bytes = fit.profile.photo.isEmpty ? null : fit.profilePhoto;
+    final badge = size * 0.3;
     return Center(
       child: Semantics(
         button: true,
@@ -79,12 +134,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           scale: 0.95,
           child: Column(children: [
             SizedBox(
-              width: 104,
-              height: 104,
+              width: size,
+              height: size,
               child: Stack(clipBehavior: Clip.none, children: [
                 Container(
-                  width: 104,
-                  height: 104,
+                  width: size,
+                  height: size,
                   clipBehavior: Clip.antiAlias,
                   decoration: BoxDecoration(color: gc.bgRaised, shape: BoxShape.circle),
                   foregroundDecoration: BoxDecoration(
@@ -92,21 +147,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     border: Border.all(color: gc.border, width: 1.5),
                   ),
                   child: bytes == null
-                      ? Icon(PhosphorIconsRegular.user, size: 42, color: gc.textTertiary)
+                      ? Icon(PhosphorIconsRegular.user, size: size * 0.4, color: gc.textTertiary)
                       : Image.memory(bytes, fit: BoxFit.cover, gaplessPlayback: true),
                 ),
                 Positioned(
-                  right: 0,
-                  bottom: 2,
+                  right: size * 0.02,
+                  bottom: size * 0.03,
                   child: Container(
-                    width: 34,
-                    height: 34,
+                    width: badge,
+                    height: badge,
                     decoration: BoxDecoration(
                       color: gc.accent,
                       shape: BoxShape.circle,
                       border: Border.all(color: gc.bg, width: 3),
                     ),
-                    child: Icon(PhosphorIconsBold.camera, size: 15, color: gc.onEmber),
+                    child: Icon(PhosphorIconsBold.camera, size: badge * 0.44, color: gc.onEmber),
                   ),
                 ),
               ]),
@@ -128,28 +183,34 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
-          Positioned.fill(child: _Glow(gc)),
-          const Positioned.fill(child: AppBackground(pattern: 'dots')),
+          Positioned.fill(child: RepaintBoundary(child: _Glow(gc))),
+          const Positioned.fill(child: RepaintBoundary(child: AppBackground(pattern: 'dots'))),
           SafeArea(
             child: Column(
               children: [
-                _topBar(gc),
+                ValueListenableBuilder<int>(valueListenable: _at, builder: (_, _, _) => _topBar(gc)),
                 Expanded(
-                  child: PageView(
+                  child: RepaintBoundary(
+                    child: PageView(
                     controller: _page,
                     onPageChanged: _onPage,
                     children: [
-                      _welcome(gc),
-                      _nameStep(gc),
-                      _photoStep(gc),
-                      _unitsStep(gc),
-                      _bodyStep(gc),
-                      _goalStep(gc),
-                      _placeStep(gc),
+                      for (final page in [
+                        _welcome(gc),
+                        _nameStep(gc),
+                        _photoStep(gc),
+                        _unitsStep(gc),
+                        _bodyStep(gc),
+                        _goalStep(gc),
+                        _placeStep(gc),
+                        if (_slow) _speedStep(gc),
+                      ])
+                        RepaintBoundary(child: page),
                     ],
                   ),
+                  ),
                 ),
-                _bottomBar(gc),
+                ValueListenableBuilder<int>(valueListenable: _at, builder: (_, _, _) => _bottomBar(gc)),
               ],
             ),
           ),
@@ -171,7 +232,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 280),
                       curve: Curves.easeOutCubic,
-                      margin: const EdgeInsets.only(right: 6),
+                      margin: const EdgeInsetsDirectional.only(end: 6),
                       height: 3,
                       decoration: BoxDecoration(
                         color: i <= _index ? gc.text : gc.bgRaised2,
@@ -209,7 +270,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: Container(
                 width: 56,
                 height: 56,
-                margin: const EdgeInsets.only(right: 12),
+                margin: const EdgeInsetsDirectional.only(end: 12),
                 decoration: BoxDecoration(color: gc.bgRaised, shape: BoxShape.circle),
                 child: Icon(PhosphorIconsBold.arrowLeft, size: 18, color: gc.textSecondary),
               ),
@@ -235,6 +296,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     required String title,
     required String why,
     required Widget child,
+    Widget Function(double height)? hero,
   }) {
     return LayoutBuilder(
       builder: (context, box) => SingleChildScrollView(
@@ -245,7 +307,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _in(0, Padding(padding: const EdgeInsets.only(left: 4), child: _label(gc, t.onbStep(step, _last)))),
+              if (hero != null) ...[
+                () {
+                  final h = (box.maxHeight * 0.3).clamp(120.0, 250.0);
+                  return _in(0, SizedBox(height: h, child: Center(child: hero(h))));
+                }(),
+                const SizedBox(height: 22),
+              ],
+              _in(0, Padding(padding: const EdgeInsetsDirectional.only(start: 4), child: _label(gc, t.onbStep(step, _last)))),
               const SizedBox(height: 10),
               _in(
                 1,
@@ -274,7 +343,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Widget _label(GymColors gc, String text) => Text(text.toUpperCase(),
-      style: AppTheme.f(10.5, weight: FontWeight.w700, color: gc.textTertiary, letterSpacing: 1.3));
+      style: AppTheme.f(10.5, weight: FontWeight.w700, color: gc.textTertiary, letterSpacing: 1.4));
 
   Widget _group(GymColors gc, List<Widget> rows) {
     return Container(
@@ -293,7 +362,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   Widget _rowIcon(GymColors gc, IconData icon, {Color? color}) => Padding(
-        padding: const EdgeInsets.only(right: 14),
+        padding: const EdgeInsetsDirectional.only(end: 14),
         child: SizedBox(width: 22, child: Icon(icon, size: 19, color: color ?? gc.textSecondary)),
       );
 
@@ -320,7 +389,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: Text(t.welcomeKicker.toUpperCase(),
-                      style: AppTheme.f(10.5, weight: FontWeight.w700, color: gc.textTertiary, letterSpacing: 1.6)),
+                      style: AppTheme.f(10.5, weight: FontWeight.w700, color: gc.textTertiary, letterSpacing: 1.4)),
                 ),
               ),
               const SizedBox(height: 8),
@@ -384,6 +453,44 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       step: 1,
       title: t.onbNameTitle,
       why: t.onbNameWhy,
+      hero: (h) => ValueListenableBuilder<TextEditingValue>(
+        valueListenable: _name,
+        builder: (context, value, _) {
+          final name = value.text.trim();
+          final avatar = h * 0.46;
+          return Column(mainAxisSize: MainAxisSize.min, children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 260),
+              curve: Curves.easeOutCubic,
+              width: avatar,
+              height: avatar,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: name.isEmpty ? gc.bgRaised : gc.ember,
+              ),
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 200),
+                transitionBuilder: (child, a) => ScaleTransition(scale: a, child: FadeTransition(opacity: a, child: child)),
+                child: name.isEmpty
+                    ? Icon(PhosphorIconsRegular.user, key: const ValueKey(''), size: avatar * 0.42, color: gc.textTertiary)
+                    : Text(name.characters.first.toUpperCase(),
+                        key: ValueKey(name.characters.first.toUpperCase()),
+                        style: AppTheme.f(avatar * 0.44, weight: FontWeight.w800, color: gc.onEmber)),
+              ),
+            ),
+            SizedBox(height: h * 0.08),
+            AnimatedOpacity(
+              duration: const Duration(milliseconds: 200),
+              opacity: name.isEmpty ? 0.35 : 1,
+              child: Text(t.onbHello(name.isEmpty ? '…' : name),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTheme.f(26, weight: FontWeight.w800, color: gc.text)),
+            ),
+          ]);
+        },
+      ),
       child: _group(gc, [
         Padding(
           padding: const EdgeInsets.only(left: 16, right: 8),
@@ -419,11 +526,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       step: 2,
       title: t.onbPhotoTitle,
       why: t.onbPhotoWhy,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 28),
-        decoration: BoxDecoration(color: gc.bgRaised, borderRadius: BorderRadius.circular(20)),
-        child: _photo(gc),
-      ),
+      hero: (h) => _photo(gc, size: h * 0.72),
+      child: const SizedBox.shrink(),
     );
   }
 
@@ -434,6 +538,32 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       step: 4,
       title: t.onbBodyTitle,
       why: t.onbBodyWhy,
+      hero: (h) {
+        const view = Rect.fromLTRB(-4, -2, 234, 466);
+        final art = bodyArtFor(p.sex);
+        return AnimatedSwitcher(
+          duration: const Duration(milliseconds: 360),
+          switchInCurve: Curves.easeOutCubic,
+          transitionBuilder: (child, a) => FadeTransition(
+            opacity: a,
+            child: ScaleTransition(scale: Tween(begin: 0.94, end: 1.0).animate(a), child: child),
+          ),
+          child: SizedBox(
+            key: ValueKey(art.id),
+            height: h,
+            width: h * view.width / view.height,
+            child: CustomPaint(
+              painter: BodyPainter(
+                gc: gc,
+                art: art,
+                crop: view,
+                token: 'onb${art.id}',
+                color: (_) => Color.lerp(gc.bgRaised2, gc.accent, 0.78)!,
+              ),
+            ),
+          ),
+        );
+      },
       child: _group(gc, [
         _bodyRow(
           gc,
@@ -499,16 +629,35 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       step: 5,
       title: t.onbGoalTitle,
       why: t.onbGoalWhy,
+      hero: (h) => SizedBox(
+        width: h,
+        height: h,
+        child: TweenAnimationBuilder<double>(
+          tween: Tween(end: goal.toDouble()),
+          duration: const Duration(milliseconds: 420),
+          curve: Curves.easeOutCubic,
+          builder: (context, lit, _) => CustomPaint(
+            painter: _WeekRing(lit: lit, on: gc.ember, off: gc.bgRaised2),
+            child: Center(
+              child: Column(mainAxisSize: MainAxisSize.min, children: [
+                MediaQuery.withNoTextScaling(
+                  child: RollingText('$goal',
+                      style: AppTheme.d(h * 0.3, weight: FontWeight.w800, color: gc.text, height: 1.4)),
+                ),
+                Text(t.perWeek(goal).replaceFirst('$goal', '').trim().toUpperCase(),
+                    textAlign: TextAlign.center,
+                    style: AppTheme.f(10, weight: FontWeight.w700, color: gc.textTertiary, letterSpacing: 1.2)),
+              ]),
+            ),
+          ),
+        ),
+      ),
       child: Container(
-        padding: const EdgeInsets.fromLTRB(18, 20, 18, 20),
-        decoration: BoxDecoration(color: gc.bgRaised, borderRadius: BorderRadius.circular(20)),
+        padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
+        decoration: BoxDecoration(color: gc.bgRaised, borderRadius: BorderRadius.circular(100)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _label(gc, t.weeklyGoal),
-            const SizedBox(height: 8),
-            Text(t.perWeek(goal), style: AppTheme.f(22, weight: FontWeight.w800, color: gc.text)),
-            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -549,7 +698,30 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       gc,
       step: 3,
       title: t.onbUnitsTitle,
-      why: t.autofills,
+      why: t.onbUnitsWhy,
+      hero: (h) {
+        final kg = fit.units == 'kg';
+        return Column(mainAxisSize: MainAxisSize.min, children: [
+          Ltr(child: Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              MediaQuery.withNoTextScaling(
+                child: RollingText(kg ? '100' : '225',
+                    style: AppTheme.d(h * 0.42, weight: FontWeight.w800, color: gc.text, height: 1.4)),
+              ),
+              const SizedBox(width: 8),
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 240),
+                child: Text(fit.units,
+                    key: ValueKey(fit.units),
+                    style: AppTheme.f(h * 0.15, weight: FontWeight.w800, color: gc.ember)),
+              ),
+            ],
+          )),
+        ]);
+      },
       child: Row(
         children: [
           for (final u in const ['kg', 'lb']) ...[
@@ -611,12 +783,55 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     'outdoors': PhosphorIconsRegular.tree,
   };
 
+  Widget _speedStep(GymColors gc) {
+    return _step(
+      gc,
+      step: 7,
+      title: t.onbSpeedTitle,
+      why: t.onbSpeedWhy,
+      child: SpeedPanel(footer: t.onbSpeedLater, rows: [
+        (t.blurSetting, t.onbSpeedBlurHint, _blur, () => setState(() => _blur = !_blur)),
+        (t.onbSpeedMotion, t.onbSpeedMotionHint, _motion, () => setState(() => _motion = !_motion)),
+      ]),
+    );
+  }
+
   Widget _placeStep(GymColors gc) {
     return _step(
       gc,
       step: 6,
       title: t.onbPlaceTitle,
       why: t.onbPlaceWhy,
+      hero: (h) {
+        final gear = <String>{'Bodyweight', for (final g in _places.values) ...g};
+        final n = _places.isEmpty
+            ? fit.allExercises.length
+            : fit.allExercises.where((e) => gear.contains(e.equipment)).length;
+        return Column(mainAxisSize: MainAxisSize.min, children: [
+          Row(mainAxisSize: MainAxisSize.min, children: [
+            for (final preset in kPlacePresets)
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 240),
+                curve: Curves.easeOutCubic,
+                margin: const EdgeInsets.symmetric(horizontal: 5),
+                width: h * 0.22,
+                height: h * 0.22,
+                decoration: BoxDecoration(
+                  color: _places.containsKey(preset) ? gc.ember : gc.bgRaised,
+                  borderRadius: BorderRadius.circular(h * 0.07),
+                ),
+                child: Icon(_placeIcons[preset],
+                    size: h * 0.1, color: _places.containsKey(preset) ? gc.onEmber : gc.textTertiary),
+              ),
+          ]),
+          SizedBox(height: h * 0.06),
+          MediaQuery.withNoTextScaling(
+            child: RollingText('$n', style: AppTheme.d(h * 0.28, weight: FontWeight.w800, color: gc.text, height: 1.4)),
+          ),
+          Text(t.onbPlaceHero.toUpperCase(),
+              style: AppTheme.f(10, weight: FontWeight.w700, color: gc.textTertiary, letterSpacing: 1.2)),
+        ]);
+      },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -635,7 +850,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         for (final preset in kPlacePresets)
                           if (_places[preset] case final gear?) ...[
                             Padding(
-                              padding: const EdgeInsets.only(left: 4),
+                              padding: const EdgeInsetsDirectional.only(start: 4),
                               child: _label(
                                   gc,
                                   _places.length > 1
@@ -721,6 +936,34 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     action();
     setState(() {});
   }
+}
+
+class _WeekRing extends CustomPainter {
+  _WeekRing({required this.lit, required this.on, required this.off});
+
+  final double lit;
+  final Color on;
+  final Color off;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final stroke = size.width * 0.07;
+    final rect = (Offset.zero & size).deflate(stroke / 2);
+    const gap = 0.16;
+    const sweep = math.pi * 2 / 7;
+    for (var i = 0; i < 7; i++) {
+      final fill = (lit - i).clamp(0.0, 1.0);
+      final paint = Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = stroke
+        ..strokeCap = StrokeCap.round
+        ..color = Color.lerp(off, on, fill)!;
+      canvas.drawArc(rect, -math.pi / 2 + i * sweep + gap / 2, sweep - gap, false, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(_WeekRing old) => old.lit != lit || old.on != on || old.off != off;
 }
 
 class _Glow extends StatelessWidget {

@@ -37,7 +37,7 @@ class _SearchBar extends StatelessWidget {
         label: t.newFood,
         size: 52,
         onTap: () => showFoodEditor(context),
-        child: Icon(PhosphorIconsRegular.camera, size: 20, color: gc.text),
+        child: Icon(PhosphorIconsBold.plus, size: 20, color: gc.text),
       ),
     ]);
   }
@@ -99,7 +99,7 @@ class _Folders extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final favs = fit.favoriteFoodItems;
-    final meals = fit.recipes;
+    final meals = fit.activeRecipes;
     return Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
       Expanded(
         child: HomeFolder(
@@ -190,6 +190,15 @@ Future<void> showFavoritesSheet(BuildContext context) => _sheet<void>(context, (
 
 Future<void> showSavedMealsSheet(BuildContext context) => _sheet<void>(context, (context) {
       final gc = context.gc;
+      Widget recipeRow(Recipe r) => _FoodRow(
+            leading: FoodPlate(items: _plateOf(r.items), size: 40),
+            title: r.name,
+            detail: '${_energy(r.total.kcal)} · ${t.recipeItems(r.items.length)}',
+            onTap: () async {
+              final done = await showRecipeSheet(context, r, fit.defaultMeal);
+              if (done == true && context.mounted) Navigator.of(context).pop();
+            },
+          );
       return AnimatedBuilder(
         animation: fit,
         builder: (context, _) => _sheetFrame(context, [
@@ -209,15 +218,13 @@ Future<void> showSavedMealsSheet(BuildContext context) => _sheet<void>(context, 
               showDishEditor(context, meal: fit.defaultMeal);
             },
           ),
-          for (final r in fit.recipes)
-            _FoodRow(
-              leading: FoodPlate(items: _plateOf(r.items), size: 40),
-              title: r.name,
-              detail: '${_energy(r.total.kcal)} · ${t.recipeItems(r.items.length)}',
-              onTap: () async {
-                final done = await showRecipeSheet(context, r, fit.defaultMeal);
-                if (done == true && context.mounted) Navigator.of(context).pop();
-              },
+          for (final r in fit.activeRecipes) recipeRow(r),
+          if (fit.archivedRecipes.isNotEmpty)
+            _ArchivedFold(
+              count: fit.archivedRecipes.length,
+              open: fit.showArchivedRecipes,
+              onToggle: fit.toggleArchivedRecipes,
+              child: Column(children: [for (final r in fit.archivedRecipeList) recipeRow(r)]),
             ),
           if (fit.recipes.isEmpty) ...[
             const SizedBox(height: 10),
@@ -270,7 +277,6 @@ class _MealTabs extends StatefulWidget {
 }
 
 class _MealTabsState extends State<_MealTabs> {
-  Meal? _meal;
   Meal? _visible;
   final _keys = <Meal, GlobalKey>{};
 
@@ -278,6 +284,7 @@ class _MealTabsState extends State<_MealTabs> {
 
   @override
   void dispose() {
+    fit.pickedMeal = null;
     _scroll.dispose();
     super.dispose();
   }
@@ -305,8 +312,7 @@ class _MealTabsState extends State<_MealTabs> {
     final gc = context.gc;
     final entries = fit.entriesOn(fit.nutritionDay);
     final meals = fit.mealsShown;
-    final picked = _meal;
-    final meal = picked != null && meals.contains(picked) ? picked : fit.defaultMeal;
+    final meal = fit.openMeal;
     _reveal(meal);
     final shown = [
       for (final e in entries)
@@ -326,7 +332,7 @@ class _MealTabsState extends State<_MealTabs> {
               behavior: HitTestBehavior.opaque,
               onTap: () {
                 HapticFeedback.selectionClick();
-                setState(() => _meal = m);
+                fit.pickMeal(m);
               },
               child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 AnimatedDefaultTextStyle(
@@ -338,7 +344,7 @@ class _MealTabsState extends State<_MealTabs> {
                 ),
                 if (count(m) > 0 && m != meal)
                   Padding(
-                    padding: const EdgeInsets.only(left: 3),
+                    padding: const EdgeInsetsDirectional.only(start: 3),
                     child: Container(
                       width: 6,
                       height: 6,
@@ -353,7 +359,7 @@ class _MealTabsState extends State<_MealTabs> {
       ),
       const SizedBox(height: 14),
       SoftCard(
-        radius: 28,
+        radius: 26,
         padding: const EdgeInsets.fromLTRB(16, 16, 12, 16),
         child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           Row(children: [
@@ -382,12 +388,12 @@ class _MealTabsState extends State<_MealTabs> {
             const SizedBox(width: 16),
             Expanded(
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Row(crossAxisAlignment: CrossAxisAlignment.baseline, textBaseline: TextBaseline.alphabetic, children: [
+                Ltr(child: Row(crossAxisAlignment: CrossAxisAlignment.baseline, textBaseline: TextBaseline.alphabetic, children: [
                   RollingText('${fit.energyOf(total.kcal)}',
                       style: AppTheme.f(30, weight: FontWeight.w800, color: gc.text, height: 1.2)),
                   const SizedBox(width: 5),
                   Text(fit.energyUnit, style: AppTheme.f(13, weight: FontWeight.w700, color: gc.textSecondary)),
-                ]),
+                ])),
                 const SizedBox(height: 4),
                 Text(
                   shown.isEmpty ? t.nothingLogged : t.recipeItems(shown.length),
@@ -419,7 +425,7 @@ class _MealTabsState extends State<_MealTabs> {
             Expanded(
               child: PrimaryButton(
                 label: t.addToMeal(mealInSentence(meal)),
-                height: 50,
+                height: 52,
                 onTap: () => showAddFoodSheet(context, meal),
               ),
             ),
@@ -742,6 +748,23 @@ class _RecipeSheetState extends State<_RecipeSheet> {
             child: Text(t.dishEdit, style: AppTheme.f(13, weight: FontWeight.w700, color: gc.textSecondary)),
           ),
           TextButton(
+            onPressed: () {
+              final on = !fit.isRecipeArchived(r.id);
+              fit.setRecipeArchived(r.id, on);
+              Navigator.of(context).pop();
+              if (on) {
+                showNotchToast(context, t.dishArchivedToast,
+                    subtitle: r.name,
+                    icon: PhosphorIconsFill.archive,
+                    accent: gc.textSecondary,
+                    action: t.undo,
+                    onTap: () => fit.setRecipeArchived(r.id, false));
+              }
+            },
+            child: Text(fit.isRecipeArchived(r.id) ? t.dishUnarchive : t.dishArchive,
+                style: AppTheme.f(13, weight: FontWeight.w700, color: gc.textSecondary)),
+          ),
+          TextButton(
             onPressed: _delete,
             child: Text(t.delete, style: AppTheme.f(13, weight: FontWeight.w700, color: gc.danger)),
           ),
@@ -772,7 +795,7 @@ class _MacroPill extends StatelessWidget {
           child: Text(letter, style: AppTheme.f(8.5, weight: FontWeight.w900, color: color)),
         ),
         const SizedBox(width: 4),
-        Text('${_g(value)}g', style: AppTheme.f(11, weight: FontWeight.w700, color: gc.text)),
+        Text('${value.round()}g', style: AppTheme.f(11, weight: FontWeight.w700, color: gc.text)),
       ]),
     );
   }
@@ -795,7 +818,7 @@ class _EntryRow extends StatelessWidget {
       direction: DismissDirection.endToStart,
       background: Container(
         alignment: Alignment.centerRight,
-        padding: const EdgeInsets.only(right: 22),
+        padding: const EdgeInsetsDirectional.only(end: 22),
         decoration: BoxDecoration(color: gc.danger.withValues(alpha: 0.18), borderRadius: BorderRadius.circular(20)),
         child: Icon(PhosphorIconsBold.trash, size: 18, color: gc.danger),
       ),
@@ -1036,10 +1059,7 @@ class _DishEditorState extends State<_DishEditor> {
         child: Container(
           height: media.size.height * 0.88,
           padding: EdgeInsets.fromLTRB(20, 12, 20, 14 + media.padding.bottom),
-          decoration: BoxDecoration(
-            color: gc.bgRaised,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
-          ),
+          decoration: sheetDecoration(gc),
           child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
             const SheetHandle(),
             const SizedBox(height: 10),
@@ -1137,5 +1157,46 @@ class _DishEditorState extends State<_DishEditor> {
         ),
       ),
     );
+  }
+}
+
+class _ArchivedFold extends StatelessWidget {
+  const _ArchivedFold({required this.count, required this.open, required this.onToggle, required this.child});
+
+  final int count;
+  final bool open;
+  final VoidCallback onToggle;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final gc = context.gc;
+    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          HapticFeedback.selectionClick();
+          onToggle();
+        },
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(4, 14, 4, 10),
+          child: Row(children: [
+            Expanded(child: SectionLabel('${t.archivedFilter} · $count')),
+            AnimatedRotation(
+              turns: open ? 0.5 : 0,
+              duration: const Duration(milliseconds: 220),
+              curve: Curves.easeOutCubic,
+              child: Icon(PhosphorIconsBold.caretDown, size: 13, color: gc.textTertiary),
+            ),
+          ]),
+        ),
+      ),
+      AnimatedSize(
+        duration: const Duration(milliseconds: 220),
+        curve: Curves.easeOutCubic,
+        alignment: Alignment.topCenter,
+        child: open ? Opacity(opacity: 0.6, child: child) : const SizedBox(width: double.infinity),
+      ),
+    ]);
   }
 }

@@ -42,9 +42,9 @@ class _StravaSheetState extends State<_StravaSheet> {
     super.initState();
     final list = [...fit.sessions]..sort((a, b) => b.date.compareTo(a.date));
     for (final s in list) {
-      (_byDay[_key(s.date)] ??= []).add(s);
+      (_byDay[_key(s.day)] ??= []).add(s);
     }
-    _day = list.isEmpty ? null : _key(list.first.date);
+    _day = list.isEmpty ? null : _key(list.first.day);
     final base = _day ?? DateTime.now();
     _month = DateTime(base.year, base.month);
   }
@@ -56,10 +56,7 @@ class _StravaSheetState extends State<_StravaSheet> {
     return Container(
       constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.88),
       padding: sheetPad(context),
-      decoration: BoxDecoration(
-        color: gc.bgRaised,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
-      ),
+      decoration: sheetDecoration(gc),
       child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -74,7 +71,7 @@ class _StravaSheetState extends State<_StravaSheet> {
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(color: gc.accentSoft, borderRadius: BorderRadius.circular(100)),
                 child: Text(t.stravaBeta,
-                    style: AppTheme.f(10.5, weight: FontWeight.w800, color: gc.accent, letterSpacing: 1.2)),
+                    style: AppTheme.f(10.5, weight: FontWeight.w700, color: gc.accent, letterSpacing: 1.4)),
               ),
             ]),
             const SizedBox(height: 8),
@@ -199,7 +196,7 @@ class _StravaSheetState extends State<_StravaSheet> {
         child: Row(children: [
           Expanded(
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(t.longDate(s.date),
+              Text(t.longDate(s.day),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: AppTheme.f(14.5, weight: FontWeight.w700, color: gc.text)),

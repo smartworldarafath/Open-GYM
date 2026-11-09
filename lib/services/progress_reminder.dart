@@ -3,6 +3,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 import '../l10n/l10n.dart';
+import 'notif_sound.dart';
 import 'train_reminder.dart';
 
 class ProgressReminder {
@@ -10,17 +11,19 @@ class ProgressReminder {
   static final ProgressReminder instance = ProgressReminder._();
 
   static const _id = 1002;
+  static const _measureId = 1003;
 
   final _plugin = FlutterLocalNotificationsPlugin();
   bool enabled = true;
 
   AndroidNotificationDetails get _android => AndroidNotificationDetails(
-        'progress_photo',
+        NotifSound.channelOf('progress_photo', SoundGroup.other),
         t.notifPhotoChannel,
         channelDescription: t.notifPhotoChannelWhy,
         importance: Importance.defaultImportance,
         priority: Priority.defaultPriority,
-        playSound: true,
+        playSound: NotifSound.plays(SoundGroup.other),
+        sound: NotifSound.soundOf(SoundGroup.other),
       );
 
   DarwinNotificationDetails get _darwin => const DarwinNotificationDetails(
@@ -49,6 +52,99 @@ class ProgressReminder {
     } catch (e) {
       debugPrint('No se pudo programar el recordatorio de fotos: $e');
     }
+  }
+
+  Future<void> scheduleMeasure(DateTime day, int intervalDays) async {
+    if (!enabled) return;
+    await cancelMeasure();
+    if (intervalDays <= 0) return;
+    try {
+      final when = atLocal(DateTime(day.year, day.month, day.day, 10, 30));
+      if (!when.isAfter(tz.TZDateTime.now(tz.local))) return;
+      await _plugin.zonedSchedule(
+        id: _measureId,
+        title: t.notifMeasureTitle,
+        body: t.notifMeasureBody(intervalDays),
+        scheduledDate: when,
+        notificationDetails: NotificationDetails(
+          android: AndroidNotificationDetails(
+            NotifSound.channelOf('measures', SoundGroup.other),
+            t.notifMeasureChannel,
+            channelDescription: t.notifMeasureChannelWhy,
+            importance: Importance.defaultImportance,
+            priority: Priority.defaultPriority,
+            playSound: NotifSound.plays(SoundGroup.other),
+            sound: NotifSound.soundOf(SoundGroup.other),
+          ),
+          iOS: _darwin,
+        ),
+        androidScheduleMode: await reminderMode(_plugin),
+      );
+    } catch (e) {
+      debugPrint('No se pudo programar el recordatorio de medidas: $e');
+    }
+  }
+
+  static const _fastId = 1004;
+  static const _fastDoneId = 1005;
+
+  AndroidNotificationDetails _fastAndroid({required bool live, DateTime? end}) => AndroidNotificationDetails(
+        live ? 'fasting_live' : NotifSound.channelOf('fasting', SoundGroup.food),
+        live ? t.notifFastLiveChannel : t.notifFastChannel,
+        channelDescription: live ? t.notifFastLiveChannelWhy : t.notifFastChannelWhy,
+        importance: live ? Importance.low : Importance.defaultImportance,
+        priority: live ? Priority.low : Priority.defaultPriority,
+        playSound: !live && NotifSound.plays(SoundGroup.food),
+        sound: live ? null : NotifSound.soundOf(SoundGroup.food),
+        enableVibration: !live,
+        ongoing: live,
+        autoCancel: !live,
+        onlyAlertOnce: live,
+        showWhen: live,
+        when: live ? end?.millisecondsSinceEpoch : null,
+        usesChronometer: live,
+        chronometerCountDown: live,
+        category: live ? AndroidNotificationCategory.stopwatch : AndroidNotificationCategory.reminder,
+      );
+
+  Future<void> showFast(DateTime start, DateTime end) async {
+    if (!enabled) return;
+    await cancelFast();
+    try {
+      if (end.isAfter(DateTime.now())) {
+        await _plugin.show(
+          id: _fastId,
+          title: t.notifFastLiveTitle,
+          body: t.notifFastLiveBody(t.clockTime(end)),
+          notificationDetails: NotificationDetails(android: _fastAndroid(live: true, end: end)),
+        );
+        await _plugin.zonedSchedule(
+          id: _fastDoneId,
+          title: t.notifFastDoneTitle,
+          body: t.notifFastDoneBody(end.difference(start).inHours),
+          scheduledDate: tz.TZDateTime.from(end, tz.local),
+          notificationDetails: NotificationDetails(android: _fastAndroid(live: false), iOS: _darwin),
+          androidScheduleMode: await reminderMode(_plugin),
+        );
+      }
+    } catch (e) {
+      debugPrint('No se pudo programar el aviso del ayuno: $e');
+    }
+  }
+
+  Future<void> cancelFast() async {
+    if (!enabled) return;
+    try {
+      await _plugin.cancel(id: _fastId);
+      await _plugin.cancel(id: _fastDoneId);
+    } catch (_) {}
+  }
+
+  Future<void> cancelMeasure() async {
+    if (!enabled) return;
+    try {
+      await _plugin.cancel(id: _measureId);
+    } catch (_) {}
   }
 
   Future<void> cancel() async {

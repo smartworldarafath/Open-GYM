@@ -106,6 +106,7 @@ const Map<String, List<String>> kExerciseAliases = {
   'Hip Abduction Machine': ['Hip Abduction (Machine)'],
   'Hip Adduction Machine': ['Hip Adduction (Machine)'],
   'Hip Thrust': ['Hip Thrust (Bodyweight)'],
+  'Incline Chest Press Machine': ['Incline Chest Press (Machine)', 'Lever Incline Chest Press'],
   'Incline Dumbbell Curl': ['Incline Curl (Dumbbell)'],
   'JM Press': ['Barbell Jm Bench Press'],
   'Jump Rope': ['Skipping Rope'],

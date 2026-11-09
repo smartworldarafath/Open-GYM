@@ -97,16 +97,25 @@ class TimerPanel extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Expanded(child: _stat(gc, elapsed, elapsedLabel, CrossAxisAlignment.start)),
+                      const SizedBox(width: 10),
                       Column(
                         children: [
                           RollingText(clockLabel(remaining),
                               countsDown: true,
                               style: AppTheme.f(36, weight: FontWeight.w800, color: gc.text, height: 1.05)),
                           const SizedBox(height: 4),
-                          Text(hint.toUpperCase(),
-                              style: AppTheme.f(10, weight: FontWeight.w800, color: accent, letterSpacing: 1.6)),
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 150),
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(hint.toUpperCase(),
+                                  maxLines: 1,
+                                  style: AppTheme.f(10, weight: FontWeight.w800, color: accent, letterSpacing: 1.6)),
+                            ),
+                          ),
                         ],
                       ),
+                      const SizedBox(width: 10),
                       Expanded(child: _stat(gc, sets, setsLabel, CrossAxisAlignment.end)),
                     ],
                   ),
@@ -124,8 +133,12 @@ class TimerPanel extends StatelessWidget {
         children: [
           RollingText(value, style: AppTheme.f(19, weight: FontWeight.w800, color: gc.text, height: 1.1)),
           const SizedBox(height: 3),
-          Text(caption.toUpperCase(),
-              style: AppTheme.f(9.5, weight: FontWeight.w700, color: gc.textTertiary, letterSpacing: 1.5)),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(caption.toUpperCase(),
+                maxLines: 1,
+                style: AppTheme.f(9.5, weight: FontWeight.w700, color: gc.textTertiary, letterSpacing: 1.5)),
+          ),
         ],
       );
 

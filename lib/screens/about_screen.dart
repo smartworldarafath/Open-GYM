@@ -15,11 +15,11 @@ import '../widgets/liquid_glass.dart';
 import '../widgets/ui_kit.dart';
 import 'update_screen.dart';
 
-const _kVersion = '1.3.4 (beta2.2)';
+const _kVersion = '1.3.4';
+const kAppVersion = '1.3.4';
 const _kAuthor = 'Arafath';
 const _kAuthorUrl = 'https://github.com/smartworldarafath';
 const _kRepoUrl = 'https://github.com/smartworldarafath/Open-GYM';
-
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
@@ -75,7 +75,7 @@ class AboutScreen extends StatelessWidget {
   }
 
   Widget _sectionLabel(GymColors gc, String label) => Text(label.toUpperCase(),
-      style: AppTheme.f(10.5, weight: FontWeight.w700, color: gc.textTertiary, letterSpacing: 1.3));
+      style: AppTheme.f(10.5, weight: FontWeight.w700, color: gc.textTertiary, letterSpacing: 1.4));
 
   Widget _hero(BuildContext context, GymColors gc) {
     final dark = gc.bg.computeLuminance() < 0.5;
@@ -291,7 +291,7 @@ class AboutScreen extends StatelessWidget {
                   child: Row(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(right: 14),
+                        padding: const EdgeInsetsDirectional.only(end: 14),
                         child: SizedBox(
                           width: 22,
                           child: Icon(rows[i].$1, size: 19, color: rows[i].$5 ?? gc.textSecondary),

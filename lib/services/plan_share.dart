@@ -25,6 +25,9 @@ class PlanItem {
     this.steps = const [],
     this.mode = '',
     this.secondary = const [],
+    this.ladder = const [],
+    this.sec,
+    this.km,
   });
   final String name;
   final int? sets;
@@ -40,6 +43,9 @@ class PlanItem {
   final String? level;
   final List<String> steps;
   final String mode;
+  final List<String> ladder;
+  final int? sec;
+  final double? km;
 }
 
 class PlanRoutine {
@@ -231,6 +237,7 @@ int _kind(Object? v) {
   if (s.startsWith('drop')) return 2;
   if (s.startsWith('fail') || s.startsWith('fallo') || s == 'amrap') return 3;
   if (s.startsWith('restpause') || s == 'rp') return 4;
+  if (s.startsWith('cluster') || s == 'c') return 5;
   return 0;
 }
 
@@ -313,7 +320,62 @@ List<PlanItem> _items(Object? raw, bool lb) {
         final List list => list.whereType<String>().toList(),
         _ => const [],
       },
+      ladder: switch (_value(entry, ['progression', 'ladder', 'progresion', 'progressao', 'progressione'])) {
+        final List list => [for (final s in list.whereType<String>()) if (s.trim().isNotEmpty) s.trim()],
+        _ => const [],
+      },
+      sec: _seconds(_value(entry, _timeKeys)),
+      km: _double(_value(entry, _distanceKeys)),
     ));
+  }
+  return _mergeRepeats(out);
+}
+
+List<PlanSet> _expanded(PlanItem item) {
+  if (item.plan.isNotEmpty) {
+    final working = item.plan.where((p) => p.kind != 1).length;
+    return [
+      for (final p in item.plan)
+        PlanSet(reps: p.reps ?? item.reps, weightKg: p.weightKg ?? item.weightKg, kind: p.kind, sec: p.sec ?? item.sec, km: p.km ?? item.km),
+      for (var i = working; i < (item.sets ?? working); i++)
+        PlanSet(reps: item.reps, weightKg: item.weightKg, sec: item.sec, km: item.km),
+    ];
+  }
+  return [for (var i = 0; i < (item.sets ?? 1); i++) PlanSet(reps: item.reps, weightKg: item.weightKg, sec: item.sec, km: item.km)];
+}
+
+List<PlanItem> _mergeRepeats(List<PlanItem> items) {
+  String key(PlanItem i) => (i.id ?? i.name).trim().toLowerCase();
+  final seen = <String, int>{};
+  final out = <PlanItem>[];
+  for (final item in items) {
+    final at = seen[key(item)];
+    if (at == null) {
+      seen[key(item)] = out.length;
+      out.add(item);
+      continue;
+    }
+    final first = out[at];
+    final plan = [..._expanded(first), ..._expanded(item)];
+    out[at] = PlanItem(
+      first.name,
+      plan.where((p) => p.kind != 1).length,
+      id: first.id,
+      reps: first.reps ?? item.reps,
+      weightKg: first.weightKg ?? item.weightKg,
+      restSec: first.restSec ?? item.restSec,
+      superset: first.superset || item.superset,
+      plan: plan,
+      muscle: first.muscle,
+      equipment: first.equipment,
+      level: first.level,
+      steps: first.steps,
+      mode: first.mode,
+      secondary: first.secondary,
+      ladder: first.ladder,
+      sec: first.sec ?? item.sec,
+      km: first.km ?? item.km,
+    );
   }
   return out;
 }
@@ -357,6 +419,8 @@ List<PlanRoutine> _parseCsv(String raw) {
   var weight = col(_weightKeys);
   final group = col(['week', 'semana', 'group', 'grupo', 'program']);
   final rest = col(_restKeys);
+  final time = col(_timeKeys);
+  final distance = col(_distanceKeys);
   final days = col(['weekday', 'weekdays', 'schedule']);
   final lb = head.any((h) => h == 'lbs' || h == 'lb' || h == 'weightlbs');
   var body = rows.skip(1).toList();
@@ -393,6 +457,8 @@ List<PlanRoutine> _parseCsv(String raw) {
       reps: _int(cell(r, reps)),
       weightKg: _weight(cell(r, weight), lb),
       restSec: _seconds(cell(r, rest)),
+      sec: _seconds(cell(r, time)),
+      km: _double(cell(r, distance)),
     ));
   }
   return [

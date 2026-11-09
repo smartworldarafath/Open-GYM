@@ -555,7 +555,7 @@ class WearRoutines extends StatelessWidget {
   Widget build(BuildContext context) {
     final gc = context.gc;
     final planned = fit.todayRoutine;
-    final list = [...fit.routines]
+    final list = [...fit.activeRoutines]
       ..sort((a, b) => (a.id == planned?.id ? 0 : 1) - (b.id == planned?.id ? 0 : 1));
     return WearPage(children: [
       _heading(gc, t.routines),
@@ -986,7 +986,11 @@ class WearSession extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 12),
       decoration: BoxDecoration(color: gc.bgRaised, borderRadius: BorderRadius.circular(24)),
       child: Column(children: [
-        Text(_cap(lead > 0 ? t.getReady : t.timeCol),
+        Text(_cap(lead > 0
+                ? (fit.switchingSides ? t.switchSides : t.getReady)
+                : fit.holdSides > 1
+                    ? t.sideOfTwo('${fit.holdSide + 1}')
+                    : t.timeCol),
             style: AppTheme.f(11.5, weight: FontWeight.w700, color: gc.textSecondary)),
         Text(lead > 0 ? '$lead' : durationLabel(left),
             style: AppTheme.f(32, weight: FontWeight.w800, color: lead > 0 ? gc.accent : gc.text, height: 1.1)),
@@ -1088,7 +1092,7 @@ class WearSession extends StatelessWidget {
         return WearButton(label: t.stopLabel, icon: PhosphorIconsFill.stop, filled: true, onTap: fit.stopHold);
       }
       return WearButton(
-        label: t.startHold(durationLabel(ex.sets[pending].sec ?? 30)),
+        label: t.startHold(fit.holdLength(ex.id, ex.sets[pending].sec ?? 30)),
         icon: PhosphorIconsFill.play,
         filled: true,
         onTap: () => fit.startHold(exIdx, pending),

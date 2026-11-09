@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
@@ -9,12 +7,27 @@ import '../services/media_store.dart';
 import '../state/fit_state.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
+import '../widgets/file_thumb.dart';
 import '../widgets/share_cards.dart';
 import '../widgets/ui_kit.dart';
 import 'share_sheet.dart';
 
-class CompareScreen extends StatelessWidget {
+class CompareScreen extends StatefulWidget {
   const CompareScreen({super.key});
+
+  @override
+  State<CompareScreen> createState() => _CompareScreenState();
+}
+
+class _CompareScreenState extends State<CompareScreen> {
+  final _zoom = TransformationController();
+  String? _shown;
+
+  @override
+  void dispose() {
+    _zoom.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +37,11 @@ class CompareScreen extends StatelessWidget {
 
     final poses = fit.posesWithBoth;
     final pose = poses.contains(fit.comparePose) ? fit.comparePose : (poses.isEmpty ? null : poses.first);
+    final shown = '${pair.from.id}|${pair.to.id}|$pose';
+    if (_shown != shown) {
+      _shown = shown;
+      _zoom.value = Matrix4.identity();
+    }
     final delta = fit.compareWeightDelta;
     final entries = fit.timelineAsc;
 
@@ -111,7 +129,7 @@ class CompareScreen extends StatelessWidget {
           children: [
             for (final e in entries)
               Padding(
-                padding: const EdgeInsets.only(right: 8),
+                padding: const EdgeInsetsDirectional.only(end: 8),
                 child: Pill(
                   label: t.shortDate(e.date),
                   bg: e.id == selectedId ? tint.withValues(alpha: 0.18) : gc.bgRaised,
@@ -140,9 +158,19 @@ class CompareScreen extends StatelessWidget {
             clipBehavior: Clip.antiAlias,
             child: path == null
                 ? Icon(PhosphorIconsRegular.imageSquare, size: 22, color: gc.textTertiary)
-                : Image.file(File(path), fit: BoxFit.cover, gaplessPlayback: true,
-                    errorBuilder: (_, _, _) =>
-                        Icon(PhosphorIconsRegular.imageSquare, size: 22, color: gc.textTertiary)),
+                : GestureDetector(
+                    onDoubleTap: () => _zoom.value = Matrix4.identity(),
+                    child: InteractiveViewer(
+                      transformationController: _zoom,
+                      minScale: 1,
+                      maxScale: 5,
+                      child: SizedBox.expand(
+                        child: FileThumb(path,
+                            errorBuilder: (_, _, _) =>
+                                Icon(PhosphorIconsRegular.imageSquare, size: 22, color: gc.textTertiary)),
+                      ),
+                    ),
+                  ),
           ),
         ),
         const SizedBox(height: 8),

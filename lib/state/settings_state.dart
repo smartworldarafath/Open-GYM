@@ -19,8 +19,11 @@ mixin SettingsState on FitCore, ToolsState, LibraryState {
 
   String demoSize = 'large';
   String demoLoop = 'always';
+  String sessionLayout = 'cards';
+  String heatmapRange = 'weeks';
   String alarmStyle = 'quiet';
   int restSeconds = 90;
+  int miniRestSeconds = 20;
   String? alarmSound;
   String? alarmSoundName;
 
@@ -34,14 +37,84 @@ mixin SettingsState on FitCore, ToolsState, LibraryState {
   bool showRoutineRow = true;
   bool levelHints = true;
   bool toastSound = true;
+  String autoProgress = 'off';
+  static const autoProgressModes = ['off', 'weight', 'reps'];
   bool heatmapLabels = true;
+  bool hideShots = false;
   bool autoAdvance = true;
   bool keepScreenOn = true;
+  bool blurOn = true;
+  String textSize = 'normal';
+  bool calmMotion = false;
+  bool fineOn = false;
+  bool highRefresh = false;
+  double maxRefresh = 60;
+  bool showMiniBody = true;
+  bool askCheckIn = true;
+  bool muscleTune = true;
+
+  bool voiceCoach = false;
+  int deloadEvery = 0;
+  DateTime? deloadFrom;
+  static const deloadChoices = [0, 4, 5, 6, 8];
+
+  int get deloadWeekIndex {
+    final from = deloadFrom;
+    if (deloadEvery <= 0 || from == null) return -1;
+    final start = DateTime(from.year, from.month, from.day - (from.weekday - 1));
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    return (today.difference(start).inDays / 7).floor();
+  }
+
+  bool get deloadWeek => deloadEvery > 0 && deloadWeekIndex >= 0 && deloadWeekIndex % deloadEvery == deloadEvery - 1;
+
+  int get weeksToDeload {
+    final i = deloadWeekIndex;
+    if (i < 0) return -1;
+    return (deloadEvery - 1 - i % deloadEvery) % deloadEvery;
+  }
+
+  void setDeloadEvery(int weeks) {
+    if (!deloadChoices.contains(weeks) || weeks == deloadEvery) return;
+    deloadEvery = weeks;
+    deloadFrom = weeks > 0 ? DateTime.now() : null;
+    _persist();
+    notifyListeners();
+  }
+
+  void toggleVoiceCoach() {
+    voiceCoach = !voiceCoach;
+    if (!voiceCoach) VoiceCoach.stop();
+    _persist();
+    notifyListeners();
+  }
+
+  void toggleMuscleTune() {
+    muscleTune = !muscleTune;
+    _persist();
+    notifyListeners();
+  }
+
+  void toggleMiniBody() {
+    showMiniBody = !showMiniBody;
+    _persist();
+    notifyListeners();
+  }
+
+  void toggleAskCheckIn() {
+    askCheckIn = !askCheckIn;
+    _persist();
+    notifyListeners();
+  }
+  bool lowEndAsked = false;
   bool startCountdown = true;
   bool gamification = true;
+  bool passOn = true;
   bool logRpe = false;
   String effortScale = 'rpe';
   int? trainReminderMin;
+  int trainAgainMin = 0;
   bool smartReminder = false;
   bool onboarded = false;
   bool alarmAllowed = true;
@@ -107,6 +180,24 @@ mixin SettingsState on FitCore, ToolsState, LibraryState {
   void setDemoSize(String size) {
     if (!const ['large', 'small', 'off'].contains(size)) return;
     demoSize = size;
+    _persist();
+    notifyListeners();
+  }
+
+  bool get listLayout => sessionLayout == 'list';
+
+  bool get heatmapYear => heatmapRange == 'year';
+
+  void setHeatmapRange(String range) {
+    if (!const ['weeks', 'year'].contains(range)) return;
+    heatmapRange = range;
+    _persist();
+    notifyListeners();
+  }
+
+  void setSessionLayout(String layout) {
+    if (!const ['cards', 'list'].contains(layout)) return;
+    sessionLayout = layout;
     _persist();
     notifyListeners();
   }
@@ -260,6 +351,18 @@ mixin SettingsState on FitCore, ToolsState, LibraryState {
     notifyListeners();
   }
 
+  void togglePass() {
+    passOn = !passOn;
+    _persist();
+    notifyListeners();
+  }
+
+  void setMiniRest(int v) {
+    miniRestSeconds = v <= 0 ? 0 : v.clamp(5, 180);
+    _persist();
+    notifyListeners();
+  }
+
   int restFor(String exerciseId) =>
       exerciseRest[exerciseId] ?? (modeOf(exerciseId) == 'cardio' ? 0 : restSeconds);
 
@@ -302,6 +405,16 @@ mixin SettingsState on FitCore, ToolsState, LibraryState {
 
   void setTrainReminder(int? minuteOfDay) {
     trainReminderMin = minuteOfDay?.clamp(0, 24 * 60 - 1);
+    _persist();
+    syncTrainReminder();
+    notifyListeners();
+  }
+
+  static const trainAgainOptions = [0, 60, 120, 180];
+
+  void setTrainAgain(int minutes) {
+    if (!trainAgainOptions.contains(minutes)) return;
+    trainAgainMin = minutes;
     _persist();
     syncTrainReminder();
     notifyListeners();
@@ -353,22 +466,164 @@ mixin SettingsState on FitCore, ToolsState, LibraryState {
     notifyListeners();
   }
 
-  double? progressFor(String exerciseId) => progressStep[exerciseId];
+  static const textSizes = ['small', 'normal', 'large'];
 
-  bool hasProgress(String exerciseId) => (progressStep[exerciseId] ?? 0) > 0;
+  double get textFactor => switch (textSize) {
+        'small' => 0.9,
+        'large' => 1.12,
+        _ => 1.0,
+      };
 
-  void toggleProgress(String exerciseId) {
-    if (hasProgress(exerciseId)) {
-      progressStep.remove(exerciseId);
+  void setTextSize(String size) {
+    if (!textSizes.contains(size) || size == textSize) return;
+    textSize = size;
+    _persist();
+    notifyListeners();
+  }
+
+  void setCalmMotion(bool on) {
+    calmMotion = on;
+    _persist();
+    notifyListeners();
+  }
+
+  void setBlur(bool on) {
+    blurOn = on;
+    blurEffects = on;
+    _persist();
+    notifyListeners();
+  }
+
+  static const perfLevels = ['lite', 'balanced', 'max'];
+
+  bool get canHighRefresh => maxRefresh > 61;
+
+  String get perfLevel {
+    final refresh = highRefresh && canHighRefresh;
+    if (!blurOn && !fineOn && !refresh && calmMotion) return 'lite';
+    if (blurOn && !fineOn && !refresh && !calmMotion) return 'balanced';
+    if (blurOn && fineOn && (refresh || !canHighRefresh) && !calmMotion) return 'max';
+    return 'custom';
+  }
+
+  void setPerfLevel(String level) {
+    if (!perfLevels.contains(level)) return;
+    final max = level == 'max';
+    blurOn = level != 'lite';
+    blurEffects = blurOn;
+    calmMotion = level == 'lite';
+    fineOn = max;
+    fineEffects = max;
+    highRefresh = max;
+    DeviceKind.setHighRefresh(highRefresh);
+    _persist();
+    notifyListeners();
+  }
+
+  void setFine(bool on) {
+    fineOn = on;
+    fineEffects = on;
+    _persist();
+    notifyListeners();
+  }
+
+  void setHighRefresh(bool on) {
+    highRefresh = on;
+    DeviceKind.setHighRefresh(on);
+    _persist();
+    notifyListeners();
+  }
+
+  Future<void> readDisplay() async {
+    final hz = await DeviceKind.maxRefresh();
+    if (hz == maxRefresh) return;
+    maxRefresh = hz;
+    notifyListeners();
+  }
+
+  void markLowEndAsked() {
+    lowEndAsked = true;
+    _persist();
+  }
+
+  double? progressFor(String exerciseId) =>
+      progressStep[exerciseId] ?? (autoProgress == 'off' ? null : fromDisplayWeight(weightStep));
+
+  void setAutoProgress(String mode) {
+    if (!autoProgressModes.contains(mode) || mode == autoProgress) return;
+    autoProgress = mode;
+    _persist();
+    notifyListeners();
+  }
+
+  void setWeightStack(String id, List<double> kg) {
+    final clean = <double>{for (final v in kg) if (v.isFinite && v > 0 && v < 1000) (v * 1000).round() / 1000}.toList()
+      ..sort();
+    if (clean.isEmpty) {
+      weightStacks.remove(id);
     } else {
+      weightStacks[id] = clean.take(60).toList();
+    }
+    _persist();
+    notifyListeners();
+  }
+
+  static const holdSteps = [0, 5, 10, 15];
+
+  int holdStepFor(String exerciseId) => holdStep[exerciseId] ?? 0;
+
+  void cycleHoldStep(String exerciseId, int dir) {
+    final i = holdSteps.indexOf(holdStepFor(exerciseId));
+    final next = holdSteps[((i < 0 ? 0 : i) + dir).clamp(0, holdSteps.length - 1)];
+    if (next == 0) {
+      holdStep.remove(exerciseId);
+    } else {
+      holdStep[exerciseId] = next;
+    }
+    _persist();
+    notifyListeners();
+  }
+
+  bool hasProgress(String exerciseId) {
+    final step = progressStep[exerciseId];
+    if (step == null && autoProgress == 'off') return false;
+    return (step ?? 1) > 0 && progressRule(exerciseId).kind != ProgressKind.manual;
+  }
+
+  ProgressRule progressRule(String exerciseId) =>
+      progressRules[exerciseId] ??
+      (autoProgress == 'reps' ? const ProgressRule(kind: ProgressKind.double) : const ProgressRule());
+
+  void setProgressRule(String exerciseId, ProgressRule rule) {
+    final was = progressRule(exerciseId).kind;
+    if (rule.kind != was && (rule.kind == ProgressKind.amrap || was == ProgressKind.amrap)) {
+      rule = rule.copyWith(fails: rule.kind == ProgressKind.amrap ? 1 : 3);
+    }
+    progressRules[exerciseId] = rule;
+    if (rule.kind != was && rule.kind != ProgressKind.manual && (progressStep[exerciseId] ?? 0) <= 0) {
       progressStep[exerciseId] = fromDisplayWeight(weightStep);
     }
     _persist();
     notifyListeners();
   }
 
+  void toggleProgress(String exerciseId) {
+    if (hasProgress(exerciseId)) {
+      if (autoProgress == 'off') {
+        progressStep.remove(exerciseId);
+      } else {
+        progressStep[exerciseId] = 0;
+      }
+    } else {
+      progressStep[exerciseId] = fromDisplayWeight(weightStep);
+      if (progressRule(exerciseId).kind == ProgressKind.manual) progressRules.remove(exerciseId);
+    }
+    _persist();
+    notifyListeners();
+  }
+
   void bumpProgressStep(String exerciseId, int dir) {
-    final current = toDisplayWeight(progressStep[exerciseId] ?? 0);
+    final current = toDisplayWeight(progressFor(exerciseId) ?? 0);
     final next = (current + dir * weightStep / 2).clamp(weightStep / 2, weightStep * 8);
     progressStep[exerciseId] = fromDisplayWeight(next);
     _persist();
@@ -401,6 +656,12 @@ mixin SettingsState on FitCore, ToolsState, LibraryState {
 
   void toggleHeatmapLabels() {
     heatmapLabels = !heatmapLabels;
+    _persist();
+    notifyListeners();
+  }
+
+  void toggleHideShots() {
+    hideShots = !hideShots;
     _persist();
     notifyListeners();
   }

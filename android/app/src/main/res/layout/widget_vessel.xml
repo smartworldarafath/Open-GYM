@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/widget_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:visibility="visible"
+        android:contentDescription="GymMane" />
+
+    <ImageView
+        android:id="@+id/widget_image_night"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:visibility="gone"
+        android:contentDescription="GymMane" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/zone_add"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="45" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="55"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/zone_open"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="72" />
+
+            <FrameLayout
+                android:id="@+id/zone_add_low"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="28" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

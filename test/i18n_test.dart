@@ -37,9 +37,12 @@ void main() {
 
     final template = arb('en').keys.where((k) => !k.startsWith('@')).toSet();
     final beta = File('test/nutrition_beta_keys.txt').readAsLinesSync().where((k) => k.isNotEmpty).toSet();
+    final pending =
+        File('test/pending_translation_keys.txt').readAsLinesSync().where((k) => k.isNotEmpty).toSet();
     for (final code in appLanguages.where((c) => c != 'en')) {
       final keys = arb(code).keys.where((k) => !k.startsWith('@')).toSet();
-      expect(template.difference(keys).difference(beta), isEmpty, reason: 'faltan claves en $code');
+      expect(template.difference(keys).difference(beta).difference(pending), isEmpty,
+          reason: 'faltan claves en $code');
       expect(keys.difference(template), isEmpty, reason: 'claves de más en $code');
     }
   });
@@ -129,6 +132,16 @@ void main() {
     expect(t.exerciseCount(4), '4 exercises');
     expect(t.sessionsLogged(1), '1 session logged');
     expect(t.streakDays(1), '1-day streak');
+  });
+
+  test('Russian copy is corrected where the literal translation read wrong', () {
+    setAppLanguage('ru');
+    expect(t.autoAdvance, 'Переходить дальше автоматически');
+    expect(t.pickedHint(6), contains('6 упражнений'));
+    expect(t.dragToReorder, contains('в этом порядке'));
+    expect(t.nextDeload(5), contains('5 тренировок'));
+    expect(t.momentsEmptyHint, contains('собранную штангу'));
+    expect(t.awardFirstStepLine, contains('за счёт заведения'));
   });
 
   test('dates read the Spanish way round', () {

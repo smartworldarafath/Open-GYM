@@ -1,0 +1,12 @@
+GymMane 1.6.0
+
+• Workout history by month with records
+• List view for the workout, with your previous sets
+• Rotate routines A/B/C or move today's workout to another day
+• Notes you see during the workout
+• Assisted machines and a deload tip when you stall
+• Training plan as a PDF
+• Water, protein and calorie widgets
+• 12 month activity calendar and a second reminder
+
+And a lot more. Install it and find out.

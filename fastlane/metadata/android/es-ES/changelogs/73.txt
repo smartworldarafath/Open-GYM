@@ -1,0 +1,12 @@
+GymMane 1.6.0
+
+• Historial de entrenos por mes con tus récords
+• Vista en lista del entreno, con tus series anteriores
+• Rota rutinas A/B/C o mueve el entreno de hoy a otro día
+• Notas que ves durante el entreno
+• Máquinas asistidas y aviso de descarga si te estancas
+• Plan de entrenamiento en PDF
+• Widgets de agua, proteína y calorías
+• Calendario de actividad de 12 meses y un segundo aviso
+
+Y mucho más. Instálala y descúbrelo.

@@ -242,7 +242,8 @@ class _BatchLogSheet extends StatefulWidget {
 
 class _BatchLogSheetState extends State<_BatchLogSheet> {
   late Meal _meal = widget.meal;
-  bool _byShare = true;
+  late DateTime _day = fit.nutritionDay;
+  int _mode = 0;
   double _share = 0.25;
   double _grams = 300;
 
@@ -250,7 +251,36 @@ class _BatchLogSheetState extends State<_BatchLogSheet> {
 
   double get _gramStep => fit.isLb ? _ozOf(false) : 25;
 
-  double get _take => _byShare ? _b.leftGrams * _share : math.min(_grams, _b.leftGrams);
+  double get _portion {
+    final b = _b;
+    final one = b.totalGrams / b.portions;
+    return b.leftGrams - one < one * 0.15 ? b.leftGrams : math.min(one, b.leftGrams);
+  }
+
+  double get _take => switch (_mode) {
+        0 => _portion,
+        1 => _b.leftGrams * _share,
+        _ => math.min(_grams, _b.leftGrams),
+      };
+
+  Widget _chip(GymColors gc, bool on, String label, String sub, VoidCallback onTap) => Pressable(
+        onTap: onTap,
+        scale: 0.94,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 160),
+          margin: const EdgeInsets.symmetric(horizontal: 3),
+          padding: const EdgeInsets.symmetric(vertical: 11),
+          decoration: BoxDecoration(
+            color: on ? gc.accentSoft : gc.bgRaised2,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: on ? gc.accent.withValues(alpha: 0.6) : Colors.transparent),
+          ),
+          child: Column(children: [
+            Text(label, style: AppTheme.f(13, weight: FontWeight.w800, color: on ? gc.accent : gc.text)),
+            Text(sub, style: AppTheme.f(10, weight: FontWeight.w600, color: gc.textTertiary)),
+          ]),
+        ),
+      );
 
   Future<void> _weigh() async {
     final k = fit.isLb ? _ozOf(false) : 1.0;
@@ -281,39 +311,29 @@ class _BatchLogSheetState extends State<_BatchLogSheet> {
         const SizedBox(height: 14),
         Center(
           child: SegToggle([
-            SegOption(t.prepOfWhatsLeft, _byShare, () => setState(() => _byShare = true)),
-            SegOption(_amtUnit(false), !_byShare, () => setState(() {
+            SegOption(t.prepPortions, _mode == 0, () => setState(() => _mode = 0)),
+            SegOption(t.prepOfWhatsLeft, _mode == 1, () => setState(() => _mode = 1)),
+            SegOption(_amtUnit(false), _mode == 2, () => setState(() {
                   _grams = _take.roundToDouble();
-                  _byShare = false;
+                  _mode = 2;
                 })),
           ]),
         ),
         const SizedBox(height: 12),
-        if (_byShare)
+        if (_mode == 0)
+          Row(children: [
+            for (final n in const [2, 3, 4, 5, 6])
+              Expanded(
+                child: _chip(gc, n == b.portions, '1/$n', _amount(b.totalGrams / n, false),
+                    () => fit.setBatchPortions(b.id, n)),
+              ),
+          ])
+        else if (_mode == 1)
           Row(children: [
             for (final s in shares)
               Expanded(
-                child: Pressable(
-                  onTap: () => setState(() => _share = s),
-                  scale: 0.94,
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 160),
-                    margin: const EdgeInsets.symmetric(horizontal: 3),
-                    padding: const EdgeInsets.symmetric(vertical: 11),
-                    decoration: BoxDecoration(
-                      color: (s - _share).abs() < 0.001 ? gc.accentSoft : gc.bgRaised2,
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(
-                          color: (s - _share).abs() < 0.001 ? gc.accent.withValues(alpha: 0.6) : Colors.transparent),
-                    ),
-                    child: Column(children: [
-                      Text(s == 1 ? t.prepAll : '${(s * 100).round()} %',
-                          style: AppTheme.f(13, weight: FontWeight.w800, color: (s - _share).abs() < 0.001 ? gc.accent : gc.text)),
-                      Text(_amount(b.leftGrams * s, false),
-                          style: AppTheme.f(10, weight: FontWeight.w600, color: gc.textTertiary)),
-                    ]),
-                  ),
-                ),
+                child: _chip(gc, (s - _share).abs() < 0.001, s == 1 ? t.prepAll : '${(s * 100).round()} %',
+                    _amount(b.leftGrams * s, false), () => setState(() => _share = s)),
               ),
           ])
         else
@@ -328,17 +348,19 @@ class _BatchLogSheetState extends State<_BatchLogSheet> {
                 final k = fit.isLb ? _ozOf(false) : 1.0;
                 final v = await askNumber(context,
                     title: t.amountIn(_amtUnit(false)), initial: fmt((_grams / k * 10).round() / 10), decimal: true);
-                if (v != null && v > 0) setState(() => _grams = (v * k).clamp(1, b.leftGrams).toDouble());
+                if (v != null && v > 0 && mounted) setState(() => _grams = (v * k).clamp(1, b.leftGrams).toDouble());
               },
             ),
           ),
         const SizedBox(height: 12),
         _MealPicker(value: _meal, onPick: (m) => setState(() => _meal = m)),
+        const SizedBox(height: 10),
+        _DayStrip(value: _day, onPick: (d) => setState(() => _day = d)),
         const SizedBox(height: 18),
         PrimaryButton(
           label: t.prepLogAmount(_amount(_take, false)),
           onTap: () {
-            final e = fit.logFromBatch(b, _take, meal: _meal);
+            final e = fit.logFromBatch(b, _take, meal: _meal, day: _day);
             if (e == null) {
               HapticFeedback.heavyImpact();
               return;
@@ -363,5 +385,60 @@ class _BatchLogSheetState extends State<_BatchLogSheet> {
         ),
       ]),
     ]);
+  }
+}
+
+class _DayStrip extends StatelessWidget {
+  const _DayStrip({required this.value, required this.onPick});
+
+  final DateTime value;
+  final ValueChanged<DateTime> onPick;
+
+  @override
+  Widget build(BuildContext context) {
+    final gc = context.gc;
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final days = [
+      if (value.isBefore(today)) value,
+      for (var i = 0; i < 7; i++) shiftDays(today, i),
+    ];
+    String label(DateTime d) {
+      if (d == today) return t.nutritionToday;
+      if (d == shiftDays(today, 1)) return t.tomorrow;
+      if (d == shiftDays(today, -1)) return t.nutritionYesterday;
+      return t.weekdayShort(d.weekday);
+    }
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      clipBehavior: Clip.none,
+      child: Row(children: [
+        for (final d in days)
+          Pressable(
+            onTap: () {
+              HapticFeedback.selectionClick();
+              onPick(d);
+            },
+            scale: 0.94,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 180),
+              margin: const EdgeInsets.symmetric(horizontal: 3),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              decoration: BoxDecoration(
+                color: d == value ? gc.accentSoft : gc.bgRaised2,
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: d == value ? gc.accent.withValues(alpha: 0.6) : Colors.transparent),
+              ),
+              child: Column(children: [
+                Text(label(d),
+                    style: AppTheme.f(12, weight: FontWeight.w800, color: d == value ? gc.accent : gc.text)),
+                Text('${d.day}',
+                    style: AppTheme.f(10, weight: FontWeight.w600, color: gc.textTertiary)),
+              ]),
+            ),
+          ),
+      ]),
+    );
   }
 }

@@ -199,4 +199,109 @@ void main() {
       expect(fit.onboarded, false);
     });
   });
+
+  group('nuevo en este entreno', () {
+    test('un ejercicio metido de más se puede añadir solo y en su sitio, con sus series', () {
+      final r = fit.createRoutine('Test');
+      fit.toggleRoutineExercise(r, a);
+      fit.toggleRoutineExercise(r, c);
+      fit.startRoutine(fit.routines.single);
+      fit.addExerciseToSession(b);
+      final s = fit.session!;
+      for (var i = 0; i < s.exercises.length; i++) {
+        fit.toggleSet(i, 0);
+      }
+      s.exercises[1].sets.first
+        ..reps = 12
+        ..weight = 30;
+      fit.finishSession();
+      expect(s.exercises.map((e) => e.id), [a, b, c]);
+      expect(fit.sessionExtras.map((e) => e.id), [b]);
+      expect(fit.addExtraToRoutine(b), isTrue);
+      expect(fit.routines.single.exerciseIds, [a, b, c]);
+      final plan = fit.plannedSets(fit.routines.single, b);
+      expect(plan.length, 1);
+      expect((plan.single.reps, plan.single.weightKg), (12, 30.0));
+      expect(fit.sessionExtras, isEmpty);
+      expect(fit.addExtraToRoutine(b), isFalse);
+      fit.saveAndExit();
+    });
+
+    test('sin series hechas o sin rutina no hay nada que ofrecer', () {
+      final r = fit.createRoutine('Test');
+      fit.toggleRoutineExercise(r, a);
+      fit.startRoutine(fit.routines.single);
+      fit.addExerciseToSession(b);
+      fit.toggleSet(0, 0);
+      fit.finishSession();
+      expect(fit.sessionExtras, isEmpty);
+      fit.saveAndExit();
+    });
+  });
+
+  group('ajustar series por músculo', () {
+    late String chest, legs, r;
+
+    setUp(() {
+      fit.muscleTune = true;
+      final free = fit.allExercises.where((e) => fit.modeOf(e.id).isEmpty && !fit.isAssisted(e.id));
+      chest = free.firstWhere((e) => e.primary == 'chest').id;
+      legs = free.firstWhere((e) => e.primary == 'quads').id;
+      r = fit.createRoutine('Torso');
+      fit.toggleRoutineExercise(r, chest);
+      fit.toggleRoutineExercise(r, legs);
+    });
+
+    tearDown(fit.saveAndExit);
+
+    void trainChest(int sets) {
+      fit.startRoutine(fit.routines.single);
+      fit.endCountdown();
+      final ex = fit.session!.exercises.first;
+      var done = 0;
+      for (var i = 0; i < ex.sets.length && done < sets; i++) {
+        if (!ex.sets[i].counts) continue;
+        fit.toggleSet(0, i);
+        done++;
+      }
+      fit.finishSession();
+    }
+
+    test('solo pregunta por los músculos con al menos dos series', () {
+      trainChest(2);
+      expect(fit.tuneTargets.map((m) => m.muscle), ['chest']);
+    });
+
+    test('me faltó suma una serie, me pasé la quita y cambiar de idea lo deshace', () {
+      final routine = fit.routines.single;
+      final before = fit.routineSets(routine, chest);
+      trainChest(2);
+      fit.voteMuscle('chest', 1);
+      expect(fit.routineSets(routine, chest), before + 1);
+      expect(fit.sessionEditedRoutine, isFalse, reason: 'no propone deshacerlo al guardar');
+      fit.voteMuscle('chest', -1);
+      expect(fit.routineSets(routine, chest), before - 1);
+      fit.voteMuscle('chest', 0);
+      expect(fit.routineSets(routine, chest), before);
+      expect(fit.muscleVote('chest'), 0);
+      fit.voteMuscle('chest', null);
+      expect(fit.muscleVote('chest'), isNull);
+    });
+
+    test('seguir entrenando deshace lo votado', () {
+      final routine = fit.routines.single;
+      final before = fit.routineSets(routine, chest);
+      trainChest(2);
+      fit.voteMuscle('chest', 1);
+      fit.continueSession();
+      expect(fit.routineSets(routine, chest), before);
+    });
+
+    test('apagado, no pregunta', () {
+      fit.muscleTune = false;
+      trainChest(2);
+      expect(fit.tuneTargets, isEmpty);
+      fit.muscleTune = true;
+    });
+  });
 }

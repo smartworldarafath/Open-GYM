@@ -11,10 +11,23 @@ export 'app_localizations.dart';
 
 final Map<String, String> _decimalSeparators = {};
 
-String get decimalSeparator =>
-    _decimalSeparators.putIfAbsent(intlLocale, () => NumberFormat.decimalPattern(intlLocale).symbols.DECIMAL_SEP);
+String get decimalSeparator => _decimalSeparators.putIfAbsent(intlLocale, () {
+      final sep = NumberFormat.decimalPattern(intlLocale).symbols.DECIMAL_SEP;
+      return sep == '٫' ? '.' : sep;
+    });
 
 String decimalText(String s) => s.replaceFirst('.', decimalSeparator);
+
+bool get isRtlLanguage => appLanguage == 'ar' || appLanguage == 'fa';
+
+String ltr(String s) => isRtlLanguage ? '\u2066$s\u2069' : s;
+
+final _grouped = <String, NumberFormat>{};
+
+String groupedInt(int n) {
+  final locale = appLanguage == 'fa' ? 'en' : intlLocale;
+  return (_grouped[locale] ??= NumberFormat.decimalPattern(locale)).format(n);
+}
 
 const Map<String, Map<String, String>> _catalogNames = {'es': kExerciseNameEs, 'it': kExerciseNameIt, 'zh': kExerciseNameZh};
 const Map<String, Map<String, List<String>>> _catalogSteps = {'es': kExerciseStepsEs, 'it': kExerciseStepsIt, 'zh': kExerciseStepsZh};
@@ -117,6 +130,7 @@ extension GymL10n on AppLocalizations {
   String templateBlurb(String id) => switch (id) {
         'fullbody' => tplFullbody,
         'ppl' => tplPpl,
+        'arnold' => tplArnold,
         'upperlower' => tplUpperlower,
         'abcd' => tplAbcd,
         'abcde' => tplAbcde,
@@ -241,6 +255,7 @@ extension GymL10n on AppLocalizations {
         'calisthenics' => kindCalisthenics,
         'cardio' => kindCardio,
         'stretch' => kindStretch,
+        'sport' => kindSport,
         _ => kindStrength,
       };
 
@@ -252,6 +267,8 @@ extension GymL10n on AppLocalizations {
 
   String weekday(int w) =>
       _capitalize(_dates(DateFormat.EEEE).format(DateTime(2024, 1, w)));
+
+  String weekdayInline(int w) => _dates(DateFormat.EEEE).format(DateTime(2024, 1, w));
 
   String weekdayShort(int w) =>
       _capitalize(_dates(DateFormat.E).format(DateTime(2024, 1, w)));
@@ -265,6 +282,8 @@ extension GymL10n on AppLocalizations {
   String monthShort(int m) =>
       _capitalize(_dates(DateFormat.MMM).format(DateTime(2024, m)).replaceAll('.', ''));
 
+  String monthInline(int m) => _dates(DateFormat.MMMM).format(DateTime(2024, m));
+
   String monthName(int m) =>
       _capitalize(_dates(DateFormat.MMMM).format(DateTime(2024, m)));
 
@@ -276,7 +295,11 @@ extension GymL10n on AppLocalizations {
 
   String shortDate(DateTime d) => _dates(DateFormat.MMMd).format(d);
 
+  String clockTime(DateTime d) => _dates(DateFormat.Hm).format(d);
+
   String shortDateYear(DateTime d) => _dates(DateFormat.yMMMd).format(d);
+
+  String shortMonthYear(DateTime d) => _dates(DateFormat.yMMM).format(d);
 
   String catalogName(String id, String fallback) => _catalogNames[appLanguage]?[id] ?? fallback;
 

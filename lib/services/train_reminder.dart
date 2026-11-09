@@ -3,12 +3,14 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 import '../l10n/l10n.dart';
+import 'notif_sound.dart';
 
 class TrainReminder {
   TrainReminder._();
   static final TrainReminder instance = TrainReminder._();
 
   static const _firstId = 1010;
+  static const _againId = 1100;
   static const _slots = 14;
   static const _horizonDays = 28;
 
@@ -20,12 +22,13 @@ class TrainReminder {
       _queue = _queue.then((_) => job()).catchError((Object e) => debugPrint('Aviso de entreno: $e'));
 
   AndroidNotificationDetails get _android => AndroidNotificationDetails(
-        'train_reminder',
+        NotifSound.channelOf('train_reminder', SoundGroup.train),
         t.notifTrainChannel,
         channelDescription: t.notifTrainChannelWhy,
         importance: Importance.defaultImportance,
         priority: Priority.defaultPriority,
-        playSound: true,
+        playSound: NotifSound.plays(SoundGroup.train),
+        sound: NotifSound.soundOf(SoundGroup.train),
       );
 
   DarwinNotificationDetails get _darwin => const DarwinNotificationDetails(
@@ -42,6 +45,7 @@ class TrainReminder {
     for (var i = 0; i < _slots; i++) {
       try {
         await _plugin.cancel(id: _firstId + i);
+        await _plugin.cancel(id: _againId + i);
       } catch (_) {}
     }
   }
@@ -50,10 +54,13 @@ class TrainReminder {
     required int minuteOfDay,
     required Set<int> weekdays,
     bool skipToday = false,
+    int againMinutes = 0,
+    bool Function(DateTime day)? restOn,
   }) =>
-      _serial(() => _schedule(minuteOfDay, weekdays, skipToday));
+      _serial(() => _schedule(minuteOfDay, weekdays, skipToday, againMinutes, restOn));
 
-  Future<void> _schedule(int minuteOfDay, Set<int> weekdays, bool skipToday) async {
+  Future<void> _schedule(
+      int minuteOfDay, Set<int> weekdays, bool skipToday, int againMinutes, bool Function(DateTime day)? restOn) async {
     if (!enabled) return;
     await _cancel();
     final mode = await reminderMode(_plugin);
@@ -61,9 +68,27 @@ class TrainReminder {
     var slot = 0;
     for (var i = skipToday ? 1 : 0; i < _horizonDays && slot < _slots; i++) {
       final day = DateTime(now.year, now.month, now.day + i, minuteOfDay ~/ 60, minuteOfDay % 60);
-      if (!day.isAfter(now)) continue;
+      final again = againMinutes > 0 && minuteOfDay + againMinutes < 24 * 60
+          ? day.add(Duration(minutes: againMinutes))
+          : null;
+      if (!day.isAfter(now) && !(again?.isAfter(now) ?? false)) continue;
       if (weekdays.isNotEmpty && !weekdays.contains(day.weekday)) continue;
+      if (restOn?.call(day) ?? false) continue;
       try {
+        if (again != null && again.isAfter(now)) {
+          await _plugin.zonedSchedule(
+            id: _againId + slot,
+            title: t.notifTrainTitle,
+            body: t.notifTrainAgainBody,
+            scheduledDate: atLocal(again),
+            notificationDetails: NotificationDetails(android: _android, iOS: _darwin),
+            androidScheduleMode: mode,
+          );
+        }
+        if (!day.isAfter(now)) {
+          slot++;
+          continue;
+        }
         await _plugin.zonedSchedule(
           id: _firstId + slot,
           title: t.notifTrainTitle,

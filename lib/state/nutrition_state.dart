@@ -6,6 +6,14 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
   final List<WaterSip> waterLog = [];
   final List<Supplement> supplements = [];
   final List<Recipe> recipes = [];
+  final Set<String> archivedRecipes = {};
+  final Set<String> archivedFoods = {};
+  final Set<String> archivedPlans = {};
+  final Set<String> archivedSupps = {};
+  bool showArchivedFoods = false;
+  bool showArchivedPlans = false;
+  bool showArchivedSupps = false;
+  bool showArchivedRecipes = false;
   final List<Batch> batches = [];
   final List<String> favoriteFoods = [];
   final List<MealPlan> mealPlans = [];
@@ -23,7 +31,9 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
   double weightGoalKg = 0;
   int? supplementReminderMin;
   String shakeFoodId = '';
+  final List<String> shakeFoods = [];
   DateTime nutritionDay = _dayKey(DateTime.now());
+  DateTime _nutritionSetOn = _dayKey(DateTime.now());
   int _foodSeq = 0;
 
   static String _dk(DateTime d) =>
@@ -87,9 +97,9 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
 
   bool isTrainingDay(DateTime day) {
     final key = _dayKey(day);
-    if (sessions.any((s) => _dayKey(s.date) == key)) return true;
+    if (_sessionsOnDay(key).isNotEmpty || _sessionsOnDay(shiftDays(key, -1)).any((s) => _dayKey(s.date) == key)) return true;
     if (key != _dayKey(DateTime.now())) return false;
-    return weeklyPlan[key.weekday] != null || (multiPlan && (planExtras[key.weekday]?.isNotEmpty ?? false));
+    return hasPlanOn(key);
   }
 
   NutritionGoals goalsFor(DateTime day) {
@@ -103,8 +113,18 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
 
   int burnedOn(DateTime day) {
     final key = _dayKey(day);
-    final secs = sessions.where((s) => _dayKey(s.date) == key).fold<int>(0, (n, s) => n + s.durationSec);
-    return ((_liftMet - 1) * _nutritionWeight * secs / 3600).round();
+    var kcal = 0.0;
+    for (final s in _sessionsOnDay(key)) {
+      var cardioSec = 0;
+      for (final e in s.exercises) {
+        final c = cardioKcal(s, e);
+        if (c == null) continue;
+        kcal += c.active;
+        cardioSec += c.sec;
+      }
+      kcal += (_liftMet - 1) * _nutritionWeight * math.max(0, s.durationSec - cardioSec) / 3600;
+    }
+    return kcal.round();
   }
 
   int kcalBudgetOn(DateTime day) => goalsFor(day).kcal + (addBurned ? burnedOn(day) : 0);
@@ -132,6 +152,58 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
   double kcalFromShown(double v) => useKj ? v / 4.184 : v;
 
   String get energyUnit => useKj ? 'kJ' : 'kcal';
+
+  String weightAim = '';
+
+  void setWeightAim(String aim) {
+    weightAim = const {'lose', 'gain', 'hold'}.contains(aim) ? aim : '';
+    _persist();
+    notifyListeners();
+  }
+
+  String get effectiveWeightAim {
+    if (weightAim.isNotEmpty) return weightAim;
+    final kg = latestBodyweight?.kg ?? 0;
+    if (weightGoalKg <= 0 || kg <= 0) return '';
+    final gap = weightGoalKg - kg;
+    if (gap.abs() < kg * 0.01) return 'hold';
+    return gap < 0 ? 'lose' : 'gain';
+  }
+
+  static const paceCorridors = {'lose': (-1.0, -0.5), 'gain': (0.25, 0.5), 'hold': (-0.25, 0.25)};
+
+  ({double kgPerWeek, double pctPerWeek})? get weightPace {
+    final now = DateTime.now();
+    final from = now.subtract(const Duration(days: 21));
+    final pts = [for (final b in bodyweight) if (!b.date.isBefore(from)) b]
+      ..sort((a, b) => a.date.compareTo(b.date));
+    if (pts.length < 3 || pts.last.date.difference(pts.first.date).inDays < 7) return null;
+    final xs = [for (final p in pts) p.date.difference(pts.first.date).inMinutes / 1440];
+    final ys = [for (final p in pts) p.kg];
+    final mx = xs.reduce((a, b) => a + b) / xs.length;
+    final my = ys.reduce((a, b) => a + b) / ys.length;
+    var num = 0.0, den = 0.0;
+    for (var i = 0; i < xs.length; i++) {
+      num += (xs[i] - mx) * (ys[i] - my);
+      den += (xs[i] - mx) * (xs[i] - mx);
+    }
+    if (den <= 0 || my <= 0) return null;
+    final perWeek = num / den * 7;
+    return (kgPerWeek: perWeek, pctPerWeek: perWeek / my * 100);
+  }
+
+  String? get weightPaceStatus {
+    final pace = weightPace;
+    final band = paceCorridors[effectiveWeightAim];
+    if (pace == null || band == null) return null;
+    final p = pace.pctPerWeek;
+    final (lo, hi) = band;
+    if (p >= lo && p <= hi) return 'onPace';
+    if (effectiveWeightAim == 'hold') return 'drifting';
+    final towards = effectiveWeightAim == 'lose' ? p < 0 : p > 0;
+    if (!towards) return 'wrongWay';
+    return p.abs() > (effectiveWeightAim == 'lose' ? -lo : hi) ? 'tooFast' : 'tooSlow';
+  }
 
   void setWeightGoal(double kg) {
     weightGoalKg = kg > 0 ? _round3(kg) : 0;
@@ -217,7 +289,35 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
 
   Macros totalOn(DateTime day) => entriesOn(day).fold(Macros.zero, (s, e) => s + e.total);
 
-  int waterOn(DateTime day) {
+  ({double kcal, double protein}) leftAfter(Macros adding, {Macros replacing = Macros.zero}) {
+    final day = nutritionDay;
+    final eaten = totalOn(day) + replacing * -1 + adding;
+    return (kcal: kcalBudgetOn(day) - eaten.kcal, protein: goalsFor(day).protein - eaten.protein);
+  }
+
+  double? fillGrams(FoodItem food, {Macros replacing = Macros.zero}) {
+    if (!food.byWeight || food.macros.kcal <= 0) return null;
+    final left = leftAfter(Macros.zero, replacing: replacing);
+    if (left.kcal <= 0) return null;
+    final perGram = food.macros * (1 / food.grams);
+    var grams = left.kcal / perGram.kcal;
+    if (trackerOn(Tracker.protein) && perGram.protein * 100 >= 8 && left.protein > 0) {
+      grams = math.min(grams, left.protein / perGram.protein);
+    }
+    return grams >= 1 ? grams : null;
+  }
+
+  int waterOn(DateTime day) => sipsOn(day) + waterFromFoodOn(day);
+
+  int waterFromFoodOn(DateTime day) {
+    var ml = 0;
+    for (final e in entriesOn(day)) {
+      ml += e.waterMl;
+    }
+    return ml;
+  }
+
+  int sipsOn(DateTime day) {
     var index = _waterByDay;
     if (index == null || _waterByDayLen != waterLog.length) {
       index = <DateTime, int>{};
@@ -244,6 +344,18 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
     return mealSlots.any((s) => s.meal == Meal.lunch) ? Meal.lunch : mealSlots.first.meal;
   }
 
+  Meal? pickedMeal;
+
+  Meal get openMeal {
+    final picked = pickedMeal;
+    return picked != null && mealsShown.contains(picked) ? picked : defaultMeal;
+  }
+
+  void pickMeal(Meal meal) {
+    pickedMeal = meal;
+    notifyListeners();
+  }
+
   bool trackerOn(Tracker t) => trackers.contains(t);
 
   void setTracker(Tracker t, bool on) {
@@ -252,6 +364,7 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
     } else {
       trackers.remove(t);
     }
+    if (t == Tracker.fasting) _syncFast();
     _persist();
     notifyListeners();
   }
@@ -330,6 +443,7 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
         liquid: food.liquid,
         cooked: cooked && food.canCook ? food.cookedYield : 0,
         per: food.macros,
+        water: food.water,
       );
 
   FoodEntry logFood(FoodItem food, {double servings = 1, Meal? meal, bool cooked = false}) {
@@ -338,6 +452,35 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
     _persist();
     notifyListeners();
     return e;
+  }
+
+  List<FoodEntry> logEntries(Iterable<FoodEntry> items, Meal meal) => _logCopies(items, meal);
+
+  ({int kcal, int protein, int carbs, int fat, int leftKcal, int leftProtein}) mealAiTargets(Meal meal, {required bool day}) {
+    final goals = goalsFor(nutritionDay);
+    final today = entriesOn(nutritionDay);
+    final eaten = totalOn(nutritionDay);
+    final leftK = math.max(0.0, goals.kcal - eaten.kcal);
+    final leftP = math.max(0.0, goals.protein - eaten.protein);
+    final leftC = math.max(0.0, goals.carbs - eaten.carbs);
+    final leftF = math.max(0.0, goals.fat - eaten.fat);
+    if (day) {
+      return (kcal: goals.kcal, protein: goals.protein, carbs: goals.carbs, fat: goals.fat, leftKcal: leftK.round(), leftProtein: leftP.round());
+    }
+    final empty = mealSlots.where((s) => !today.any((e) => e.meal == s.meal)).length;
+    final targetEmpty = !today.any((e) => e.meal == meal);
+    final divisor = math.max(1, targetEmpty ? empty : empty + 1);
+    final slots = math.max(1, mealSlots.length);
+    double share(double left, num goal) => left > 0 ? left / divisor : goal / slots;
+    int tidy(double v, int lo, int hi, int step) => ((v / step).round() * step).clamp(lo, hi);
+    return (
+      kcal: tidy(share(leftK, goals.kcal), 80, 1500, 10),
+      protein: tidy(share(leftP, goals.protein), 5, 150, 1),
+      carbs: tidy(share(leftC, goals.carbs), 5, 300, 1),
+      fat: tidy(share(leftF, goals.fat), 3, 150, 1),
+      leftKcal: leftK.round(),
+      leftProtein: leftP.round(),
+    );
   }
 
   FoodEntry? logQuick(String name, Macros macros, {Meal? meal}) {
@@ -454,14 +597,18 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
     return b;
   }
 
-  FoodEntry? logFromBatch(Batch batch, double grams, {Meal? meal}) {
+  FoodEntry? logFromBatch(Batch batch, double grams, {Meal? meal, DateTime? day}) {
     final b = batchById(batch.id);
     if (b == null || grams <= 0 || b.totalGrams <= 0) return null;
     final take = math.min(grams, b.leftGrams);
     if (take <= 0) return null;
+    final today = _dayKey(DateTime.now());
+    var on = _dayKey(day ?? nutritionDay);
+    final last = shiftDays(today, kNutritionDaysAhead);
+    if (on.isAfter(last)) on = last;
     final e = FoodEntry(
       id: _newId('e'),
-      at: _stampFor(nutritionDay),
+      at: _stampFor(on),
       meal: meal ?? defaultMeal,
       name: b.name,
       foodId: b.id,
@@ -485,6 +632,14 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
     notifyListeners();
   }
 
+  void setBatchPortions(String id, int portions) {
+    final i = batches.indexWhere((b) => b.id == id);
+    if (i < 0 || batches[i].portions == portions) return;
+    batches[i] = batches[i].copyWith(portions: portions);
+    _persist();
+    notifyListeners();
+  }
+
   void deleteBatch(String id) {
     batches.removeWhere((b) => b.id == id);
     _persist();
@@ -497,6 +652,36 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
     waterLog.add(WaterSip(_stampFor(nutritionDay), amount.clamp(1, 5000)));
     _persist();
     notifyListeners();
+  }
+
+  int takeWidgetLog(String pending) {
+    var n = 0;
+    final today = _dayKey(DateTime.now());
+    for (final item in pending.split(';')) {
+      final p = item.split(',');
+      if (p.length != 3) continue;
+      final ms = int.tryParse(p[1]);
+      if (ms == null) continue;
+      final at = DateTime.fromMillisecondsSinceEpoch(ms);
+      final day = _dayKey(at);
+      if (day.isAfter(today) || today.difference(day).inDays > 7) continue;
+      if (p[0] == 'w') {
+        final ml = int.tryParse(p[2]) ?? 0;
+        if (ml <= 0) continue;
+        waterLog.add(WaterSip(at, ml.clamp(1, 5000)));
+        n++;
+      } else if (p[0] == 's') {
+        final food = foodById(p[2]);
+        if (food == null) continue;
+        foodLog.add(entryFor(food, meal: mealForHour(at.hour, mealSlots)).copyWith(at: at));
+        n++;
+      }
+    }
+    if (n > 0) {
+      _persist();
+      notifyListeners();
+    }
+    return n;
   }
 
   List<WaterSip> waterSipsOn(DateTime day) {
@@ -524,11 +709,11 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
 
   String waterLabel(int ml) {
     if (isLb) return '${(ml / 29.5735).round()} fl oz';
-    if (ml >= 1000) return '${fmt((ml / 100).round() / 10)} L';
+    if (ml >= 1000) return '${fmt((ml / 10).round() / 100)} L';
     return '$ml ml';
   }
 
-  String waterValue(int ml) => isLb ? '${(ml / 29.5735).round()}' : fmt((ml / 100).round() / 10);
+  String waterValue(int ml) => isLb ? '${(ml / 29.5735).round()}' : fmt((ml / 10).round() / 100);
 
   String get waterUnit => isLb ? 'fl oz' : 'L';
 
@@ -574,17 +759,63 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
   List<Recipe> searchRecipes(String query) {
     final q = foldText(query.trim());
     return [
-      for (final r in recipes)
+      for (final r in activeRecipes)
         if (q.isEmpty || foldText(r.name).contains(q)) r,
     ];
   }
 
-  List<FoodItem> searchFoods(String query) {
+  List<FoodItem> searchFoods(String query, {FoodCat? cat, String? group}) {
     final q = foldText(query.trim());
     return [
       for (final f in foodsByUse)
-        if (q.isEmpty || foldText(f.name).contains(q)) f,
+        if ((q.isEmpty ? !archivedFoods.contains(f.id) : foldText(f.name).contains(q)) &&
+            (cat == null || f.cat == cat) &&
+            (group == null || f.group == group))
+          f,
     ];
+  }
+
+  final List<FoodGroup> foodGroups = [];
+
+  FoodGroup? foodGroupById(String id) {
+    for (final g in foodGroups) {
+      if (g.id == id) return g;
+    }
+    return null;
+  }
+
+  List<FoodItem> foodsInGroup(String id) => [for (final f in foodsByUse) if (f.group == id) f];
+
+  String addFoodGroup(String name) {
+    final clean = name.trim();
+    if (clean.isEmpty) return '';
+    for (final g in foodGroups) {
+      if (foldText(g.name) == foldText(clean)) return g.id;
+    }
+    final g = FoodGroup(_newId('g'), clean.length > 30 ? clean.substring(0, 30) : clean);
+    foodGroups.add(g);
+    _persist();
+    notifyListeners();
+    return g.id;
+  }
+
+  void renameFoodGroup(String id, String name) {
+    final g = foodGroupById(id);
+    final clean = name.trim();
+    if (g == null || clean.isEmpty) return;
+    g.name = clean.length > 30 ? clean.substring(0, 30) : clean;
+    _persist();
+    notifyListeners();
+  }
+
+  void deleteFoodGroup(String id) {
+    foodGroups.removeWhere((g) => g.id == id);
+    for (var i = 0; i < foods.length; i++) {
+      if (foods[i].group == id) foods[i] = foods[i].copyWith(group: '');
+    }
+    _dropCaches();
+    _persist();
+    notifyListeners();
   }
 
   List<FoodItem> get recentLibraryFoods {
@@ -626,7 +857,84 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
     notifyListeners();
   }
 
+  List<Recipe> get activeRecipes => [for (final r in recipes) if (!archivedRecipes.contains(r.id)) r];
+
+  List<Recipe> get archivedRecipeList => [for (final r in recipes) if (archivedRecipes.contains(r.id)) r];
+
+  bool isRecipeArchived(String id) => archivedRecipes.contains(id);
+
+  void setRecipeArchived(String id, bool on) {
+    if (on ? !archivedRecipes.add(id) : !archivedRecipes.remove(id)) return;
+    if (archivedRecipes.isEmpty) showArchivedRecipes = false;
+    _persist();
+    notifyListeners();
+  }
+
+  List<FoodItem> get archivedFoodList => [for (final f in foodsByUse) if (archivedFoods.contains(f.id)) f];
+
+  List<MealPlan> get activeMealPlans => [for (final p in mealPlans) if (!archivedPlans.contains(p.id)) p];
+
+  List<MealPlan> get archivedPlanList => [for (final p in mealPlans) if (archivedPlans.contains(p.id)) p];
+
+  List<Supplement> get activeSupplements => [for (final s in supplements) if (!archivedSupps.contains(s.id)) s];
+
+  List<Supplement> get archivedSuppList => [for (final s in supplements) if (archivedSupps.contains(s.id)) s];
+
+  void setFoodArchived(String id, bool on) {
+    if (on ? !archivedFoods.add(id) : !archivedFoods.remove(id)) return;
+    if (on) favoriteFoods.remove(id);
+    if (archivedFoods.isEmpty) showArchivedFoods = false;
+    _dropCaches();
+    _persist();
+    notifyListeners();
+  }
+
+  List<int> setPlanArchived(String id, bool on, {List<int> restore = const []}) {
+    if (on ? !archivedPlans.add(id) : !archivedPlans.remove(id)) return const [];
+    final days = [for (final e in mealWeek.entries) if (e.value == id) e.key];
+    if (on) {
+      mealWeek.removeWhere((_, v) => v == id);
+    } else {
+      for (final d in restore) {
+        mealWeek.putIfAbsent(d, () => id);
+      }
+    }
+    if (archivedPlans.isEmpty) showArchivedPlans = false;
+    _persist();
+    notifyListeners();
+    return on ? days : const [];
+  }
+
+  void setSuppArchived(String id, bool on) {
+    if (on ? !archivedSupps.add(id) : !archivedSupps.remove(id)) return;
+    if (archivedSupps.isEmpty) showArchivedSupps = false;
+    syncSupplementReminder();
+    _persist();
+    notifyListeners();
+  }
+
+  void toggleArchivedFoods() {
+    showArchivedFoods = !showArchivedFoods;
+    notifyListeners();
+  }
+
+  void toggleArchivedPlans() {
+    showArchivedPlans = !showArchivedPlans;
+    notifyListeners();
+  }
+
+  void toggleArchivedSupps() {
+    showArchivedSupps = !showArchivedSupps;
+    notifyListeners();
+  }
+
+  void toggleArchivedRecipes() {
+    showArchivedRecipes = !showArchivedRecipes;
+    notifyListeners();
+  }
+
   void deleteRecipe(String id) {
+    archivedRecipes.remove(id);
     recipes.removeWhere((r) => r.id == id);
     _persist();
     notifyListeners();
@@ -761,6 +1069,7 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
 
   void deleteMealPlan(String id) {
     mealPlans.removeWhere((p) => p.id == id);
+    archivedPlans.remove(id);
     mealWeek.removeWhere((_, v) => v == id);
     _persist();
     notifyListeners();
@@ -853,6 +1162,7 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
           liquid: e.liquid,
           cooked: e.cooked,
           per: e.per,
+          water: e.water,
         ));
       }
       final name = (p['n'] as String? ?? '').trim();
@@ -1006,8 +1316,12 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
     bool liquid = false,
     double cookedYield = 0,
     Macros macros = Macros.zero,
+    FoodCat? cat,
+    int water = 0,
+    String group = '',
   }) {
     final clean = name.trim();
+    final groupId = foodGroupById(group) == null ? '' : group;
     final i = id == null ? -1 : foods.indexWhere((f) => f.id == id);
     if (i >= 0) {
       final old = foods[i];
@@ -1019,7 +1333,10 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
           grams: grams,
           liquid: liquid,
           macros: macros,
-          cookedYield: cookedYield);
+          cookedYield: cookedYield,
+          cat: () => cat,
+          water: water.clamp(0, 5000),
+          group: groupId);
       _persist();
       notifyListeners();
       return foods[i];
@@ -1033,6 +1350,9 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
       liquid: liquid,
       cookedYield: cookedYield,
       macros: macros,
+      cat: cat,
+      water: water.clamp(0, 5000),
+      group: groupId,
     );
     foods.add(food);
     _persist();
@@ -1044,6 +1364,27 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
 
   void setShakeFood(String id) {
     shakeFoodId = foodById(id) == null ? '' : id;
+    if (shakeFoodId.isNotEmpty && !shakeFoods.contains(id)) shakeFoods.add(id);
+    _persist();
+    notifyListeners();
+  }
+
+  bool isShakeFood(String id) => shakeFoods.contains(id);
+
+  List<FoodItem> get shakeFoodItems => [for (final f in foodsByUse) if (shakeFoods.contains(f.id)) f];
+
+  void setShakeTag(String id, bool on) {
+    if (on) {
+      if (foodById(id) == null || shakeFoods.contains(id)) return;
+      shakeFoods.add(id);
+      if (shakeFood == null) shakeFoodId = id;
+    } else {
+      if (!shakeFoods.remove(id)) return;
+      if (shakeFoodId == id) {
+        final rest = shakeFoodItems;
+        shakeFoodId = rest.isEmpty ? '' : rest.first.id;
+      }
+    }
     _persist();
     notifyListeners();
   }
@@ -1052,7 +1393,9 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
     final i = foods.indexWhere((f) => f.id == id);
     if (i < 0) return;
     if (shakeFoodId == id) shakeFoodId = '';
+    shakeFoods.remove(id);
     favoriteFoods.remove(id);
+    archivedFoods.remove(id);
     final gone = foods.removeAt(i);
     if (gone.photo.isNotEmpty && !isAssetPhoto(gone.photo)) MediaStore.delete(gone.photo);
     _persist();
@@ -1062,6 +1405,9 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
   Supplement? addSupplement(
     String name, {
     String dose = '',
+    double? amount,
+    String unit = '',
+    double? stock,
     String photo = '',
     int? at,
     int days = 0,
@@ -1075,6 +1421,9 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
       id: _newId('s'),
       name: clean,
       dose: dose.trim(),
+      amount: amount != null && amount > 0 ? amount : null,
+      unit: kSuppUnits.contains(unit) ? unit : '',
+      stock: stock == null ? null : math.max(0.0, stock),
       photo: photo,
       at: at,
       days: days,
@@ -1093,6 +1442,11 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
     String id, {
     String? name,
     String? dose,
+    double? amount,
+    bool clearAmount = false,
+    String? unit,
+    double? stock,
+    bool clearStock = false,
     String? photo,
     int? at,
     bool clearAt = false,
@@ -1108,6 +1462,11 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
     var next = old.copyWith(
       name: name == null || name.trim().isEmpty ? null : name.trim(),
       dose: dose?.trim(),
+      amount: amount != null && amount > 0 ? amount : null,
+      clearAmount: clearAmount || (amount != null && amount <= 0),
+      unit: unit == null ? null : (kSuppUnits.contains(unit) ? unit : ''),
+      stock: stock == null ? null : math.max(0.0, stock),
+      clearStock: clearStock,
       photo: photo,
       at: at,
       clearAt: clearAt,
@@ -1127,12 +1486,56 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
 
   int? supplementTime(Supplement s) => s.at ?? supplementReminderMin;
 
-  List<Supplement> supplementsDueOn(DateTime day) => [for (final s in supplements) if (s.dueOn(day)) s];
+  String suppUnitLabel(String unit, double amount) {
+    final n = amount == 1 ? 1 : 2;
+    return switch (unit) {
+      'capsule' => t.suppUnitCapsule(n),
+      'pill' => t.suppUnitPill(n),
+      'scoop' => t.suppUnitScoop(n),
+      'drop' => t.suppUnitDrop(n),
+      'serving' => t.suppUnitServing(n),
+      'iu' => t.suppUnitIu,
+      'g' || 'mg' || 'ml' => unit,
+      _ => '',
+    };
+  }
+
+  String suppAmountLabel(double amount, String unit) {
+    final word = suppUnitLabel(unit, amount);
+    final n = amount >= 1000 && amount == amount.roundToDouble() ? groupedInt(amount.round()) : fmt((amount * 100).round() / 100);
+    return word.isEmpty ? n : '$n $word';
+  }
+
+  String suppDoseLabel(Supplement s) => s.amount == null ? s.dose : suppAmountLabel(s.amount!, s.unit);
+
+  int? suppDaysLeft(Supplement s, {DateTime? from}) {
+    final stock = s.stock;
+    if (stock == null) return null;
+    var takes = (stock / s.perTake + 1e-9).floor();
+    final today = _dayKey(from ?? DateTime.now());
+    final takenToday = takenOn(today).contains(s.id);
+    for (var i = 0; i < 1000; i++) {
+      final day = shiftDays(today, i);
+      if (s.until != null && day.isAfter(s.until!)) return null;
+      if (!s.dueOn(day) || (i == 0 && takenToday)) continue;
+      if (takes == 0) return i;
+      takes--;
+    }
+    return null;
+  }
+
+  bool suppRunningLow(Supplement s) {
+    final left = suppDaysLeft(s);
+    return left != null && left <= 7;
+  }
+
+  List<Supplement> supplementsDueOn(DateTime day) => [for (final s in activeSupplements) if (s.dueOn(day)) s];
 
   void removeSupplement(String id) {
     final gone = supplements.where((s) => s.id == id).firstOrNull;
     if (gone != null && gone.photo.isNotEmpty && !isAssetPhoto(gone.photo)) MediaStore.delete(gone.photo);
     supplements.removeWhere((s) => s.id == id);
+    archivedSupps.remove(id);
     for (final taken in supplementsTaken.values) {
       taken.remove(id);
     }
@@ -1145,8 +1548,15 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
   void toggleSupplement(String id) {
     final key = _dk(nutritionDay);
     final taken = supplementsTaken.putIfAbsent(key, () => <String>{});
-    if (!taken.remove(id)) taken.add(id);
+    final marked = !taken.remove(id);
+    if (marked) taken.add(id);
     if (taken.isEmpty) supplementsTaken.remove(key);
+    final i = supplements.indexWhere((s) => s.id == id);
+    final stock = i < 0 ? null : supplements[i].stock;
+    if (stock != null) {
+      final s = supplements[i];
+      supplements[i] = s.copyWith(stock: math.max(0.0, stock + (marked ? -s.perTake : s.perTake)));
+    }
     syncSupplementReminder();
     _persist();
     notifyListeners();
@@ -1171,7 +1581,7 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
     for (var i = 0; i < 14; i++) {
       final day = shiftDays(today, i);
       final byTime = <int, List<Supplement>>{};
-      for (final s in supplements) {
+      for (final s in activeSupplements) {
         final at = supplementTime(s);
         if (at == null || !s.dueOn(day) || (i == 0 && taken.contains(s.id))) continue;
         byTime.putIfAbsent(at, () => []).add(s);
@@ -1191,9 +1601,25 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
         (
           at: d.at,
           names: [for (final s in d.items) s.name],
-          doses: [for (final s in d.items) if (s.dose.isNotEmpty) '${s.name} ${s.dose}'],
+          doses: [
+            for (final s in d.items)
+              if (suppDoseLabel(s).isNotEmpty || _lowOn(s, d.at) != null)
+                [
+                  if (suppDoseLabel(s).isNotEmpty) '${s.name} ${suppDoseLabel(s)}',
+                  ?_lowOn(s, d.at),
+                ].join(' · '),
+          ],
         ),
     ]);
+  }
+
+  String? _lowOn(Supplement s, DateTime at) {
+    final left = suppDaysLeft(s);
+    if (left == null) return null;
+    final ahead = _dayKey(at).difference(_dayKey(DateTime.now())).inDays;
+    final then = left - ahead;
+    if (then > 7) return null;
+    return then <= 0 ? t.suppRanOut : t.suppLeftFor(then);
   }
 
   List<DateTime> get nutritionWeek {
@@ -1209,16 +1635,29 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
   bool get hasNutritionData =>
       foodLog.isNotEmpty || waterLog.isNotEmpty || foods.isNotEmpty || recipes.isNotEmpty || batches.isNotEmpty;
 
+  static const kNutritionDaysAhead = 7;
+
   void setNutritionDay(DateTime day) {
     final key = _dayKey(day);
     final today = _dayKey(DateTime.now());
-    nutritionDay = key.isAfter(today) ? today : key;
+    final last = shiftDays(today, kNutritionDaysAhead);
+    nutritionDay = key.isAfter(last) ? last : key;
+    _nutritionSetOn = today;
+    notifyListeners();
+  }
+
+  void rollNutritionDay() {
+    final today = _dayKey(DateTime.now());
+    if (_nutritionSetOn == today) return;
+    if (nutritionDay == _nutritionSetOn) nutritionDay = today;
+    _nutritionSetOn = today;
     notifyListeners();
   }
 
   void setNutritionBeta(bool on) {
     nutritionBeta = on;
     syncSupplementReminder();
+    _syncFast();
     _persist();
     notifyListeners();
   }
@@ -1226,15 +1665,121 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
   void goNutrition() {
     if (!nutritionBeta) return;
     nutritionDay = _dayKey(DateTime.now());
+    _nutritionSetOn = nutritionDay;
     FoodLibrary.load().then((_) => notifyListeners());
     pushRoute('nutrition');
   }
 
   void backFromNutrition() => popRoute();
 
+  static const fastPresets = [12, 14, 16, 18, 20, 23];
+  int fastGoalHours = 16;
+  DateTime? fastStart;
+  final List<FastRecord> fasts = [];
+
+  bool get fasting => fastStart != null;
+
+  DateTime? get fastEndsAt => fastStart?.add(Duration(hours: fastGoalHours));
+
+  DateTime? get lastMealAt {
+    final now = DateTime.now();
+    final since = now.subtract(const Duration(hours: 24));
+    DateTime? last;
+    for (final e in foodLog) {
+      if (e.at.isAfter(now) || e.at.isBefore(since) || e.at.hour == 12 && e.at.minute == 0 && e.at.second == 0) continue;
+      if (last == null || e.at.isAfter(last)) last = e.at;
+    }
+    return last;
+  }
+
+  void startFast({DateTime? at}) {
+    final now = DateTime.now();
+    var start = at ?? now;
+    if (start.isAfter(now)) start = now;
+    final floor = now.subtract(const Duration(hours: 48));
+    if (start.isBefore(floor)) start = floor;
+    fastStart = start;
+    _syncFast();
+    _persist();
+    notifyListeners();
+  }
+
+  void moveFastStart(DateTime at) {
+    if (fastStart == null) return;
+    startFast(at: at);
+  }
+
+  void endFast() {
+    final start = fastStart;
+    if (start == null) return;
+    final end = DateTime.now();
+    if (end.difference(start).inMinutes >= 10) {
+      fasts.add(FastRecord(start, end, fastGoalHours));
+      fasts.sort((a, b) => a.start.compareTo(b.start));
+      if (fasts.length > 200) fasts.removeRange(0, fasts.length - 200);
+    }
+    fastStart = null;
+    _syncFast();
+    _persist();
+    notifyListeners();
+  }
+
+  void cancelFast() {
+    if (fastStart == null) return;
+    fastStart = null;
+    _syncFast();
+    _persist();
+    notifyListeners();
+  }
+
+  void removeFast(FastRecord r) {
+    if (!fasts.remove(r)) return;
+    _persist();
+    notifyListeners();
+  }
+
+  void setFastGoal(int hours) {
+    final h = hours.clamp(1, 72);
+    if (h == fastGoalHours) return;
+    fastGoalHours = h;
+    _syncFast();
+    _persist();
+    notifyListeners();
+  }
+
+  int get fastStreak {
+    var n = 0;
+    for (final r in fasts.reversed) {
+      if (!r.reached) break;
+      n++;
+    }
+    return n;
+  }
+
+  ({int count, int reached, Duration avg})? get fastWeek {
+    final since = DateTime.now().subtract(const Duration(days: 7));
+    final recent = [for (final r in fasts) if (r.end.isAfter(since)) r];
+    if (recent.isEmpty) return null;
+    final total = recent.fold(Duration.zero, (a, r) => a + r.length);
+    return (
+      count: recent.length,
+      reached: recent.where((r) => r.reached).length,
+      avg: Duration(minutes: total.inMinutes ~/ recent.length),
+    );
+  }
+
+  void _syncFast() {
+    final start = fastStart, end = fastEndsAt;
+    if (!nutritionBeta || !trackerOn(Tracker.fasting) || start == null || end == null) {
+      ProgressReminder.instance.cancelFast();
+    } else {
+      ProgressReminder.instance.showFast(start, end);
+    }
+  }
+
   Map<String, dynamic> nutritionJson() => {
         'foods': foods.map((f) => f.toJson()).toList(),
-        'log': foodLog.map((e) => e.toJson()).toList(),
+        'log': _stored('log', foodLog, (e) => e.toJson()),
         'water': waterLog.map((w) => w.toJson()).toList(),
         'supps': supplements.map((s) => s.toJson()).toList(),
         'taken': supplementsTaken.map((k, v) => MapEntry(k, v.toList())),
@@ -1246,8 +1791,13 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
         if (useKj) 'kj': true,
         if (!vesselMotion) 'still': true,
         if (weightGoalKg > 0) 'wGoal': weightGoalKg,
+        if (weightAim.isNotEmpty) 'wAim': weightAim,
         'suppAt': ?supplementReminderMin,
         if (recipes.isNotEmpty) 'recipes': recipes.map((r) => r.toJson()).toList(),
+        if (archivedRecipes.isNotEmpty) 'recArch': archivedRecipes.toList(),
+        if (archivedFoods.isNotEmpty) 'foodArch': archivedFoods.toList(),
+        if (archivedPlans.isNotEmpty) 'planArch': archivedPlans.toList(),
+        if (archivedSupps.isNotEmpty) 'suppArch': archivedSupps.toList(),
         if (favoriteFoods.isNotEmpty) 'fav': favoriteFoods,
         if (batches.isNotEmpty) 'batches': batches.map((b) => b.toJson()).toList(),
         'meals': mealSlots.map((m) => m.toJson()).toList(),
@@ -1256,6 +1806,14 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
         'trkKnown': [for (final t in Tracker.values) t.name],
         'trackers': [for (final t in Tracker.values) if (trackers.contains(t)) t.name],
         if (shakeFoodId.isNotEmpty) 'shake': shakeFoodId,
+        'shakes': shakeFoods,
+        if (foodGroups.isNotEmpty) 'groups': foodGroups.map((g) => g.toJson()).toList(),
+        if (fastGoalHours != 16 || fastStart != null || fasts.isNotEmpty)
+          'fast': {
+            'h': fastGoalHours,
+            if (fastStart != null) 'on': fastStart!.toIso8601String(),
+            if (fasts.isNotEmpty) 'log': fasts.map((r) => r.toJson()).toList(),
+          },
       };
 
   void loadNutrition(Map<String, dynamic>? j, {Map<String, String>? restored}) {
@@ -1264,6 +1822,9 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
           for (final e in (j?[k] as List?) ?? const [])
             if (e is Map) e.cast<String, dynamic>(),
         ];
+    foodGroups
+      ..clear()
+      ..addAll(list('groups').map(FoodGroup.fromJson).nonNulls);
     foods
       ..clear()
       ..addAll(list('foods').map(FoodItem.fromJson).where((f) => f.id.isNotEmpty).map((f) {
@@ -1304,9 +1865,23 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
     supplementReminderMin = suppAt?.clamp(0, 24 * 60 - 1);
     final wGoal = (j?['wGoal'] as num?)?.toDouble() ?? 0;
     weightGoalKg = wGoal.isFinite && wGoal > 0 && wGoal < 500 ? wGoal : 0;
+    final aim = j?['wAim'];
+    weightAim = const {'lose', 'gain', 'hold'}.contains(aim) ? aim as String : '';
     recipes
       ..clear()
       ..addAll(list('recipes').map(Recipe.fromJson).where((r) => r.id.isNotEmpty && r.items.isNotEmpty));
+    archivedRecipes
+      ..clear()
+      ..addAll([for (final id in (j?['recArch'] as List?) ?? const []) if (id is String && recipes.any((r) => r.id == id)) id]);
+    showArchivedRecipes = false;
+    for (final (set, key) in [(archivedFoods, 'foodArch'), (archivedPlans, 'planArch'), (archivedSupps, 'suppArch')]) {
+      set
+        ..clear()
+        ..addAll([for (final id in (j?[key] as List?) ?? const []) if (id is String) id]);
+    }
+    showArchivedFoods = false;
+    showArchivedPlans = false;
+    showArchivedSupps = false;
     batches
       ..clear()
       ..addAll(list('batches').map(Batch.fromJson).nonNulls);
@@ -1344,7 +1919,28 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
     }
     final shake = j?['shake'] as String? ?? '';
     shakeFoodId = foods.any((f) => f.id == shake) ? shake : '';
+    final tagged = j?['shakes'];
+    shakeFoods
+      ..clear()
+      ..addAll(tagged is List
+          ? {...tagged.whereType<String>().where((id) => foods.any((f) => f.id == id))}
+          : [if (shakeFoodId.isNotEmpty) shakeFoodId]);
+    if (!shakeFoods.contains(shakeFoodId)) shakeFoodId = shakeFoods.isEmpty ? '' : shakeFoods.first;
+    final fast = j?['fast'];
+    final fastMap = fast is Map ? fast.cast<String, dynamic>() : const <String, dynamic>{};
+    fastGoalHours = ((fastMap['h'] as num?)?.toInt() ?? 16).clamp(1, 72);
+    final on = DateTime.tryParse(fastMap['on'] as String? ?? '');
+    fastStart = on != null && !on.isAfter(DateTime.now()) ? on : null;
+    fasts
+      ..clear()
+      ..addAll([
+        for (final e in (fastMap['log'] as List?) ?? const [])
+          if (e is Map) FastRecord.fromJson(e.cast<String, dynamic>()),
+      ].nonNulls)
+      ..sort((a, b) => a.start.compareTo(b.start));
     nutritionDay = _dayKey(DateTime.now());
+    _nutritionSetOn = nutritionDay;
     syncSupplementReminder();
+    _syncFast();
   }
 }

@@ -70,7 +70,7 @@ class LiveWorkout {
         detail = t.liveAllDone;
       } else {
         final st = ex.sets[pending];
-        final load = st.sec != null || st.km != null
+        final load = st.sec != null || st.km != null || st.repsR != null
             ? fit.loggedSetLabel(st.logged)
             : fit.isRepsOnly(ex.id)
                 ? '${st.reps} ${t.repsCol.toLowerCase()}'
@@ -93,20 +93,21 @@ class LiveWorkout {
         : '${pendingIdx < 0 ? ex.sets.length : pendingIdx + 1}/${ex.sets.length}';
     final finished = [for (final e in s.exercises) e.sets.isNotEmpty && e.sets.every((st) => st.done)];
     final flashing = _flashAt != null && DateTime.now().difference(_flashAt!) < const Duration(seconds: 2);
-    final actions = <(String, String)>[
-      if (paused)
-        ('pause', '▶  ${t.liveResume}')
-      else ...[
-        if (resting) ...[
-          ('add', '+15 s'),
-          ('skip', '${t.liveSkipRest}  ›'),
-        ] else if (pendingIdx >= 0)
-          ('done', '✓  ${t.liveDoneSet}')
-        else if (nextEx != null)
-          ('next', '${t.liveNext}  ›'),
-        ('pause', '❚❚  ${t.livePause}'),
-      ],
-    ];
+    List<(String, String)> actionsFor(bool resting) => [
+          if (paused)
+            ('pause', '▶  ${t.liveResume}')
+          else ...[
+            if (resting) ...[
+              ('add', '+15 s'),
+              ('skip', '${t.liveSkipRest}  ›'),
+            ] else if (pendingIdx >= 0)
+              ('done', '✓  ${t.liveDoneSet}')
+            else if (nextEx != null)
+              ('next', '${t.liveNext}  ›'),
+            ('pause', '❚❚  ${t.livePause}'),
+          ],
+        ];
+    final actions = actionsFor(resting);
 
     final key = [
       name, detail, index, total, resting ? restEnd.millisecondsSinceEpoch : 0, paused, position,
@@ -151,6 +152,9 @@ class LiveWorkout {
         'actions': [
           for (final (id, label) in actions) {'id': id, 'label': label},
         ],
+        'afterRest': [
+          for (final (id, label) in actionsFor(false)) {'id': id, 'label': label},
+        ],
       });
     } catch (e) {
       _lastKey = '';
@@ -176,6 +180,8 @@ class LiveWorkout {
         fit.skipRest();
       case 'next':
         fit.goNextPending();
+      case 'restEnd':
+        fit.restElapsed();
     }
   }
 

@@ -38,6 +38,7 @@ object LiveNotifier {
     private var font: Typeface? = null
     private var flashId = -1
     private var flashUntil = 0L
+    private var endedRest = 0L
     private val tick = Runnable { repost() }
 
     fun update(ctx: Context, a: Map<*, *>) {
@@ -62,9 +63,10 @@ object LiveNotifier {
         val detail = a["detail"] as? String ?: ""
         val restLabel = a["restLabel"] as? String ?: ""
         val next = a["next"] as? String
-        val resting = a["resting"] as? Boolean ?: false
         val paused = a["paused"] as? Boolean ?: false
         val restEnd = (a["restEnd"] as? Number)?.toLong() ?: 0L
+        val restOver = (a["resting"] as? Boolean ?: false) && restEnd <= now
+        val resting = (a["resting"] as? Boolean ?: false) && !restOver
         val startedAt = (a["startedAt"] as? Number)?.toLong() ?: 0L
         val index = (a["index"] as? Number)?.toInt() ?: 0
         val total = (a["total"] as? Number)?.toInt() ?: 0
@@ -72,8 +74,12 @@ object LiveNotifier {
         val done = (a["done"] as? List<*>)?.map { it == true } ?: emptyList()
         val progress = (a["progress"] as? Number)?.toInt() ?: 0
         val chip = a["chip"] as? String
+        if (restOver && endedRest != restEnd) {
+            endedRest = restEnd
+            dart?.invokeMethod("action", "restEnd")
+        }
         val flash = if (now < flashUntil) a["flash"] as? String else null
-        val actions = (a["actions"] as? List<*>)?.mapNotNull { it as? Map<*, *> } ?: emptyList()
+        val actions = (a[if (restOver) "afterRest" else "actions"] as? List<*>)?.mapNotNull { it as? Map<*, *> } ?: emptyList()
         val accent = ctx.getColor(if (paused) R.color.live_pause else R.color.live_accent)
         val green = ctx.getColor(R.color.live_done)
         val left = if (resting) ((restEnd - now + 999) / 1000).coerceAtLeast(0) else 0L
@@ -160,6 +166,7 @@ object LiveNotifier {
                 wait = 1000L - (now - startedAt).mod(1000L) + 15L
             }
         }
+        if (resting && !paused) wait = minOf(wait, restEnd - now + 15)
         if (flashUntil > now) wait = minOf(wait, flashUntil - now + 15)
         if (wait != Long.MAX_VALUE) main.postDelayed(tick, wait)
     }

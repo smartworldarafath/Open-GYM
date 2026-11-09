@@ -8,6 +8,7 @@ import 'package:home_widget/home_widget.dart';
 import '../state/fit_state.dart';
 import '../theme/app_colors.dart';
 import '../widgets/home_widget_views.dart';
+import 'nutrition_widgets.dart';
 
 class HomeWidgetBridge {
   HomeWidgetBridge._();
@@ -85,7 +86,7 @@ class HomeWidgetBridge {
       final bodySize = _ios ? const Size(320, 336) : const Size(320, 220);
       final todaySize = _ios ? const Size(155, 155) : const Size(120, 120);
       const weekSize = Size(320, 150);
-      final week = [for (var i = 0; i < 7; i++) fit.isDayDone(i)];
+      final week = [for (var i = 0; i < 7; i++) fit.isDayDone(i) && !fit.isDayPartial(i)];
       final levels = fit.heatmapWeeksFor(26);
       final heat = fit.muscleHeatOver(bodyDays);
       final plannedToday = fit.todayRoutine != null;
@@ -189,6 +190,9 @@ class HomeWidgetBridge {
           if (path != null) await HomeWidget.saveWidgetData<String>('${key}_night', path);
         }
       }
+      if (!_ios && NutritionWidgets.providers.any(wants)) {
+        await NutritionWidgets.paint(render: _render, wants: wants, day: day, night: night, framed: framed);
+      }
       final now = DateTime.now();
       if (everyone) _allPainted = today;
       await HomeWidget.saveWidgetData<String>('today_stamp', _stamp(now));
@@ -216,6 +220,11 @@ class HomeWidgetBridge {
         ('WeekWidgetProvider', 'WeekWidget'),
       ]) {
         if (wants(android)) await _reload(android, ios);
+      }
+      if (!_ios) {
+        for (final android in NutritionWidgets.providers) {
+          if (wants(android)) await _reload(android, android);
+        }
       }
     } catch (e) {
       debugPrint('HomeWidgetBridge.update falló: $e');

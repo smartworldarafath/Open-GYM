@@ -3,6 +3,7 @@ part of 'fit_state.dart';
 mixin LibraryState on FitCore {
   String exSearch = '';
   String? exMuscleFilter;
+  String? exZoneFilter;
   String? exDifficultyFilter;
   String? exEquipmentFilter;
   String? exKindFilter;
@@ -74,12 +75,30 @@ mixin LibraryState on FitCore {
     return null;
   }
 
+  final List<String> _exerciseTrail = [];
+
   void openExercise(String id) {
+    final from = activeExerciseId;
+    if (route == 'exercise-detail' && from != null && from != id) {
+      _exerciseTrail.add(from);
+    } else if (route != 'exercise-detail') {
+      _exerciseTrail.clear();
+    }
     activeExerciseId = id;
     pushRoute('exercise-detail');
   }
 
-  void closeExerciseDetail() => popRoute(fallback: 'exercises');
+  void closeExerciseDetail() {
+    while (route == 'exercise-detail' && _exerciseTrail.isNotEmpty) {
+      final id = _exerciseTrail.removeLast();
+      if (id == activeExerciseId || exerciseById(id) == null) continue;
+      activeExerciseId = id;
+      notifyListeners();
+      return;
+    }
+    _exerciseTrail.clear();
+    popRoute(fallback: 'exercises');
+  }
 
   void toggleFavorite(String id) {
     favorites[id] = !(favorites[id] ?? false);
@@ -95,6 +114,7 @@ mixin LibraryState on FitCore {
   void clearExFilters() {
     exSearch = '';
     exMuscleFilter = null;
+    exZoneFilter = null;
     exDifficultyFilter = null;
     exEquipmentFilter = null;
     exKindFilter = null;
@@ -105,8 +125,20 @@ mixin LibraryState on FitCore {
 
   void setMuscleFilter(String id) {
     exMuscleFilter = exMuscleFilter == id ? null : id;
+    exZoneFilter = null;
     notifyListeners();
   }
+
+  void setZoneFilter(String? zone) {
+    exZoneFilter = zone;
+    exMuscleFilter = null;
+    notifyListeners();
+  }
+
+  int zoneCount(String zone) => musclesCount(kBodyZones[zone] ?? const []);
+
+  int musclesCount(List<String> muscles) =>
+      allExercises.where((ex) => !isArchived(ex.id) && muscles.contains(ex.primary)).length;
 
   void setDifficultyFilter(String d) {
     exDifficultyFilter = exDifficultyFilter == d ? null : d;
@@ -152,11 +184,18 @@ mixin LibraryState on FitCore {
           !ex.secondary.contains(exMuscleFilter)) {
         return false;
       }
+      final zone = kBodyZones[exZoneFilter];
+      if (zone != null && !zone.contains(ex.primary) && !ex.secondary.any(zone.contains)) return false;
       if (exDifficultyFilter != null && ex.difficulty != exDifficultyFilter) return false;
       if (exEquipmentFilter != null && ex.equipment != exEquipmentFilter) return false;
       if (exKindFilter != null && kindOf(ex) != exKindFilter) return false;
       return true;
     }).toList();
+    final zone = kBodyZones[exZoneFilter];
+    if (zone != null) {
+      final inside = _groupedByMuscle(list.where((ex) => zone.contains(ex.primary)).toList());
+      return [...inside, ..._groupedByMuscle(list.where((ex) => !zone.contains(ex.primary)).toList())];
+    }
     final muscle = exMuscleFilter;
     if (muscle == null) return _groupedByMuscle(list);
     final primary = list.where((ex) => ex.primary == muscle);
@@ -319,7 +358,7 @@ mixin LibraryState on FitCore {
       final from = s.exercises[i];
       final j = s.exercises.indexWhere((e) => e.id == toId);
       if (j < 0) {
-        s.exercises[i] = LoggedExercise(to.id, to.name, to.primary, from.sets);
+        s.exercises[i] = LoggedExercise(to.id, to.name, to.primary, from.sets, incline: from.incline, kcal: from.kcal);
       } else {
         s.exercises[j].sets.addAll(from.sets);
         s.exercises.removeAt(i);
@@ -385,6 +424,63 @@ mixin LibraryState on FitCore {
       }
     }
     return false;
+  }
+
+  static const _sidedByDefault = {
+    'side-plank-hold',
+    'cable-pallof-hold',
+    'cross-body-shoulder-stretch',
+    'standing-quad-stretch',
+    'kneeling-hip-flexor-stretch',
+    'wall-calf-stretch',
+  };
+
+  bool isEachSide(String id) {
+    if (!isTimed(id)) return false;
+    if (eachSide.contains(id)) return true;
+    if (eachSideOff.contains(id)) return false;
+    return _sidedByDefault.contains(id);
+  }
+
+  bool isSidedReps(String id) => !isTimed(id) && modeOf(id) != 'cardio' && eachSide.contains(id);
+
+  void toggleEachSide(String id) {
+    final on = !isEachSide(id);
+    eachSide.remove(id);
+    eachSideOff.remove(id);
+    if (on != _sidedByDefault.contains(id)) (on ? eachSide : eachSideOff).add(id);
+    _persist();
+    notifyListeners();
+  }
+
+  static const _assistedByDefault = {'kiJ4Z2K', '7OeHptV', 'PAgTVaK'};
+
+  bool _assistedName(String id) {
+    for (final e in customExercises) {
+      if (e.id == id) {
+        final n = e.name.toLowerCase();
+        return n.contains('assist') || n.contains('asistid');
+      }
+    }
+    return false;
+  }
+
+  bool _assistedDefault(String id) => _assistedByDefault.contains(id) || _assistedName(id);
+
+  bool isAssisted(String id) {
+    if (modeOf(id).isNotEmpty || isRepsOnly(id)) return false;
+    if (assistedOn.contains(id)) return true;
+    if (assistedOff.contains(id)) return false;
+    return _assistedDefault(id);
+  }
+
+  void toggleAssisted(String id) {
+    final on = !isAssisted(id);
+    assistedOn.remove(id);
+    assistedOff.remove(id);
+    if (on != _assistedDefault(id)) (on ? assistedOn : assistedOff).add(id);
+    _persist();
+    notifyListeners();
   }
 
   void toggleRepsOnly(String id) {

@@ -35,7 +35,7 @@ class _ShareSheet extends StatefulWidget {
 }
 
 class _ShareSheetState extends State<_ShareSheet> {
-  final GlobalKey _card = GlobalKey();
+  final _cards = {for (final k in ShareKind.values) k: GlobalKey()};
   late ShareKind _kind = widget.initial;
   bool _busy = false;
 
@@ -55,7 +55,7 @@ class _ShareSheetState extends State<_ShareSheet> {
     if (_busy) return;
     setState(() => _busy = true);
     try {
-      final boundary = _card.currentContext?.findRenderObject() as RenderRepaintBoundary?;
+      final boundary = _cards[_kind]!.currentContext?.findRenderObject() as RenderRepaintBoundary?;
       if (boundary == null) return;
       final image = await boundary.toImage(pixelRatio: 3);
       final data = await image.toByteData(format: ui.ImageByteFormat.png);
@@ -84,11 +84,7 @@ class _ShareSheetState extends State<_ShareSheet> {
 
     return Container(
       constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.9),
-      decoration: BoxDecoration(
-        color: gc.bg,
-
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(26)),
-      ),
+      decoration: sheetDecoration(gc),
       clipBehavior: Clip.antiAlias,
       child: SafeArea(
         top: false,
@@ -107,36 +103,38 @@ class _ShareSheetState extends State<_ShareSheet> {
                 ],
               ),
             ),
-            SizedBox(
-              height: 44,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                children: [
-                  for (final k in kinds)
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: Center(
-                        child: Pill(
-                          label: _label(k),
-                          bg: k == kind ? gc.emberSoft : gc.bgRaised,
-                          fg: k == kind ? gc.text : gc.textSecondary,
-                          fontSize: 12.5,
-                          onTap: () => setState(() => _kind = k),
-                        ),
-                      ),
-                    ),
-                ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: SegToggle(
+                    [for (final k in kinds) SegOption(_label(k), k == kind, () => setState(() => _kind = k))],
+                    hPad: 14,
+                    vPad: 8,
+                    fontSize: 12.5,
+                  ),
+                ),
               ),
             ),
             Flexible(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(20, 18, 20, 8),
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
                 child: Center(
                   child: FittedBox(
-                    child: RepaintBoundary(
-                      key: _card,
-                      child: ShareCard(kind: kind, gc: gc),
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 340),
+                      switchInCurve: Curves.easeOutCubic,
+                      switchOutCurve: Curves.easeInCubic,
+                      transitionBuilder: (child, a) => FadeTransition(
+                        opacity: a,
+                        child: ScaleTransition(scale: Tween(begin: 0.94, end: 1.0).animate(a), child: child),
+                      ),
+                      child: RepaintBoundary(
+                        key: _cards[kind],
+                        child: ShareCard(kind: kind, gc: gc),
+                      ),
                     ),
                   ),
                 ),
@@ -150,7 +148,7 @@ class _ShareSheetState extends State<_ShareSheet> {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 6, 20, 16),
-              child: LiquidGlassButton(label: t.share, height: 54, onTap: _share),
+              child: LiquidGlassButton(label: sentenceCase(t.share), height: 52, onTap: _share),
             ),
           ],
         ),
