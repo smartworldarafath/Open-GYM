@@ -88,14 +88,10 @@ jobs:
           fi
           xcodebuild -version
 
-      - name: Install dependencies & Configure CocoaPods
+      - name: Clean stale simulators & install dependencies
         run: |
-          flutter config --no-enable-swift-package-manager
+          xcrun simctl delete unavailable 2>/dev/null || true
           flutter pub get
-          cd ios
-          pod repo update || true
-          pod install || true
-          cd ..
 
       - name: Build iOS Application (iPhone & iPad)
         run: |
