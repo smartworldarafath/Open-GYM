@@ -74,6 +74,7 @@ class AppTheme {
     Color? color,
     double? letterSpacing,
     double height = 1.0,
+    TextDecoration decoration = TextDecoration.none,
   }) =>
       TextStyle(
         fontFamily: disp,
@@ -82,6 +83,7 @@ class AppTheme {
         color: color,
         letterSpacing: letterSpacing,
         height: height,
+        decoration: decoration,
       );
 
   static TextStyle f(
@@ -90,6 +92,7 @@ class AppTheme {
     Color? color,
     double? letterSpacing,
     double height = 1.15,
+    TextDecoration decoration = TextDecoration.none,
   }) =>
       TextStyle(
         fontFamily: round,
@@ -98,6 +101,7 @@ class AppTheme {
         color: color,
         letterSpacing: letterSpacing,
         height: height,
+        decoration: decoration,
       );
 
   static TextStyle s(
@@ -106,6 +110,7 @@ class AppTheme {
     Color? color,
     double? letterSpacing,
     double height = 1.35,
+    TextDecoration decoration = TextDecoration.none,
   }) =>
       TextStyle(
         fontFamily: sans,
@@ -114,5 +119,6 @@ class AppTheme {
         color: color,
         letterSpacing: letterSpacing,
         height: height,
+        decoration: decoration,
       );
 }

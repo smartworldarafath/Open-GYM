@@ -542,7 +542,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver, Single
         final body = await response.transform(utf8.decoder).join();
         final json = jsonDecode(body) as Map<String, dynamic>;
         final tagName = (json['tag_name'] as String? ?? '').replaceAll('v', '').trim();
-        if (_isVersionNewer(tagName, '1.3.6')) {
+        if (_isVersionNewer(tagName, '1.3.7')) {
           if (mounted) {
             setState(() {
               _availableUpdateTag = tagName;
@@ -581,90 +581,93 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver, Single
           ),
         );
       },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-        decoration: BoxDecoration(
-          color: gc.bgRaised,
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: gc.ember.withValues(alpha: 0.5), width: 1.5),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.35),
-              blurRadius: 16,
-              offset: const Offset(0, 4),
-            ),
-            BoxShadow(
-              color: gc.ember.withValues(alpha: 0.15),
-              blurRadius: 12,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 36,
-              height: 36,
-              decoration: BoxDecoration(
-                color: gc.ember.withValues(alpha: 0.18),
-                shape: BoxShape.circle,
+      child: Material(
+        type: MaterialType.transparency,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          decoration: BoxDecoration(
+            color: gc.bgRaised,
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(color: gc.ember.withValues(alpha: 0.5), width: 1.5),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.35),
+                blurRadius: 16,
+                offset: const Offset(0, 4),
               ),
-              child: Center(
-                child: Icon(PhosphorIconsFill.sparkle, size: 18, color: gc.ember),
+              BoxShadow(
+                color: gc.ember.withValues(alpha: 0.15),
+                blurRadius: 12,
+                offset: const Offset(0, 2),
               ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Open-GYM v$_availableUpdateTag',
-                    style: AppTheme.f(13.5, weight: FontWeight.w700, color: gc.text),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    'New update ready - Tap to update',
-                    style: AppTheme.f(11.5, weight: FontWeight.w500, color: gc.textSecondary),
-                  ),
-                ],
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                setState(() => _dismissedUpdate = true);
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => const UpdateScreen(currentVersion: kAppVersion),
-                  ),
-                );
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+            ],
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 36,
+                height: 36,
                 decoration: BoxDecoration(
-                  color: gc.ember,
-                  borderRadius: BorderRadius.circular(10),
+                  color: gc.ember.withValues(alpha: 0.18),
+                  shape: BoxShape.circle,
                 ),
-                child: const Text(
-                  'Update',
-                  style: TextStyle(
-                    fontSize: 12.5,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
+                child: Center(
+                  child: Icon(PhosphorIconsFill.sparkle, size: 18, color: gc.ember),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Open-GYM v$_availableUpdateTag',
+                      style: AppTheme.f(13.5, weight: FontWeight.w700, color: gc.text),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      'New update ready - Tap to update',
+                      style: AppTheme.f(11.5, weight: FontWeight.w500, color: gc.textSecondary),
+                    ),
+                  ],
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() => _dismissedUpdate = true);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const UpdateScreen(currentVersion: kAppVersion),
+                    ),
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                  decoration: BoxDecoration(
+                    color: gc.ember,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Text(
+                    'Update',
+                    style: TextStyle(
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(width: 8),
-            GestureDetector(
-              onTap: () => setState(() => _dismissedUpdate = true),
-              child: Container(
-                padding: const EdgeInsets.all(4),
-                child: Icon(PhosphorIconsBold.x, size: 16, color: gc.textTertiary),
+              const SizedBox(width: 8),
+              GestureDetector(
+                onTap: () => setState(() => _dismissedUpdate = true),
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  child: Icon(PhosphorIconsBold.x, size: 16, color: gc.textTertiary),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -1011,8 +1014,10 @@ class _NavBarState extends State<_NavBar> {
 
   @override
   Widget build(BuildContext context) {
-
-    return SizedBox(height: height, child: _bar(context, height));
+    return Material(
+      type: MaterialType.transparency,
+      child: SizedBox(height: height, child: _bar(context, height)),
+    );
   }
 
   Widget _bar(BuildContext context, double h) {
@@ -1154,7 +1159,8 @@ class _NavBarState extends State<_NavBar> {
                       child: Text(
                         label,
                         maxLines: 1,
-                        style: AppTheme.f(9.5, weight: selected ? FontWeight.w800 : FontWeight.w600, color: color),
+                        style: AppTheme.f(9.5, weight: selected ? FontWeight.w800 : FontWeight.w600, color: color)
+                            .copyWith(decoration: TextDecoration.none),
                       ),
                     ),
                   ),

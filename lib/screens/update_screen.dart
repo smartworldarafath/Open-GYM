@@ -16,7 +16,7 @@ import '../widgets/liquid_glass.dart';
 import '../widgets/ui_kit.dart';
 
 class UpdateScreen extends StatefulWidget {
-  const UpdateScreen({super.key, this.currentVersion = '1.3.6'});
+  const UpdateScreen({super.key, this.currentVersion = '1.3.7'});
 
   final String currentVersion;
 

@@ -15,8 +15,8 @@ import '../widgets/liquid_glass.dart';
 import '../widgets/ui_kit.dart';
 import 'update_screen.dart';
 
-const _kVersion = '1.3.6';
-const kAppVersion = '1.3.6';
+const _kVersion = '1.3.7';
+const kAppVersion = '1.3.7';
 const _kAuthor = 'Arafath';
 const _kAuthorUrl = 'https://github.com/smartworldarafath';
 const _kRepoUrl = 'https://github.com/smartworldarafath/Open-GYM';
