@@ -10,7 +10,7 @@ const kMealAiMaxItems = 40;
 
 enum AiSource { library, mine, ai }
 
-enum AiFlag { adjusted, doubtful, noValues, noAmount }
+enum AiFlag { adjusted, doubtful, noValues, noAmount, matched }
 
 class AiFood {
   AiFood({
@@ -25,10 +25,13 @@ class AiFood {
     this.fiber,
     this.sugar,
     this.sodium,
+    this.chol,
     this.sat,
     this.trans,
     this.mono,
     this.poly,
+    this.iron,
+    this.potassium,
     this.per100 = false,
     this.meal = '',
   });
@@ -44,10 +47,13 @@ class AiFood {
   double? fiber;
   double? sugar;
   double? sodium;
+  double? chol;
   double? sat;
   double? trans;
   double? mono;
   double? poly;
+  double? iron;
+  double? potassium;
   bool per100;
   String meal;
 
@@ -314,10 +320,13 @@ const _fatKeys = ['fat', 'fats', 'grasa', 'grasas', 'lipids', 'lipidos', 'f', 'f
 const _fiberKeys = ['fiber', 'fibre', 'fibra', 'fiberg'];
 const _sugarKeys = ['sugar', 'sugars', 'azucar', 'azucares', 'sugarg', 'totalsugars'];
 const _sodiumKeys = ['sodium', 'sodio', 'natrium', 'sodiummg', 'sodiomg'];
+const _cholKeys = ['cholesterol', 'colesterol', 'cholesterolmg', 'colesterolmg', 'chol'];
 const _satKeys = ['saturated', 'saturatedfat', 'saturadas', 'saturada', 'grasassaturadas', 'grasasaturada', 'satfat', 'saturates', 'saturatedfatg'];
 const _transKeys = ['trans', 'transfat', 'transfats', 'grasastrans', 'grasatrans', 'transfatg'];
 const _monoKeys = ['monounsaturated', 'monounsaturatedfat', 'monoinsaturadas', 'monoinsaturada', 'grasasmonoinsaturadas', 'monofat', 'mono'];
 const _polyKeys = ['polyunsaturated', 'polyunsaturatedfat', 'poliinsaturadas', 'poliinsaturada', 'grasaspoliinsaturadas', 'polyfat', 'poly'];
+const _ironKeys = ['iron', 'hierro', 'ironmg', 'hierromg', 'eisen', 'fer', 'ferro'];
+const _potassiumKeys = ['potassium', 'potasio', 'potassiummg', 'potasiomg', 'kalium', 'potassio'];
 const _nestedKeys = ['macros', 'nutrition', 'nutrients', 'nutrientes', 'nutritionalvalues', 'valoresnutricionales', 'totals', 'total', 'values'];
 const _per100Keys = ['per100', 'per100g', 'per100grams', 'porcada100g', 'per100ml'];
 const _mealKeys = ['meal', 'comida', 'slot', 'mealtype', 'momento'];
@@ -516,10 +525,13 @@ AiFood? _food(Object? raw, String defaultMeal) {
     fiber: macro(_fiberKeys),
     sugar: macro(_sugarKeys),
     sodium: macro(_sodiumKeys),
+    chol: macro(_cholKeys),
     sat: macro(_satKeys),
     trans: macro(_transKeys),
     mono: macro(_monoKeys),
     poly: macro(_polyKeys),
+    iron: macro(_ironKeys),
+    potassium: macro(_potassiumKeys),
     per100: isPer100,
     meal: meal is String && meal.trim().isNotEmpty ? meal.trim() : defaultMeal,
   );
@@ -643,6 +655,15 @@ List<(Object?, bool)> _candidates(String text, String open) {
   return out;
 }
 
+enum MealAiTrouble { noData, cut, unknown }
+
+MealAiTrouble diagnoseMealAi(String raw) {
+  int count(String chars) => raw.split('').where(chars.contains).length;
+  final open = count('{[');
+  if (open == 0) return MealAiTrouble.noData;
+  return count('}]') < open ? MealAiTrouble.cut : MealAiTrouble.unknown;
+}
+
 AiReply parseMealAi(String raw) {
   final text = _clean(raw);
   var best = const AiReply([]);
@@ -670,11 +691,12 @@ AiReply parseMealAi(String raw) {
 }
 
 class AiDraft {
-  AiDraft({required this.entry, required this.source, this.flags = const {}, this.on = true});
+  AiDraft({required this.entry, required this.source, this.flags = const {}, this.on = true, this.asNew});
 
   FoodEntry entry;
   final AiSource source;
   final Set<AiFlag> flags;
+  final AiDraft? asNew;
   bool on;
 
   String get name => entry.name;
@@ -830,7 +852,8 @@ Meal _mealFor(String raw, List<MealSlot> slots, Meal fallback) {
 
 Macros _aiMacros(AiFood f, double? grams, Set<AiFlag> flags) {
   var kcal = f.kcal, p = f.protein, c = f.carbs, fat = f.fat, fi = f.fiber;
-  var su = f.sugar, na = f.sodium, sa = f.sat, tr = f.trans, mu = f.mono, po = f.poly;
+  var su = f.sugar, na = f.sodium, ch = f.chol, sa = f.sat, tr = f.trans, mu = f.mono, po = f.poly;
+  var fe = f.iron, ka = f.potassium;
   if (f.per100) {
     final k = (grams ?? 100) / 100;
     kcal = kcal == null ? null : kcal * k;
@@ -840,10 +863,13 @@ Macros _aiMacros(AiFood f, double? grams, Set<AiFlag> flags) {
     fi = fi == null ? null : fi * k;
     su = su == null ? null : su * k;
     na = na == null ? null : na * k;
+    ch = ch == null ? null : ch * k;
     sa = sa == null ? null : sa * k;
     tr = tr == null ? null : tr * k;
     mu = mu == null ? null : mu * k;
     po = po == null ? null : po * k;
+    fe = fe == null ? null : fe * k;
+    ka = ka == null ? null : ka * k;
   }
   final given = [p, c, fat].where((e) => e != null).length;
   final derived = (p ?? 0) * 4 + (c ?? 0) * 4 + (fat ?? 0) * 9;
@@ -879,17 +905,56 @@ Macros _aiMacros(AiFood f, double? grams, Set<AiFlag> flags) {
     fiber: fi ?? 0,
     sugar: su ?? 0,
     sodium: na ?? 0,
+    chol: ch ?? 0,
     sat: sa ?? 0,
     trans: tr ?? 0,
     mono: mu ?? 0,
     poly: po ?? 0,
+    iron: fe ?? 0,
+    potassium: ka ?? 0,
   );
 }
 
+bool _near(double a, double b, double abs, double rel) => (a - b).abs() <= math.max(abs, math.max(a, b) * rel);
+
+FoodItem? _byValues(AiFood f, double? grams, List<FoodItem> own) {
+  if (grams == null || grams <= 0 || f.per100) return null;
+  final kcal = f.kcal, p = f.protein, c = f.carbs, fat = f.fat;
+  if (kcal == null || p == null || c == null || fat == null || kcal <= 0) return null;
+  FoodItem? best;
+  var bestGap = double.infinity;
+  for (final item in own) {
+    if (item.grams <= 0) continue;
+    final m = item.macros * (grams / item.grams);
+    if (m.kcal <= 0) continue;
+    if (!_near(kcal, m.kcal, 8, 0.04) ||
+        !_near(p, m.protein, 0.6, 0.06) ||
+        !_near(c, m.carbs, 0.6, 0.06) ||
+        !_near(fat, m.fat, 0.6, 0.06)) {
+      continue;
+    }
+    if (f.sodium != null && m.sodium > 0 && !_near(f.sodium!, m.sodium, 15, 0.08)) continue;
+    if (f.sat != null && m.sat > 0 && !_near(f.sat!, m.sat, 0.4, 0.1)) continue;
+    final gap = (kcal - m.kcal).abs() + (p - m.protein).abs() + (c - m.carbs).abs() + (fat - m.fat).abs();
+    if (gap < bestGap) {
+      bestGap = gap;
+      best = item;
+    }
+  }
+  return best;
+}
+
 AiDraft _draft(AiFood f, Meal meal, String lang, List<FoodItem> own, DateTime now) {
-  final flags = <AiFlag>{};
   var grams = f.grams;
-  final hit = _match(f.name, lang, own);
+  var hit = _match(f.name, lang, own);
+  var byValues = false;
+  if (hit?.own == null) {
+    final same = _byValues(f, grams, own);
+    if (same != null) {
+      hit = _Hit(null, same, 1);
+      byValues = true;
+    }
+  }
   if (hit != null) {
     final lib = hit.library;
     final mine = hit.own;
@@ -921,10 +986,20 @@ AiDraft _draft(AiFood f, Meal meal, String lang, List<FoodItem> own, DateTime no
         agrees = !((ratio < 0.55 || ratio > 1.8) && gap > 40);
       }
       if (agrees) {
-        return AiDraft(entry: entry, source: lib != null ? AiSource.library : AiSource.mine, flags: const {});
+        return AiDraft(
+          entry: entry,
+          source: lib != null ? AiSource.library : AiSource.mine,
+          flags: byValues ? const {AiFlag.matched} : const {},
+          asNew: byValues ? _aiDraft(f, meal, grams, now) : null,
+        );
       }
     }
   }
+  return _aiDraft(f, meal, grams, now);
+}
+
+AiDraft _aiDraft(AiFood f, Meal meal, double? grams, DateTime now) {
+  final flags = <AiFlag>{};
   final macros = f.hasMacros ? _aiMacros(f, grams, flags) : Macros.zero;
   if (!f.hasMacros) flags.add(AiFlag.noValues);
   if (grams == null && !flags.contains(AiFlag.noValues)) flags.add(AiFlag.noAmount);
@@ -1026,7 +1101,7 @@ String buildMealAiPrompt(MealAiBrief b) {
     '2. Use exactly the keys shown in the example. Keep "gymmane" as "$kMealAiTag" and "v" as $kMealAiVersion.',
     '3. One entry in "items" per food or ingredient. Split mixed dishes into their ingredients (for example "Rice, cooked" and "Chicken breast, grilled").',
     '4. "grams" is the weight in grams of that item (for liquids, the volume in millilitres). Always a plain number, never a range.',
-    '5. "kcal", "protein", "carbs" and "fat" are the TOTAL for the amount in "grams", not per 100 g. Plain numbers only: dot as decimal separator, no units, no quotes. Protein, carbs and fat are in grams. kcal must be close to 4 x protein + 4 x carbs + 9 x fat. Optional, same rules (totals for the amount in "grams"): "fiber", "sugar", "saturated", "trans", "monounsaturated" and "polyunsaturated" in grams, and "sodium" in milligrams. Add them only when you know them, for example from a nutrition label I gave you; leave the key out otherwise, never write 0 for unknown.',
+    '5. "kcal", "protein", "carbs" and "fat" are the TOTAL for the amount in "grams", not per 100 g. Plain numbers only: dot as decimal separator, no units, no quotes. Protein, carbs and fat are in grams. kcal must be close to 4 x protein + 4 x carbs + 9 x fat. Optional, same rules (totals for the amount in "grams"): "fiber", "sugar", "saturated", "trans", "monounsaturated" and "polyunsaturated" in grams, and "sodium", "cholesterol", "iron" and "potassium" in milligrams. Add them only when you know them, for example from a nutrition label I gave you; leave the key out otherwise, never write 0 for unknown.',
     '6. Use simple, common, generic food names (for example "Greek yogurt", "Rolled oats", "Banana", "Olive oil"). No brands, no adjectives, no cooking instructions inside the name. Add "cooked" or "grilled" to the name only when the weight is the cooked weight.',
     '7. Use realistic amounts that a person can weigh at home. Do not put the same food twice in one option.',
     '8. "meal" is one of these ids: ${ids.map((e) => '"$e"').join(', ')}.${b.day ? ' Spread the foods across the meals.' : ' Use "${b.mealId}" for every item.'}',
@@ -1051,6 +1126,107 @@ String buildMealAiPrompt(MealAiBrief b) {
     '```',
     '',
     'If you cannot follow these rules, reply with {"gymmane": "$kMealAiTag", "v": $kMealAiVersion, "options": []}.',
+  ];
+  return lines.join('\n');
+}
+
+const kFoodAiTag = 'gymmane-food';
+
+class AiFoodPick {
+  const AiFoodPick(this.food, {this.serving = '', this.liquid = false});
+
+  final AiFood food;
+  final String serving;
+  final bool liquid;
+}
+
+const _servingNameKeys = ['servingname', 'servinglabel', 'portionname', 'serving', 'portion', 'racion', 'porcion', 'nombreracion'];
+const _liquidKeys = ['liquid', 'drink', 'isliquid', 'liquido', 'bebida'];
+const _saltKeys = ['salt', 'sal', 'saltg', 'salg'];
+const _foodWrapKeys = ['food', 'item', 'product', 'alimento', 'producto', 'result', 'data'];
+
+Map? _foodNode(Object? v, int depth) {
+  if (depth > 5) return null;
+  if (v is List) {
+    for (final e in v) {
+      final hit = _foodNode(e, depth + 1);
+      if (hit != null) return hit;
+    }
+    return null;
+  }
+  if (v is! Map) return null;
+  if (_isItem(v)) return v;
+  final nm = _norm(v);
+  for (final k in _foodWrapKeys) {
+    final hit = _foodNode(nm[k], depth + 1);
+    if (hit != null) return hit;
+  }
+  for (final e in nm.values) {
+    final hit = _foodNode(e, depth + 1);
+    if (hit != null) return hit;
+  }
+  return null;
+}
+
+AiFoodPick? parseFoodAi(String raw) {
+  final text = _clean(raw);
+  for (final (v, _) in [..._candidates(text, '{'), ..._candidates(text, '[')]) {
+    final node = _foodNode(v, 0);
+    if (node == null) continue;
+    final food = _food(node, '');
+    if (food == null || !food.hasMacros) continue;
+    final nm = _norm(node);
+    final per = _macroSource(nm, per100: true);
+    final src = per.isNotEmpty ? per : _macroSource(nm, per100: false);
+    if (food.sodium == null) {
+      final salt = _numOf(_first({...nm, ...src}, _saltKeys));
+      if (salt != null && salt > 0) food.sodium = salt * 400;
+    }
+    final label = _first(nm, _servingNameKeys);
+    final liquid = _first(nm, _liquidKeys);
+    final serving = label is String ? label.replaceAll(RegExp(r'\s+'), ' ').trim() : '';
+    return AiFoodPick(
+      food,
+      serving: serving.length > 40 ? serving.substring(0, 40).trim() : serving,
+      liquid: liquid == true || food.liquid,
+    );
+  }
+  return null;
+}
+
+String buildFoodAiPrompt(String language) {
+  final lines = <String>[
+    'You are the nutrition assistant of GymMane, an offline fitness app. A program, not a person, will read your reply, so the format below is strict.',
+    '',
+    'REQUEST',
+    '- Together with this message I give you a nutrition label, a photo or screenshot of a product, a link to it, or just the name of a food. Turn it into ONE food for my food list.',
+    '- If nothing came with this message, reply only with one short sentence asking me for the label, a photo, a link or the name of the food, and wait.',
+    '- When there is a label, copy its values exactly. Only when there is no label, use typical values for that food.',
+    '- Write the food name in $language. Keep the brand if the product has one.',
+    '',
+    'FORMAT RULES (follow every one)',
+    '1. Reply with exactly one JSON object inside one ```json code block. Nothing before it, nothing after it.',
+    '2. Use exactly the keys shown in the example. Keep "gymmane" as "$kFoodAiTag" and "v" as 1.',
+    '3. "per100" holds the values per 100 g (per 100 ml for drinks): "kcal", plus "protein", "carbs" and "fat" in grams. Optional, only when you know them: "fiber", "sugar", "saturated", "trans", "monounsaturated" and "polyunsaturated" in grams, "sodium", "cholesterol", "iron" and "potassium" in milligrams. If the label gives salt instead of sodium, sodium in mg is salt in g x 400. Leave a key out when you do not know it, never write 0 for unknown.',
+    '4. Plain numbers only: dot as decimal separator, no units, no quotes.',
+    '5. "serving_name" is the serving the label uses, short (for example "1 bar" or "1 glass"), and "grams" is the weight of that serving in grams (millilitres for drinks). With no serving, use "100 g" and 100.',
+    '6. "liquid" is true for drinks and false for everything else.',
+    '7. Before you reply, check that the JSON is valid and has "name", "grams" and "per100" with "kcal", "protein", "carbs" and "fat".',
+    '',
+    'EXAMPLE OF A VALID REPLY (the numbers are only an illustration)',
+    '```json',
+    '{',
+    '  "gymmane": "$kFoodAiTag",',
+    '  "v": 1,',
+    '  "food": {',
+    '    "name": "Greek yogurt 2%",',
+    '    "serving_name": "1 pot",',
+    '    "grams": 170,',
+    '    "liquid": false,',
+    '    "per100": {"kcal": 73, "protein": 9.9, "carbs": 3.9, "fat": 2, "sugar": 3.6, "saturated": 1.3, "sodium": 36}',
+    '  }',
+    '}',
+    '```',
   ];
   return lines.join('\n');
 }

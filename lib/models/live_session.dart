@@ -2,13 +2,15 @@ import 'workout.dart';
 
 class SessionSet {
   SessionSet(this.reps, this.weight, this.done,
-      {this.kind = SetKind.normal, this.rpe, this.sec, this.km, this.rest, this.note = '', this.repsR});
+      {this.kind = SetKind.normal, this.rpe, this.sec, this.km, this.rest, this.note = '', this.repsR, this.goal});
   int reps;
   int? repsR;
+  String? goal;
   String note;
   int? rest;
   double weight;
   bool done;
+  bool half = false;
   SetKind kind;
   double? rpe;
   int? sec;
@@ -25,13 +27,15 @@ class SessionSet {
       kind: kind, rpe: rpe, sec: sec, km: km, note: note.trim(), left: repsR == null ? null : reps, right: repsR);
 
   SessionSet copy({bool done = false}) =>
-      SessionSet(reps, weight, done, kind: kind, rpe: rpe, sec: sec, km: km, repsR: repsR);
+      SessionSet(reps, weight, done, kind: kind, rpe: rpe, sec: sec, km: km, repsR: repsR, goal: goal);
 
   Map<String, dynamic> toJson() => {
         'r': reps,
         if (repsR != null) 'rr': repsR,
+        if (goal != null) 'g': goal,
         'w': weight,
         'd': done,
+        if (half && !done) 'h': true,
         if (kind != SetKind.normal) 'k': kind.index,
         if (rpe != null) 'e': rpe,
         if (sec != null) 't': sec,
@@ -50,17 +54,23 @@ class SessionSet {
         rest: (j['rs'] as num?)?.toInt().clamp(0, 3600),
         note: j['n'] as String? ?? '',
         repsR: (j['rr'] as num?)?.toInt(),
-      );
+        goal: j['g'] as String?,
+      )..half = j['h'] as bool? ?? false;
 }
 
 class SessionExercise {
-  SessionExercise(this.id, this.name, this.primary, this.sets, {this.linkedNext = false, this.swappedFrom});
+  SessionExercise(this.id, this.name, this.primary, this.sets,
+      {this.linkedNext = false, this.jumpNext = false, this.swappedFrom, this.slot});
   final String id;
   final String name;
   final String primary;
   final List<SessionSet> sets;
   bool linkedNext;
+  bool jumpNext;
   final String? swappedFrom;
+  String? slot;
+
+  String get routineSlot => slot ?? swappedFrom ?? id;
 
   bool get hasUndone => sets.any((s) => !s.done);
 
@@ -70,7 +80,9 @@ class SessionExercise {
         'p': primary,
         's': sets.map((s) => s.toJson()).toList(),
         if (linkedNext) 'l': true,
+        if (jumpNext) 'j': true,
         if (swappedFrom != null) 'sw': swappedFrom,
+        if (slot != null) 'sl': slot,
       };
   factory SessionExercise.fromJson(Map<String, dynamic> j) => SessionExercise(
         j['id'] as String,
@@ -78,7 +90,9 @@ class SessionExercise {
         j['p'] as String,
         (j['s'] as List).map((e) => SessionSet.fromJson((e as Map).cast<String, dynamic>())).toList(),
         linkedNext: j['l'] as bool? ?? false,
+        jumpNext: j['j'] as bool? ?? false,
         swappedFrom: j['sw'] as String?,
+        slot: j['sl'] as String?,
       );
 }
 
@@ -96,6 +110,7 @@ class WorkoutSession {
   DateTime? loggedAt;
   DateTime? restEndsAt;
   int? restFrozen;
+  bool restSwitch = false;
   int? summaryVolume;
   int? summarySets;
   int? summaryDuration;
@@ -112,6 +127,7 @@ class WorkoutSession {
   void clearRest() {
     restEndsAt = null;
     restFrozen = null;
+    restSwitch = false;
   }
 
   Map<String, dynamic> toJson() => {
@@ -126,6 +142,7 @@ class WorkoutSession {
         'at': loggedAt?.toIso8601String(),
         if (restEndsAt != null) 're': restEndsAt!.toIso8601String(),
         if (restFrozen != null) 'rf': restFrozen,
+        if (restSwitch && restEndsAt != null) 'rsw': true,
         'sv': summaryVolume,
         'ss': summarySets,
         'sd': summaryDuration,
@@ -144,6 +161,7 @@ class WorkoutSession {
     ..loggedAt = DateTime.tryParse((j['at'] as String?) ?? '')
     ..restEndsAt = DateTime.tryParse((j['re'] as String?) ?? '')
     ..restFrozen = (j['rf'] as num?)?.toInt()
+    ..restSwitch = j['rsw'] as bool? ?? false
     ..summaryVolume = (j['sv'] as num?)?.toInt()
     ..summarySets = (j['ss'] as num?)?.toInt()
     ..summaryDuration = (j['sd'] as num?)?.toInt();

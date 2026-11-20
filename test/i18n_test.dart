@@ -313,7 +313,7 @@ void main() {
       'Icon 1', 'Icon 2', 'Icon 3', 'Icon 4', 'Icon 5', 'Icon 6', 'Icon 7', 'Icon 8',
       'Choose your launcher app icon',
       'New update ready - Tap to update', 'Update',
-      'M', 'F', 'kg', 'lb', 'cm', 'EN', 'ES', 'BN', 'বাংলা',
+      'M', 'F', 'kg', 'lb', 'cm', 'EN', 'ES', 'BN', 'বাংলা', 'NFC',
     };
 
     final offenders = <String>[];

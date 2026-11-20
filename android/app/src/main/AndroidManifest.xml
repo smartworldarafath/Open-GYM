@@ -5,6 +5,9 @@
     <uses-permission android:name="android.permission.USE_EXACT_ALARM"/>
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.NFC"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28"/>
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"/>
@@ -28,16 +31,62 @@
     <uses-permission android:name="android.permission.health.READ_WEIGHT"/>
     <uses-permission android:name="android.permission.health.WRITE_EXERCISE"/>
 
+    <uses-sdk tools:overrideLibrary="androidx.wear.tiles, androidx.wear.protolayout, androidx.wear.protolayout.expression, androidx.wear.protolayout.expression.pipeline,androidx.wear.protolayout.proto, androidx.wear.watchface.complications.datasource, androidx.wear.watchface.complications.data, androidx.wear.watchface.complications, androidx.wear.watchface.complications.data.source, androidx.wear.watchface.data, androidx.wear.watchface.style.data"/>
+
     <uses-feature android:name="android.hardware.type.watch" android:required="false"/>
     <uses-feature android:name="android.hardware.touchscreen" android:required="false"/>
+    <uses-feature android:name="android.hardware.nfc" android:required="false"/>
+    <uses-feature android:name="android.hardware.bluetooth" android:required="false"/>
 
     <application
         android:label="Open GYM"
-        android:name="${applicationName}"
+        android:name=".GymManeApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:enableOnBackInvokedCallback="true">
         <meta-data android:name="com.google.android.wearable.standalone" android:value="true"/>
+        <service
+            android:name=".TodayTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_qs_today"
+            android:label="@string/qs_today"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE"/>
+            </intent-filter>
+        </service>
+        <service
+            android:name=".PassTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_qs_pass"
+            android:label="@string/qs_pass"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE"/>
+            </intent-filter>
+        </service>
+        <service
+            android:name=".GymTileService"
+            android:exported="true"
+            android:label="@string/tile_label"
+            android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER">
+            <intent-filter>
+                <action android:name="androidx.wear.tiles.action.BIND_TILE_PROVIDER"/>
+            </intent-filter>
+            <meta-data android:name="androidx.wear.tiles.PREVIEW" android:resource="@drawable/tile_preview"/>
+        </service>
+        <service
+            android:name=".GymComplicationService"
+            android:exported="true"
+            android:icon="@drawable/ic_complication"
+            android:label="@string/tile_label"
+            android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
+            <intent-filter>
+                <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST"/>
+            </intent-filter>
+            <meta-data android:name="android.support.wearable.complications.SUPPORTED_TYPES" android:value="RANGED_VALUE,SHORT_TEXT"/>
+            <meta-data android:name="android.support.wearable.complications.UPDATE_PERIOD_SECONDS" android:value="0"/>
+        </service>
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -51,10 +100,6 @@
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
               />
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -70,109 +115,192 @@
             </intent-filter>
         </activity>
         <activity-alias
-            android:name=".MainActivityAlias1"
-            android:enabled="false"
+            android:name=".IconDefault"
+            android:enabled="true"
             android:exported="true"
-            android:icon="@mipmap/ic_launcher_1"
+            android:icon="@mipmap/ic_launcher"
+            android:roundIcon="@mipmap/ic_launcher"
             android:label="Open GYM"
             android:targetActivity=".MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts"/>
         </activity-alias>
-
         <activity-alias
-            android:name=".MainActivityAlias2"
+            android:name=".IconLight"
             android:enabled="false"
             android:exported="true"
-            android:icon="@mipmap/ic_launcher_2"
+            android:icon="@mipmap/ic_launcher_light"
+            android:roundIcon="@mipmap/ic_launcher_light"
             android:label="Open GYM"
             android:targetActivity=".MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts"/>
         </activity-alias>
-
         <activity-alias
-            android:name=".MainActivityAlias3"
+            android:name=".IconSand"
             android:enabled="false"
             android:exported="true"
-            android:icon="@mipmap/ic_launcher_3"
+            android:icon="@mipmap/ic_launcher_sand"
+            android:roundIcon="@mipmap/ic_launcher_sand"
             android:label="Open GYM"
             android:targetActivity=".MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts"/>
         </activity-alias>
-
         <activity-alias
-            android:name=".MainActivityAlias4"
+            android:name=".IconGraphite"
             android:enabled="false"
             android:exported="true"
-            android:icon="@mipmap/ic_launcher_4"
+            android:icon="@mipmap/ic_launcher_graphite"
+            android:roundIcon="@mipmap/ic_launcher_graphite"
             android:label="Open GYM"
             android:targetActivity=".MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts"/>
         </activity-alias>
-
         <activity-alias
-            android:name=".MainActivityAlias5"
+            android:name=".IconSage"
             android:enabled="false"
             android:exported="true"
-            android:icon="@mipmap/ic_launcher_5"
+            android:icon="@mipmap/ic_launcher_sage"
+            android:roundIcon="@mipmap/ic_launcher_sage"
             android:label="Open GYM"
             android:targetActivity=".MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts"/>
         </activity-alias>
-
         <activity-alias
-            android:name=".MainActivityAlias6"
+            android:name=".IconNight"
             android:enabled="false"
             android:exported="true"
-            android:icon="@mipmap/ic_launcher_6"
+            android:icon="@mipmap/ic_launcher_night"
+            android:roundIcon="@mipmap/ic_launcher_night"
             android:label="Open GYM"
             android:targetActivity=".MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts"/>
         </activity-alias>
-
         <activity-alias
-            android:name=".MainActivityAlias7"
+            android:name=".IconMaterial"
             android:enabled="false"
             android:exported="true"
-            android:icon="@mipmap/ic_launcher_7"
+            android:icon="@mipmap/ic_launcher_material"
+            android:roundIcon="@mipmap/ic_launcher_material"
             android:label="Open GYM"
             android:targetActivity=".MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts"/>
         </activity-alias>
-
         <activity-alias
-            android:name=".MainActivityAlias8"
+            android:name=".IconMedal"
             android:enabled="false"
             android:exported="true"
-            android:icon="@mipmap/ic_launcher_8"
+            android:icon="@mipmap/ic_launcher_medal"
+            android:roundIcon="@mipmap/ic_launcher_medal"
             android:label="Open GYM"
             android:targetActivity=".MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts"/>
+        </activity-alias>
+        <activity-alias
+            android:name=".IconGlass"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher_glass"
+            android:roundIcon="@mipmap/ic_launcher_glass"
+            android:label="Open GYM"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts"/>
+        </activity-alias>
+        <activity-alias
+            android:name=".IconStopwatch"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher_stopwatch"
+            android:roundIcon="@mipmap/ic_launcher_stopwatch"
+            android:label="Open GYM"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts"/>
+        </activity-alias>
+        <activity-alias
+            android:name=".IconMarble"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher_marble"
+            android:roundIcon="@mipmap/ic_launcher_marble"
+            android:label="Open GYM"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts"/>
+        </activity-alias>
+        <activity-alias
+            android:name=".NfcToday"
+            android:enabled="false"
+            android:exported="true"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:scheme="gymmane" android:host="today"/>
             </intent-filter>
         </activity-alias>
-
         <activity-alias
             android:name=".HealthPermissionsUsage"
             android:targetActivity=".MainActivity"
@@ -283,6 +411,9 @@
             android:name=".LiveActionReceiver"
             android:exported="false" />
 
+        <receiver
+            android:name="com.dexterous.flutterlocalnotifications.ActionBroadcastReceiver"
+            android:exported="false" />
         <receiver
             android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver"
             android:exported="false" />

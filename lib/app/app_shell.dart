@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' show RenderRepaintBoundary;
 import 'package:flutter/services.dart';
@@ -28,6 +29,7 @@ import '../screens/onboarding_screen.dart';
 import '../screens/places_screen.dart';
 import '../screens/plan_import_sheet.dart';
 import '../screens/progress_screen.dart';
+import '../screens/recovery_screen.dart';
 import '../screens/routine_edit_screen.dart';
 import '../screens/routines_screen.dart';
 import '../screens/session_screen.dart';
@@ -40,23 +42,31 @@ import '../screens/timeline_screen.dart';
 import '../screens/tool_detail_screen.dart';
 import '../screens/tools_screen.dart';
 import '../screens/train_screen.dart';
+import '../screens/workout_view_screen.dart';
 import '../services/auto_backup.dart';
 import '../services/device_kind.dart';
 import '../services/health_steps.dart';
 import '../services/incoming_share.dart';
+import '../services/meal_ai.dart';
 import '../services/nutrition_widgets.dart';
+import '../services/local_store.dart';
+import '../services/server/server_link.dart';
+import '../services/supplement_reminder.dart';
 import '../state/fit_state.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
+import '../widgets/nfc_sheet.dart';
 import '../widgets/app_background.dart';
 import '../widgets/award_celebration.dart';
 import '../widgets/dialogs.dart';
+import '../widgets/rest_glow.dart';
 import '../widgets/steps_card.dart';
 import '../widgets/glass.dart';
 import '../widgets/health_cards.dart';
 import '../widgets/liquid_notch.dart';
 import '../widgets/start_countdown.dart';
 import '../widgets/ui_kit.dart';
+import 'desktop.dart';
 
 class AppShell extends StatefulWidget {
   const AppShell({super.key});
@@ -122,6 +132,12 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver, Single
     _checkUpdateOnLaunch();
     IncomingShare.listen(_receive);
     NutritionWidgets.listenOpen(_openFromWidget);
+    SupplementReminder.instance.onOpen = _openSupplements;
+    SupplementReminder.instance.listenTaken(fit.takeSupplementsOn);
+    if (kIsWeb) {
+      ServerLink.instance.onRemote = _remoteChanged;
+      ServerLink.instance.start();
+    }
     HealthSteps.listen(_showStepsInfo);
     fit.refreshSteps();
     fit.refreshHealth();
@@ -131,6 +147,9 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver, Single
       await NutritionWidgets.takePending();
       final open = await NutritionWidgets.takeOpen();
       if (open != null) _openFromWidget(open);
+      final launched = await SupplementReminder.instance.launchIds();
+      if (launched != null) _openSupplements(launched);
+      await SupplementReminder.instance.takePending();
       if (await HealthSteps.takeUsage()) _showStepsInfo();
       await fit.readDisplay();
       await _offerLiteMode();
@@ -138,8 +157,39 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver, Single
   }
 
   void _openFromWidget(String route) {
-    if (!mounted || !fit.onboarded || route != 'nutrition' || fit.isSessionActive) return;
-    if (fit.route != 'nutrition') fit.goNutrition();
+    if (route == 'nfc/today' || route == 'today') {
+      if (mounted) openTodayFromTag(context, tag: route != 'today');
+      return;
+    }
+    if (route == 'pass') {
+      if (!mounted || !fit.onboarded) return;
+      final pass = fit.quickPass;
+      if (pass == null) {
+        if (!fit.isSessionActive) fit.goGymPasses();
+      } else {
+        showGymPass(context, pass);
+      }
+      return;
+    }
+    if (!mounted || !fit.onboarded || fit.isSessionActive) return;
+    if (route == 'play') {
+      playWorkout(context);
+    } else if (route == 'nutrition' && fit.route != 'nutrition') {
+      fit.goNutrition();
+    }
+  }
+
+  void _remoteChanged(String text, {required bool conflict, required bool fromPhone}) {
+    final data = Store.decodeState(text);
+    if (data.isEmpty || fit.isSessionActive) return;
+    fit.applyBackup(data);
+    if (!mounted) return;
+    showNotchToast(context, fromPhone ? t.webSyncedPhone : t.webSynced, icon: PhosphorIconsFill.arrowsClockwise, accent: context.gc.sage);
+  }
+
+  void _openSupplements(List<String> ids) {
+    if (!mounted || !fit.onboarded || fit.isSessionActive) return;
+    fit.openSupplements(ids);
   }
 
   void _showStepsInfo() {
@@ -158,6 +208,13 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver, Single
     _incoming = null;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
+      final food = text.contains(kFoodAiTag) ? parseFoodAi(text) : null;
+      if (food != null) {
+        fit.setNutritionBeta(true);
+        if (fit.route != 'nutrition') fit.goNutrition();
+        showFoodEditor(context, pick: food);
+        return;
+      }
       if (fit.isMealPlanText(text)) {
         final n = fit.importMealPlans(text);
         if (n > 0) {
@@ -268,11 +325,23 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver, Single
     _blurQueued = true;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _blurQueued = false;
-      if (!mounted || sheetRecede.value <= 0.001 || !blurEffects) return;
       final box = _appKey.currentContext?.findRenderObject();
-      if (box is! RenderRepaintBoundary || !box.hasSize) return;
+      if (!mounted || sheetRecede.value <= 0.001 || !blurEffects || box is! RenderRepaintBoundary || !box.hasSize) {
+        edgeBlurRaster.value = null;
+        return;
+      }
       final scale = fineEffects ? 0.5 : 0.3;
       final ratio = MediaQuery.devicePixelRatioOf(context) * scale;
+      if (edgeBlurRaster.value != ratio) {
+        edgeBlurRaster.value = ratio;
+        _blurQueued = true;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _blurQueued = false;
+          _queueBlur();
+        });
+        WidgetsBinding.instance.scheduleFrame();
+        return;
+      }
       try {
         final small = box.toImageSync(pixelRatio: ratio);
         final sigma = 2 * ratio;
@@ -284,7 +353,10 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver, Single
         final old = _blurred;
         setState(() => _blurred = soft);
         old?.dispose();
-      } catch (_) {}
+      } catch (_) {
+      } finally {
+        edgeBlurRaster.value = null;
+      }
     });
   }
 
@@ -341,6 +413,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver, Single
     if (state == AppLifecycleState.resumed) {
       fit.rollNutritionDay();
       NutritionWidgets.takePending();
+      SupplementReminder.instance.takePending();
       fit.refreshAlarmPermission();
       fit.syncRest();
       fit.refreshWidgets();
@@ -354,8 +427,11 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver, Single
     return AnimatedBuilder(
       animation: fit,
       builder: (context, _) {
-        if (!fit.onboarded) return const OnboardingScreen();
-        final parked = fit.sessionParked && fit.showNav;
+        if (!fit.onboarded) {
+          return const OnboardingScreen();
+        }
+        final wide = DesktopScope.wideFor(MediaQuery.sizeOf(context).width);
+        final parked = fit.sessionParked && fit.showNav && !wide;
 
         return PopScope(
           canPop: false,
@@ -403,29 +479,41 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver, Single
                       Scaffold(
                         backgroundColor: Colors.transparent,
                         body: Padding(
-                          padding: EdgeInsets.only(
+                          padding: EdgeInsetsDirectional.only(
+                              start: wide ? DesktopScope.sidebarWidth : 0,
                               bottom: (MediaQuery.viewInsetsOf(context).bottom > 0
                                       ? 0
                                       : MediaQuery.viewPaddingOf(context).bottom) +
                                   (parked ? _pillSpace : 0)),
-                          child: NotificationListener<ScrollNotification>(
-                            onNotification: _onScroll,
-                            child: RepaintBoundary(child: _animatedScreen()),
+                          child: DesktopScope(
+                            wide: wide,
+                            child: NotificationListener<ScrollNotification>(
+                              onNotification: _onScroll,
+                              child: RepaintBoundary(child: _animatedScreen()),
+                            ),
                           ),
                         ),
                       ),
                     ]),
                   ),
                 ),
-                Positioned(
-                  left: 0,
-                  right: 0,
+                if (wide)
+                  const PositionedDirectional(
+                    start: 16,
+                    top: 16,
+                    bottom: 16,
+                    width: DesktopScope.sidebarWidth - 32,
+                    child: Material(type: MaterialType.transparency, child: _Sidebar()),
+                  ),
+                PositionedDirectional(
+                  start: wide ? DesktopScope.sidebarWidth : 0,
+                  end: 0,
                   top: 0,
                   child: _blurTop.contains(fit.route)
                       ? _CollapsedBar(progress: _collapse, title: _compactTitle())
                       : const SizedBox.shrink(),
                 ),
-                if (fit.showNav)
+                if (fit.showNav && !wide)
                   Positioned(
                     left: 0,
                     right: 0,
@@ -433,7 +521,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver, Single
                     child: EdgeBlur(
                         top: false, height: 128 + MediaQuery.viewPaddingOf(context).bottom + (parked ? _pillSpace : 0)),
                   ),
-                if (fit.showNav && MediaQuery.viewInsetsOf(context).bottom < 60) ...[
+                if (fit.showNav && !wide && MediaQuery.viewInsetsOf(context).bottom < 60) ...[
                   Positioned(
                     left: 24,
                     right: 24,
@@ -520,6 +608,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver, Single
                       ),
                     ),
                   ),
+                if (fit.restGlow) Positioned.fill(child: RestGlow(tick: fit.restDoneTick)),
               ]),
             ),
             ),
@@ -542,7 +631,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver, Single
         final body = await response.transform(utf8.decoder).join();
         final json = jsonDecode(body) as Map<String, dynamic>;
         final tagName = (json['tag_name'] as String? ?? '').replaceAll('v', '').trim();
-        if (_isVersionNewer(tagName, '1.3.7')) {
+        if (_isVersionNewer(tagName, '1.3.9')) {
           if (mounted) {
             setState(() {
               _availableUpdateTag = tagName;
@@ -730,7 +819,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver, Single
           if (currentChild != null) Positioned.fill(key: currentChild.key, child: currentChild),
         ],
       ),
-      child: KeyedSubtree(key: ValueKey(fit.route), child: _screen()),
+      child: KeyedSubtree(key: ValueKey(fit.route), child: _DesktopPage(route: fit.route, child: _screen())),
     );
   }
 
@@ -746,6 +835,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver, Single
         'about' => t.about,
         'health' => t.healthTitle,
         'nutrition' => t.nutrition,
+        'recovery' => t.recoveryTitle,
         _ when fit.route.startsWith('preferences/') => SettingsScreen.sectionTitleOf(fit.route.substring(12)),
         _ => null,
       };
@@ -796,8 +886,12 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver, Single
         return NotesScreen();
       case 'history':
         return HistoryScreen();
+      case 'workout':
+        return const WorkoutViewScreen();
       case 'nutrition':
         return NutritionScreen();
+      case 'recovery':
+        return RecoveryScreen();
       case 'health':
         return const HealthScreen();
       case 'note-edit':
@@ -868,13 +962,16 @@ class _CollapsedBar extends StatelessWidget {
                         child: ImageFiltered(
                           enabled: soft > 0.3,
                           imageFilter: ui.ImageFilter.blur(sigmaX: soft, sigmaY: soft),
-                          child: Text(
-                            titleCase(title!),
-                            textAlign: TextAlign.center,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: AppTheme.f(15.5, weight: FontWeight.w800, color: context.gc.text, letterSpacing: -0.2)
-                                .copyWith(decoration: TextDecoration.none),
+                          child: Material(
+                            type: MaterialType.transparency,
+                            child: Text(
+                              titleCase(title!),
+                              textAlign: TextAlign.center,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTheme.f(15.5, weight: FontWeight.w800, color: context.gc.text, letterSpacing: -0.2)
+                                  .copyWith(decoration: TextDecoration.none),
+                            ),
                           ),
                         ),
                       ),
@@ -950,6 +1047,19 @@ class _ParkedPill extends StatelessWidget {
       ),
     );
   }
+}
+
+void playWorkout(BuildContext context) {
+  if (fit.sessionParked) {
+    fit.stepBackIntoSession();
+    return;
+  }
+  final planned = fit.todayRoutine;
+  if (planned != null && planned.exerciseIds.isNotEmpty) {
+    fit.startRoutine(planned);
+    return;
+  }
+  showStartSheet(context);
 }
 
 class _NavBar extends StatefulWidget {
@@ -1132,40 +1242,43 @@ class _NavBarState extends State<_NavBar> {
           scale: pressed ? 0.85 : (lifted ? 1.08 : 1),
           duration: Duration(milliseconds: pressed ? 110 : 340),
           curve: pressed ? Curves.easeOut : Curves.easeOutBack,
-          child: SizedBox(
-            width: _iw,
-            height: height,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TweenAnimationBuilder<double>(
-                  tween: Tween(begin: selected ? 1 : 0, end: selected ? 1 : 0),
-                  duration: const Duration(milliseconds: 200),
-                  curve: Curves.easeOut,
-                  builder: (context, v, _) => Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Opacity(opacity: 0.7 * (1 - v), child: Icon(icon, size: 20, color: gc.text)),
-                      Opacity(opacity: v, child: Icon(iconFill, size: 20, color: gc.text)),
-                    ],
+          child: Material(
+            type: MaterialType.transparency,
+            child: SizedBox(
+              width: _iw,
+              height: height,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TweenAnimationBuilder<double>(
+                    tween: Tween(begin: selected ? 1 : 0, end: selected ? 1 : 0),
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.easeOut,
+                    builder: (context, v, _) => Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Opacity(opacity: 0.7 * (1 - v), child: Icon(icon, size: 20, color: gc.text)),
+                        Opacity(opacity: v, child: Icon(iconFill, size: 20, color: gc.text)),
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 2),
-                ExcludeSemantics(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 2),
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        label,
-                        maxLines: 1,
-                        style: AppTheme.f(9.5, weight: selected ? FontWeight.w800 : FontWeight.w600, color: color)
-                            .copyWith(decoration: TextDecoration.none),
+                  const SizedBox(height: 2),
+                  ExcludeSemantics(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 2),
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          label,
+                          maxLines: 1,
+                          style: AppTheme.f(9.5, weight: selected ? FontWeight.w800 : FontWeight.w600, color: color)
+                              .copyWith(decoration: TextDecoration.none),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -1173,18 +1286,7 @@ class _NavBarState extends State<_NavBar> {
     );
   }
 
-  void _play(BuildContext context) {
-    if (fit.sessionParked) {
-      fit.stepBackIntoSession();
-      return;
-    }
-    final planned = fit.todayRoutine;
-    if (planned != null && planned.exerciseIds.isNotEmpty) {
-      fit.startRoutine(planned);
-      return;
-    }
-    showStartSheet(context);
-  }
+  void _play(BuildContext context) => playWorkout(context);
 
   Widget _fab(BuildContext context) {
     final gc = context.gc;
@@ -1363,4 +1465,312 @@ class _SoftCopy extends CustomPainter {
 
   @override
   bool shouldRepaint(_SoftCopy old) => old.image != image || old.amount != amount;
+}
+
+class _Sidebar extends StatelessWidget {
+  const _Sidebar();
+
+  static const _main = [
+    ('home', PhosphorIconsRegular.house, PhosphorIconsFill.house),
+    ('progress', PhosphorIconsRegular.chartLineUp, PhosphorIconsFill.chartLineUp),
+    ('exercises', PhosphorIconsRegular.barbell, PhosphorIconsFill.barbell),
+    ('settings', PhosphorIconsRegular.userCircle, PhosphorIconsFill.userCircle),
+  ];
+
+  String _label(String id) => switch (id) {
+        'home' => sentenceCase(t.home),
+        'progress' => titleCase(t.progress),
+        'exercises' => titleCase(t.exercises),
+        'settings' => sentenceCase(t.profile),
+        'routines' => titleCase(t.routines),
+        'notes' => titleCase(t.journal),
+        'tools' => titleCase(t.tools),
+        'nutrition' => sentenceCase(t.nutrition),
+        'recovery' => sentenceCase(t.recoveryTitle),
+        _ => titleCase(t.settings),
+      };
+
+  void _go(String id) {
+    switch (id) {
+      case 'home':
+        fit.goHome();
+      case 'progress':
+        fit.goProgress();
+      case 'exercises':
+        fit.goExercises();
+      case 'settings':
+        fit.goSettings();
+      case 'routines':
+        fit.goHome();
+        fit.goRoutines();
+      case 'notes':
+        fit.goHome();
+        fit.goNotes(all: true);
+      case 'tools':
+        fit.goHome();
+        fit.goTools();
+      case 'nutrition':
+        fit.goHome();
+        fit.goNutrition();
+      case 'recovery':
+        fit.goHome();
+        fit.goRecovery();
+      default:
+        fit.goSettings();
+        fit.goPreferences();
+    }
+  }
+
+  String get _active {
+    final r = fit.route;
+    if (r.startsWith('preferences')) return 'preferences';
+    if (r == 'routine-edit' || r == 'ai-plan') return 'routines';
+    if (r == 'note-edit') return 'notes';
+    if (r == 'tools-detail') return 'tools';
+    if (r == 'exercise-detail') return 'exercises';
+    if (const ['history', 'workout', 'measures', 'timeline', 'compare', 'health'].contains(r)) return 'progress';
+    if (const ['awards', 'moments', 'passes', 'about', 'places'].contains(r)) return 'settings';
+    return r;
+  }
+
+  @override
+  Widget build(BuildContext context) => ListenableBuilder(listenable: fit, builder: (context, _) => _panel(context));
+
+  Widget _panel(BuildContext context) {
+    final gc = context.gc;
+    final active = _active;
+    final live = fit.isSessionActive;
+    return Container(
+      padding: const EdgeInsets.fromLTRB(14, 20, 14, 16),
+      decoration: BoxDecoration(
+        color: gc.bgRaised.withValues(alpha: 0.72),
+        borderRadius: BorderRadius.circular(28),
+      ),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        Padding(
+          padding: const EdgeInsetsDirectional.only(start: 6),
+          child: Row(children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.asset('assets/img/app_icon.png', width: 34, height: 34, filterQuality: FilterQuality.medium),
+            ),
+            const SizedBox(width: 11),
+            Expanded(
+              child: Text('GymMane',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTheme.f(19, weight: FontWeight.w800, color: gc.text, letterSpacing: -0.4)),
+            ),
+          ]),
+        ),
+        const SizedBox(height: 24),
+        _StartButton(live: live),
+        const SizedBox(height: 22),
+        for (final (id, icon, fill) in _main) ...[
+          _SideItem(
+            label: _label(id),
+            icon: icon,
+            iconFill: fill,
+            selected: active == id,
+            onTap: () => _go(id),
+          ),
+          const SizedBox(height: 4),
+        ],
+        const SizedBox(height: 18),
+        for (final (id, icon, fill) in [
+          ('routines', PhosphorIconsRegular.listChecks, PhosphorIconsFill.listChecks),
+          ('notes', PhosphorIconsRegular.notebook, PhosphorIconsFill.notebook),
+          ('tools', PhosphorIconsRegular.calculator, PhosphorIconsFill.calculator),
+          if (fit.nutritionBeta) ('nutrition', PhosphorIconsRegular.forkKnife, PhosphorIconsFill.forkKnife),
+          if (fit.recoveryOn) ('recovery', PhosphorIconsRegular.thermometerSimple, PhosphorIconsFill.thermometerSimple),
+        ]) ...[
+          _SideItem(
+            label: _label(id),
+            icon: icon,
+            iconFill: fill,
+            selected: active == id,
+            small: true,
+            onTap: () => _go(id),
+          ),
+          const SizedBox(height: 2),
+        ],
+        const Spacer(),
+        _SideItem(
+          label: _label('preferences'),
+          icon: PhosphorIconsRegular.gearSix,
+          iconFill: PhosphorIconsFill.gearSix,
+          selected: active == 'preferences',
+          small: true,
+          onTap: () => _go('preferences'),
+        ),
+        const SizedBox(height: 10),
+        const _ServerStatus(),
+      ]),
+    );
+  }
+}
+
+class _StartButton extends StatelessWidget {
+  const _StartButton({required this.live});
+
+  final bool live;
+
+  @override
+  Widget build(BuildContext context) {
+    final gc = context.gc;
+    return Pressable(
+      onTap: () => live ? fit.stepBackIntoSession() : playWorkout(context),
+      scale: 0.97,
+      child: Semantics(
+        button: true,
+        child: Container(
+          height: 48,
+          decoration: BoxDecoration(color: gc.ember, borderRadius: BorderRadius.circular(100)),
+          padding: const EdgeInsets.symmetric(horizontal: 18),
+          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Icon(PhosphorIconsFill.play, size: 15, color: gc.onEmber),
+            const SizedBox(width: 9),
+            Flexible(
+              child: FitText(live ? t.keepTraining : sentenceCase(t.startWorkout),
+                  style: AppTheme.f(14.5, weight: FontWeight.w800, color: gc.onEmber)),
+            ),
+          ]),
+        ),
+      ),
+    );
+  }
+}
+
+class _SideItem extends StatefulWidget {
+  const _SideItem({
+    required this.label,
+    required this.icon,
+    required this.iconFill,
+    required this.selected,
+    required this.onTap,
+    this.small = false,
+  });
+
+  final String label;
+  final IconData icon;
+  final IconData iconFill;
+  final bool selected;
+  final bool small;
+  final VoidCallback onTap;
+
+  @override
+  State<_SideItem> createState() => _SideItemState();
+}
+
+class _SideItemState extends State<_SideItem> {
+  bool _hover = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final gc = context.gc;
+    final on = widget.selected;
+    final h = widget.small ? 40.0 : 46.0;
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _hover = true),
+      onExit: (_) => setState(() => _hover = false),
+      child: Semantics(
+        button: true,
+        selected: on,
+        label: widget.label,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: widget.onTap,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 180),
+            curve: Curves.easeOutCubic,
+            height: h,
+            padding: const EdgeInsetsDirectional.only(start: 14, end: 10),
+            decoration: BoxDecoration(
+              color: on ? gc.bgRaised2 : (_hover ? gc.bgRaised2.withValues(alpha: 0.5) : Colors.transparent),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Row(children: [
+              Icon(on ? widget.iconFill : widget.icon,
+                  size: widget.small ? 17 : 19, color: on ? gc.text : gc.textSecondary),
+              const SizedBox(width: 13),
+              Expanded(
+                child: Text(widget.label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTheme.f(widget.small ? 13.5 : 14.5,
+                        weight: on ? FontWeight.w800 : FontWeight.w600, color: on ? gc.text : gc.textSecondary)),
+              ),
+            ]),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ServerStatus extends StatelessWidget {
+  const _ServerStatus();
+
+  @override
+  Widget build(BuildContext context) {
+    final gc = context.gc;
+    return ListenableBuilder(
+      listenable: ServerLink.instance,
+      builder: (context, _) {
+        final link = ServerLink.instance;
+        final ok = !link.available || link.online;
+        final text = !link.available ? t.webServerLocal : (link.online ? t.webServerSaved : t.webServerOffline);
+        return Padding(
+          padding: const EdgeInsetsDirectional.only(start: 14, end: 8),
+          child: Row(children: [
+            Container(
+              width: 7,
+              height: 7,
+              decoration: BoxDecoration(color: ok ? gc.sage : gc.warn, shape: BoxShape.circle),
+            ),
+            const SizedBox(width: 9),
+            Expanded(
+              child: Text(text,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTheme.f(11.5, weight: FontWeight.w600, color: gc.textTertiary)),
+            ),
+          ]),
+        );
+      },
+    );
+  }
+}
+
+class _DesktopPage extends StatelessWidget {
+  const _DesktopPage({required this.route, required this.child});
+
+  final String route;
+  final Widget child;
+
+  static const _sheets = {'history', 'awards'};
+
+  static const _flow = {'home', 'progress', 'settings', 'tools', 'nutrition', 'preferences', 'notes', 'routines', 'exercises', 'history', 'workout', 'awards', 'exercise-detail', 'recovery'};
+
+  @override
+  Widget build(BuildContext context) {
+    if (!DesktopScope.of(context)) return child;
+    final max = _flow.contains(route) ? DesktopScope.flowWidth : DesktopScope.readingWidth;
+    return LayoutBuilder(builder: (context, box) {
+      final inset = _sheets.contains(route) ? 24.0 : 0.0;
+      final width = (box.maxWidth - inset * 2) < max ? box.maxWidth - inset * 2 : max;
+      final media = MediaQuery.of(context);
+      return Center(
+        child: SizedBox(
+          width: width,
+          height: box.maxHeight,
+          child: MediaQuery(
+            data: media.copyWith(size: Size(width, media.size.height)),
+            child: child,
+          ),
+        ),
+      );
+    });
+  }
 }

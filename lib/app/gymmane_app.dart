@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -5,7 +7,9 @@ import '../l10n/l10n.dart';
 import '../state/fit_state.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
+import '../widgets/keyboard_guard.dart';
 import 'app_shell.dart';
+import 'desktop.dart';
 
 class GymManeApp extends StatefulWidget {
   const GymManeApp({super.key});
@@ -43,13 +47,13 @@ class _GymManeAppState extends State<GymManeApp> {
       builder: (context, _) => MaterialApp(
         title: 'Open GYM',
         debugShowCheckedModeBanner: false,
+        scrollBehavior: kIsWeb ? const _WebScroll() : null,
         theme: AppTheme.lightWith(fit.uiColorPref),
         darkTheme: fit.themePref == 'amoled'
             ? AppTheme.amoledWith(fit.uiColorPref)
             : AppTheme.darkWith(fit.uiColorPref),
         themeMode: fit.themeMode,
         locale: fit.locale,
-
         supportedLocales: AppLocalizations.supportedLocales,
         localizationsDelegates: const [
           AppLocalizations.delegate,
@@ -65,7 +69,7 @@ class _GymManeAppState extends State<GymManeApp> {
               textScaler: TextScaler.linear(system * fit.textFactor),
               disableAnimations: media.disableAnimations || fit.calmMotion,
             ),
-            child: _ButtonNavScrim(child: child!),
+            child: kIsWeb ? _WebFrame(child: child!) : KeyboardGuard(child: _ButtonNavScrim(child: child!)),
           );
         },
         home: const AppShell(),
@@ -95,6 +99,45 @@ class _ButtonNavScrim extends StatelessWidget {
             child: IgnorePointer(child: ColoredBox(color: context.gc.bg)),
           ),
       ],
+    );
+  }
+}
+
+class _WebScroll extends MaterialScrollBehavior {
+  const _WebScroll();
+
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        PointerDeviceKind.trackpad,
+        PointerDeviceKind.stylus,
+      };
+}
+
+class _WebFrame extends StatelessWidget {
+  const _WebFrame({required this.child});
+
+  final Widget child;
+
+  static const _column = 640.0;
+
+  @override
+  Widget build(BuildContext context) {
+    final media = MediaQuery.of(context);
+    final size = media.size;
+    if (size.width <= _column + 40 || DesktopScope.wideFor(size.width)) return child;
+    return ColoredBox(
+      color: context.gc.bg,
+      child: Center(
+        child: SizedBox(
+          width: _column,
+          child: MediaQuery(
+            data: media.copyWith(size: Size(_column, size.height)),
+            child: child,
+          ),
+        ),
+      ),
     );
   }
 }

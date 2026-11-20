@@ -1,6 +1,6 @@
-import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'host.dart';
 
 enum HealthGroup { heart, vitals, sleep, activity }
 
@@ -39,7 +39,7 @@ class HealthMetrics {
   static const _channel = MethodChannel('gymmane/health');
 
   static Future<Set<HealthMetric>> granted() async {
-    if (!Platform.isAndroid) return {};
+    if (!onMobile) return {};
     try {
       final keys = await _channel.invokeListMethod<String>('metricsGranted') ?? const [];
       final byName = HealthMetric.values.asNameMap();
@@ -52,7 +52,7 @@ class HealthMetrics {
   }
 
   static Future<bool> request(Iterable<HealthMetric> metrics) async {
-    if (!Platform.isAndroid) return false;
+    if (!onMobile) return false;
     try {
       return await _channel.invokeMethod<bool>('requestMetrics', {
             'metrics': [for (final m in metrics) m.name],
@@ -66,7 +66,7 @@ class HealthMetrics {
   }
 
   static Future<Set<String>> grantedKeys() async {
-    if (!Platform.isAndroid) return {};
+    if (!onMobile) return {};
     try {
       return {...?await _channel.invokeListMethod<String>('metricsGranted')};
     } on PlatformException {
@@ -77,7 +77,7 @@ class HealthMetrics {
   }
 
   static Future<bool> requestKeys(List<String> keys) async {
-    if (!Platform.isAndroid) return false;
+    if (!onMobile) return false;
     try {
       return await _channel.invokeMethod<bool>('requestMetrics', {'metrics': keys}) ?? false;
     } on PlatformException {
@@ -96,7 +96,7 @@ class HealthMetrics {
     String notes = '',
     bool manual = false,
   }) async {
-    if (!Platform.isAndroid) return false;
+    if (!onMobile) return false;
     try {
       return await _channel.invokeMethod<bool>('writeWorkout', {
             'id': id,
@@ -116,7 +116,7 @@ class HealthMetrics {
   }
 
   static Future<bool> deleteWorkout(String id) async {
-    if (!Platform.isAndroid) return false;
+    if (!onMobile) return false;
     try {
       return await _channel.invokeMethod<bool>('deleteWorkout', {'id': id}) ?? false;
     } on PlatformException {
@@ -130,7 +130,7 @@ class HealthMetrics {
       readKey(metric.name, from, to);
 
   static Future<List<List<double>>?> readKey(String key, DateTime from, DateTime to) async {
-    if (!Platform.isAndroid) return null;
+    if (!onMobile) return null;
     try {
       final rows = await _channel.invokeListMethod<Object?>('readMetric', {
         'metric': key,
@@ -149,7 +149,25 @@ class HealthMetrics {
     }
   }
 
+  static List<List<double>> mergeSleep(List<List<double>> rows) {
+    final spans = [
+      for (final r in rows)
+        if (r[1] > 0) [r[0] - r[1] * 60000, r[0]],
+    ]..sort((a, b) => a[0].compareTo(b[0]));
+    final merged = <List<double>>[];
+    for (final s in spans) {
+      final last = merged.isEmpty ? null : merged.last;
+      if (last != null && s[0] <= last[1]) {
+        if (s[1] > last[1]) last[1] = s[1];
+      } else {
+        merged.add([...s]);
+      }
+    }
+    return [for (final m in merged) [m[1], (m[1] - m[0]) / 60000]];
+  }
+
   static Map<String, List<double>> byDay(HealthMetric metric, List<List<double>> rows) {
+    if (metric == HealthMetric.sleep) rows = mergeSleep(rows);
     final sums = <String, List<double>>{};
     final counts = <String, int>{};
     for (final r in rows) {

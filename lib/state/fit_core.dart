@@ -72,6 +72,7 @@ abstract class FitCore extends ChangeNotifier {
 
   final Map<String, int> exerciseRest = {};
   final Map<String, String> exerciseUnits = {};
+  final Map<String, String> exerciseDistance = {};
 
   final Map<String, double> progressStep = {};
   final Map<String, int> holdStep = {};
@@ -87,8 +88,12 @@ abstract class FitCore extends ChangeNotifier {
   final Set<String> eachSide = {};
 
   final Set<String> eachSideOff = {};
+  final Set<String> keepCounting = {};
+  final Set<String> pairOn = pairedDumbbells;
   final Set<String> assistedOn = {};
   final Set<String> assistedOff = {};
+  final Set<String> bodyOn = {};
+  final Set<String> bodyOff = {};
 
   final Set<String> noSuggest = {};
 
@@ -175,6 +180,7 @@ abstract class FitCore extends ChangeNotifier {
   double? get placeBarKg => null;
 
   String units = 'kg';
+  String lengthUnits = '';
   double stepKg = 2.5;
   double stepLb = 5;
   int weekStartDay = DateTime.monday;
@@ -319,6 +325,14 @@ abstract class FitCore extends ChangeNotifier {
     notifyListeners();
   }
 
+  static String _lengthFrom(Object? raw) => raw == 'cm' || raw == 'in' ? raw as String : '';
+
+  void setLengthUnits(String u) {
+    lengthUnits = _lengthFrom(u);
+    _persist();
+    notifyListeners();
+  }
+
   static const _lbPerKg = 2.20462;
   bool get isLb => units == 'lb';
 
@@ -376,6 +390,24 @@ abstract class FitCore extends ChangeNotifier {
   String distanceLabel(double km) => '${distanceValue(km)} $distanceUnit';
 
   double get distanceStep => 0.1;
+
+  String distanceUnitFor(String id) => exerciseDistance[id] ?? distanceUnit;
+
+  bool isMiFor(String id) => distanceUnitFor(id) == 'mi';
+
+  double toDisplayKmFor(String id, double km) => isMiFor(id) ? km / _kmPerMile : km;
+
+  double fromDisplayKmFor(String id, double shown) => isMiFor(id) ? shown * _kmPerMile : shown;
+
+  String distanceValueFor(String id, double km) => fmt((toDisplayKmFor(id, km) * 100).round() / 100);
+
+  String distanceLabelFor(String id, double km) => '${distanceValueFor(id, km)} ${distanceUnitFor(id)}';
+
+  void setExerciseDistance(String id, String unit) {
+    unit == distanceUnit ? exerciseDistance.remove(id) : exerciseDistance[id] = unit;
+    _persist();
+    notifyListeners();
+  }
 }
 
 String durationLabel(int sec) {

@@ -1,0 +1,157 @@
+# Issue commands, written as a comment on the issue:
+#
+#   /claim             ask to work on the issue
+#   /unclaim           step back from it
+#   /approved          (maintainers) approve it and assign the first claimer
+#   /approved @user    (maintainers) approve it and assign that user directly
+#
+# Nobody is assigned until a maintainer approves the issue. `/approve` works too.
+# Only the event payload and the API are read; no code from the repo is run.
+
+name: Issue commands
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  issues: write
+
+concurrency:
+  group: issue-commands-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  command:
+    if: github.event.issue.pull_request == null && github.event.comment.user.type == 'User'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v9
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const issue = context.payload.issue;
+            const comment = context.payload.comment;
+            const number = issue.number;
+            const login = comment.user.login;
+
+            const LABELS = {
+              approved: { color: '2ea043', description: 'Approved by the maintainer, can be worked on' },
+              'claim-pending': { color: 'fbca04', description: 'Someone asked to work on it, waiting for approval' },
+            };
+
+            const text = comment.body.trim();
+            const labels = issue.labels.map(l => l.name);
+            const assignees = issue.assignees.map(a => a.login);
+            const isBug = labels.some(l => l.toLowerCase().includes('bug'));
+            const reply = body =>
+              github.rest.issues.createComment({ owner, repo, issue_number: number, body });
+
+            // Creates the label with its colour, or fixes the colour of an existing one.
+            async function ensureLabel(name) {
+              const want = LABELS[name];
+              try {
+                const { data } = await github.rest.issues.getLabel({ owner, repo, name });
+                if (data.color.toLowerCase() !== want.color) {
+                  await github.rest.issues.updateLabel({ owner, repo, name, color: want.color, description: want.description });
+                }
+              } catch (e) {
+                if (e.status !== 404) throw e;
+                await github.rest.issues.createLabel({ owner, repo, name, color: want.color, description: want.description });
+              }
+            }
+
+            async function addLabel(name) {
+              await ensureLabel(name);
+              await github.rest.issues.addLabels({ owner, repo, issue_number: number, labels: [name] });
+            }
+
+            async function removePending() {
+              if (!labels.includes('claim-pending')) return;
+              await github.rest.issues
+                .removeLabel({ owner, repo, issue_number: number, name: 'claim-pending' })
+                .catch(() => {});
+            }
+
+            // Returns true when GitHub accepted the assignee.
+            async function assign(who) {
+              const { data } = await github.rest.issues.addAssignees({
+                owner, repo, issue_number: number, assignees: [who],
+              });
+              const ok = data.assignees.some(a => a.login.toLowerCase() === who.toLowerCase());
+              if (ok) await removePending();
+              return ok;
+            }
+
+            // Bugs are fixed, everything else (features, ideas) is closed by the pull request.
+            const assignedText = who =>
+              `@${who}, this issue is now yours. Thanks for helping! ` +
+              `Link your pull request with \`${isBug ? 'Fixes' : 'Closes'} #${number}\`. ` +
+              `If you can't finish it, comment \`/unclaim\` so someone else can take it.`;
+
+            // ---------- /approved [@user] (maintainers only) ----------
+            const approve = text.match(/^\/approved?(?:\s+@?([A-Za-z0-9][A-Za-z0-9-]{0,38}))?\s*$/i);
+            if (approve) {
+              if (!['OWNER', 'MEMBER', 'COLLABORATOR'].includes(comment.author_association)) {
+                await reply(`@${login}, only the maintainer can approve issues.`);
+                return;
+              }
+              if (!labels.includes('approved')) await addLabel('approved');
+
+              let target = approve[1];
+              if (!target) {
+                if (assignees.length > 0) {
+                  await reply('✅ Approved.');
+                  return;
+                }
+                // The first person who claimed it and didn't step back.
+                const comments = await github.paginate(github.rest.issues.listComments, {
+                  owner, repo, issue_number: number, per_page: 100,
+                });
+                for (const c of comments) {
+                  if (c.user.type !== 'User') continue;
+                  const t = c.body.trim().toLowerCase();
+                  if (t === '/claim' && !target) target = c.user.login;
+                  if (t === '/unclaim' && c.user.login === target) target = null;
+                }
+              }
+              if (!target) {
+                await reply('✅ Approved. Anyone who wants to work on it can comment `/claim`.');
+                return;
+              }
+              if (await assign(target)) {
+                await reply(`✅ Approved. ${assignedText(target)}`);
+              } else {
+                await reply(`✅ Approved, but GitHub wouldn't assign @${target}. They need to comment on this issue first (for example \`/claim\`), then run \`/approved @${target}\` again.`);
+              }
+              return;
+            }
+
+            const command = text.toLowerCase();
+
+            // ---------- /unclaim ----------
+            if (command === '/unclaim') {
+              if (!assignees.includes(login)) return;
+              await github.rest.issues.removeAssignees({ owner, repo, issue_number: number, assignees: [login] });
+              await reply(`@${login} is no longer assigned. This issue is free to \`/claim\` again.`);
+              return;
+            }
+
+            // ---------- /claim ----------
+            if (command !== '/claim') return;
+
+            if (issue.state === 'closed') {
+              await reply(`@${login}, this issue is closed, so it can't be claimed.`);
+              return;
+            }
+            if (assignees.includes(login)) return;
+            if (assignees.length > 0) {
+              await reply(`@${login}, this issue is already assigned to @${assignees[0]}.`);
+              return;
+            }
+            if (labels.includes('approved')) {
+              if (await assign(login)) await reply(assignedText(login));
+              return;
+            }
+            if (!labels.includes('claim-pending')) await addLabel('claim-pending');
+            await reply(`Thanks @${login}! Your claim is saved. This issue isn't approved yet: nobody is assigned until the maintainer approves it. If it's approved, you'll be assigned automatically; if not, it won't be worked on.`);

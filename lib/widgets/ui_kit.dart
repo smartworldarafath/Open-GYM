@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
@@ -280,7 +281,7 @@ class _PressableState extends State<Pressable> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    final tap = GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: widget.onTap,
       onLongPress: widget.onLongPress,
@@ -294,6 +295,8 @@ class _PressableState extends State<Pressable> {
         child: widget.child,
       ),
     );
+    if (!kIsWeb || widget.onTap == null) return tap;
+    return MouseRegion(cursor: SystemMouseCursors.click, child: tap);
   }
 }
 
@@ -322,8 +325,12 @@ class GhostButton extends StatelessWidget {
           children: [
             Icon(icon, size: 16, color: gc.ember),
             const SizedBox(width: 8),
-            Text(titleCase(label),
-                style: AppTheme.f(13.5, weight: FontWeight.w700, color: gc.text)),
+            Flexible(
+              child: Text(titleCase(label),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTheme.f(13.5, weight: FontWeight.w700, color: gc.text)),
+            ),
           ],
         ),
       ),
@@ -853,6 +860,7 @@ class StepperControl extends StatelessWidget {
     required this.onDec,
     required this.onInc,
     this.onEdit,
+    this.onLongPress,
     this.minWidth = 70,
     this.btnSize = 30,
     this.gap = 14,
@@ -864,6 +872,7 @@ class StepperControl extends StatelessWidget {
   final VoidCallback onDec;
   final VoidCallback onInc;
   final VoidCallback? onEdit;
+  final VoidCallback? onLongPress;
   final double minWidth;
   final double btnSize;
   final double gap;
@@ -889,7 +898,7 @@ class StepperControl extends StatelessWidget {
       child: RollingText(value, style: AppTheme.f(fontSize, weight: FontWeight.w700, color: gc.text)),
     );
     if (onEdit != null) {
-      label = GestureDetector(behavior: HitTestBehavior.opaque, onTap: onEdit, child: label);
+      label = GestureDetector(behavior: HitTestBehavior.opaque, onTap: onEdit, onLongPress: onLongPress, child: label);
     }
     return Ltr(
       child: Row(
@@ -926,13 +935,19 @@ class ToolRow extends StatelessWidget {
       constraints: const BoxConstraints(minHeight: 56),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Flexible(child: Text(sentenceCase(label), style: AppTheme.f(14.5, weight: FontWeight.w500, color: gc.text))),
-            const SizedBox(width: 12),
-            control,
-          ],
+        child: LayoutBuilder(
+          builder: (context, box) => Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                  child: Text(sentenceCase(label), style: AppTheme.f(14.5, weight: FontWeight.w500, color: gc.text))),
+              const SizedBox(width: 12),
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: math.max(0.0, box.maxWidth - 84)),
+                child: FittedBox(fit: BoxFit.scaleDown, alignment: AlignmentDirectional.centerEnd, child: control),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -1566,7 +1581,7 @@ class PrimaryButton extends StatelessWidget {
     this.glass = false,
   });
   final String label;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final Color? bg;
   final Color? fg;
   final double height;

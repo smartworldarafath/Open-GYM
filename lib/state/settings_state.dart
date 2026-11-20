@@ -2,6 +2,8 @@ part of 'fit_state.dart';
 
 const String kBgPhotoId = 'bg';
 
+const List<String> kHomeBlocks = ['weekdays', 'steps', 'week', 'routines', 'activity', 'recommended', 'folders', 'nutrition', 'recovery'];
+
 mixin SettingsState on FitCore, ToolsState, LibraryState {
   String themePref = 'dark';
 
@@ -24,6 +26,8 @@ mixin SettingsState on FitCore, ToolsState, LibraryState {
   String alarmStyle = 'quiet';
   int restSeconds = 90;
   int miniRestSeconds = 20;
+  int changeRestSeconds = 0;
+  int sideRestSeconds = 0;
   String? alarmSound;
   String? alarmSoundName;
 
@@ -35,13 +39,17 @@ mixin SettingsState on FitCore, ToolsState, LibraryState {
   bool showRecommended = true;
   bool showWeekStats = true;
   bool showRoutineRow = true;
+  List<String> homeOrder = List.of(kHomeBlocks);
+  List<String> customGear = [];
   bool levelHints = true;
   bool toastSound = true;
+  bool restGlow = false;
   String autoProgress = 'off';
   static const autoProgressModes = ['off', 'weight', 'reps'];
   bool heatmapLabels = true;
   bool hideShots = false;
   bool autoAdvance = true;
+  bool autoHold = false;
   bool keepScreenOn = true;
   bool blurOn = true;
   String textSize = 'normal';
@@ -54,6 +62,7 @@ mixin SettingsState on FitCore, ToolsState, LibraryState {
   bool muscleTune = true;
 
   bool voiceCoach = false;
+  bool nfcTag = false;
   int deloadEvery = 0;
   DateTime? deloadFrom;
   static const deloadChoices = [0, 4, 5, 6, 8];
@@ -79,6 +88,13 @@ mixin SettingsState on FitCore, ToolsState, LibraryState {
     if (!deloadChoices.contains(weeks) || weeks == deloadEvery) return;
     deloadEvery = weeks;
     deloadFrom = weeks > 0 ? DateTime.now() : null;
+    _persist();
+    notifyListeners();
+  }
+
+  void setNfcTag(bool on) {
+    if (nfcTag == on) return;
+    nfcTag = on;
     _persist();
     notifyListeners();
   }
@@ -363,6 +379,18 @@ mixin SettingsState on FitCore, ToolsState, LibraryState {
     notifyListeners();
   }
 
+  void setChangeRest(int v) {
+    changeRestSeconds = v <= 0 ? 0 : v.clamp(15, 900);
+    _persist();
+    notifyListeners();
+  }
+
+  void setSideRest(int v) {
+    sideRestSeconds = v <= 0 ? 0 : v.clamp(5, 300);
+    _persist();
+    notifyListeners();
+  }
+
   int restFor(String exerciseId) =>
       exerciseRest[exerciseId] ?? (modeOf(exerciseId) == 'cardio' ? 0 : restSeconds);
 
@@ -450,6 +478,12 @@ mixin SettingsState on FitCore, ToolsState, LibraryState {
 
   void toggleAutoAdvance() {
     autoAdvance = !autoAdvance;
+    _persist();
+    notifyListeners();
+  }
+
+  void toggleAutoHold() {
+    autoHold = !autoHold;
     _persist();
     notifyListeners();
   }
@@ -636,6 +670,38 @@ mixin SettingsState on FitCore, ToolsState, LibraryState {
     notifyListeners();
   }
 
+  List<String> get homeOrderShown {
+    final out = [
+      for (final id in homeOrder)
+        if (kHomeBlocks.contains(id)) id,
+    ];
+    for (final (i, id) in kHomeBlocks.indexed) {
+      if (!homeOrder.contains(id)) out.insert(i < out.length ? i : out.length, id);
+    }
+    return out;
+  }
+
+  String addCustomGear(String name) {
+    final clean = name.trim();
+    final all = [...kEquipment, ...customGear];
+    for (final e in all) {
+      if (e.toLowerCase() == clean.toLowerCase()) return e;
+    }
+    customGear = [...customGear, clean];
+    _persist();
+    notifyListeners();
+    return clean;
+  }
+
+  void setHomeOrder(List<String> order) {
+    homeOrder = [
+      for (final id in order)
+        if (kHomeBlocks.contains(id)) id,
+    ];
+    _persist();
+    notifyListeners();
+  }
+
   void toggleRecommended() {
     showRecommended = !showRecommended;
     _persist();
@@ -662,6 +728,12 @@ mixin SettingsState on FitCore, ToolsState, LibraryState {
 
   void toggleHideShots() {
     hideShots = !hideShots;
+    _persist();
+    notifyListeners();
+  }
+
+  void toggleRestGlow() {
+    restGlow = !restGlow;
     _persist();
     notifyListeners();
   }

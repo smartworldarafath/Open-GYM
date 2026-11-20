@@ -10,6 +10,8 @@ analyzer:
     - windows/**
     - macos/**
     - linux/**
+    - server/**
+    - packages/**
 
 formatter:
   page_width: 110

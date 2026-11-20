@@ -5,7 +5,7 @@ import 'package:gymmane/state/fit_state.dart';
 void main() {
   test('every tool in the menu has a screen behind it', () {
     expect(kToolMeta.map((t) => t.id).toSet(),
-        {'rm', 'bmi', 'cal', 'bf', 'ffmi', 'plate', 'warmup', 'rpe', 'dots', 'wilks'});
+        {'rm', 'bmi', 'cal', 'bf', 'ffmi', 'plate', 'warmup', 'rpe', 'dots', 'wilks', 'protein', 'water'});
     for (final t in kToolMeta) {
       expect(t.name.trim(), isNotEmpty);
       expect(t.desc.trim(), isNotEmpty);
@@ -133,6 +133,22 @@ void main() {
   });
 
   group('Body fat (US Navy)', () {
+    test('se rellena con las últimas medidas: abdomen en hombres, cintura y cadera en mujeres (#410)', () {
+      fit.resetAllData();
+      fit.addMeasure('neck', 39);
+      fit.addMeasure('abdomen', 91);
+      fit.addMeasure('waist', 72);
+      fit.addMeasure('hips', 99);
+      expect(fit.allMeasureKeys, contains('abdomen'));
+      fit.bfSex = 'male';
+      fit.selectTool('bf');
+      expect(fit.bfNeck, 39);
+      expect(fit.bfWaist, 91);
+      fit.setBfSex('female');
+      expect(fit.bfWaist, 72);
+      expect(fit.bfHip, 99);
+    });
+
     test('male 175 cm, neck 38, waist 84 → 16.2%', () {
       fit.bfSex = 'male';
       fit.bfHeight = 175;
@@ -212,5 +228,18 @@ void main() {
     expect(fit.calHeight, fit.profile.heightCm);
     expect(fit.bmiWeight, fit.profile.weightKg);
     fit.updateProfile(sex: 'male');
+  });
+
+  test('protein and water follow weight, goal and training', () {
+    fit.protWeight = 80;
+    fit.setProtGoal('hold');
+    expect((fit.protLow, fit.protHigh), (110, 145));
+    fit.setProtGoal('lose');
+    expect((fit.protLow, fit.protHigh), (145, 175));
+    fit.waterWeight = 80;
+    fit.waterMinutes = 0;
+    expect(fit.waterLiters, 2.8);
+    fit.bumpWaterMinutes(60);
+    expect(fit.waterLiters, 3.5);
   });
 }

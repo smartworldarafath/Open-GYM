@@ -7,7 +7,25 @@ void main() {
     fit.sessions.clear();
     fit.setUnits('kg');
   });
-  tearDown(() => fit.setUnits('kg'));
+  tearDown(() {
+    fit.setUnits('kg');
+    fit.setLengthUnits('');
+  });
+
+  test('#428 las medidas van en cm o pulgadas aparte del peso', () {
+    fit.setUnits('kg');
+    expect(fit.heightLabel(178), '178 cm');
+    fit.setLengthUnits('in');
+    expect(fit.weightLabel(60), '60 kg');
+    expect(fit.heightLabel(178), '5′ 10″');
+    expect(fit.lengthUnit, 'in');
+    expect(fit.toJson()['lengthUnits'], 'in');
+    fit.setUnits('lb');
+    fit.setLengthUnits('cm');
+    expect(fit.lengthUnit, 'cm');
+    fit.setLengthUnits('');
+    expect(fit.lengthUnit, 'in');
+  });
 
   void startSession() {
     fit.startWorkout();
@@ -120,5 +138,20 @@ void main() {
     expect(fit.toShownFor(id, fit.session!.exercises.first.sets.first.weight), closeTo(105, 0.01));
     fit.setExerciseUnits(id, 'kg');
     expect(fit.exerciseUnits.containsKey(id), isFalse, reason: 'igual que la app no se guarda');
+  });
+
+  test('#358 un cardio puede ir en km aunque la app vaya en lb', () {
+    fit.setUnits('lb');
+    final id = fit.allExercises.firstWhere((e) => fit.modeOf(e.id) == 'cardio').id;
+    expect(fit.distanceUnitFor(id), 'mi');
+    fit.setExerciseDistance(id, 'km');
+    expect(fit.distanceUnitFor(id), 'km');
+    expect(fit.distanceUnit, 'mi');
+    expect(fit.distanceLabelFor(id, 5), '5 km');
+    expect(fit.fromDisplayKmFor(id, 3), 3);
+    expect(fit.toJson()['exDist'], {id: 'km'});
+    fit.setExerciseDistance(id, 'mi');
+    expect(fit.exerciseDistance.containsKey(id), isFalse, reason: 'igual que la app no se guarda');
+    fit.setUnits('kg');
   });
 }

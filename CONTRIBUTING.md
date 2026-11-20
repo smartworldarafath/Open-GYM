@@ -14,6 +14,23 @@
 - **Translations:** edit the `.arb` file of your language and send a pull
   request, see [TRANSLATING.md](TRANSLATING.md).
 
+## Working on an issue
+
+Comment on the issue to use these commands:
+
+| Command | What it does |
+|---|---|
+| `/claim` | Ask to work on the issue. |
+| `/unclaim` | Step back so someone else can take it. |
+
+**Nobody is assigned until the maintainer approves the issue** with `/approved`,
+no matter how many claims or comments it has. Once it is approved, the first
+person who claimed it is assigned automatically (the maintainer can also pick
+someone directly), and later claims on an approved, unassigned issue are assigned
+straight away. If an issue is not approved, it won't be worked on.
+
+GymMane is made by a student, so reviews can take a while. Thanks for your patience!
+
 ## Two rules that never bend
 
 1. **No accounts, no logins, no remote user data.** Ever.
@@ -80,3 +97,10 @@ flutter test test/session_test.dart # one file
 - Say what changed and why, and add a screenshot for anything visual.
 - By contributing you agree your work ships under the project's
   [GPL-3.0 license](LICENSE).
+
+## Using AI tools
+
+You can use AI, just use it responsibly. If you made something with it, please
+review it before sending anything.
+
+Pull requests with an AI or an agent as co-author will never be accepted.

@@ -16,6 +16,10 @@ double? rpePercent(int reps, double? rpe) {
   return i < _rpeTable.length ? _rpeTable[i] : null;
 }
 
+final Set<String> pairedDumbbells = {};
+
+double Function(String id, double weight, DateTime day)? setLoad;
+
 class LoggedSet {
   LoggedSet(this.reps, this.weight,
       {this.kind = SetKind.normal, this.rpe, this.sec, this.km, this.note = '', this.left, this.right});
@@ -31,10 +35,11 @@ class LoggedSet {
 
   bool get counts => kind != SetKind.warmup;
   bool get sided => left != null && right != null;
-  double get volume => reps * weight;
+  double? get rir => rpe == null ? null : 10 - rpe!;
+  double get volume => counts ? (sided ? left! + right! : reps) * weight : 0;
 
   double get oneRm {
-    if (reps <= 0) return 0;
+    if (!counts || reps <= 0) return 0;
     final pct = rpePercent(reps, rpe);
     return pct == null ? weight * (1 + reps / 30) : weight / pct;
   }
@@ -87,10 +92,21 @@ class LoggedExercise {
   final List<LoggedSet> sets;
   double? incline;
   int? kcal;
+  DateTime? on;
 
   List<LoggedSet> get workingSets => sets.where((s) => s.counts).toList();
 
-  double get volume => workingSets.fold(0.0, (s, x) => s + x.volume);
+  double get volume {
+    final load = setLoad;
+    final day = on ?? DateTime.now();
+    final paired = pairedDumbbells.contains(id);
+    return workingSets.fold(0.0, (s, x) {
+      final reps = x.sided ? x.left! + x.right! : x.reps;
+      if (reps <= 0) return s;
+      final kg = load == null ? x.weight : load(id, x.weight, day);
+      return s + reps * kg * (!x.sided && paired ? 2 : 1);
+    });
+  }
   double get topWeight {
     final w = workingSets;
     return w.isEmpty ? 0 : w.map((s) => s.weight).reduce((a, b) => a > b ? a : b);
@@ -120,7 +136,11 @@ class LoggedExercise {
 }
 
 class LoggedSession {
-  LoggedSession(this.date, this.durationSec, this.exercises, {this.routineId, this.name, this.hrAvg, this.hrMax, this.sleep, this.energy, this.deload = false});
+  LoggedSession(this.date, this.durationSec, this.exercises, {this.routineId, this.name, this.hrAvg, this.hrMax, this.sleep, this.energy, this.deload = false}) {
+    for (final e in exercises) {
+      e.on ??= date;
+    }
+  }
   final DateTime date;
   int durationSec;
   final List<LoggedExercise> exercises;
@@ -133,7 +153,7 @@ class LoggedSession {
   final bool deload;
 
   DateTime get day => date.subtract(Duration(seconds: durationSec));
-  double get volume => exercises.fold(0.0, (s, e) => s + e.volume);
+  double get volume => exercises.fold(0.0, (s, e) => s + (e..on ??= date).volume);
   int get setCount => exercises.fold(0, (s, e) => s + e.workingSets.length);
 
   Map<String, dynamic> toJson() => {
@@ -175,8 +195,11 @@ class BodyweightEntry {
 }
 
 class PlannedSet {
-  const PlannedSet({this.reps, this.weightKg, this.kind = SetKind.normal, this.sec, this.km});
+  const PlannedSet({this.reps, this.repsMax, this.weightKg, this.kind = SetKind.normal, this.sec, this.km});
   final int? reps;
+  final int? repsMax;
+
+  String? get repsLabel => reps == null ? null : (repsMax != null && repsMax! > reps! ? '$reps-$repsMax' : '$reps');
   final double? weightKg;
   final SetKind kind;
   final int? sec;
@@ -184,6 +207,8 @@ class PlannedSet {
 
   PlannedSet copyWith({
     int? reps,
+    int? repsMax,
+    bool clearRange = false,
     double? weightKg,
     SetKind? kind,
     int? sec,
@@ -192,6 +217,7 @@ class PlannedSet {
   }) =>
       PlannedSet(
         reps: reps ?? this.reps,
+        repsMax: clearRange ? null : (repsMax ?? this.repsMax),
         weightKg: autoWeight ? null : (weightKg ?? this.weightKg),
         kind: kind ?? this.kind,
         sec: sec ?? this.sec,
@@ -200,6 +226,7 @@ class PlannedSet {
 
   Map<String, dynamic> toJson() => {
         if (reps != null) 'r': reps,
+        if (repsMax != null) 'rm': repsMax,
         if (weightKg != null) 'w': weightKg,
         if (kind != SetKind.normal) 'k': kind.index,
         if (sec != null) 't': sec,
@@ -207,6 +234,7 @@ class PlannedSet {
       };
   factory PlannedSet.fromJson(Map<String, dynamic> j) => PlannedSet(
         reps: (j['r'] as num?)?.toInt(),
+        repsMax: (j['rm'] as num?)?.toInt(),
         weightKg: (j['w'] as num?)?.toDouble(),
         kind: setKindFrom(j['k']),
         sec: (j['t'] as num?)?.toInt(),
@@ -253,23 +281,32 @@ class SavedPlan {
       );
 }
 
+String slotExercise(String slot) {
+  final i = slot.indexOf('#');
+  return i < 0 ? slot : slot.substring(0, i);
+}
+
 class Routine {
   Routine(this.id, this.name, this.exerciseIds,
       {Map<String, int>? sets,
       Set<String>? chained,
+      Set<String>? jumped,
       Map<String, List<PlannedSet>>? plan,
       Map<String, int>? rest,
       List<List<String>>? ladders,
       Map<String, List<String>>? alts,
+      Map<String, String>? exerciseNotes,
       this.group = '',
       this.color = -1,
       this.archived = false})
       : sets = sets ?? {},
         chained = chained ?? {},
+        jumped = jumped ?? {},
         plan = plan ?? {},
         rest = rest ?? {},
         ladders = ladders ?? [],
-        alts = alts ?? {};
+        alts = alts ?? {},
+        exerciseNotes = exerciseNotes ?? {};
   final String id;
   String name;
   String group;
@@ -278,10 +315,41 @@ class Routine {
   final List<String> exerciseIds;
   final Map<String, int> sets;
   final Set<String> chained;
+  final Set<String> jumped;
   final Map<String, List<PlannedSet>> plan;
   final Map<String, int> rest;
   final List<List<String>> ladders;
   final Map<String, List<String>> alts;
+  final Map<String, String> exerciseNotes;
+
+  List<String> slotsOf(String exId) => [for (final s in exerciseIds) if (slotExercise(s) == exId) s];
+
+  bool hasExercise(String exId) => exerciseIds.any((s) => slotExercise(s) == exId);
+
+  String freeSlot(String exId) {
+    if (!exerciseIds.contains(exId)) return exId;
+    var n = 2;
+    while (exerciseIds.contains('$exId#$n')) {
+      n++;
+    }
+    return '$exId#$n';
+  }
+
+  ({int n, int of}) repeatOf(String slot) {
+    final same = slotsOf(slotExercise(slot));
+    return (n: same.indexOf(slot) + 1, of: same.length);
+  }
+
+  void dropSlot(String slot) {
+    exerciseIds.remove(slot);
+    sets.remove(slot);
+    plan.remove(slot);
+    rest.remove(slot);
+    chained.remove(slot);
+    jumped.remove(slot);
+    alts.remove(slot);
+    exerciseNotes.remove(slot);
+  }
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -289,22 +357,43 @@ class Routine {
         if (ladders.isNotEmpty) 'lad': ladders,
         if (alts.isNotEmpty) 'alt': alts,
         'ex': exerciseIds,
+        if (exerciseNotes.isNotEmpty) 'notes': exerciseNotes,
         if (rest.isNotEmpty) 'r': rest,
         if (sets.isNotEmpty) 's': sets,
         if (chained.isNotEmpty) 'c': chained.toList(),
+        if (jumped.isNotEmpty) 'j': jumped.toList(),
         if (group.isNotEmpty) 'g': group,
         if (color >= 0) 'k': color,
         if (archived) 'a': true,
         if (plan.isNotEmpty)
           'p': plan.map((k, v) => MapEntry(k, v.map((s) => s.toJson()).toList())),
       };
+  static List<String> _uniqueSlots(Iterable<String> raw) {
+    final out = <String>[];
+    for (final s in raw) {
+      if (s.isEmpty) continue;
+      if (!out.contains(s)) {
+        out.add(s);
+        continue;
+      }
+      final base = slotExercise(s);
+      var n = 2;
+      while (out.contains('$base#$n')) {
+        n++;
+      }
+      out.add('$base#$n');
+    }
+    return out;
+  }
+
   factory Routine.fromJson(Map<String, dynamic> j) => Routine(
         j['id'] as String,
         j['n'] as String,
-        ((j['ex'] as List?) ?? []).cast<String>(),
+        _uniqueSlots(((j['ex'] as List?) ?? []).whereType<String>()),
         sets: ((j['s'] as Map?) ?? const {})
             .map((k, v) => MapEntry(k as String, (v as num).toInt())),
         chained: ((j['c'] as List?) ?? const []).cast<String>().toSet(),
+        jumped: ((j['j'] as List?) ?? const []).cast<String>().toSet(),
         plan: ((j['p'] as Map?) ?? const {}).map((k, v) => MapEntry(
               k as String,
               (v as List).map((s) => PlannedSet.fromJson((s as Map).cast<String, dynamic>())).toList(),
@@ -318,6 +407,11 @@ class Routine {
         alts: {
           for (final e in ((j['alt'] as Map?) ?? const {}).entries)
             if (e.value is List && (e.value as List).isNotEmpty) e.key as String: (e.value as List).cast<String>().toList(),
+        },
+        exerciseNotes: {
+          for (final e in ((j['notes'] as Map?) ?? const {}).entries)
+            if (e.key is String && e.value is String && (e.value as String).trim().isNotEmpty)
+              e.key as String: (e.value as String).trim(),
         },
         group: (j['g'] as String?) ?? '',
         color: (j['k'] as num?)?.toInt() ?? -1,

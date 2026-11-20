@@ -368,6 +368,46 @@ void main() {
       expect(d.total.kcal, 120);
     });
 
+    test('un alimento propio con los mismos valores se reutiliza aunque el nombre no se parezca', () {
+      const mine = FoodItem(
+        id: 'f9',
+        name: 'Jack Links',
+        grams: 40,
+        macros: Macros(kcal: 150, protein: 9, carbs: 3, fat: 11, sodium: 480, sat: 5, chol: 35),
+      );
+      final d = resolve(
+              '{"items":[{"food":"Beef stick and cheese snack","grams":40,"kcal":150,"protein":9,"carbs":3,"fat":11,"sodium":480,"saturated":5}]}',
+              own: [mine])
+          .single
+          .items
+          .single;
+      expect(d.source, AiSource.mine);
+      expect(d.name, 'Jack Links');
+      expect(d.entry.foodId, 'f9');
+      expect(d.total.chol, closeTo(35, 0.01));
+      expect(d.flags, contains(AiFlag.matched));
+      final fresh = d.asNew!;
+      expect(fresh.source, AiSource.ai);
+      expect(fresh.name, 'Beef stick and cheese snack');
+    });
+
+    test('valores distintos no se confunden con un alimento propio', () {
+      const mine = FoodItem(
+        id: 'f9',
+        name: 'Jack Links',
+        grams: 40,
+        macros: Macros(kcal: 150, protein: 9, carbs: 3, fat: 11),
+      );
+      final d = resolve(
+              '{"items":[{"food":"Beef stick and cheese snack","grams":40,"kcal":190,"protein":9,"carbs":3,"fat":15}]}',
+              own: [mine])
+          .single
+          .items
+          .single;
+      expect(d.source, AiSource.ai);
+      expect(d.asNew, isNull);
+    });
+
     test('con piezas usa el peso de la pieza de la biblioteca', () {
       final d = resolve('{"items":[{"food":"Banana","count":2,"kcal":214,"protein":2.6,"carbs":54,"fat":0.7}]}').single.items.single;
       expect(d.source, AiSource.library);
@@ -390,12 +430,13 @@ void main() {
 
   group('etiqueta completa', () {
     test('lee fibra, azucar, sodio y tipos de grasa del alimento', () {
-      final d = resolve('{"items":[{"food":"Beef stick and cheese protein snack","grams":40,"kcal":150,"protein":9,"carbs":3,"fat":11,"sodium":480,"saturated":5,"trans":0.2,"sugar":1,"fiber":0.5,"monounsaturated":4,"polyunsaturated":0.8}]}')
+      final d = resolve('{"items":[{"food":"Beef stick and cheese protein snack","grams":40,"kcal":150,"protein":9,"carbs":3,"fat":11,"sodium":480,"cholesterol":35,"saturated":5,"trans":0.2,"sugar":1,"fiber":0.5,"monounsaturated":4,"polyunsaturated":0.8}]}')
           .single
           .items
           .single;
       expect(d.source, AiSource.ai);
       expect(d.total.sodium, closeTo(480, 0.01));
+      expect(d.total.chol, closeTo(35, 0.01));
       expect(d.total.sat, closeTo(5, 0.01));
       expect(d.total.trans, closeTo(0.2, 0.01));
       expect(d.total.sugar, closeTo(1, 0.01));
@@ -418,8 +459,66 @@ void main() {
 
     test('el prompt pide los campos opcionales sin hacerlos obligatorios', () {
       final p = buildMealAiPrompt(brief);
-      expect(p, contains('"sodium" in milligrams'));
+      expect(p, contains('"sodium", "cholesterol", "iron" and "potassium" in milligrams'));
       expect(p, contains('leave the key out otherwise'));
+    });
+  });
+
+  group('alimento con IA', () {
+    test('lee la respuesta con el formato pedido y los valores por 100 g', () {
+      final pick = parseFoodAi('Aquí tienes:\n```json\n{"gymmane": "gymmane-food", "v": 1, "food": {"name": "Yogur griego Hacendado", "serving_name": "1 tarrina", "grams": 125, "liquid": false, "per100": {"kcal": 97, "protein": 6.5, "carbs": 3.4, "fat": 6.4, "sugar": 3.4, "saturated": 4.2, "sodium": 40}}}\n```');
+      expect(pick, isNotNull);
+      final f = pick!.food;
+      expect(f.name, 'Yogur griego Hacendado');
+      expect(pick.serving, '1 tarrina');
+      expect(pick.liquid, isFalse);
+      expect(f.grams, 125);
+      expect(f.per100, isTrue);
+      expect([f.kcal, f.protein, f.carbs, f.fat, f.sugar, f.sat, f.sodium], [97, 6.5, 3.4, 6.4, 3.4, 4.2, 40]);
+    });
+
+    test('pasa la sal a sodio y entiende bebidas', () {
+      final pick = parseFoodAi('{"producto": {"nombre": "Bebida de avena", "racion": "1 vaso", "ml": 250, "bebida": true, "per100ml": {"calorias": 46, "proteinas": 0.4, "hidratos": 7.6, "grasas": 1.5, "sal": 0.1}}}');
+      expect(pick, isNotNull);
+      expect(pick!.liquid, isTrue);
+      expect(pick.serving, '1 vaso');
+      expect(pick.food.grams, 250);
+      expect(pick.food.sodium, closeTo(40, 0.001));
+    });
+
+    test('#394 lee hierro y potasio y los pasa de 100 g a la ración', () {
+      final pick = parseFoodAi('{"food": {"name": "Lentejas", "grams": 200, "per100": {"kcal": 116, "protein": 9, "carbs": 20, "fat": 0.4, "iron": 3.3, "potassium": 369}}}');
+      expect(pick, isNotNull);
+      expect([pick!.food.iron, pick.food.potassium], [3.3, 369]);
+      expect(buildFoodAiPrompt('Spanish'), contains('"iron" and "potassium" in milligrams'));
+    });
+
+    test('sin valores no rellena nada', () {
+      expect(parseFoodAi('Mándame la etiqueta, una foto, un enlace o el nombre del alimento.'), isNull);
+      expect(parseFoodAi('{"food": {"name": "Pan"}}'), isNull);
+    });
+
+    test('la petición pide un solo alimento por 100 g en el idioma de la app y su ejemplo se lee bien', () {
+      final p = buildFoodAiPrompt('Spanish');
+      expect(p, contains('ONE food'));
+      expect(p, contains('"per100"'));
+      expect(p, contains('in Spanish'));
+      expect(parseFoodAi(p), isNotNull);
+    });
+  });
+
+  group('por qué no se ha podido leer', () {
+    test('solo texto, sin datos: la IA se ha negado o ha contestado en frase', () {
+      expect(diagnoseMealAi('Lo siento, no puedo ver la foto. ¿Me describes el plato?'), MealAiTrouble.noData);
+    });
+
+    test('un JSON a medias es una respuesta cortada', () {
+      expect(diagnoseMealAi('```json {"gymmane": "meal", "options": [{"items": [{"name": "Arroz", "grams": 150'),
+          MealAiTrouble.cut);
+    });
+
+    test('con datos completos pero raros, el aviso de siempre', () {
+      expect(diagnoseMealAi('{"hola": 1}'), MealAiTrouble.unknown);
     });
   });
 }

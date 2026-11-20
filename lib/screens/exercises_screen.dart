@@ -1,11 +1,12 @@
-import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
+import '../app/desktop.dart';
 import '../catalog/exercise_catalog.dart';
 import '../l10n/l10n.dart';
 import '../models/exercise.dart';
@@ -14,11 +15,13 @@ import '../state/fit_state.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
 import '../widgets/body_map.dart';
+import '../widgets/dialogs.dart';
 import '../widgets/exercise_media.dart';
 import '../widgets/glass.dart';
 import '../widgets/liquid_glass.dart';
 import '../widgets/svg_icon.dart';
 import '../widgets/ui_kit.dart';
+import '../widgets/local_image.dart';
 
 class ExercisesScreen extends StatefulWidget {
   const ExercisesScreen({super.key});
@@ -66,6 +69,9 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
     final contentTop = chipsTop + 34 + 12;
 
     return Stack(children: [
+              if (DesktopScope.of(context) && list.isNotEmpty)
+                Positioned.fill(child: _grid(gc, list, contentTop))
+              else
               Positioned.fill(
                 child: ListView.builder(
               key: const PageStorageKey('exercises'),
@@ -333,6 +339,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
         if (place.id == fit.activePlaceId) (place.name, () => fit.setActivePlace('')),
     ];
     return SingleChildScrollView(
+      key: const PageStorageKey('h-exercises_screen-342'),
       scrollDirection: Axis.horizontal,
       clipBehavior: Clip.none,
       child: Row(children: [
@@ -409,6 +416,57 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
       n++;
     }
     return n;
+  }
+
+  Widget _grid(GymColors gc, List<Exercise> list, double top) {
+    return LayoutBuilder(builder: (context, box) {
+      final n = ((box.maxWidth - 40 + 12) / (340 + 12)).floor().clamp(1, 4);
+      final items = <Object>[];
+      var i = 0;
+      while (i < list.length) {
+        final m = list[i].primary;
+        var j = i;
+        while (j < list.length && list[j].primary == m) {
+          j++;
+        }
+        items.add((m, j - i));
+        for (var k = i; k < j; k += n) {
+          items.add(list.sublist(k, (k + n).clamp(0, j)));
+        }
+        i = j;
+      }
+      return ListView.builder(
+        key: const PageStorageKey('exercises'),
+        controller: _scroll,
+        padding: EdgeInsets.fromLTRB(20, top, 20, 60),
+        itemCount: items.length,
+        itemBuilder: (context, k) {
+          final it = items[k];
+          if (it is (String, int)) {
+            return Padding(
+              padding: EdgeInsets.fromLTRB(4, k == 0 ? 2 : 22, 0, 8),
+              child: Row(children: [
+                Text(muscleLabel(it.$1).toUpperCase(),
+                    style: AppTheme.f(10.5, weight: FontWeight.w700, color: gc.textTertiary, letterSpacing: 1.3)),
+                const SizedBox(width: 7),
+                Text('${it.$2}',
+                    style: AppTheme.f(10.5, weight: FontWeight.w700, color: gc.textSecondary, letterSpacing: 1.3)),
+              ]),
+            );
+          }
+          final row = it as List<Exercise>;
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: Row(children: [
+              for (var c = 0; c < n; c++) ...[
+                if (c > 0) const SizedBox(width: 12),
+                Expanded(child: c < row.length ? _row(gc, row[c], first: true, last: true) : const SizedBox.shrink()),
+              ],
+            ]),
+          );
+        },
+      );
+    });
   }
 
   Widget _row(GymColors gc, Exercise ex, {required bool first, required bool last}) {
@@ -525,21 +583,26 @@ class _FilterChipData {
 }
 
 void showCreateExerciseSheet(BuildContext context,
-    {void Function(String id)? onCreated, Exercise? editing, String initialName = ''}) {
+    {void Function(String id)? onCreated, Exercise? editing, Exercise? copyOf, String initialName = ''}) {
   final gc = context.gc;
-  final nameCtrl = TextEditingController(text: editing?.name ?? initialName.trim());
-  final stepsCtrl = TextEditingController(text: editing?.steps.join('\n') ?? '');
-  final aliasCtrl = TextEditingController(text: editing?.aliases.join(', ') ?? '');
+  final src = editing ?? copyOf;
+  final nameCtrl = TextEditingController(
+      text: editing?.name ?? (copyOf != null ? t.exerciseCopyName(exerciseName(copyOf)) : initialName.trim()));
+  final stepsCtrl = TextEditingController(
+      text: editing?.steps.join('\n') ?? (copyOf != null ? exerciseSteps(copyOf).join('\n') : ''));
+  final aliasCtrl = TextEditingController(
+      text: editing?.aliases.join(', ') ??
+          (copyOf != null ? {...copyOf.aliases, if (copyOf.name != exerciseName(copyOf)) copyOf.name}.join(', ') : ''));
   final nameFocus = FocusNode();
   final scroll = ScrollController();
   bool nameMissing = false;
   int shakes = 0;
-  String muscle = editing?.primary ?? kMuscles.first.id;
-  final secondary = <String>{...?editing?.secondary};
-  String equipment = editing?.equipment ?? kEquipment.first;
-  String difficulty = editing?.difficulty ?? kDifficulties.first;
-  String mode = editing?.mode ?? '';
-  String kind = editing?.kind ?? '';
+  String muscle = src?.primary ?? kMuscles.first.id;
+  final secondary = <String>{...?src?.secondary};
+  String equipment = src?.equipment ?? kEquipment.first;
+  String difficulty = src?.difficulty ?? kDifficulties.first;
+  String mode = editing?.mode ?? (copyOf != null ? fit.modeOf(copyOf.id) : '');
+  String kind = src?.kind ?? '';
   bool advanced = false;
   bool allEquipment = false;
   String? openZone = kBodyZones.entries.firstWhere((z) => z.value.contains(muscle), orElse: () => kBodyZones.entries.first).key;
@@ -557,8 +620,19 @@ void showCreateExerciseSheet(BuildContext context,
           final mediaIsVideo = mediaPath != null && MediaStore.isVideo(mediaPath!);
           Future<void> pickMedia() async {
             try {
-              final res = await FilePicker.platform.pickFiles(type: FileType.media);
-              final path = res?.files.single.path;
+              final res = await FilePicker.platform.pickFiles(type: FileType.media, withData: kIsWeb);
+              final picked = res?.files.single;
+              if (picked == null) return;
+              if (kIsWeb) {
+                final bytes = picked.bytes;
+                final name = bytes == null
+                    ? null
+                    : await MediaStore.saveBytes('custom', MediaStore.extOf(picked.name), bytes);
+                final url = name == null ? null : MediaStore.pathFor(name);
+                if (url != null) setSheet(() => mediaPath = url);
+                return;
+              }
+              final path = picked.path;
               if (path != null) setSheet(() => mediaPath = path);
             } catch (_) {}
           }
@@ -594,7 +668,7 @@ void showCreateExerciseSheet(BuildContext context,
                     child: TextField(
                       controller: nameCtrl,
                       focusNode: nameFocus,
-                      autofocus: editing == null,
+                      autofocus: editing == null && copyOf == null,
                       style: AppTheme.f(15, weight: FontWeight.w500, color: gc.text),
                       cursorColor: nameMissing ? gc.danger : gc.accent,
                       textCapitalization: TextCapitalization.words,
@@ -726,7 +800,7 @@ void showCreateExerciseSheet(BuildContext context,
                   const SizedBox(height: 10),
                   Builder(builder: (_) {
                     const common = ['Bodyweight', 'Dumbbell', 'Barbell', 'Machine', 'Cable', 'Band'];
-                    final rest = [for (final e in kEquipment) if (!common.contains(e)) e];
+                    final rest = [for (final e in [...kEquipment, ...fit.customGear]) if (!common.contains(e)) e];
                     final all = allEquipment || rest.contains(equipment);
                     return Wrap(spacing: 8, runSpacing: 8, children: [
                       for (final e in [...common, if (all) ...rest])
@@ -742,6 +816,23 @@ void showCreateExerciseSheet(BuildContext context,
                           vPad: 8,
                           fontSize: 13,
                         ),
+                      Pill(
+                        label: t.equipNew,
+                        bg: Colors.transparent,
+                        fg: gc.accent,
+                        onTap: () async {
+                          final name = await askText(context, title: t.equipNewTitle, hint: t.equipNewHint);
+                          if (name == null || name.trim().isEmpty) return;
+                          final added = fit.addCustomGear(name);
+                          setSheet(() {
+                            equipment = added;
+                            allEquipment = true;
+                          });
+                        },
+                        hPad: 12,
+                        vPad: 8,
+                        fontSize: 13,
+                      ),
                       if (!all)
                         Pill(
                           label: '+${rest.length}',
@@ -937,7 +1028,7 @@ void showCreateExerciseSheet(BuildContext context,
                                                     style: AppTheme.f(12, weight: FontWeight.w500, color: gc.textSecondary)),
                                               ]),
                                             )
-                                          : Center(child: Image.file(File(mediaPath!), fit: BoxFit.contain, alignment: Alignment.center)),
+                                          : Center(child: Image(image: localImage(mediaPath!), fit: BoxFit.contain, alignment: Alignment.center)),
                                     ),
                                     Positioned(
                                       top: 8,
@@ -1000,7 +1091,8 @@ void showCreateExerciseSheet(BuildContext context,
                           mode: mode,
                           secondary: secondary.toList(),
                           aliases: aliases,
-                          kind: kind);
+                          kind: kind,
+                          art: copyOf?.art ?? '');
                       if (mediaPath != null) {
                         await fit.attachExerciseMedia(id, mediaPath!);
                       }

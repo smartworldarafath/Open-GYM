@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 import '../l10n/l10n.dart';
+import '../screens/measures_screen.dart' show showMeasureSheet;
 import '../services/health_metrics.dart';
 import '../services/health_steps.dart';
 import '../state/fit_state.dart';
@@ -161,7 +162,7 @@ class HealthCard extends StatelessWidget {
             const SizedBox(height: 12),
             Row(children: [
               Expanded(
-                child: Text(t.healthFrom,
+                child: Text(health(t.healthFrom),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: AppTheme.f(11.5, weight: FontWeight.w500, color: gc.textTertiary)),
@@ -258,7 +259,7 @@ class HealthScreen extends StatelessWidget {
               Text(t.healthTitle,
                   style: AppTheme.f(32, weight: FontWeight.w800, color: gc.text, letterSpacing: -0.9, height: 1.05)),
               const SizedBox(height: 4),
-              Text(t.healthFrom, style: AppTheme.f(13, weight: FontWeight.w500, color: gc.textSecondary)),
+              Text(health(t.healthFrom), style: AppTheme.f(13, weight: FontWeight.w500, color: gc.textSecondary)),
               for (final g in HealthGroup.values)
                 if (shown.any((m) => m.group == g) || (g == HealthGroup.activity && fit.stepsOn))
                   Column(
@@ -525,7 +526,7 @@ void showHealthPicker(BuildContext context) {
               const SizedBox(height: 20),
               Text(t.healthPickTitle, textAlign: TextAlign.center, style: AppTheme.f(19, color: gc.text)),
               const SizedBox(height: 6),
-              Text(t.healthPickHint,
+              Text(health(t.healthPickHint),
                   textAlign: TextAlign.center,
                   style: AppTheme.f(12.5, weight: FontWeight.w500, color: gc.textSecondary, height: 1.4)),
               const SizedBox(height: 16),
@@ -724,6 +725,12 @@ void showHealthDetail(BuildContext context, HealthMetric metric) {
                   if (fit.healthOnDay(metric, d)?.first case final v?) healthShown(metric, v) else null,
               ],
               labels: [for (final d in week) t.weekdayInitial(d.weekday)],
+              tags: pressure
+                  ? [
+                      for (final d in week)
+                        if (fit.healthOnDay(metric, d) case final v? when v.length > 1) healthValue(metric, v) else null,
+                    ]
+                  : null,
               format: (v) => switch (metric) {
                 HealthMetric.sleep => healthNumber(metric, v * 60),
                 HealthMetric.spo2 ||
@@ -762,10 +769,21 @@ void showHealthDetail(BuildContext context, HealthMetric metric) {
             ],
           ]),
           const SizedBox(height: 10),
-          Text(t.healthFrom,
+          Text(health(pressure && fit.measures.any((m) => m.key == 'bp') ? t.healthFromYours : t.healthFrom),
               textAlign: TextAlign.center,
               style: AppTheme.f(11.5, weight: FontWeight.w500, color: gc.textTertiary)),
           const SizedBox(height: 16),
+          if (pressure) ...[
+            GhostButton(
+              label: t.healthAddReading,
+              icon: PhosphorIconsBold.plus,
+              onTap: () {
+                Navigator.of(sheet).pop();
+                showMeasureSheet(context, 'bp');
+              },
+            ),
+            const SizedBox(height: 10),
+          ],
           PrimaryButton(label: t.done, onTap: () => Navigator.of(sheet).pop()),
         ],
       ),
@@ -797,7 +815,7 @@ class _HealthLinksState extends State<_HealthLinks> {
             final ok = await set(!saved);
             if (mounted) setState(() => _asking.remove(title));
             if (!ok && context.mounted) {
-              showNotchToast(context, t.healthLinkDenied,
+              showNotchToast(context, health(t.healthLinkDenied),
                   icon: PhosphorIconsFill.warningCircle, accent: gc.warn, action: t.healthOpenSettings,
                   onTap: () => HealthSteps.openSettings());
             }
@@ -833,7 +851,7 @@ class _HealthLinksState extends State<_HealthLinks> {
           Divider(height: 1, thickness: 1, color: gc.border, indent: 14, endIndent: 14),
           row(PhosphorIconsRegular.scales, t.healthLinkWeight, t.healthLinkWeightHint, fit.hcWeights, fit.setHcWeights),
           Divider(height: 1, thickness: 1, color: gc.border, indent: 14, endIndent: 14),
-          row(PhosphorIconsRegular.barbell, t.healthLinkWrite, t.healthLinkWriteHint, fit.hcWrite, fit.setHcWrite),
+          row(PhosphorIconsRegular.barbell, t.healthLinkWrite, health(t.healthLinkWriteHint), fit.hcWrite, fit.setHcWrite),
         ]),
       ),
     ]);

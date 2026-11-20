@@ -322,14 +322,14 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
 
   Widget _chosenList(GymColors gc) {
     final routine = fit.activeRoutine!;
-    final chosen = fit.routineExercises(routine);
+    final chosen = fit.routineSlots(routine);
     return SliverReorderableList(
       itemCount: chosen.length,
       proxyDecorator: liftedRow(14),
       onReorderStart: reorderPicked,
       onReorderEnd: reorderDropped,
       onReorder: (from, to) => fit.reorderRoutineExercise(routine.id, from, to),
-      itemBuilder: (context, i) => _chosenRow(gc, routine, chosen[i], i),
+      itemBuilder: (context, i) => _chosenRow(gc, routine, chosen[i].slot, chosen[i].ex, i),
     );
   }
 
@@ -367,6 +367,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
         (fit.exEquipmentFilter == null ? 0 : 1) +
         (fit.exDifficultyFilter == null ? 0 : 1);
     return SingleChildScrollView(
+      key: const PageStorageKey('h-routine_edit_screen-370'),
       scrollDirection: Axis.horizontal,
       clipBehavior: Clip.none,
       child: Row(children: [
@@ -464,7 +465,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
       final load = [
         if (p.km != null) fit.distanceValue(p.km!),
         if (p.sec != null) durationLabel(p.sec!),
-        if (p.reps != null) '${p.reps}',
+        if (p.reps != null) p.repsLabel!,
         if (p.weightKg != null) fit.weightValue(p.weightKg!),
       ].join(' × ');
       final tag = setKindTag(p.kind);
@@ -484,8 +485,8 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
     return unit.isEmpty ? parts.join(' · ') : '${parts.join(' · ')} $unit';
   }
 
-  void _remove(Exercise ex) {
-    final undo = fit.removeRoutineExercise(_id, ex.id);
+  void _remove(String slot, Exercise ex) {
+    final undo = fit.removeRoutineExercise(_id, slot);
     if (undo == null) return;
     HapticFeedback.lightImpact();
     showNotchToast(
@@ -555,24 +556,27 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
     );
   }
 
-  Widget _chosenRow(GymColors gc, Routine routine, Exercise ex, int index) {
-    final linksNext = fit.chainsToNext(routine, ex.id);
+  Widget _chosenRow(GymColors gc, Routine routine, String slot, Exercise ex, int index) {
+    final linksNext = fit.chainsToNext(routine, slot);
     final fromPrev = index > 0 && fit.chainsToNext(routine, routine.exerciseIds[index - 1]);
     final inChain = linksNext || fromPrev;
-    final plan = fit.plannedSets(routine, ex.id);
+    final inJump = linksNext
+        ? fit.jumpsToNext(routine, slot)
+        : fromPrev && fit.jumpsToNext(routine, routine.exerciseIds[index - 1]);
+    final plan = fit.plannedSets(routine, slot);
     final anyChain = [
       for (var i = 0; i < routine.exerciseIds.length - 1; i++) fit.chainsToNext(routine, routine.exerciseIds[i]),
     ].any((x) => x);
-    final fresh = _seen.add(ex.id);
+    final fresh = _seen.add(slot);
     return _GrowIn(
-      key: ValueKey(ex.id),
+      key: ValueKey(slot),
       play: fresh,
       child: Padding(
       padding: EdgeInsets.only(bottom: linksNext ? 0 : 8),
       child: Dismissible(
-        key: ValueKey('swipe-${ex.id}'),
+        key: ValueKey('swipe-$slot'),
         direction: DismissDirection.endToStart,
-        onDismissed: (_) => _remove(ex),
+        onDismissed: (_) => _remove(slot, ex),
         background: Container(
           margin: EdgeInsets.only(bottom: linksNext ? 4 : 0),
           alignment: Alignment.centerRight,
@@ -589,7 +593,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                   width: 12,
                   child: inChain ? _rail(gc, top: !fromPrev, bottom: !linksNext) : null,
                 ),
-              Expanded(child: _chosenCard(gc, routine, ex, index, inChain, plan, linksNext)),
+              Expanded(child: _chosenCard(gc, routine, slot, ex, index, inChain, inJump, plan, linksNext)),
             ],
           ),
         ),
@@ -598,8 +602,11 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
     );
   }
 
-  Widget _chosenCard(GymColors gc, Routine routine, Exercise ex, int index, bool inChain,
+  Widget _chosenCard(GymColors gc, Routine routine, String slot, Exercise ex, int index, bool inChain, bool inJump,
       List<PlannedSet> plan, bool linksNext) {
+    final repeat = fit.routineRepeat(routine, slot);
+    final chained = routine.chained.contains(slot);
+    final jumps = chained && routine.jumped.contains(slot);
     return Container(
       margin: EdgeInsets.only(bottom: linksNext ? 4 : 0),
       padding: const EdgeInsets.all(8),
@@ -621,7 +628,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
         ),
         GestureDetector(
           behavior: HitTestBehavior.opaque,
-          onTap: () => _openPlan(ex),
+          onTap: () => _openPlan(slot, ex),
           onLongPress: () => showExercisePreview(context, ex),
           child: SizedBox(width: 44, child: ExerciseMedia(ex: ex, height: 44, radius: 10)),
         ),
@@ -635,7 +642,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                 label: t.planSets,
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque,
-                  onTap: () => _openPlan(ex),
+                  onTap: () => _openPlan(slot, ex),
                   onLongPress: () => showExercisePreview(context, ex),
                   child: Row(children: [
                     Flexible(
@@ -652,8 +659,13 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
               ),
               if (inChain) ...[
                 const SizedBox(height: 2),
-                Text(t.superset.toUpperCase(),
+                Text((inJump ? t.jumpSet : t.superset).toUpperCase(),
                     style: AppTheme.f(9.5, weight: FontWeight.w700, color: gc.brass, letterSpacing: 1)),
+              ],
+              if (repeat.of > 1) ...[
+                const SizedBox(height: 2),
+                Text(t.routineRepeatTag(repeat.n, repeat.of).toUpperCase(),
+                    style: AppTheme.f(9.5, weight: FontWeight.w700, color: gc.accent, letterSpacing: 1)),
               ],
               if (fit.ladderIn(routine, ex.id) case final ladder?) ...[
                 const SizedBox(height: 2),
@@ -665,14 +677,14 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                 fit: BoxFit.scaleDown,
                 alignment: AlignmentDirectional.centerStart,
                 child: StepperControl(
-                  value: t.setCount(fit.routineSets(routine, ex.id)),
+                  value: t.setCount(fit.routineSets(routine, slot)),
                   minWidth: 62,
                   btnSize: 24,
                   gap: 8,
                   fontSize: 12,
                   btnRadius: 7,
-                  onDec: () => fit.bumpRoutineSets(_id, ex.id, -1),
-                  onInc: () => fit.bumpRoutineSets(_id, ex.id, 1),
+                  onDec: () => fit.bumpRoutineSets(_id, slot, -1),
+                  onInc: () => fit.bumpRoutineSets(_id, slot, 1),
                 ),
               ),
               if (plan.isNotEmpty) ...[
@@ -688,14 +700,22 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
         if (index < routine.exerciseIds.length - 1)
           Semantics(
             button: true,
-            toggled: routine.chained.contains(ex.id),
-            label: t.supersetLink,
+            label: jumps ? t.supersetUnlink : chained ? t.jumpSetLink : t.supersetLink,
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {
-                fit.toggleChain(_id, ex.id);
-                if (!routine.chained.contains(ex.id)) return;
+                if (jumps) {
+                  fit.toggleChain(_id, slot);
+                  return;
+                }
                 HapticFeedback.selectionClick();
+                if (chained) {
+                  fit.toggleJump(_id, slot);
+                  showNotchToast(context, t.jumpSet,
+                      subtitle: t.jumpSetHint, icon: PhosphorIconsFill.arrowsClockwise, accent: gc.brass);
+                  return;
+                }
+                fit.toggleChain(_id, slot);
                 showNotchToast(context, t.superset,
                     subtitle: t.supersetHint, icon: PhosphorIconsFill.link, accent: gc.brass);
               },
@@ -710,10 +730,14 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                       child: FadeTransition(opacity: a, child: child),
                     ),
                     child: Icon(
-                      routine.chained.contains(ex.id) ? PhosphorIconsFill.link : PhosphorIconsRegular.link,
-                      key: ValueKey(routine.chained.contains(ex.id)),
+                      jumps
+                          ? PhosphorIconsFill.arrowsClockwise
+                          : chained
+                              ? PhosphorIconsFill.link
+                              : PhosphorIconsRegular.link,
+                      key: ValueKey(jumps ? 2 : chained ? 1 : 0),
                       size: 17,
-                      color: routine.chained.contains(ex.id) ? gc.ember : gc.textTertiary,
+                      color: jumps ? gc.brass : chained ? gc.ember : gc.textTertiary,
                     ),
                   ),
                 ),
@@ -725,7 +749,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
           label: t.removeFromRoutine,
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
-            onTap: () => _remove(ex),
+            onTap: () => _remove(slot, ex),
             child: SizedBox(
               width: 38,
               height: 44,
@@ -742,6 +766,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
 
   Widget _pickRow(GymColors gc, Exercise ex) {
     final inRoutine = fit.routineHas(_id, ex.id);
+    final times = fit.routineCountOf(_id, ex.id);
     return Pressable(
       scale: 0.98,
       onTap: () {
@@ -792,10 +817,15 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                 child: child,
               ),
               child: KeyedSubtree(
-                key: ValueKey(inRoutine),
-                child: inRoutine
-                    ? SvgPathIcon(Ic.checkBold, size: 14, color: gc.onEmber)
-                    : Icon(PhosphorIconsRegular.plus, size: 15, color: gc.textSecondary),
+                key: ValueKey(times),
+                child: times > 1
+                    ? Center(
+                        child: Text('$times',
+                            style: AppTheme.f(13, weight: FontWeight.w900, color: gc.onEmber, height: 1)),
+                      )
+                    : inRoutine
+                        ? SvgPathIcon(Ic.checkBold, size: 14, color: gc.onEmber)
+                        : Icon(PhosphorIconsRegular.plus, size: 15, color: gc.textSecondary),
               ),
             ),
           ),
@@ -804,7 +834,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
     );
   }
 
-  void _openPlan(Exercise ex) {
+  void _openPlan(String slot, Exercise ex) {
     showAppSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -814,13 +844,14 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
         builder: (sheet, _) {
           final gc = sheet.gc;
           final routine = fit.routines.where((r) => r.id == _id).firstOrNull;
-          if (routine == null || !routine.exerciseIds.contains(ex.id)) return const SizedBox.shrink();
+          if (routine == null || !routine.exerciseIds.contains(slot)) return const SizedBox.shrink();
           final mode = fit.modeOf(ex.id);
           final repsOnly = fit.isRepsOnly(ex.id);
-          final plan = fit.hasPlan(routine, ex.id)
-              ? fit.plannedSets(routine, ex.id)
-              : List.generate(fit.routineSets(routine, ex.id), (_) => const PlannedSet());
-          void save(List<PlannedSet> next) => fit.setPlannedSets(_id, ex.id, next);
+          final repeat = fit.routineRepeat(routine, slot);
+          final plan = fit.hasPlan(routine, slot)
+              ? fit.plannedSets(routine, slot)
+              : List.generate(fit.routineSets(routine, slot), (_) => const PlannedSet());
+          void save(List<PlannedSet> next) => fit.setPlannedSets(_id, slot, next);
           void edit(int i, PlannedSet p) => save([...plan]..[i] = p);
           var working = 0;
           return Container(
@@ -845,6 +876,11 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                       child: FavoriteStar(on: fit.favorites[ex.id] ?? false),
                     ),
                   ]),
+                  if (repeat.of > 1) ...[
+                    const SizedBox(height: 2),
+                    Text(t.routineRepeatTag(repeat.n, repeat.of).toUpperCase(),
+                        style: AppTheme.f(10, weight: FontWeight.w700, color: gc.accent, letterSpacing: 1)),
+                  ],
                   const SizedBox(height: 4),
                   Text(
                       switch (mode) {
@@ -853,6 +889,31 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                         _ => repsOnly ? t.planHintReps : t.planSetsHint,
                       },
                       style: AppTheme.f(12, weight: FontWeight.w500, color: gc.textSecondary, height: 1.4)),
+                  const SizedBox(height: 16),
+                  GhostButton(
+                    label: t.routineExerciseNote,
+                    icon: PhosphorIconsRegular.pushPin,
+                    onTap: () async {
+                      final text = await askText(
+                        sheet,
+                        title: t.routineExerciseNote,
+                        initial: routine.exerciseNotes[slot] ?? '',
+                        hint: t.notePlaceholder,
+                        allowEmpty: true,
+                        maxLines: 3,
+                      );
+                      if (text != null) fit.setRoutineExerciseNote(_id, slot, text);
+                    },
+                  ),
+                  if (routine.exerciseNotes[slot] case final note?) ...[
+                    const SizedBox(height: 6),
+                    Text(
+                      note,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTheme.f(12.5, color: gc.textSecondary, height: 1.4),
+                    ),
+                  ],
                   const SizedBox(height: 16),
                   _planHeader(gc, mode, repsOnly),
                   const SizedBox(height: 8),
@@ -883,7 +944,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                       ),
                     ],
                   ]),
-                  if (fit.hasPlan(routine, ex.id))
+                  if (fit.hasPlan(routine, slot))
                     GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: () => save(const []),
@@ -895,17 +956,23 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                       ),
                     ),
                   const SizedBox(height: 10),
-                  _restRow(sheet, gc, routine, ex),
+                  _restRow(sheet, gc, routine, slot, ex),
                   if (mode.isEmpty) ...[
                     const SizedBox(height: 8),
                     _progressRow(sheet, gc, ex),
                   ],
+                  if (mode.isEmpty || mode == 'time') ...[
+                    const SizedBox(height: 8),
+                    _sidesRow(gc, ex, mode),
+                  ],
                   const SizedBox(height: 8),
-                  _altsRow(sheet, gc, routine, ex),
+                  _altsRow(sheet, gc, routine, slot, ex),
                   if (fit.modeOf(ex.id).isEmpty) ...[
                     const SizedBox(height: 8),
                     _ladderRow(sheet, gc, routine, ex),
                   ],
+                  const SizedBox(height: 8),
+                  _againRow(sheet, gc, slot, ex),
                   const SizedBox(height: 14),
                   PrimaryButton(label: t.done, onTap: () => Navigator.of(sheet).pop()),
                 ],
@@ -913,6 +980,35 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _sidesRow(GymColors gc, Exercise ex, String mode) {
+    final timed = mode == 'time';
+    final on = timed ? fit.isEachSide(ex.id) : fit.isSidedReps(ex.id);
+    return Pressable(
+      scale: 0.98,
+      onTap: () => timed ? fit.toggleEachSide(ex.id) : fit.toggleSidedReps(ex.id),
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(16, 12, 12, 12),
+        decoration: BoxDecoration(color: gc.bgRaised2, borderRadius: BorderRadius.circular(18)),
+        child: Row(children: [
+          Icon(PhosphorIconsRegular.arrowsLeftRight, size: 19, color: on ? gc.text : gc.textSecondary),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(t.eachSide, style: AppTheme.f(14, weight: FontWeight.w600, color: gc.text)),
+              const SizedBox(height: 3),
+              Text(timed ? t.eachSideHint : t.eachSideRepsHint,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTheme.f(11.5, weight: FontWeight.w500, color: gc.textSecondary, height: 1.3)),
+            ]),
+          ),
+          const SizedBox(width: 10),
+          TinySwitch(on: on),
+        ]),
       ),
     );
   }
@@ -942,11 +1038,43 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
     );
   }
 
-  Widget _altsRow(BuildContext sheet, GymColors gc, Routine routine, Exercise ex) {
-    final alts = [for (final id in fit.routineAlts(routine.id, ex.id)) ?fit.exerciseById(id)];
+  Widget _againRow(BuildContext sheet, GymColors gc, String slot, Exercise ex) => Pressable(
+        scale: 0.98,
+        onTap: () {
+          final made = fit.addRoutineSlot(_id, ex.id, like: slot);
+          if (made.isEmpty) return;
+          HapticFeedback.mediumImpact();
+          Navigator.of(sheet).pop();
+          showNotchToast(context, t.routineAddedAgain,
+              subtitle: t.routineAddedAgainHint, icon: PhosphorIconsBold.plus, accent: gc.accent);
+        },
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(16, 12, 12, 12),
+          decoration: BoxDecoration(color: gc.bgRaised2, borderRadius: BorderRadius.circular(18)),
+          child: Row(children: [
+            Icon(PhosphorIconsRegular.copySimple, size: 19, color: gc.textSecondary),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(t.routineAddAgain, style: AppTheme.f(14, weight: FontWeight.w600, color: gc.text)),
+                const SizedBox(height: 3),
+                Text(t.routineAddAgainHint,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTheme.f(11.5, weight: FontWeight.w500, color: gc.textSecondary, height: 1.3)),
+              ]),
+            ),
+            const SizedBox(width: 8),
+            Icon(PhosphorIconsBold.plus, size: 13, color: gc.textTertiary),
+          ]),
+        ),
+      );
+
+  Widget _altsRow(BuildContext sheet, GymColors gc, Routine routine, String slot, Exercise ex) {
+    final alts = [for (final id in fit.routineAlts(routine.id, slot)) ?fit.exerciseById(id)];
     return Pressable(
       scale: 0.98,
-      onTap: () => _pickAlts(sheet, routine.id, ex),
+      onTap: () => _pickAlts(sheet, routine.id, slot, ex),
       child: Container(
         padding: const EdgeInsets.fromLTRB(16, 12, 12, 12),
         decoration: BoxDecoration(color: gc.bgRaised2, borderRadius: BorderRadius.circular(18)),
@@ -970,7 +1098,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
     );
   }
 
-  void _pickAlts(BuildContext context, String routineId, Exercise ex) {
+  void _pickAlts(BuildContext context, String routineId, String slot, Exercise ex) {
     showAppSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -980,11 +1108,11 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
         builder: (sheet, _) {
           final routine = fit.routines.where((r) => r.id == routineId).firstOrNull;
           if (routine == null) return const SizedBox.shrink();
-          final chosen = fit.routineAlts(routineId, ex.id);
+          final chosen = fit.routineAlts(routineId, slot);
           final pool = [
             for (final id in chosen) ?fit.exerciseById(id),
             for (final e in fit.swapOptions(ex.id, n: 18))
-              if (!chosen.contains(e.id) && !routine.exerciseIds.contains(e.id)) e,
+              if (!chosen.contains(e.id) && !routine.hasExercise(e.id)) e,
           ];
           return AppSheet(children: [
             SheetTitle(t.altsTitle, subtitle: t.altsPickHint(RoutinesState.maxAlts)),
@@ -998,7 +1126,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                   selected: chosen.contains(e.id),
                   onTap: () {
                     HapticFeedback.selectionClick();
-                    fit.toggleRoutineAlt(routineId, ex.id, e.id);
+                    fit.toggleRoutineAlt(routineId, slot, e.id);
                   },
                 ),
             ]),
@@ -1046,8 +1174,8 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
     );
   }
 
-  Widget _restRow(BuildContext sheet, GymColors gc, Routine routine, Exercise ex) {
-    final own = fit.routineRest(routine.id, ex.id);
+  Widget _restRow(BuildContext sheet, GymColors gc, Routine routine, String slot, Exercise ex) {
+    final own = fit.routineRest(routine.id, slot);
     final seconds = own ?? fit.restFor(ex.id);
     String label(int s) => s == 0 ? t.restOff : clockLabel(s);
     return Container(
@@ -1064,7 +1192,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
               const SizedBox(height: 3),
               GestureDetector(
                 behavior: HitTestBehavior.opaque,
-                onTap: own != null ? () => fit.setRoutineRest(routine.id, ex.id, null) : null,
+                onTap: own != null ? () => fit.setRoutineRest(routine.id, slot, null) : null,
                 child: Text(own != null ? t.restInRoutineReset : t.restInRoutineHint,
                     style: AppTheme.f(11.5,
                         weight: FontWeight.w500, color: own != null ? gc.accent : gc.textSecondary, height: 1.3)),
@@ -1080,8 +1208,8 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
           gap: 3,
           fontSize: 14,
           btnRadius: 10,
-          onDec: () => fit.setRoutineRest(routine.id, ex.id, seconds - 15),
-          onInc: () => fit.setRoutineRest(routine.id, ex.id, seconds + 15),
+          onDec: () => fit.setRoutineRest(routine.id, slot, seconds - 15),
+          onInc: () => fit.setRoutineRest(routine.id, slot, seconds + 15),
           onEdit: () async {
             final v = await askRuler(sheet,
                 title: t.restInRoutine,
@@ -1092,7 +1220,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
                 majorEvery: 6,
                 format: (v) => clockLabel(v.round()),
                 tickLabel: (v) => clockLabel(v.round()));
-            if (v != null) fit.setRoutineRest(routine.id, ex.id, v.round());
+            if (v != null) fit.setRoutineRest(routine.id, slot, v.round());
           },
         ),
       ]),
@@ -1134,7 +1262,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
   ) {
     final p = plan[i];
     final auto = t.autoValue;
-    Widget cell(String value, VoidCallback dec, VoidCallback inc, VoidCallback onEdit) => Expanded(
+    Widget cell(String value, VoidCallback dec, VoidCallback inc, VoidCallback onEdit, {VoidCallback? onLongPress}) => Expanded(
           child: FittedBox(
             fit: BoxFit.scaleDown,
             child: StepperControl(
@@ -1147,6 +1275,7 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
               onDec: dec,
               onInc: inc,
               onEdit: onEdit,
+              onLongPress: onLongPress,
             ),
           ),
         );
@@ -1185,12 +1314,50 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
           fit.units,
           (v) => edit(i, v <= 0 ? p.copyWith(autoWeight: true) : p.copyWith(weightKg: fit.fromDisplayWeight(v)))),
     );
+    void shiftReps(int by) {
+      final from = p.reps ?? 10;
+      final next = (from + by).clamp(1, 999);
+      final max = p.repsMax;
+      edit(i, p.copyWith(reps: next, repsMax: max == null ? null : (max + next - from).clamp(next, 999)));
+    }
+
     final reps = cell(
-      p.reps == null ? auto : '${p.reps}',
-      () => edit(i, p.copyWith(reps: ((p.reps ?? 10) - 1).clamp(1, 999))),
-      () => edit(i, p.copyWith(reps: ((p.reps ?? 10) + 1).clamp(1, 999))),
-      () => ask(t.repsTitle, (p.reps ?? 10).toDouble(), 100, 1, 5, '',
-          (v) => edit(i, p.copyWith(reps: v.round().clamp(1, 999)))),
+      p.reps == null ? auto : p.repsLabel!,
+      () => shiftReps(-1),
+      () => shiftReps(1),
+      () async {
+        final v = await askRuler(sheet,
+            title: t.repsTitle,
+            value: (p.reps ?? 10).toDouble(),
+            min: 0,
+            max: 100,
+            step: 1,
+            majorEvery: 5,
+            hint: t.repsRangeHint);
+        if (v == null) return;
+        final next = v.round().clamp(1, 999);
+        final max = p.repsMax;
+        edit(i, p.copyWith(reps: next, clearRange: max != null && max <= next));
+      },
+      onLongPress: () async {
+        final low = p.reps ?? 10;
+        final v = await askRuler(sheet,
+            title: t.repsMaxTitle,
+            value: (p.repsMax ?? low).toDouble(),
+            min: low.toDouble(),
+            max: 100,
+            step: 1,
+            unit: '',
+            majorEvery: 5,
+            clearLabel: p.repsMax == null ? null : t.repsRangeClear);
+        if (v == null) return;
+        if (v.isNaN) {
+          edit(i, p.copyWith(clearRange: true));
+          return;
+        }
+        final max = v.round();
+        edit(i, max > low ? p.copyWith(reps: low, repsMax: max) : p.copyWith(reps: low, clearRange: true));
+      },
     );
     final cardio = mode == 'cardio';
     final step = cardio ? 60 : 15;
@@ -1262,19 +1429,12 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
   }
 
   void _pickGroup(Routine routine) {
-    final gc = context.gc;
     showAppSheet<void>(
       context: context,
+      isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (sheet) => Container(
-        padding: sheetPad(sheet),
-        decoration: sheetDecoration(gc),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+      builder: (sheet) => AppSheet(
           children: [
-            const SheetHandle(),
-            const SizedBox(height: 16),
             SheetTitle(t.routineGroup),
             const SizedBox(height: 14),
             OptionGroup([
@@ -1306,7 +1466,6 @@ class _RoutineEditScreenState extends State<RoutineEditScreen> {
               },
             ),
           ],
-        ),
       ),
     );
   }

@@ -95,9 +95,9 @@ mixin RoutinesState on FitCore, LibraryState {
 
   Map<String, double> routineMuscleSets(Routine r) {
     final out = <String, double>{};
-    for (final ex in routineExercises(r)) {
+    for (final (:slot, :ex) in routineSlots(r)) {
       if (!countsForMuscles(ex.id)) continue;
-      final n = routineSets(r, ex.id).toDouble();
+      final n = routineSets(r, slot).toDouble();
       out[ex.primary] = (out[ex.primary] ?? 0) + n;
       for (final m in ex.secondary) {
         out[m] = (out[m] ?? 0) + n / 2;
@@ -106,14 +106,12 @@ mixin RoutinesState on FitCore, LibraryState {
     return out;
   }
 
-  List<Exercise> routineExercises(Routine r) {
-    final out = <Exercise>[];
-    for (final id in r.exerciseIds) {
-      final e = exerciseById(id);
-      if (e != null) out.add(e);
-    }
-    return out;
-  }
+  List<Exercise> routineExercises(Routine r) => [for (final s in routineSlots(r)) s.ex];
+
+  List<({String slot, Exercise ex})> routineSlots(Routine r) => [
+        for (final slot in r.exerciseIds)
+          if (exerciseById(slotExercise(slot)) case final ex?) (slot: slot, ex: ex),
+      ];
 
   Routine? get todayRoutine => routineOn(DateTime.now());
 
@@ -125,6 +123,13 @@ mixin RoutinesState on FitCore, LibraryState {
     return last;
   }
 
+  int? daysSinceDone(String routineId) {
+    final last = lastDoneOf(routineId);
+    if (last == null) return null;
+    final now = DateTime.now();
+    return DateTime(now.year, now.month, now.day).difference(DateTime(last.year, last.month, last.day)).inDays;
+  }
+
   List<Routine> get activeRoutines => [for (final r in routines) if (!r.archived) r];
 
   List<Routine> get archivedRoutines => [for (final r in routines) if (r.archived) r];
@@ -132,6 +137,17 @@ mixin RoutinesState on FitCore, LibraryState {
   bool showArchivedRoutines = false;
 
   final Set<String> collapsedGroups = {};
+
+  final List<String> groupNames = [];
+
+  void _syncGroupNames() {
+    final order = routineGroups;
+    final rest = [for (final g in groupNames) if (!order.contains(g)) g];
+    groupNames
+      ..clear()
+      ..addAll(order)
+      ..addAll(rest);
+  }
 
   void toggleGroupCollapsed(String group) {
     if (!collapsedGroups.remove(group)) collapsedGroups.add(group);
@@ -145,6 +161,11 @@ mixin RoutinesState on FitCore, LibraryState {
     final to = from + by;
     if (from < 0 || to < 0 || to >= order.length) return;
     order.insert(to, order.removeAt(from));
+    final hidden = [for (final g in groupNames) if (!order.contains(g)) g];
+    groupNames
+      ..clear()
+      ..addAll(order)
+      ..addAll(hidden);
     final rank = {for (var i = 0; i < order.length; i++) order[i]: i};
     final grouped = [for (final r in routines) if (rank.containsKey(r.group)) r]
       ..sort((a, b) => rank[a.group]!.compareTo(rank[b.group]!));
@@ -541,6 +562,20 @@ mixin RoutinesState on FitCore, LibraryState {
     for (final r in activeRoutines) {
       if (r.group.isNotEmpty && !out.contains(r.group)) out.add(r.group);
     }
+    final used = {for (final r in routines) r.group};
+    for (var i = 0; i < groupNames.length; i++) {
+      final g = groupNames[i];
+      if (g.isEmpty || used.contains(g) || out.contains(g)) continue;
+      var at = 0;
+      for (var k = i - 1; k >= 0; k--) {
+        final p = out.indexOf(groupNames[k]);
+        if (p >= 0) {
+          at = p + 1;
+          break;
+        }
+      }
+      out.insert(at, g);
+    }
     return out;
   }
 
@@ -550,7 +585,9 @@ mixin RoutinesState on FitCore, LibraryState {
   void setRoutineGroup(String id, String group) {
     final r = _routine(id);
     if (r == null) return;
+    _syncGroupNames();
     r.group = group.trim();
+    if (r.group.isNotEmpty && !groupNames.contains(r.group)) groupNames.add(r.group);
     _persist();
     notifyListeners();
   }
@@ -571,10 +608,12 @@ mixin RoutinesState on FitCore, LibraryState {
     made.exerciseIds.addAll(source.exerciseIds);
     made.sets.addAll(source.sets);
     made.chained.addAll(source.chained);
+    made.jumped.addAll(source.jumped);
     made.ladders.addAll([for (final l in source.ladders) [...l]]);
     made.plan.addAll({for (final e in source.plan.entries) e.key: [...e.value]});
     made.rest.addAll(source.rest);
     made.alts.addAll({for (final e in source.alts.entries) e.key: [...e.value]});
+    made.exerciseNotes.addAll(source.exerciseNotes);
     made.group = source.group;
     made.color = source.color;
     _persist();
@@ -582,8 +621,30 @@ mixin RoutinesState on FitCore, LibraryState {
     return copy;
   }
 
+  void reorderRoutines(String group, int from, int to) {
+    final slots = [
+      for (var i = 0; i < routines.length; i++)
+        if (routines[i].group == group && !routines[i].archived) i,
+    ];
+    if (from < 0 || from >= slots.length || to < 0 || to >= slots.length || from == to) return;
+    final items = [for (final i in slots) routines[i]];
+    items.insert(to, items.removeAt(from));
+    for (var k = 0; k < slots.length; k++) {
+      routines[slots[k]] = items[k];
+    }
+    _persist();
+    notifyListeners();
+  }
+
   void renameGroup(String from, String to) {
     final name = to.trim();
+    _syncGroupNames();
+    final at = groupNames.indexOf(from);
+    if (name.isEmpty || groupNames.contains(name)) {
+      groupNames.remove(from);
+    } else if (at >= 0) {
+      groupNames[at] = name;
+    }
     for (final r in routines) {
       if (r.group == from) r.group = name;
     }
@@ -593,6 +654,8 @@ mixin RoutinesState on FitCore, LibraryState {
   }
 
   void deleteGroup(String group) {
+    _syncGroupNames();
+    groupNames.remove(group);
     for (final id in [for (final r in routinesInGroup(group)) r.id]) {
       _dropRoutine(id);
     }
@@ -601,6 +664,7 @@ mixin RoutinesState on FitCore, LibraryState {
   }
 
   void deleteRoutine(String id) {
+    _syncGroupNames();
     _dropRoutine(id);
     _persist();
     notifyListeners();
@@ -642,21 +706,37 @@ mixin RoutinesState on FitCore, LibraryState {
   void toggleRoutineExercise(String routineId, String exId) {
     final r = _routine(routineId);
     if (r == null) return;
-    if (r.exerciseIds.remove(exId)) {
-      r.sets.remove(exId);
-      r.plan.remove(exId);
-      r.rest.remove(exId);
-      r.chained.remove(exId);
-      r.alts.remove(exId);
+    final slots = r.slotsOf(slotExercise(exId));
+    if (slots.isNotEmpty) {
+      r.dropSlot(slots.last);
     } else {
-      r.exerciseIds.add(exId);
+      r.exerciseIds.add(slotExercise(exId));
     }
     _persist();
     notifyListeners();
   }
 
+  String addRoutineSlot(String routineId, String exId, {String? like}) {
+    final r = _routine(routineId);
+    if (r == null || exerciseById(exId) == null) return '';
+    final slot = r.freeSlot(exId);
+    r.exerciseIds.add(slot);
+    if (like != null && r.exerciseIds.contains(like)) {
+      if (r.sets[like] case final n?) r.sets[slot] = n;
+      if (r.plan[like] case final p?) r.plan[slot] = List.unmodifiable(p);
+      if (r.rest[like] case final v?) r.rest[slot] = v;
+      if (r.alts[like] case final a?) r.alts[slot] = [...a];
+    }
+    _persist();
+    notifyListeners();
+    return slot;
+  }
+
+  ({int n, int of}) routineRepeat(Routine r, String slot) => r.repeatOf(slot);
+
   List<String>? ladderIn(Routine? r, String exId) {
     if (r == null) return null;
+    exId = slotExercise(exId);
     for (final l in r.ladders) {
       if (l.contains(exId)) return l;
     }
@@ -671,17 +751,22 @@ mixin RoutinesState on FitCore, LibraryState {
   }
 
   String? nextStepIn(Routine? r, String exId) {
+    exId = slotExercise(exId);
     final own = ladderIn(r, exId);
     if (own == null) return nextStepOf(exId);
     final at = own.indexOf(exId);
     return at + 1 < own.length ? own[at + 1] : null;
   }
 
-  int stepIndexIn(Routine? r, String exId) => (ladderIn(r, exId) ?? builtInLadder(exId) ?? const []).indexOf(exId);
+  int stepIndexIn(Routine? r, String exId) {
+    exId = slotExercise(exId);
+    return (ladderIn(r, exId) ?? builtInLadder(exId) ?? const []).indexOf(exId);
+  }
 
   void setLadder(String routineId, String exId, List<String> steps) {
     final r = _routine(routineId);
     if (r == null) return;
+    exId = slotExercise(exId);
     final clean = <String>[];
     for (final id in steps) {
       if (!clean.contains(id) && exerciseById(id) != null) clean.add(id);
@@ -692,26 +777,30 @@ mixin RoutinesState on FitCore, LibraryState {
     notifyListeners();
   }
 
-  void replaceRoutineExercise(String routineId, String from, String to) {
+  String? replaceRoutineExercise(String routineId, String from, String to, {bool beside = false}) {
     final r = _routine(routineId);
-    if (r == null) return;
+    if (r == null) return null;
     final at = r.exerciseIds.indexOf(from);
-    if (at < 0 || r.exerciseIds.contains(to)) return;
-    r.exerciseIds[at] = to;
+    if (at < 0 || slotExercise(to) != to || (!beside && r.hasExercise(to))) return null;
+    final slot = r.freeSlot(to);
+    r.exerciseIds[at] = slot;
     final sets = r.sets.remove(from);
-    if (sets != null) r.sets[to] = sets;
+    if (sets != null) r.sets[slot] = sets;
     final plan = r.plan.remove(from);
-    if (plan != null) r.plan[to] = [for (final p in plan) PlannedSet(kind: p.kind)];
+    if (plan != null) r.plan[slot] = [for (final p in plan) PlannedSet(kind: p.kind)];
     final rest = r.rest.remove(from);
-    if (rest != null) r.rest[to] = rest;
-    if (r.chained.remove(from)) r.chained.add(to);
+    if (rest != null) r.rest[slot] = rest;
+    r.exerciseNotes.remove(from);
+    if (r.chained.remove(from)) r.chained.add(slot);
+    if (r.jumped.remove(from)) r.jumped.add(slot);
     final alts = r.alts.remove(from);
     if (alts != null) {
       final kept = [for (final a in alts) if (a != to) a];
-      if (kept.isNotEmpty) r.alts[to] = kept;
+      if (kept.isNotEmpty) r.alts[slot] = kept;
     }
     _persist();
     notifyListeners();
+    return slot;
   }
 
   static const maxAlts = 3;
@@ -720,7 +809,7 @@ mixin RoutinesState on FitCore, LibraryState {
 
   void toggleRoutineAlt(String routineId, String exId, String altId) {
     final r = _routine(routineId);
-    if (r == null || altId == exId) return;
+    if (r == null || altId == slotExercise(exId)) return;
     final list = [...?r.alts[exId]];
     if (!list.remove(altId)) {
       if (list.length >= maxAlts) list.removeAt(0);
@@ -744,8 +833,12 @@ mixin RoutinesState on FitCore, LibraryState {
     final plan = r.plan[exId];
     final rest = r.rest[exId];
     final chained = r.chained.contains(exId);
+    final jumped = r.jumped.contains(exId);
     final alts = r.alts[exId];
-    toggleRoutineExercise(routineId, exId);
+    final note = r.exerciseNotes[exId];
+    r.dropSlot(exId);
+    _persist();
+    notifyListeners();
     return () {
       final back = _routine(routineId);
       if (back == null || back.exerciseIds.contains(exId)) return;
@@ -754,7 +847,9 @@ mixin RoutinesState on FitCore, LibraryState {
       if (plan != null) back.plan[exId] = plan;
       if (rest != null) back.rest[exId] = rest;
       if (chained) back.chained.add(exId);
+      if (jumped) back.jumped.add(exId);
       if (alts != null) back.alts[exId] = alts;
+      if (note != null) back.exerciseNotes[exId] = note;
       _persist();
       notifyListeners();
     };
@@ -766,13 +861,29 @@ mixin RoutinesState on FitCore, LibraryState {
       final working = planned.where((p) => p.kind != SetKind.warmup).length;
       return working == 0 ? planned.length : working;
     }
-    return r.sets[exId] ?? (modeOf(exId) == 'cardio' ? 1 : kDefaultRoutineSets);
+    return r.sets[exId] ?? (modeOf(slotExercise(exId)) == 'cardio' ? 1 : kDefaultRoutineSets);
   }
 
   List<PlannedSet> plannedSets(Routine r, String exId) => r.plan[exId] ?? const [];
 
   int? routineRest(String? routineId, String exId) =>
       routineId == null ? null : _routine(routineId)?.rest[exId];
+
+  String? routineExerciseNote(String? routineId, String exId) =>
+      routineId == null ? null : _routine(routineId)?.exerciseNotes[exId];
+
+  void setRoutineExerciseNote(String routineId, String exId, String text) {
+    final r = _routine(routineId);
+    if (r == null || !r.exerciseIds.contains(exId)) return;
+    final note = text.trim();
+    if (note.isEmpty) {
+      r.exerciseNotes.remove(exId);
+    } else {
+      r.exerciseNotes[exId] = note;
+    }
+    _persist();
+    notifyListeners();
+  }
 
   void setRoutineRest(String routineId, String exId, int? seconds) {
     final r = _routine(routineId);
@@ -817,7 +928,21 @@ mixin RoutinesState on FitCore, LibraryState {
   void toggleChain(String routineId, String exId) {
     final r = _routine(routineId);
     if (r == null) return;
-    if (!r.chained.remove(exId)) r.chained.add(exId);
+    if (r.chained.remove(exId)) {
+      r.jumped.remove(exId);
+    } else {
+      r.chained.add(exId);
+    }
+    _persist();
+    notifyListeners();
+  }
+
+  bool jumpsToNext(Routine r, String exId) => chainsToNext(r, exId) && r.jumped.contains(exId);
+
+  void toggleJump(String routineId, String exId) {
+    final r = _routine(routineId);
+    if (r == null || !r.chained.contains(exId)) return;
+    if (!r.jumped.remove(exId)) r.jumped.add(exId);
     _persist();
     notifyListeners();
   }
@@ -849,7 +974,9 @@ mixin RoutinesState on FitCore, LibraryState {
     notifyListeners();
   }
 
-  bool routineHas(String routineId, String exId) => _routine(routineId)?.exerciseIds.contains(exId) ?? false;
+  bool routineHas(String routineId, String exId) => _routine(routineId)?.hasExercise(slotExercise(exId)) ?? false;
+
+  int routineCountOf(String routineId, String exId) => _routine(routineId)?.slotsOf(slotExercise(exId)).length ?? 0;
 
   void reorderRoutineExercise(String routineId, int from, int to) {
     final ids = _routine(routineId)?.exerciseIds;
@@ -884,7 +1011,7 @@ mixin RoutinesState on FitCore, LibraryState {
     pushRoute('routine-edit');
   }
 
-  int routinesWith(String exId) => routines.where((r) => r.exerciseIds.contains(exId)).length;
+  int routinesWith(String exId) => routines.where((r) => r.hasExercise(exId)).length;
 
   String routineTitle(Routine r) => r.name.isEmpty ? t.newRoutineName : r.name;
 

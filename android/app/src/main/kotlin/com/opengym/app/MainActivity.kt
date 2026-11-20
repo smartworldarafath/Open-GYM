@@ -20,6 +20,7 @@ import android.view.ViewConfiguration
 import android.view.WindowManager
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.embedding.engine.FlutterShellArgs
 import io.flutter.plugin.common.MethodChannel
 import java.io.File
 import java.io.FileOutputStream
@@ -30,9 +31,34 @@ class MainActivity : FlutterActivity() {
     private var rotaryChannel: MethodChannel? = null
     private var openChannel: MethodChannel? = null
 
+    override fun getFlutterShellArgs(): FlutterShellArgs {
+        val args = super.getFlutterShellArgs()
+        GraphicsMode.starting(this)
+        if (GraphicsMode.compat(this)) args.add(GraphicsMode.DISABLE_IMPELLER)
+        return args
+    }
+
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         val messenger = flutterEngine.dartExecutor.binaryMessenger
+
+        MethodChannel(messenger, "gymmane/graphics").setMethodCallHandler { call, result ->
+            when (call.method) {
+                "state" -> result.success(
+                    mapOf("compat" to GraphicsMode.compat(this), "detected" to GraphicsMode.detected(this)),
+                )
+                "ready" -> {
+                    GraphicsMode.ready(this)
+                    result.success(null)
+                }
+                "set" -> {
+                    result.success(null)
+                    val on = call.argument<Boolean>("compat") ?: false
+                    window.decorView.postDelayed({ GraphicsMode.setAndRestart(this, on) }, 150)
+                }
+                else -> result.notImplemented()
+            }
+        }
 
         MethodChannel(messenger, "gymmane/haptics").setMethodCallHandler { call, result ->
             if (call.method != "buzz") {
@@ -267,7 +293,12 @@ class MainActivity : FlutterActivity() {
         HealthBridge.attach(this, MethodChannel(messenger, HealthBridge.CHANNEL))
         BackupBridge.attach(this, MethodChannel(messenger, BackupBridge.CHANNEL))
         SoundBridge.attach(this, MethodChannel(messenger, SoundBridge.CHANNEL))
+        AppIconBridge.attach(this, MethodChannel(messenger, AppIconBridge.CHANNEL))
+        NfcBridge.attach(this, MethodChannel(messenger, NfcBridge.CHANNEL))
         VoiceBridge.attach(this, MethodChannel(messenger, VoiceBridge.CHANNEL))
+        WearSurfaces.attach(this, MethodChannel(messenger, WearSurfaces.CHANNEL))
+        WatchLinkBridge.attach(this, MethodChannel(messenger, WatchLinkBridge.CHANNEL))
+        QuickTiles.attach(this, MethodChannel(messenger, QuickTiles.CHANNEL))
     }
 
     private fun currentDisplay(): android.view.Display? =
@@ -411,6 +442,7 @@ class MainActivity : FlutterActivity() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (HealthBridge.onPermissionResult(requestCode, grantResults)) return
+        if (WatchLinkBridge.onPermissionResult(requestCode, grantResults)) return
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
@@ -434,6 +466,8 @@ class MainActivity : FlutterActivity() {
     override fun cleanUpFlutterEngine(flutterEngine: FlutterEngine) {
         rotaryChannel = null
         openChannel = null
+        NfcBridge.detach(this)
+        WatchLinkBridge.detach()
         LiveNotifier.dart = null
         HealthBridge.channel = null
         if (isFinishing) LiveNotifier.cancel(this)
@@ -456,7 +490,18 @@ class MainActivity : FlutterActivity() {
         incomingChannel?.invokeMethod("incoming", text)
     }
 
+    override fun onResume() {
+        super.onResume()
+        NfcBridge.resume(this)
+    }
+
+    override fun onPause() {
+        NfcBridge.pause(this)
+        super.onPause()
+    }
+
     private fun takeOpen(intent: Intent?): String? {
+        if (NfcBridge.isToday(intent)) return "nfc/today"
         val route = intent?.getStringExtra(OPEN_EXTRA) ?: return null
         intent.removeExtra(OPEN_EXTRA)
         return route
@@ -464,6 +509,7 @@ class MainActivity : FlutterActivity() {
 
     private fun takeIncoming(intent: Intent?): String? {
         if (intent == null || intent.action == Intent.ACTION_VIEW_PERMISSION_USAGE) return null
+        if (intent.action == android.nfc.NfcAdapter.ACTION_NDEF_DISCOVERED) return null
         val text = when (intent.action) {
             Intent.ACTION_VIEW -> intent.data?.let { readText(it) }
             Intent.ACTION_SEND -> streamOf(intent)?.let { readText(it) }

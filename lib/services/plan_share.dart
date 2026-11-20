@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 class PlanSet {
-  const PlanSet({this.reps, this.weightKg, this.kind = 0, this.sec, this.km});
+  const PlanSet({this.reps, this.repsMax, this.weightKg, this.kind = 0, this.sec, this.km});
   final int? reps;
+  final int? repsMax;
   final double? weightKg;
   final int kind;
   final int? sec;
@@ -15,9 +16,11 @@ class PlanItem {
     this.sets, {
     this.id,
     this.reps,
+    this.repsMax,
     this.weightKg,
     this.restSec,
     this.superset = false,
+    this.jump = false,
     this.plan = const [],
     this.muscle,
     this.equipment,
@@ -26,16 +29,20 @@ class PlanItem {
     this.mode = '',
     this.secondary = const [],
     this.ladder = const [],
+    this.loggingNote = '',
     this.sec,
     this.km,
+    this.kind = 0,
   });
   final String name;
   final int? sets;
   final String? id;
   final int? reps;
+  final int? repsMax;
   final double? weightKg;
   final int? restSec;
   final bool superset;
+  final bool jump;
   final List<PlanSet> plan;
   final String? muscle;
   final List<String> secondary;
@@ -44,8 +51,10 @@ class PlanItem {
   final List<String> steps;
   final String mode;
   final List<String> ladder;
+  final String loggingNote;
   final int? sec;
   final double? km;
+  final int kind;
 }
 
 class PlanRoutine {
@@ -64,6 +73,7 @@ const _weekKeys = ['weeks', 'semanas', 'mesocycle', 'blocks'];
 const _dayKeys = ['days', 'dias', 'weekdays', 'schedule', 'on'];
 const _setKeys = ['sets', 'series', 'setcount'];
 const _repKeys = ['reps', 'repetitions', 'repeticiones', 'rep', 'repeticoes', 'ripetizioni'];
+const _repMaxKeys = ['repsmax', 'maxreps', 'repmax', 'maxrep', 'repsto', 'repsmaximum'];
 const _weightKeys = ['weight', 'weightkg', 'load', 'kg', 'peso', 'carga', 'lbs', 'lb'];
 const _restKeys = ['rest', 'restseconds', 'restsec', 'descanso', 'pause', 'riposo'];
 const _timeKeys = ['time', 'duration', 'seconds', 'sec', 'secs', 'tiempo', 'durationseconds'];
@@ -176,6 +186,14 @@ List<String> _candidates(String raw) {
 
 String _norm(Object? key) => key.toString().toLowerCase().replaceAll(RegExp(r'[^a-z]'), '');
 
+int? _repsMax(Map<Object?, Object?> map, int? low) {
+  final explicit = _int(_value(map, _repMaxKeys));
+  final raw = _value(map, _repKeys);
+  final fromText = raw is String ? RegExp(r'(\d+)\s*(?:-|–|—|to|a)\s*(\d+)').firstMatch(raw)?.group(2) : null;
+  final max = explicit ?? (fromText == null ? null : int.parse(fromText));
+  return max != null && low != null && max > low ? max : null;
+}
+
 Object? _value(Map<Object?, Object?> map, List<String> keys) {
   for (final key in keys) {
     for (final entry in map.entries) {
@@ -184,6 +202,8 @@ Object? _value(Map<Object?, Object?> map, List<String> keys) {
   }
   return null;
 }
+
+bool _flag(Object? v) => v == true || (v is String && v.toLowerCase() == 'true');
 
 String _string(Object? v) => v is String ? v.trim() : (v is num ? '$v' : '');
 
@@ -276,6 +296,7 @@ List<PlanSet> _planSets(Object? raw, bool lb) {
     if (s is! Map<Object?, Object?>) continue;
     out.add(PlanSet(
       reps: _int(_value(s, _repKeys)),
+      repsMax: _repsMax(s, _int(_value(s, _repKeys))),
       weightKg: _weight(_value(s, _weightKeys), lb || _value(s, ['lbs', 'lb']) != null),
       kind: _kind(_value(s, ['type', 'kind', 'tipo', 'settype'])),
       sec: _seconds(_value(s, _timeKeys)),
@@ -302,15 +323,18 @@ List<PlanItem> _items(Object? raw, bool lb) {
     final info = custom is Map<Object?, Object?> ? custom : const <Object?, Object?>{};
     final steps = _value(info, ['steps', 'howto', 'pasos', 'instructions']);
     final superset = _value(entry, ['superset', 'supersetwithnext', 'linked', 'chain']);
+    final jump = _flag(_value(entry, ['jumpset', 'jump']));
     out.add(PlanItem(
       name.isEmpty ? id : name,
       _int(_value(entry, _setKeys)),
       id: id.isEmpty ? null : id,
       reps: _int(_value(entry, _repKeys)),
+      repsMax: _repsMax(entry, _int(_value(entry, _repKeys))),
       weightKg: _weight(_value(entry, _weightKeys), itemLb),
       restSec: _seconds(_value(entry, _restKeys)),
-      superset: superset == true || (superset is String && superset.toLowerCase() == 'true'),
-      plan: _planSets(_value(entry, ['plan', 'setplan', 'setsplan', 'detail']), itemLb),
+      superset: jump || _flag(superset),
+      jump: jump,
+      plan: _planSets(_value(entry, ['plan', 'setplan', 'setsplan', 'detail']) ?? (_value(entry, _setKeys) is List ? _value(entry, _setKeys) : null), itemLb),
       muscle: _string(_value(info, ['muscle', 'primary', 'musculo'])),
       equipment: _string(_value(info, ['equipment', 'material', 'gear'])),
       level: _string(_value(info, ['level', 'difficulty', 'nivel'])),
@@ -324,8 +348,13 @@ List<PlanItem> _items(Object? raw, bool lb) {
         final List list => [for (final s in list.whereType<String>()) if (s.trim().isNotEmpty) s.trim()],
         _ => const [],
       },
+      loggingNote: switch (_value(entry, ['loggingnote'])) {
+        final String note => note.trim(),
+        _ => '',
+      },
       sec: _seconds(_value(entry, _timeKeys)),
       km: _double(_value(entry, _distanceKeys)),
+      kind: _kind(_value(entry, ['type', 'kind', 'settype', 'tipo'])),
     ));
   }
   return _mergeRepeats(out);
@@ -336,25 +365,47 @@ List<PlanSet> _expanded(PlanItem item) {
     final working = item.plan.where((p) => p.kind != 1).length;
     return [
       for (final p in item.plan)
-        PlanSet(reps: p.reps ?? item.reps, weightKg: p.weightKg ?? item.weightKg, kind: p.kind, sec: p.sec ?? item.sec, km: p.km ?? item.km),
+        PlanSet(
+          reps: p.reps ?? item.reps,
+          repsMax: p.reps == null ? item.repsMax : p.repsMax,
+          weightKg: p.weightKg ?? item.weightKg,
+          kind: p.kind,
+          sec: p.sec ?? item.sec,
+          km: p.km ?? item.km,
+        ),
       for (var i = working; i < (item.sets ?? working); i++)
-        PlanSet(reps: item.reps, weightKg: item.weightKg, sec: item.sec, km: item.km),
+        PlanSet(
+          reps: item.reps,
+          repsMax: item.repsMax,
+          weightKg: item.weightKg,
+          kind: item.kind,
+          sec: item.sec,
+          km: item.km,
+        ),
     ];
   }
-  return [for (var i = 0; i < (item.sets ?? 1); i++) PlanSet(reps: item.reps, weightKg: item.weightKg, sec: item.sec, km: item.km)];
+  return [
+    for (var i = 0; i < (item.sets ?? 1); i++)
+      PlanSet(
+        reps: item.reps,
+        repsMax: item.repsMax,
+        weightKg: item.weightKg,
+        kind: item.kind,
+        sec: item.sec,
+        km: item.km,
+      ),
+  ];
 }
 
 List<PlanItem> _mergeRepeats(List<PlanItem> items) {
   String key(PlanItem i) => (i.id ?? i.name).trim().toLowerCase();
-  final seen = <String, int>{};
   final out = <PlanItem>[];
   for (final item in items) {
-    final at = seen[key(item)];
-    if (at == null) {
-      seen[key(item)] = out.length;
+    if (out.isEmpty || key(out.last) != key(item)) {
       out.add(item);
       continue;
     }
+    final at = out.length - 1;
     final first = out[at];
     final plan = [..._expanded(first), ..._expanded(item)];
     out[at] = PlanItem(
@@ -362,9 +413,11 @@ List<PlanItem> _mergeRepeats(List<PlanItem> items) {
       plan.where((p) => p.kind != 1).length,
       id: first.id,
       reps: first.reps ?? item.reps,
+      repsMax: first.repsMax ?? item.repsMax,
       weightKg: first.weightKg ?? item.weightKg,
       restSec: first.restSec ?? item.restSec,
       superset: first.superset || item.superset,
+      jump: first.jump || item.jump,
       plan: plan,
       muscle: first.muscle,
       equipment: first.equipment,
@@ -373,8 +426,10 @@ List<PlanItem> _mergeRepeats(List<PlanItem> items) {
       mode: first.mode,
       secondary: first.secondary,
       ladder: first.ladder,
+      loggingNote: first.loggingNote.isEmpty ? item.loggingNote : first.loggingNote,
       sec: first.sec ?? item.sec,
       km: first.km ?? item.km,
+      kind: first.kind,
     );
   }
   return out;

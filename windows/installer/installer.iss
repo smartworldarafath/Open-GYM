@@ -1,5 +1,5 @@
 #define MyAppName "Open-GYM"
-#define MyAppVersion "1.3.7"
+#define MyAppVersion "1.3.9"
 #define MyAppPublisher "Arafath"
 #define MyAppURL "https://github.com/smartworldarafath/Open-GYM"
 #define MyAppExeName "Open-GYM.exe"

@@ -4,9 +4,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../l10n/l10n.dart';
 import '../models/workout.dart';
@@ -17,6 +15,7 @@ import '../theme/app_theme.dart';
 import '../widgets/glass.dart';
 import '../widgets/liquid_notch.dart';
 import '../widgets/ui_kit.dart';
+import '../services/file_share.dart';
 
 const _sample = '{ "name": "Push", "exercises": [ ... ] }';
 
@@ -24,18 +23,12 @@ Future<void> sharePlan(List<Routine> routines, {String? title}) async {
   if (routines.isEmpty) return;
   final name = title ?? fit.routineTitle(routines.first);
   try {
-    final dir = await getTemporaryDirectory();
     final slug = name
         .toLowerCase()
         .replaceAll(RegExp(r'[^a-z0-9]+'), '-')
         .replaceAll(RegExp(r'^-+|-+$'), '');
-    final file = File('${dir.path}/gymmane-${slug.isEmpty ? 'plan' : slug}.json');
-    await file.writeAsString(fit.exportPlanJson(routines));
-    await SharePlus.instance.share(ShareParams(
-      files: [XFile(file.path, mimeType: 'application/json')],
-      text: '${fit.planSummaryText(routines)}\n\n${t.shareMessage(name)}',
-      subject: name,
-    ));
+    await shareFile('gymmane-${slug.isEmpty ? 'plan' : slug}.json', utf8Bytes(fit.exportPlanJson(routines)),
+        mime: 'application/json', text: '${fit.planSummaryText(routines)}\n\n${t.shareMessage(name)}', subject: name);
   } catch (_) {}
 }
 
@@ -113,12 +106,21 @@ class _PlanImportSheetState extends State<_PlanImportSheet> {
   void _apply({bool copies = false}) {
     final result = fit.applyPlan(_plans, schedule: _schedule, copies: copies);
     final gc = context.gc;
+    final changed = result.routines > 0 || result.notesAdded > 0;
     showNotchToast(
       context,
-      result.routines > 0 ? t.routinesAdded(result.routines) : t.nothingToImport,
-      subtitle: result.routines > 0 ? t.exerciseCount(result.added) : null,
-      icon: result.routines > 0 ? PhosphorIconsFill.checkCircle : PhosphorIconsFill.warningCircle,
-      accent: result.routines > 0 ? gc.sage : gc.warn,
+      result.routines > 0
+          ? t.routinesAdded(result.routines)
+          : result.notesAdded > 0
+          ? t.routineNotesAdded
+          : t.nothingToImport,
+      subtitle: result.routines > 0
+          ? t.exerciseCount(result.added)
+          : result.notesAdded > 0
+          ? t.noteCount(result.notesAdded)
+          : null,
+      icon: changed ? PhosphorIconsFill.checkCircle : PhosphorIconsFill.warningCircle,
+      accent: changed ? gc.sage : gc.warn,
     );
     Navigator.of(context).pop();
   }
@@ -131,6 +133,7 @@ class _PlanImportSheetState extends State<_PlanImportSheet> {
     final preview = _plans.isEmpty ? null : fit.previewPlan(_plans);
     final hasDays = _plans.any((p) => p.days.isNotEmpty);
     final allOwned = preview != null && preview.routines > 0 && preview.owned == preview.routines;
+    final notesOnly = allOwned && preview.hasNewNotes;
     return Container(
       padding: sheetPad(context).add(EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom)),
       constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.9),
@@ -212,7 +215,7 @@ class _PlanImportSheetState extends State<_PlanImportSheet> {
                   ),
                 ),
               ],
-              if (allOwned) ...[
+              if (allOwned && !notesOnly) ...[
                 const SizedBox(height: 12),
                 Row(children: [
                   Icon(PhosphorIconsRegular.checkCircle, size: 16, color: gc.sage),
@@ -224,7 +227,9 @@ class _PlanImportSheetState extends State<_PlanImportSheet> {
                 ]),
               ],
               const SizedBox(height: 16),
-              if (allOwned)
+              if (notesOnly)
+                PrimaryButton(label: t.importRoutineNotes, onTap: _apply)
+              else if (allOwned)
                 GhostButton(
                   label: t.importAsCopy,
                   icon: PhosphorIconsRegular.copy,

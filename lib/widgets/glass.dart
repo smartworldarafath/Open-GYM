@@ -2,6 +2,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
+import '../app/desktop.dart';
 import '../theme/app_colors.dart';
 
 bool blurEffects = true;
@@ -67,16 +68,24 @@ Future<T?> showAppSheet<T>({
   bool isDismissible = true,
   bool enableDrag = true,
   bool useSafeArea = false,
+  double maxWidth = 600,
 }) {
   final nav = Navigator.of(context);
+  final desk = DesktopScope.wideFor(MediaQuery.sizeOf(context).width);
+  final cap = isScrollControlled ? null : 9 / 16;
+  Widget lifted(BuildContext c) =>
+      desk ? builder(c) : _KeyboardLift(capRatio: cap, child: Builder(builder: builder));
+  final WidgetBuilder inner = enableDrag && isDismissible ? (c) => _PullToClose(child: lifted(c)) : lifted;
   return nav.push(_GlassSheetRoute<T>(
-    builder: enableDrag && isDismissible ? (c) => _PullToClose(child: builder(c)) : builder,
-    isScrollControlled: isScrollControlled,
+    builder: desk ? (c) => ClipRRect(borderRadius: BorderRadius.circular(28), child: inner(c)) : inner,
+    isScrollControlled: desk ? isScrollControlled : true,
     backgroundColor: backgroundColor,
-    shape: shape,
+    shape: desk ? RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)) : shape,
+    floating: desk,
     isDismissible: isDismissible,
     enableDrag: enableDrag,
     useSafeArea: useSafeArea,
+    constraints: desk ? BoxConstraints(maxWidth: maxWidth) : null,
     modalBarrierColor: Colors.black.withValues(alpha: 0.38),
     capturedThemes: InheritedTheme.capture(from: context, to: nav.context),
     barrierLabel: MaterialLocalizations.of(context).scrimLabel,
@@ -85,6 +94,7 @@ Future<T?> showAppSheet<T>({
 
 class _GlassSheetRoute<T> extends ModalBottomSheetRoute<T> with _GlassCount<T> {
   _GlassSheetRoute({
+    this.floating = false,
     required super.builder,
     required super.isScrollControlled,
     super.backgroundColor,
@@ -92,10 +102,21 @@ class _GlassSheetRoute<T> extends ModalBottomSheetRoute<T> with _GlassCount<T> {
     super.isDismissible,
     super.enableDrag,
     super.useSafeArea,
+    super.constraints,
     super.modalBarrierColor,
     super.capturedThemes,
     super.barrierLabel,
   });
+
+  final bool floating;
+
+  @override
+  Widget buildPage(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+    final page = super.buildPage(context, animation, secondaryAnimation);
+    return floating
+        ? _KeyboardLift(child: Padding(padding: const EdgeInsets.only(top: 28, bottom: 28), child: page))
+        : page;
+  }
 
   @override
   bool canTransitionTo(TransitionRoute<dynamic> nextRoute) => nextRoute is _GlassSheetRoute;
@@ -118,6 +139,30 @@ class _GlassSheetRoute<T> extends ModalBottomSheetRoute<T> with _GlassCount<T> {
         );
       },
     );
+  }
+}
+
+class _KeyboardLift extends StatelessWidget {
+  const _KeyboardLift({required this.child, this.capRatio});
+
+  final Widget child;
+  final double? capRatio;
+
+  @override
+  Widget build(BuildContext context) {
+    final media = MediaQuery.of(context);
+    final ratio = capRatio;
+    Widget lift(double? maxHeight) => Padding(
+          padding: EdgeInsets.only(bottom: media.viewInsets.bottom),
+          child: MediaQuery(
+            data: media.copyWith(viewInsets: media.viewInsets.copyWith(bottom: 0)),
+            child: maxHeight == null
+                ? child
+                : ConstrainedBox(constraints: BoxConstraints(maxHeight: maxHeight), child: child),
+          ),
+        );
+    if (ratio == null) return lift(null);
+    return LayoutBuilder(builder: (context, box) => lift(box.maxHeight * ratio));
   }
 }
 
@@ -206,6 +251,8 @@ class _GlassDialogRoute<T> extends DialogRoute<T> with _GlassCount<T> {
 }
 
 
+final ValueNotifier<double?> edgeBlurRaster = ValueNotifier(null);
+
 class EdgeBlur extends StatefulWidget {
   const EdgeBlur({super.key, required this.height, this.top = true, this.sigma = 16, this.shade = 1});
 
@@ -229,6 +276,7 @@ class _EdgeBlurState extends State<EdgeBlur> {
   @override
   void initState() {
     super.initState();
+    edgeBlurRaster.addListener(_rerender);
     if (_program != null || !ui.ImageFilter.isShaderFilterSupported) return;
     (_loading ??= ui.FragmentProgram.fromAsset('assets/shaders/edge_fade.frag')).then((p) {
       _program = p;
@@ -236,8 +284,13 @@ class _EdgeBlurState extends State<EdgeBlur> {
     }, onError: (_) {});
   }
 
+  void _rerender() {
+    if (mounted) setState(() {});
+  }
+
   @override
   void dispose() {
+    edgeBlurRaster.removeListener(_rerender);
     _dropShaders();
     super.dispose();
   }
@@ -284,7 +337,7 @@ class _EdgeBlurState extends State<EdgeBlur> {
             if (!blurEffects)
               const SizedBox.shrink()
             else if (program != null)
-              for (final f in _layers(program, MediaQuery.devicePixelRatioOf(context)))
+              for (final f in _layers(program, edgeBlurRaster.value ?? MediaQuery.devicePixelRatioOf(context)))
                 Positioned.fill(
                   child: ClipRect(child: BackdropFilter(filter: f, child: const SizedBox.expand())),
                 )

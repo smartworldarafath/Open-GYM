@@ -1,7 +1,8 @@
-import 'dart:io';
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:flutter/services.dart';
+import 'host.dart';
 
 enum HealthAccess { unsupported, denied, granted }
 
@@ -17,7 +18,7 @@ class HealthSteps {
   }
 
   static Future<bool> takeUsage() async {
-    if (!Platform.isAndroid) return false;
+    if (!onAndroid) return false;
     try {
       return await _channel.invokeMethod<bool>('takeUsage') ?? false;
     } on PlatformException {
@@ -28,7 +29,7 @@ class HealthSteps {
   }
 
   static Future<HealthAccess> access() async {
-    if (!Platform.isAndroid) return HealthAccess.unsupported;
+    if (!onMobile) return HealthAccess.unsupported;
     try {
       final status = await _channel.invokeMethod<String>('status');
       return HealthAccess.values.asNameMap()[status] ?? HealthAccess.unsupported;
@@ -40,7 +41,7 @@ class HealthSteps {
   }
 
   static Future<bool> request() async {
-    if (!Platform.isAndroid) return false;
+    if (!onMobile) return false;
     try {
       return await _channel.invokeMethod<bool>('request') ?? false;
     } on PlatformException {
@@ -51,7 +52,7 @@ class HealthSteps {
   }
 
   static Future<bool> openSettings() async {
-    if (!Platform.isAndroid) return false;
+    if (!onMobile) return false;
     try {
       return await _channel.invokeMethod<bool>('openSettings') ?? false;
     } on PlatformException {
@@ -62,12 +63,9 @@ class HealthSteps {
   }
 
   static Future<Map<DateTime, int>?> read(List<DateTime> days) async {
-    if (days.isEmpty || !Platform.isAndroid) return null;
-    final now = DateTime.now().millisecondsSinceEpoch;
-    final ranges = [
-      for (final day in days)
-        [_start(day), math.max(_start(day) + 1, math.min(_start(DateTime(day.year, day.month, day.day + 1)), now))],
-    ];
+    if (days.isEmpty || !onMobile) return null;
+    final cutoff = onIOS ? DateTime.now() : null;
+    final ranges = [for (final day in days) stepQueryRange(day, cutoff: cutoff)];
     try {
       final counts = await _channel.invokeListMethod<int>('readSteps', {'ranges': ranges});
       if (counts == null || counts.length != days.length) return null;
@@ -79,5 +77,13 @@ class HealthSteps {
     }
   }
 
-  static int _start(DateTime day) => DateTime(day.year, day.month, day.day).millisecondsSinceEpoch;
+  @visibleForTesting
+  static List<int> stepQueryRange(DateTime day, {DateTime? cutoff}) {
+    final start = DateTime(day.year, day.month, day.day).millisecondsSinceEpoch;
+    final end = DateTime(day.year, day.month, day.day + 1).millisecondsSinceEpoch;
+    return [
+      start,
+      if (cutoff == null) end else math.max(start + 1, math.min(end, cutoff.millisecondsSinceEpoch)),
+    ];
+  }
 }

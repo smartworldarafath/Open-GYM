@@ -1,3 +1,6 @@
+import 'dart:io' show Platform;
+
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/widgets.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -5,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'app_localizations.dart';
 import 'catalog_es.dart';
 import 'catalog_it.dart';
+import 'catalog_pt.dart';
 import 'catalog_zh.dart';
 
 export 'app_localizations.dart';
@@ -18,22 +22,26 @@ String get decimalSeparator => _decimalSeparators.putIfAbsent(intlLocale, () {
 
 String decimalText(String s) => s.replaceFirst('.', decimalSeparator);
 
-bool get isRtlLanguage => appLanguage == 'ar' || appLanguage == 'fa';
+const Set<String> kRtlLanguages = {'ar', 'fa', 'ur'};
+
+bool get isRtlLanguage => kRtlLanguages.contains(appLanguage);
 
 String ltr(String s) => isRtlLanguage ? '\u2066$s\u2069' : s;
 
 final _grouped = <String, NumberFormat>{};
 
 String groupedInt(int n) {
-  final locale = appLanguage == 'fa' ? 'en' : intlLocale;
+  final locale = appLanguage == 'fa' || appLanguage == 'bn' ? 'en' : intlLocale;
   return (_grouped[locale] ??= NumberFormat.decimalPattern(locale)).format(n);
 }
 
-const Map<String, Map<String, String>> _catalogNames = {'es': kExerciseNameEs, 'it': kExerciseNameIt, 'zh': kExerciseNameZh};
-const Map<String, Map<String, List<String>>> _catalogSteps = {'es': kExerciseStepsEs, 'it': kExerciseStepsIt, 'zh': kExerciseStepsZh};
+const Map<String, Map<String, String>> _catalogNames = {'es': kExerciseNameEs, 'it': kExerciseNameIt, 'pt': kExerciseNamePt, 'zh': kExerciseNameZh};
+const Map<String, Map<String, List<String>>> _catalogSteps = {'es': kExerciseStepsEs, 'it': kExerciseStepsIt, 'pt': kExerciseStepsPt, 'zh': kExerciseStepsZh};
 
 String appLanguage = 'en';
 AppLocalizations t = lookupAppLocalizations(const Locale('en'));
+
+String health(String text) => !kIsWeb && Platform.isIOS ? text.replaceAll('Health Connect', 'Apple Health') : text;
 
 String _codeOf(Locale l) => l.scriptCode == null ? l.languageCode : '${l.languageCode}_${l.scriptCode}';
 
@@ -103,6 +111,8 @@ extension GymL10n on AppLocalizations {
         'dots' => toolNameDots,
         'wilks' => toolNameWilks,
         'ffmi' => toolNameFfmi,
+        'protein' => toolNameProtein,
+        'water' => toolNameWater,
         _ => toolNameWarmup,
       };
 
@@ -116,6 +126,8 @@ extension GymL10n on AppLocalizations {
         'dots' => toolTitleDots,
         'wilks' => toolTitleWilks,
         'ffmi' => toolTitleFfmi,
+        'protein' => toolTitleProtein,
+        'water' => toolTitleWater,
         _ => toolTitleWarmup,
       };
 
@@ -124,6 +136,8 @@ extension GymL10n on AppLocalizations {
         'cal' => toolHintCal,
         'bf' => toolHintBf,
         'plate' => toolHintPlate,
+        'protein' => toolHintProtein,
+        'water' => toolHintWater,
         _ => toolHintWarmup,
       };
 
@@ -150,6 +164,8 @@ extension GymL10n on AppLocalizations {
         'dots' => toolDescDots,
         'wilks' => toolDescWilks,
         'ffmi' => toolDescFfmi,
+        'protein' => toolDescProtein,
+        'water' => toolDescWater,
         _ => toolDescWarmup,
       };
 
@@ -222,6 +238,8 @@ extension GymL10n on AppLocalizations {
         'arm' => measureArm,
         'forearm' => measureForearm,
         'waist' => measureWaist,
+        'abdomen' => measureAbdomen,
+        'bp' => measureBp,
         'hips' => measureHips,
         'thigh' => measureThigh,
         'calf' => measureCalf,
@@ -248,7 +266,8 @@ extension GymL10n on AppLocalizations {
         'Band' => equipBand,
         'Kettlebell' => equipKettlebell,
         'Rings' => equipRings,
-        _ => equipOther,
+        'Other' => equipOther,
+        _ => id.isEmpty ? equipOther : id,
       };
 
   String exerciseKind(String id) => switch (id) {

@@ -77,6 +77,24 @@ void main() {
       expect(fit.totalSets, 0);
       expect(fit.muscleSetsOver(7), isEmpty);
     });
+
+    test('warm-up 40 kg x 8 does not overwrite est_1rm_kg or working tonnage', () {
+      final warmup = LoggedSet(8, 40, kind: SetKind.warmup);
+      final work = LoggedSet(5, 30);
+      expect(warmup.oneRm, 0);
+      expect(warmup.volume, 0);
+      expect(fit.liftScore('EIeI8Vf', warmup), 0);
+
+      fit.sessions
+        ..add(session(2, [warmup]))
+        ..add(session(1, [warmup, work]));
+
+      final pr = fit.personalRecords.single;
+      expect(pr.oneRm, closeTo(35.0, 0.1));
+      expect(fit.oneRmSeries('EIeI8Vf'), [35.0]);
+      expect(fit.bestRepsSeries('EIeI8Vf'), [5]);
+      expect(fit.totalVolumeKg, 150);
+    });
   });
 
   group('inches users are not fed centimetres', () {
@@ -213,6 +231,27 @@ void main() {
       log(30, 'quads', 100);
       log(50, 'chest', 40);
       expect(fit.weekInsights.length, lessThanOrEqualTo(3));
+    });
+  });
+
+  group('#369 par de mancuernas', () {
+    test('el volumen cuenta las dos, también en lo ya hecho, y se puede quitar', () {
+      final fly = fit.matchExerciseByName('Dumbbell Fly')!.id;
+      fit.sessions.add(LoggedSession(DateTime.now().subtract(const Duration(hours: 2)), 1800,
+          [LoggedExercise(fly, 'Fly', 'chest', [LoggedSet(10, 24), LoggedSet(5, 30, kind: SetKind.warmup)])]));
+      expect(fit.canPair(fly), isTrue);
+      expect(fit.totalVolumeKg, 240);
+      fit.togglePaired(fly);
+      expect(fit.totalVolumeKg, 480);
+      expect(fit.volumeThisWeekKg, 480);
+      expect(fit.personalRecords.single.best, 24, reason: 'el récord sigue siendo el de una mancuerna');
+      fit.togglePaired(fly);
+      expect(fit.totalVolumeKg, 240);
+    });
+
+    test('solo se ofrece en mancuernas con peso', () {
+      expect(fit.canPair(fit.matchExerciseByName('Bench Press')!.id), isFalse);
+      expect(fit.canPair('plank-hold'), isFalse);
     });
   });
 }

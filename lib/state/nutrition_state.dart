@@ -70,6 +70,8 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
       fiber: (kcal * 14 / 1000).round().clamp(15, 60),
       sugar: nutritionGoals.sugar,
       sodium: nutritionGoals.sodium,
+      iron: nutritionGoals.iron,
+      potassium: nutritionGoals.potassium,
     );
   }
 
@@ -106,7 +108,23 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
     final rest = restGoals;
     if (rest == null || isTrainingDay(day)) return activeGoals;
     final a = activeGoals;
-    return rest.copyWith(waterMl: a.waterMl, glassMl: a.glassMl, fiber: a.fiber, sugar: a.sugar, sodium: a.sodium);
+    return rest.copyWith(
+        waterMl: a.waterMl,
+        glassMl: a.glassMl,
+        fiber: a.fiber,
+        sugar: a.sugar,
+        sodium: a.sodium,
+        iron: a.iron,
+        potassium: a.potassium);
+  }
+
+  int ironGoal(NutritionGoals g) => g.iron > 0 ? g.iron : (profile.sex == 'female' ? 18 : 8);
+
+  int potassiumGoal(NutritionGoals g) => g.potassium > 0 ? g.potassium : (profile.sex == 'female' ? 2600 : 3400);
+
+  ({int known, int total}) mineralsCoverage(DateTime day) {
+    final items = entriesOn(day).where((e) => e.total.kcal > 0).toList();
+    return (known: items.where((e) => e.total.hasMinerals).length, total: items.length);
   }
 
   static const double _liftMet = 5;
@@ -374,6 +392,36 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
       if (s.meal == m) return s;
     }
     return null;
+  }
+
+  String mealLabel(Meal m) {
+    final custom = slotOf(m)?.name ?? '';
+    if (custom.isNotEmpty) return custom;
+    return switch (m) {
+      Meal.breakfast => t.mealBreakfast,
+      Meal.lunch => t.mealLunch,
+      Meal.dinner => t.mealDinner,
+      Meal.snacks => t.mealSnacks,
+      _ => t.mealOther,
+    };
+  }
+
+  String amountLabel(double grams, bool liquid) {
+    final unit = liquid ? 'ml' : 'g';
+    if (!isLb) return '${fmt(grams.round().toDouble())} $unit';
+    final oz = liquid ? 29.5735 : 28.3495;
+    return '${fmt((grams / oz * 10).round() / 10)} ${liquid ? 'fl oz' : 'oz'}';
+  }
+
+  String servingLabel(FoodEntry e) {
+    if (e.grams > 0) {
+      return e.cooked > 0
+          ? '${amountLabel(e.shownGrams, e.liquid)} · ${t.cookedLabel.toLowerCase()}'
+          : amountLabel(e.totalGrams, e.liquid);
+    }
+    final serving = foodById(e.foodId)?.serving ?? '';
+    if (serving.isEmpty) return e.servings == 1 ? '' : '${fmt(e.servings)} ×';
+    return '${e.servings == 1 ? '' : '${fmt(e.servings)} × '}$serving';
   }
 
   List<Meal> get mealsShown {
@@ -751,7 +799,7 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
   void updateRecipe(String id, List<FoodEntry> items) {
     final i = recipes.indexWhere((r) => r.id == id);
     if (i < 0 || items.isEmpty) return;
-    recipes[i] = Recipe(id: id, name: recipes[i].name, items: items);
+    recipes[i] = recipes[i].copyWith(items: items);
     _persist();
     notifyListeners();
   }
@@ -835,18 +883,30 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
     return out;
   }
 
-  Recipe? saveRecipe(String name, List<FoodEntry> items) {
+  Recipe? saveRecipe(String name, List<FoodEntry> items, {String photo = ''}) {
     final clean = name.trim();
     if (clean.isEmpty || items.isEmpty) return null;
     final r = Recipe(
       id: _newId('r'),
       name: clean,
       items: [for (final e in items) e.copyWith(id: _newId('e'))],
+      photo: photo,
     );
     recipes.add(r);
     _persist();
     notifyListeners();
     return r;
+  }
+
+  void setRecipePhoto(String id, String photo) {
+    final i = recipes.indexWhere((r) => r.id == id);
+    if (i < 0) return;
+    final old = recipes[i].photo;
+    if (old == photo) return;
+    if (old.isNotEmpty && !isAssetPhoto(old)) MediaStore.delete(old);
+    recipes[i] = recipes[i].copyWith(photo: photo);
+    _persist();
+    notifyListeners();
   }
 
   void renameRecipe(String id, String name) {
@@ -935,6 +995,9 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
 
   void deleteRecipe(String id) {
     archivedRecipes.remove(id);
+    for (final r in recipes) {
+      if (r.id == id && r.photo.isNotEmpty && !isAssetPhoto(r.photo)) MediaStore.delete(r.photo);
+    }
     recipes.removeWhere((r) => r.id == id);
     _persist();
     notifyListeners();
@@ -1562,6 +1625,25 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
     notifyListeners();
   }
 
+  void takeSupplementsOn(DateTime day, List<String> ids) {
+    final key = _dk(day);
+    final taken = supplementsTaken.putIfAbsent(key, () => <String>{});
+    var changed = false;
+    for (final id in ids) {
+      final i = supplements.indexWhere((s) => s.id == id);
+      if (i < 0 || !taken.add(id)) continue;
+      changed = true;
+      final s = supplements[i];
+      final stock = s.stock;
+      if (stock != null) supplements[i] = s.copyWith(stock: math.max(0.0, stock - s.perTake));
+    }
+    if (taken.isEmpty) supplementsTaken.remove(key);
+    if (!changed) return;
+    syncSupplementReminder();
+    _persist();
+    notifyListeners();
+  }
+
   void setSupplementReminder(int? minuteOfDay) {
     supplementReminderMin = minuteOfDay?.clamp(0, 24 * 60 - 1);
     syncSupplementReminder();
@@ -1600,6 +1682,7 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
       for (final d in due)
         (
           at: d.at,
+          ids: [for (final s in d.items) s.id],
           names: [for (final s in d.items) s.name],
           doses: [
             for (final s in d.items)
@@ -1670,6 +1753,22 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
     pushRoute('nutrition');
   }
 
+  Set<String> suppFocus = {};
+  int _suppFocusTicket = 0;
+
+  void openSupplements(List<String> ids) {
+    if (!nutritionBeta) return;
+    if (route != 'nutrition') goNutrition();
+    suppFocus = ids.toSet();
+    final ticket = ++_suppFocusTicket;
+    notifyListeners();
+    Future.delayed(const Duration(seconds: 6), () {
+      if (ticket != _suppFocusTicket) return;
+      suppFocus = {};
+      notifyListeners();
+    });
+  }
+
   void backFromNutrition() => popRoute();
 
   static const fastPresets = [12, 14, 16, 18, 20, 23];
@@ -1709,19 +1808,49 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
     startFast(at: at);
   }
 
-  void endFast() {
+  FastRecord? endFast() {
     final start = fastStart;
-    if (start == null) return;
+    if (start == null) return null;
     final end = DateTime.now();
+    FastRecord? saved;
     if (end.difference(start).inMinutes >= 10) {
-      fasts.add(FastRecord(start, end, fastGoalHours));
-      fasts.sort((a, b) => a.start.compareTo(b.start));
-      if (fasts.length > 200) fasts.removeRange(0, fasts.length - 200);
+      saved = FastRecord(start, end, fastGoalHours);
+      _keepFast(saved);
     }
     fastStart = null;
     _syncFast();
     _persist();
     notifyListeners();
+    return saved;
+  }
+
+  void _keepFast(FastRecord r) {
+    fasts.add(r);
+    fasts.sort((a, b) => a.start.compareTo(b.start));
+    if (fasts.length > 200) fasts.removeRange(0, fasts.length - 200);
+  }
+
+  String? fastProblem(DateTime start, DateTime end, {FastRecord? editing}) {
+    if (end.isAfter(DateTime.now().add(const Duration(minutes: 1)))) return 'future';
+    if (!end.isAfter(start)) return 'order';
+    if (end.difference(start).inMinutes < 10) return 'short';
+    final live = fastStart;
+    if (live != null && end.isAfter(live)) return 'overlap';
+    for (final r in fasts) {
+      if (identical(r, editing)) continue;
+      if (start.isBefore(r.end) && end.isAfter(r.start)) return 'overlap';
+    }
+    return null;
+  }
+
+  FastRecord? saveFast(DateTime start, DateTime end, {FastRecord? replacing}) {
+    if (fastProblem(start, end, editing: replacing) != null) return null;
+    if (replacing != null && !fasts.remove(replacing)) return null;
+    final r = FastRecord(start, end, replacing?.goalHours ?? fastGoalHours);
+    _keepFast(r);
+    _persist();
+    notifyListeners();
+    return r;
   }
 
   void cancelFast() {
@@ -1869,7 +1998,10 @@ mixin NutritionState on FitCore, ToolsState, StatsState {
     weightAim = const {'lose', 'gain', 'hold'}.contains(aim) ? aim as String : '';
     recipes
       ..clear()
-      ..addAll(list('recipes').map(Recipe.fromJson).where((r) => r.id.isNotEmpty && r.items.isNotEmpty));
+      ..addAll(list('recipes').map(Recipe.fromJson).where((r) => r.id.isNotEmpty && r.items.isNotEmpty).map((r) {
+        if (restored == null || r.photo.isEmpty || isAssetPhoto(r.photo)) return r;
+        return r.copyWith(photo: restored[r.photo] ?? '');
+      }));
     archivedRecipes
       ..clear()
       ..addAll([for (final id in (j?['recArch'] as List?) ?? const []) if (id is String && recipes.any((r) => r.id == id)) id]);

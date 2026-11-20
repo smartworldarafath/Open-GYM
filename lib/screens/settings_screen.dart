@@ -5,17 +5,18 @@ import 'dart:math' as math;
 import 'dart:ui' as ui;
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../app/desktop.dart';
 import '../l10n/l10n.dart';
 import '../models/profile.dart';
+import '../services/graphics_mode.dart';
 import '../services/alarm_store.dart';
 import '../services/auto_backup.dart';
 import '../services/backup_zip.dart';
@@ -28,6 +29,15 @@ import '../services/workout_import.dart';
 import '../state/fit_state.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
+import '../services/app_icon.dart';
+import '../services/nfc_tags.dart';
+import '../services/quick_tiles.dart';
+import '../services/watch_link.dart';
+import 'help_topics.dart';
+import '../widgets/app_icon_sheet.dart';
+import '../widgets/nfc_sheet.dart';
+import '../widgets/quick_tiles_sheet.dart';
+import '../widgets/watch_sheet.dart';
 import '../widgets/auto_backup_sheet.dart';
 import '../widgets/body_rulers.dart';
 import '../widgets/dialogs.dart';
@@ -55,6 +65,12 @@ import '../widgets/widget_showcase.dart';
 import 'profile_screen.dart';
 import 'strava_sheet.dart';
 
+import '../services/host.dart';
+import '../services/file_share.dart';
+import '../services/server/server_link.dart';
+import '../widgets/server_card.dart';
+import 'about_screen.dart';
+
 const _kRepoUrl = 'https://github.com/smartworldarafath/Open-GYM';
 const _kBugUrl = '$_kRepoUrl/issues/new?labels=bug';
 const _kFeatureUrl = '$_kRepoUrl/issues/new?labels=enhancement';
@@ -69,7 +85,47 @@ class SettingsScreen extends StatelessWidget {
     final gc = context.gc;
     final id = section;
     WidgetShowcase.warm(context);
-    if (id == null) return _SettingsHome(screen: this);
+    if (id == null && DesktopScope.of(context)) {
+      _deskOn = true;
+      return Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        SizedBox(width: 400, child: _SettingsHome(screen: this)),
+        const SizedBox(width: 30),
+        Expanded(
+          child: ValueListenableBuilder<String>(
+            valueListenable: _desk,
+            builder: (context, sec, _) => RiseScope(
+              id: 'settings-$sec',
+              once: false,
+              child: SingleChildScrollView(
+                key: ValueKey(sec),
+                clipBehavior: Clip.none,
+                padding: const EdgeInsets.fromLTRB(0, 112, 32, 48),
+                child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                  Padding(
+                    padding: const EdgeInsetsDirectional.only(start: 4, bottom: 18),
+                    child: Text(titleCase(_sectionTitle(sec)), style: AppTheme.f(24, weight: FontWeight.w800, color: gc.text)),
+                  ),
+                  if (sec == 'about')
+                    Align(
+                      alignment: AlignmentDirectional.topStart,
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 720),
+                        child: const AboutScreen(embedded: true),
+                      ),
+                    )
+                  else
+                    ...riseAll(_sectionBody(context, gc, sec)),
+                ]),
+              ),
+            ),
+          ),
+        ),
+      ]);
+    }
+    if (id == null) {
+      _deskOn = false;
+      return _SettingsHome(screen: this);
+    }
     return RiseScope(
       id: 'settings-$id',
       once: false,
@@ -168,6 +224,10 @@ class SettingsScreen extends StatelessWidget {
                     SegOption('kg', fit.units == 'kg', () => fit.setUnits('kg')),
                     SegOption('lb', fit.units == 'lb', () => fit.setUnits('lb')),
                   ], glass: true)),
+                  _prefRow(gc, PhosphorIconsRegular.ruler, t.lengthUnitsLabel, SegToggle([
+                    SegOption('cm', !fit.isInches, () => fit.setLengthUnits('cm')),
+                    SegOption('in', fit.isInches, () => fit.setLengthUnits('in')),
+                  ], glass: true)),
                   _choiceRow(
                     context,
                     gc,
@@ -211,6 +271,24 @@ class SettingsScreen extends StatelessWidget {
                       ]),
                     ),
                   ),
+                  if (AppIcon.available)
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () => showAppIconSheet(context),
+                      child: _prefRow(
+                        gc,
+                        PhosphorIconsRegular.appWindow,
+                        t.appIcon,
+                        Row(mainAxisSize: MainAxisSize.min, children: [
+                          ValueListenableBuilder<String>(
+                            valueListenable: AppIcon.current,
+                            builder: (_, _, _) => AppIconThumb(AppIcon.style, size: 26),
+                          ),
+                          const SizedBox(width: 8),
+                          Icon(PhosphorIconsRegular.caretRight, size: 15, color: gc.textTertiary),
+                        ]),
+                      ),
+                    ),
 
             GestureDetector(
               behavior: HitTestBehavior.opaque,
@@ -309,6 +387,60 @@ class SettingsScreen extends StatelessWidget {
                     ),
                     hint: t.miniRestHint,
                   ),
+                  _prefRow(
+                    gc,
+                    PhosphorIconsRegular.timer,
+                    t.changeRest,
+                    StepperControl(
+                      value: fit.changeRestSeconds == 0 ? t.restOff : clockLabel(fit.changeRestSeconds),
+                      minWidth: 48,
+                      btnSize: 28,
+                      gap: 10,
+                      fontSize: 14,
+                      onDec: () => fit.setChangeRest(fit.changeRestSeconds - 15),
+                      onInc: () => fit.setChangeRest(fit.changeRestSeconds == 0 ? fit.restSeconds : fit.changeRestSeconds + 15),
+                      onEdit: () async {
+                        final v = await askRuler(context,
+                            title: t.changeRest,
+                            value: fit.changeRestSeconds.toDouble(),
+                            min: 0,
+                            max: 900,
+                            step: 5,
+                            majorEvery: 6,
+                            format: (v) => clockLabel(v.round()),
+                            tickLabel: (v) => clockLabel(v.round()));
+                        if (v != null) fit.setChangeRest(v.round());
+                      },
+                    ),
+                    hint: t.changeRestHint,
+                  ),
+                  _prefRow(
+                    gc,
+                    PhosphorIconsRegular.arrowsLeftRight,
+                    t.sideRest,
+                    StepperControl(
+                      value: fit.sideRestSeconds == 0 ? t.restOff : clockLabel(fit.sideRestSeconds),
+                      minWidth: 48,
+                      btnSize: 28,
+                      gap: 10,
+                      fontSize: 14,
+                      onDec: () => fit.setSideRest(fit.sideRestSeconds - 5),
+                      onInc: () => fit.setSideRest(fit.sideRestSeconds == 0 ? 15 : fit.sideRestSeconds + 5),
+                      onEdit: () async {
+                        final v = await askRuler(context,
+                            title: t.sideRest,
+                            value: fit.sideRestSeconds.toDouble(),
+                            min: 0,
+                            max: 300,
+                            step: 5,
+                            majorEvery: 6,
+                            format: (v) => clockLabel(v.round()),
+                            tickLabel: (v) => clockLabel(v.round()));
+                        if (v != null) fit.setSideRest(v.round());
+                      },
+                    ),
+                    hint: t.sideRestHint,
+                  ),
           ]),
           _subhead(gc, t.settingsDuring),
           _card(gc, [
@@ -376,6 +508,12 @@ class SettingsScreen extends StatelessWidget {
                   ),
                   GestureDetector(
                     behavior: HitTestBehavior.opaque,
+                    onTap: fit.toggleAutoHold,
+                    child: _prefRow(gc, PhosphorIconsRegular.hourglassMedium, t.autoHold,
+                        TinySwitch(on: fit.autoHold), hint: t.autoHoldHint),
+                  ),
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
                     onTap: fit.toggleStartCountdown,
                     child: _prefRow(gc, PhosphorIconsRegular.timer, t.countdownSetting,
                         TinySwitch(on: fit.startCountdown), hint: t.countdownHint),
@@ -409,6 +547,35 @@ class SettingsScreen extends StatelessWidget {
                         hint: t.voiceSettingHint,
                         badge: BetaTag(t.sectionBeta, small: true)),
                   ),
+                  if (NfcTags.available)
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () => showNfcSheet(context),
+                      child: _prefRow(
+                        gc,
+                        PhosphorIconsRegular.contactlessPayment,
+                        t.nfcRow,
+                        Row(mainAxisSize: MainAxisSize.min, children: [
+                          Text(fit.nfcTag ? t.nfcOn : t.nfcOff,
+                              style: AppTheme.f(13, weight: FontWeight.w600, color: gc.textSecondary)),
+                          const SizedBox(width: 6),
+                          Icon(PhosphorIconsRegular.caretRight, size: 15, color: gc.textTertiary),
+                        ]),
+                        hint: t.nfcRowHint,
+                      ),
+                    ),
+                  if (QuickTiles.available)
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () => showQuickTilesSheet(context),
+                      child: _prefRow(
+                        gc,
+                        PhosphorIconsRegular.squaresFour,
+                        t.qsRow,
+                        Icon(PhosphorIconsRegular.caretRight, size: 15, color: gc.textTertiary),
+                        hint: t.qsRowHint,
+                      ),
+                    ),
           ]),
           _subhead(gc, t.routines),
           _card(gc, [
@@ -486,6 +653,7 @@ class SettingsScreen extends StatelessWidget {
       case 'alerts':
         return [
           _card(gc, [
+                  if (!kIsWeb)
                   GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () => _editTrainReminder(context),
@@ -509,6 +677,7 @@ class SettingsScreen extends StatelessWidget {
                       hint: t.trainReminderRowHint,
                     ),
                   ),
+                  if (onAndroid)
                   GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () => showAppSheet<void>(
@@ -531,6 +700,7 @@ class SettingsScreen extends StatelessWidget {
                       hint: t.notifSoundRowHint,
                     ),
                   ),
+                  if (!kIsWeb)
                   GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () => _editAlarmSound(context),
@@ -572,11 +742,17 @@ class SettingsScreen extends StatelessWidget {
                   ),
                   GestureDetector(
                     behavior: HitTestBehavior.opaque,
+                    onTap: fit.toggleRestGlow,
+                    child: _prefRow(gc, PhosphorIconsRegular.sunDim, t.restGlowSetting,
+                        TinySwitch(on: fit.restGlow), hint: t.restGlowHint),
+                  ),
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
                     onTap: fit.toggleToastSound,
                     child: _prefRow(gc, PhosphorIconsRegular.bellSimple, t.toastSoundSetting,
                         TinySwitch(on: fit.toastSound), hint: t.toastSoundHint),
                   ),
-                  if (!fit.alarmAllowed) ...[
+                  if (!kIsWeb && !fit.alarmAllowed) ...[
                     const SizedBox(height: 14),
                     _alarmWarning(context, gc),
                     const SizedBox(height: 14),
@@ -609,7 +785,7 @@ class SettingsScreen extends StatelessWidget {
                             const SizedBox(width: 6),
                             Icon(PhosphorIconsBold.caretRight, size: 14, color: gc.textTertiary),
                           ]),
-                          hint: t.healthSettingHint),
+                          hint: health(t.healthSettingHint)),
                     ),
                   GestureDetector(
                     behavior: HitTestBehavior.opaque,
@@ -637,6 +813,14 @@ class SettingsScreen extends StatelessWidget {
                     child: _prefRow(gc, PhosphorIconsRegular.forkKnife, t.nutritionBeta,
                         TinySwitch(on: fit.nutritionBeta),
                         hint: t.nutritionBetaHint,
+                        badge: BetaTag(t.sectionBeta, small: true)),
+                  ),
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () => fit.setRecoveryOn(!fit.recoveryOn),
+                    child: _prefRow(gc, PhosphorIconsRegular.thermometerSimple, t.recoveryTitle,
+                        TinySwitch(on: fit.recoveryOn),
+                        hint: t.recoverySettingHint,
                         badge: BetaTag(t.sectionBeta, small: true)),
                   ),
 
@@ -693,6 +877,10 @@ class SettingsScreen extends StatelessWidget {
         ];
       case 'data':
         return [
+          if (kIsWeb && ServerLink.instance.available) ...[
+            const ServerCard(),
+            const SizedBox(height: 12),
+          ],
           ImportCard(onTap: () => _openImportApps(context)),
           const SizedBox(height: 12),
           _linkGroup(gc, [
@@ -702,10 +890,11 @@ class SettingsScreen extends StatelessWidget {
               (PhosphorIconsRegular.downloadSimple, t.importBackup, () => _importBackup(context)),
               if (AutoBackup.instance.supported)
                 (PhosphorIconsRegular.clockCounterClockwise, t.autoBackup, () => showAutoBackupSheet(context)),
+              if (WatchLink.instance.available) (PhosphorIconsRegular.watch, t.watchRow, () => showWatchSheet(context)),
               (PhosphorIconsRegular.export, t.stravaRow, () => showStravaSheet(context)),
               (PhosphorIconsRegular.barbell, t.clearWorkouts, () => _clearWorkouts(context)),
               (PhosphorIconsRegular.trash, t.resetData, () => _resetAll(context)),
-          ], danger: AutoBackup.instance.supported ? 6 : 5),
+          ], danger: (AutoBackup.instance.supported ? 6 : 5) + (WatchLink.instance.available ? 1 : 0)),
         ];
       default:
         return [
@@ -761,10 +950,16 @@ class SettingsScreen extends StatelessWidget {
         'widgets' => t.sectionWidgets,
         'beta' => t.sectionBeta,
         'data' => t.sectionData,
+        'about' => t.aboutGymmane,
         _ => titleCase(t.support),
       };
 
   static String sectionTitleOf(String id) => _sectionTitle(id);
+
+  List<(String, String)> get searchRows => [
+        for (final c in _categories())
+          for (final r in c.rows) (c.id, r.$1),
+      ];
 
   List<_Category> _categories() {
     const r = PhosphorIconsRegular.gearSix;
@@ -777,18 +972,24 @@ class SettingsScreen extends StatelessWidget {
         (t.heatRangeSetting, PhosphorIconsRegular.calendarDots),
         (t.heatmapLabelsSetting, PhosphorIconsRegular.gridNine),
         (t.background, PhosphorIconsRegular.image),
+        if (AppIcon.available) (t.appIcon, PhosphorIconsRegular.appWindow),
         (t.perfSetting, PhosphorIconsRegular.lightning),
         (t.textSizeSetting, PhosphorIconsRegular.textAa),
       ]),
       _Category('training', PhosphorIconsRegular.barbell, _sectionTitle('training'), [
         (t.restTimer, PhosphorIconsRegular.timer),
         (t.miniRest, PhosphorIconsRegular.timer),
+        (t.changeRest, PhosphorIconsRegular.timer),
+        (t.sideRest, PhosphorIconsRegular.arrowsLeftRight),
         (t.effortSetting, PhosphorIconsRegular.gauge),
         (t.weightStepSetting, PhosphorIconsRegular.barbell),
         (t.autoProgressSetting, PhosphorIconsRegular.trendUp),
         (t.deloadSetting, PhosphorIconsRegular.feather),
         (t.voiceSetting, PhosphorIconsRegular.waveform),
+        if (NfcTags.available) (t.nfcRow, PhosphorIconsRegular.contactlessPayment),
+        if (QuickTiles.available) (t.qsRow, PhosphorIconsRegular.squaresFour),
         (t.autoAdvance, PhosphorIconsRegular.skipForward),
+        (t.autoHold, PhosphorIconsRegular.hourglassMedium),
         (t.countdownSetting, PhosphorIconsRegular.timer),
         (t.keepScreenOn, PhosphorIconsRegular.sun),
         (t.checkInSetting, PhosphorIconsRegular.moon),
@@ -806,6 +1007,7 @@ class SettingsScreen extends StatelessWidget {
         (t.notifSoundSetting, PhosphorIconsRegular.musicNotes),
         (t.alarmSound, PhosphorIconsRegular.speakerHigh),
         (t.alarmStyleTitle, PhosphorIconsRegular.vibrate),
+        (t.restGlowSetting, PhosphorIconsRegular.sunDim),
         (t.toastSoundSetting, PhosphorIconsRegular.bellSimple),
       ]),
       _Category('home', PhosphorIconsRegular.house, _sectionTitle('home'), [
@@ -813,12 +1015,12 @@ class SettingsScreen extends StatelessWidget {
         (t.homeRecommended, PhosphorIconsRegular.sparkle),
         (t.homeRoutines, PhosphorIconsRegular.folders),
         (t.homeWeekStats, PhosphorIconsRegular.chartBar),
-        (t.stepsSetting, PhosphorIconsRegular.footprints),
+        (health(t.stepsSetting), PhosphorIconsRegular.footprints),
         (t.healthSetting, PhosphorIconsRegular.heartbeat),
         (t.gamificationSetting, PhosphorIconsRegular.medal),
         (t.gymPass, PhosphorIconsRegular.qrCode),
       ]),
-      if (Platform.isAndroid || Platform.isIOS)
+      if (onMobile)
         _Category('widgets', PhosphorIconsRegular.squaresFour, _sectionTitle('widgets'), [
           (t.addActivityWidget, PhosphorIconsRegular.squaresFour),
           (t.addStatsWidget, PhosphorIconsRegular.chartBar),
@@ -828,6 +1030,7 @@ class SettingsScreen extends StatelessWidget {
         ]),
       _Category('beta', PhosphorIconsRegular.flask, _sectionTitle('beta'), [
         (t.nutritionBeta, PhosphorIconsRegular.forkKnife),
+        (t.recoveryTitle, PhosphorIconsRegular.thermometerSimple),
       ]),
       _Category('data', PhosphorIconsRegular.database, _sectionTitle('data'), [
         (t.exportCsv, PhosphorIconsRegular.fileCsv),
@@ -835,6 +1038,7 @@ class SettingsScreen extends StatelessWidget {
         (t.exportBackup, PhosphorIconsRegular.fileZip),
         (t.importBackup, PhosphorIconsRegular.downloadSimple),
         (t.autoBackup, PhosphorIconsRegular.clockCounterClockwise),
+        if (WatchLink.instance.available) (t.watchRow, PhosphorIconsRegular.watch),
         (t.importFromApp, PhosphorIconsRegular.arrowSquareIn),
         (t.stravaRow, PhosphorIconsRegular.export),
         (t.clearWorkouts, PhosphorIconsRegular.barbell),
@@ -850,7 +1054,18 @@ class SettingsScreen extends StatelessWidget {
     ];
   }
 
-  static void _openCategory(String id) => id == 'about' ? fit.goAbout() : fit.pushRoute('preferences/$id');
+  static final ValueNotifier<String> _desk = ValueNotifier('general');
+  static bool _deskOn = false;
+
+  static void _openCategory(String id) {
+    if (_deskOn) {
+      _desk.value = id;
+    } else if (id == 'about') {
+      fit.goAbout();
+    } else {
+      fit.pushRoute('preferences/$id');
+    }
+  }
 
   Widget _prefRow(GymColors gc, IconData icon, String label, Widget control, {String? hint, Widget? badge}) {
     if (hint == null) {
@@ -1001,6 +1216,14 @@ class SettingsScreen extends StatelessWidget {
         _ => t.perfCustom,
       };
 
+  Future<void> _switchGraphics(BuildContext context) async {
+    final ok = await askConfirm(context,
+        title: t.gfxRestartTitle, body: t.gfxRestartBody, confirmLabel: t.gfxRestart);
+    if (!ok) return;
+    fit.persistNow();
+    await GraphicsMode.restartWith(!GraphicsMode.compat);
+  }
+
   void _performanceSheet(BuildContext context) {
     fit.readDisplay();
     showAppSheet<void>(
@@ -1060,6 +1283,9 @@ class SettingsScreen extends StatelessWidget {
                       () => fit.setHighRefresh(!fit.highRefresh)),
                 toggle(PhosphorIconsRegular.waveSine, t.calmMotionSetting, t.calmMotionHint, fit.calmMotion,
                     () => fit.setCalmMotion(!fit.calmMotion)),
+                if (GraphicsMode.available)
+                  toggle(PhosphorIconsRegular.textAa, t.gfxCompat, t.gfxCompatHint, GraphicsMode.compat,
+                      () => _switchGraphics(sheet)),
               ]),
             ),
           ]);
@@ -1135,14 +1361,9 @@ class SettingsScreen extends StatelessWidget {
       _snack(context, t.nothingToExport);
       return;
     }
-    final dir = await getTemporaryDirectory();
     final stamp = DateTime.now().toIso8601String().split('T').first;
-    final file = File('${dir.path}/gymmane-workouts-$stamp.csv');
-    await file.writeAsString(fit.exportCsv());
-    if (!context.mounted) return;
-    await SharePlus.instance.share(
-      ShareParams(files: [XFile(file.path)], subject: 'GymMane workouts'),
-    );
+    await shareFile('gymmane-workouts-$stamp.csv', utf8Bytes(fit.exportCsv()),
+        mime: 'text/csv', subject: 'GymMane workouts');
   }
 
   Future<void> _clearWorkouts(BuildContext context) async {
@@ -1174,14 +1395,10 @@ class SettingsScreen extends StatelessWidget {
   }
 
   Future<void> _exportBackup(BuildContext context) async {
-    final dir = await getTemporaryDirectory();
     final stamp = DateTime.now().toIso8601String().split('T').first;
-    final file = File('${dir.path}/gymmane-backup-$stamp.zip');
-    await file.writeAsBytes(await buildBackupZip(), flush: true);
+    final zip = await buildBackupZip();
     if (!context.mounted) return;
-    await SharePlus.instance.share(
-      ShareParams(files: [XFile(file.path)], subject: 'GymMane backup'),
-    );
+    await shareFile('gymmane-backup-$stamp.zip', zip, mime: 'application/zip', subject: 'GymMane backup');
   }
 
   Future<void> _importBackup(BuildContext context) async {
@@ -1283,8 +1500,11 @@ class SettingsScreen extends StatelessWidget {
                       ('Hevy', 'workout_data.csv'),
                       ('Strong', 'strong.csv'),
                       ('Lyfta', 'LyftaExport.csv'),
+                      ('Liftosaur', '.csv'),
+                      ('JEFIT', '.csv'),
+                      ('StrongLifts', '.csv'),
                       ('FitNotes', '.fitnotes'),
-                      ('openGym', 'opengym-backup.json'),
+                      ('openGym', '.json · .zip'),
                       ('CSV', ''),
                     ].indexed) ...[
                       if (i > 0) Divider(height: 1, thickness: 1, indent: 16, endIndent: 16, color: gc.border),
@@ -1381,7 +1601,7 @@ class SettingsScreen extends StatelessWidget {
     String? raw;
     try {
       if (bytes.length > 2 && bytes[0] == 0x50 && bytes[1] == 0x4B) {
-        raw = weightCsvFromZip(bytes);
+        raw = openGymBackupFromZip(bytes) ?? weightCsvFromZip(bytes);
         if (raw == null) {
           _snack(context, t.importZipNoWeights);
           return;
@@ -2496,6 +2716,7 @@ class _SettingsHomeState extends State<_SettingsHome> {
   final _query = TextEditingController();
   final _focus = FocusNode();
   final _scroll = ScrollController();
+  String? _openHelp;
   static const _span = 96.0;
   static const _back = 36.0;
   static const _pill = 52.0;
@@ -2556,6 +2777,10 @@ class _SettingsHomeState extends State<_SettingsHome> {
           for (final r in c.rows)
             if (_plain(r.$1).contains(q) || _plain(c.title).contains(q)) (c, r.$1, r.$2),
     ];
+    final topics = searching ? helpTopics() : const <HelpTopic>[];
+    final asked = q.isEmpty
+        ? [for (final id in kHelpCommon) ...topics.where((h) => h.id == id)]
+        : topics.where((h) => h.matches(_query.text)).toList();
 
     final pad = MediaQuery.paddingOf(context).top;
     final titleTop = pad + 12 + _back + 18;
@@ -2589,7 +2814,7 @@ class _SettingsHomeState extends State<_SettingsHome> {
                     ),
                   ),
                   child: searching
-                      ? _results(gc, hits, q.isEmpty)
+                      ? _results(gc, cats, hits, asked, q.isEmpty)
                       : Column(
                           key: const ValueKey('cats'),
                           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -2774,13 +2999,25 @@ class _SettingsHomeState extends State<_SettingsHome> {
   }
 
   Widget _bubble(GymColors gc, _Category c) {
+    return ValueListenableBuilder<String>(
+      valueListenable: SettingsScreen._desk,
+      builder: (context, sec, _) => _bubbleBody(gc, c, SettingsScreen._deskOn && sec == c.id),
+    );
+  }
+
+  Widget _bubbleBody(GymColors gc, _Category c, bool on) {
     return Pressable(
       onTap: () => _go(c, null),
       scale: 0.975,
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
         height: 64,
         padding: const EdgeInsets.symmetric(horizontal: 12),
-        decoration: BoxDecoration(color: gc.bgRaised, borderRadius: BorderRadius.circular(22)),
+        decoration: BoxDecoration(
+          color: gc.bgRaised,
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(color: on ? gc.text.withValues(alpha: 0.55) : Colors.transparent, width: 1.4),
+        ),
         child: Row(
           children: [
             _circle(gc, c.icon),
@@ -2799,17 +3036,138 @@ class _SettingsHomeState extends State<_SettingsHome> {
     );
   }
 
-  Widget _results(GymColors gc, List<(_Category, String, IconData)> hits, bool empty) {
-    if (empty) return const SizedBox(key: ValueKey('blank'), height: 200);
-    if (hits.isEmpty) {
+  void _goHelp(List<_Category> cats, HelpTopic h) {
+    final section = h.section;
+    if (section != null) {
+      final c = cats.where((c) => c.id == section).firstOrNull;
+      if (c != null) _go(c, h.row);
+      return;
+    }
+    _focus.unfocus();
+    h.go?.call();
+  }
+
+  Widget _helpLabel(GymColors gc, String text) => Padding(
+        padding: const EdgeInsets.fromLTRB(4, 6, 0, 10),
+        child: Text(text.toUpperCase(),
+            style: AppTheme.f(10.5, weight: FontWeight.w700, color: gc.textTertiary, letterSpacing: 1.4)),
+      );
+
+  Widget _helpGroup(GymColors gc, List<_Category> cats, List<HelpTopic> list) => Container(
+        decoration: BoxDecoration(color: gc.bgRaised, borderRadius: BorderRadius.circular(22)),
+        clipBehavior: Clip.antiAlias,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            for (var i = 0; i < list.length; i++) _helpRow(gc, cats, list[i], last: i == list.length - 1),
+          ],
+        ),
+      );
+
+  Widget _helpRow(GymColors gc, List<_Category> cats, HelpTopic h, {required bool last}) {
+    final open = _openHelp == h.id;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        border: last ? null : Border(bottom: BorderSide(color: gc.border.withValues(alpha: 0.6))),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Semantics(
+            button: true,
+            expanded: open,
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                HapticFeedback.selectionClick();
+                setState(() => _openHelp = open ? null : h.id);
+              },
+              child: Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(16, 15, 14, 15),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(h.question,
+                          style: AppTheme.f(14.5, weight: FontWeight.w600, color: gc.text, height: 1.3)),
+                    ),
+                    const SizedBox(width: 12),
+                    AnimatedRotation(
+                      turns: open ? 0.5 : 0,
+                      duration: const Duration(milliseconds: 220),
+                      curve: Curves.easeOutCubic,
+                      child: Icon(PhosphorIconsRegular.caretDown, size: 15, color: gc.textTertiary),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          AnimatedSize(
+            duration: const Duration(milliseconds: 240),
+            curve: Curves.easeOutCubic,
+            alignment: Alignment.topCenter,
+            child: !open
+                ? const SizedBox(width: double.infinity)
+                : Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 6),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(h.answer, style: AppTheme.s(13, color: gc.textSecondary, height: 1.45)),
+                        if (h.leads)
+                          Semantics(
+                            button: true,
+                            child: GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () {
+                                HapticFeedback.selectionClick();
+                                _goHelp(cats, h);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(t.helpGo, style: AppTheme.f(13, weight: FontWeight.w700, color: gc.accent)),
+                                    const SizedBox(width: 4),
+                                    Icon(PhosphorIconsBold.arrowUpRight, size: 13, color: gc.accent),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        else
+                          const SizedBox(height: 10),
+                      ],
+                    ),
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _results(GymColors gc, List<_Category> cats, List<(_Category, String, IconData)> hits,
+      List<HelpTopic> asked, bool empty) {
+    if (empty) {
+      return Column(
+        key: const ValueKey('common'),
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _helpLabel(gc, t.helpCommon),
+          _helpGroup(gc, cats, asked),
+        ],
+      );
+    }
+    if (hits.isEmpty && asked.isEmpty) {
       return Padding(
         key: const ValueKey('none'),
         padding: const EdgeInsets.fromLTRB(4, 12, 4, 12),
-        child: Text(t.settingsNoResults, style: AppTheme.f(15, weight: FontWeight.w500, color: gc.textSecondary)),
+        child: Text(t.helpNoResults, style: AppTheme.f(15, weight: FontWeight.w500, color: gc.textSecondary)),
       );
     }
     return Column(
-      key: ValueKey('hits${hits.length}'),
+      key: ValueKey('hits${hits.length}-${asked.length}'),
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         for (var i = 0; i < hits.length; i++) ...[
@@ -2841,6 +3199,11 @@ class _SettingsHomeState extends State<_SettingsHome> {
               ),
             ),
           ),
+        ],
+        if (asked.isNotEmpty) ...[
+          if (hits.isNotEmpty) const SizedBox(height: 22),
+          _helpLabel(gc, t.helpQuestions),
+          _helpGroup(gc, cats, asked),
         ],
       ],
     );

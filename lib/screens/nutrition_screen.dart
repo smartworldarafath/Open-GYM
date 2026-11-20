@@ -1,19 +1,18 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../app/desktop.dart';
 import '../l10n/l10n.dart';
 import '../models/nutrition.dart';
 import '../services/food_library.dart';
 import '../services/meal_ai.dart';
+import '../services/report_content.dart' show dayHasMore, dayMarkdown;
 import '../services/media_store.dart';
 import '../services/sticker_cutout.dart';
 import '../state/fit_state.dart';
@@ -31,6 +30,7 @@ import '../widgets/rolling_text.dart';
 import '../widgets/cutout_editor.dart';
 import '../widgets/ruler_picker.dart';
 import '../widgets/ui_kit.dart';
+import '../services/file_share.dart';
 import 'plan_import_sheet.dart' show pickTextFile;
 import 'progress_screen.dart' show showBodyweightSheet;
 
@@ -49,17 +49,7 @@ String mealInSentence(Meal m) {
   return name.toLowerCase();
 }
 
-String mealName(Meal m) {
-  final custom = fit.slotOf(m)?.name ?? '';
-  if (custom.isNotEmpty) return custom;
-  return switch (m) {
-    Meal.breakfast => t.mealBreakfast,
-    Meal.lunch => t.mealLunch,
-    Meal.dinner => t.mealDinner,
-    Meal.snacks => t.mealSnacks,
-    _ => t.mealOther,
-  };
-}
+String mealName(Meal m) => fit.mealLabel(m);
 
 IconData _mealIcon(Meal m) => switch (m) {
       Meal.breakfast => PhosphorIconsRegular.coffee,
@@ -80,9 +70,7 @@ double _snapAmt(double grams, bool liquid) =>
 
 String _amtUnit(bool liquid) => fit.isLb ? (liquid ? 'fl oz' : 'oz') : _unitOf(liquid);
 
-String _amount(double grams, bool liquid) => fit.isLb
-    ? '${fmt((grams / _ozOf(liquid) * 10).round() / 10)} ${_amtUnit(liquid)}'
-    : '${fmt(grams.round().toDouble())} ${_unitOf(liquid)}';
+String _amount(double grams, bool liquid) => fit.amountLabel(grams, liquid);
 
 String _energy(num kcal) => ltr('${fit.energyOf(kcal)} ${fit.energyUnit}');
 
@@ -96,12 +84,48 @@ String portionName(PortionKind k, [int n = 1]) => switch (k) {
       PortionKind.glass => t.portionGlass(n),
     };
 
-String _servingLine(FoodEntry e, FoodItem? food) {
-  if (e.grams > 0) return e.cooked > 0 ? '${_amount(e.shownGrams, e.liquid)} · ${t.cookedLabel.toLowerCase()}' : _amount(e.totalGrams, e.liquid);
-  final serving = food?.serving ?? '';
-  final x = e.servings == 1 ? '' : '${fmt(e.servings)} × ';
-  if (serving.isEmpty) return e.servings == 1 ? '' : '${fmt(e.servings)} ×';
-  return '$x$serving';
+String _servingLine(FoodEntry e, FoodItem? food) => fit.servingLabel(e);
+
+Future<void> _copyDay(BuildContext context) async {
+  final gc = context.gc;
+  final day = fit.nutritionDay;
+  final food = fit.entriesOn(day).isNotEmpty || fit.waterOn(day) > 0;
+  final more = dayHasMore(day);
+  if (!food && !more) {
+    showNotchToast(context, t.nothingLogged, icon: PhosphorIconsRegular.copy, accent: gc.textSecondary);
+    return;
+  }
+  final full = food && more
+      ? await _sheet<bool>(
+          context,
+          (sheet) => _sheetFrame(sheet, [
+            SheetTitle(t.nutritionCopyDay),
+            const SizedBox(height: 16),
+            OptionGroup([
+              OptionItem(t.nutritionCopyFood,
+                  icon: PhosphorIconsRegular.forkKnife,
+                  detail: t.nutritionCopyFoodHint,
+                  onTap: () => Navigator.of(sheet).pop(false)),
+              OptionItem(t.nutritionCopyAll,
+                  icon: PhosphorIconsRegular.calendarDots,
+                  detail: t.nutritionCopyAllHint,
+                  onTap: () => Navigator.of(sheet).pop(true)),
+            ]),
+          ]))
+      : more;
+  if (full == null || !context.mounted) return;
+  HapticFeedback.lightImpact();
+  await Clipboard.setData(ClipboardData(text: dayMarkdown(day, full: full)));
+  if (!context.mounted) return;
+  showNotchToast(context, t.copiedDone, subtitle: _dayName(day), icon: PhosphorIconsRegular.copy, accent: gc.accent);
+}
+
+String _dayName(DateTime day) {
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
+  if (day == today) return t.nutritionToday;
+  if (day == shiftDays(today, -1)) return t.nutritionYesterday;
+  return t.longDate(day);
 }
 
 class NutritionScreen extends StatefulWidget {
@@ -169,12 +193,95 @@ class _NutritionScreenState extends State<NutritionScreen> {
     final planned = on(Tracker.plans) ? fit.planOn(fit.nutritionDay) : null;
     final todayPlan = planned != null && planned.items.isNotEmpty ? planned : null;
     final detail = <Widget>[
-      if (on(Tracker.animal) || on(Tracker.fiber) || on(Tracker.sugarSodium)) _DetailGrid(),
+      if (on(Tracker.animal) || on(Tracker.fiber) || on(Tracker.sugarSodium) || on(Tracker.minerals)) _DetailGrid(),
       if (on(Tracker.quality)) _QualityCard(),
       if (on(Tracker.fats)) _FatTypesCard(),
       if (on(Tracker.week)) _WeekTile(),
       if (on(Tracker.weight)) _WeightTile(),
     ];
+    final header = ScreenHeader(
+      title: t.nutrition,
+      subtitle: _dayLabel,
+      onBack: fit.backFromNutrition,
+      badge: BetaTag(t.sectionBeta),
+      actions: [
+        RoundAction(
+          label: t.nutritionCopyDay,
+          onTap: () => _copyDay(context),
+          child: Icon(PhosphorIconsRegular.copy, size: 17, color: gc.textSecondary),
+        ),
+        const SizedBox(width: 8),
+        RoundAction(
+          label: t.trackersTitle,
+          onTap: () => showTrackersSheet(context),
+          child: Icon(PhosphorIconsRegular.slidersHorizontal, size: 17, color: gc.textSecondary),
+        ),
+        const SizedBox(width: 8),
+        RoundAction(
+          label: t.nutritionGoals,
+          onTap: () => showGoalsSheet(context),
+          child: Icon(PhosphorIconsRegular.target, size: 17, color: gc.textSecondary),
+        ),
+      ],
+    );
+    if (DesktopScope.of(context)) {
+      Widget stack(List<Widget> ws, {double gap = 12}) => Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (var i = 0; i < ws.length; i++) ...[if (i > 0) SizedBox(height: gap), ws[i]],
+            ],
+          );
+      final tiles = <(int, Widget)>[
+        (0, stack([
+          if (on(Tracker.calories) || on(Tracker.protein) || on(Tracker.carbs) || on(Tracker.fat)) _HeroCard(),
+          const _SearchBar(),
+          if (on(Tracker.foods)) _FoodShelf(),
+        ])),
+        if (on(Tracker.week)) (0, _WeekTile()),
+        for (final c in cards) (1, c),
+        if (todayPlan != null) (2, _TodayPlanCard(plan: todayPlan)),
+        if (on(Tracker.prep))
+          (2, stack([
+            _Heading(t.prepTitle, action: t.prepNewShort, onAction: () => showBatchEditor(context)),
+            _PrepShelf(),
+          ])),
+        if (on(Tracker.plans))
+          (2, stack([
+            _Heading(t.mealPlansTitle, action: t.mealPlanNew, onAction: () => showNewPlanSheet(context)),
+            _PlansSection(),
+          ])),
+        if (on(Tracker.foods)) (2, _Folders()),
+      ];
+      final rest = [for (final d in detail) if (d is! _WeekTile) d];
+      var at = 2;
+      Widget rise(Widget w) => Rise(index: at++, child: w);
+      final top = [for (final x in tiles) FlowSlot(column: x.$1, stretch: x.$2 is _WeekTile || x.$2 is _SupplementsCard, child: rise(x.$2))];
+      final meals = rise(const _MealGrid());
+      final low = [for (final d in rest) rest.length == 1 ? FlowWide(child: rise(d)) : rise(d)];
+      return RiseScope(
+        id: 'nutrition',
+        child: SingleChildScrollView(
+          clipBehavior: Clip.none,
+          padding: const EdgeInsets.fromLTRB(32, 30, 32, 48),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            Rise(index: 0, child: header),
+            const SizedBox(height: 16),
+            Rise(index: 1, child: _WeekStrip()),
+            const SizedBox(height: 18),
+            CardFlow(minColumn: 340, gap: 20, children: top),
+            const SizedBox(height: 30),
+            meals,
+            if (low.isNotEmpty) ...[
+              const SizedBox(height: 30),
+              _Heading(t.trackersDetail),
+              const SizedBox(height: 12),
+              CardFlow(minColumn: 340, gap: 20, children: low),
+            ],
+          ]),
+        ),
+      );
+    }
     var order = 0;
     return RiseScope(
       id: 'nutrition',
@@ -186,25 +293,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 40),
         children: [
           for (final w in <Widget>[
-            ScreenHeader(
-              title: t.nutrition,
-              subtitle: _dayLabel,
-              onBack: fit.backFromNutrition,
-              badge: BetaTag(t.sectionBeta),
-              actions: [
-                RoundAction(
-                  label: t.trackersTitle,
-                  onTap: () => showTrackersSheet(context),
-                  child: Icon(PhosphorIconsRegular.slidersHorizontal, size: 17, color: gc.textSecondary),
-                ),
-                const SizedBox(width: 8),
-                RoundAction(
-                  label: t.nutritionGoals,
-                  onTap: () => showGoalsSheet(context),
-                  child: Icon(PhosphorIconsRegular.target, size: 17, color: gc.textSecondary),
-                ),
-              ],
-            ),
+            header,
             const SizedBox(height: 16),
             _WeekStrip(),
             if (on(Tracker.calories) || on(Tracker.protein) || on(Tracker.carbs) || on(Tracker.fat)) ...[
@@ -508,7 +597,7 @@ Widget _macroSummary(BuildContext context, Macros m) {
         cell(t.macroCarbs, '${_g(m.carbs)} g', gc.carbs),
         cell(t.macroFat, '${_g(m.fat)} g', gc.fat),
       ]),
-      if (m.hasExtras) ...[
+      if (m.hasExtras || (fit.trackerOn(Tracker.minerals) && m.hasMinerals)) ...[
         const SizedBox(height: 10),
         Text(_extrasLine(m), style: AppTheme.f(11.5, weight: FontWeight.w600, color: gc.textSecondary)),
       ],

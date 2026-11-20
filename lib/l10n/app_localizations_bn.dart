@@ -13,7 +13,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String vsLastMonthLabel(String pct) {
-    return 'গত মাসের তুলনায় $pct%';
+    return 'গত মাসের তুলনায় $pct%';
   }
 
   @override
@@ -22,7 +22,7 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get save => 'সংরক্ষণ';
+  String get save => 'সেভ করো';
 
   @override
   String get cancel => 'বাতিল';
@@ -31,10 +31,10 @@ class AppLocalizationsBn extends AppLocalizations {
   String get cancelCaps => 'বাতিল';
 
   @override
-  String get deleteCaps => 'মুছুন';
+  String get deleteCaps => 'মুছে ফেলো';
 
   @override
-  String get done => 'সম্পন্ন';
+  String get done => 'হয়ে গেছে';
 
   @override
   String get set => 'সেট';
@@ -43,7 +43,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get home => 'হোম';
 
   @override
-  String get progress => 'উন্নতি';
+  String get progress => 'অগ্রগতি';
 
   @override
   String get exercises => 'ব্যায়াম';
@@ -58,7 +58,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get thisWeek => 'এই সপ্তাহ';
 
   @override
-  String get recommended => 'সুপারিশকৃত';
+  String get recommended => 'প্রস্তাবিত';
 
   @override
   String get goal => 'লক্ষ্য';
@@ -70,7 +70,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get setsToday => 'আজকের সেট';
 
   @override
-  String get prs => 'রেকর্ড (PR)';
+  String get prs => 'PR';
 
   @override
   String get todaysFocus => 'আজকের ফোকাস';
@@ -79,7 +79,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get todaysRoutine => 'আজকের রুটিন';
 
   @override
-  String get startWorkout => 'ব্যায়াম শুরু করুন';
+  String get startWorkout => 'ওয়ার্কআউট শুরু করো';
 
   @override
   String get routines => 'রুটিন';
@@ -88,7 +88,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get tools => 'টুলস';
 
   @override
-  String get firstSessionHint => 'পেশী বেছে নিয়ে আপনার প্রথম সেশন লগ করুন';
+  String get firstSessionHint => 'তোমার পেশি বেছে নাও আর প্রথম সেশন লিখে রাখো';
 
   @override
   String exerciseCount(int n) {
@@ -111,57 +111,57 @@ class AppLocalizationsBn extends AppLocalizations {
   String get legDay => 'লেগ ডে';
 
   @override
-  String get pushFocus => 'বুক · কাঁধ · ট্রাইসেপ্স';
+  String get pushFocus => 'বুক · কাঁধ · ট্রাইসেপস';
 
   @override
-  String get pullFocus => 'পিঠ · বাইসেপ্স · ট্র্যাপস';
+  String get pullFocus => 'পিঠ · বাইসেপস · ট্র্যাপস';
 
   @override
-  String get legFocus => 'কোয়াডস · হ্যামস্ট্রিংস · গ্লুটস';
+  String get legFocus => 'কোয়াড · হ্যামস্ট্রিং · গ্লুট';
 
   @override
-  String get train => 'ট্রেন';
+  String get train => 'ট্রেনিং';
 
   @override
-  String get step1 => 'ধাপ ১ / ২';
+  String get step1 => 'ধাপ 1 / 2';
 
   @override
-  String get step2 => 'ধাপ ২ / ২';
+  String get step2 => 'ধাপ 2 / 2';
 
   @override
-  String get chooseFocus => 'ফোকাস নির্বাচন করুন';
+  String get chooseFocus => 'তোমার ফোকাস বেছে নাও';
 
   @override
-  String get buildSession => 'সেশন সাজান';
+  String get buildSession => 'তোমার সেশন সাজাও';
 
   @override
-  String get tapMuscles => 'যে পেশীগুলো ট্রেন করতে চান স্পর্শ করুন — সামনে এবং পিছনে।';
+  String get tapMuscles => 'যে পেশিগুলো ট্রেন করতে চাও সেগুলোতে ট্যাপ করো, সামনে আর পেছনে।';
 
   @override
-  String get continueBtn => 'চালিয়ে যান';
+  String get continueBtn => 'এগিয়ে যাও';
 
   @override
-  String get nothingForFocus => 'এই ফোকাসে এখনও কিছু নেই';
+  String get nothingForFocus => 'এই ফোকাসের জন্য এখনও কিছু নেই';
 
   @override
-  String get goBackPick => 'ফিরে যান এবং লাইব্রেরির ব্যায়ামযুক্ত পেশী নির্বাচন করুন।';
+  String get goBackPick => 'ফিরে যাও আর এমন একটা পেশি বেছে নাও যার ব্যায়াম তোমার লাইব্রেরিতে আছে।';
 
   @override
   String pickedHint(int n) {
-    return 'আমরা আপনার জন্য একটি সেশন বেছে নিয়েছি — $nটি থেকে যেকোনোটি যোগ বা বাদ দিন।';
+    return 'আমরা তোমার জন্য একটা সেশন বেছে দিয়েছি। $nটির যেকোনোটা যোগ বা বাদ দিতে ট্যাপ করো।';
   }
 
   @override
-  String get pickAnExercise => 'ব্যায়াম বেছে নিন';
+  String get pickAnExercise => 'একটা ব্যায়াম বেছে নাও';
 
   @override
-  String get searchAllExercises => 'যেকোনো ব্যায়াম খুঁজুন…';
+  String get searchAllExercises => 'যেকোনো ব্যায়াম খোঁজো…';
 
   @override
   String get noExercisesMatch => 'কোনো ব্যায়াম মেলেনি';
 
   @override
-  String get createItInstead => 'তার পরিবর্তে নিজের মতো নতুন ব্যায়াম তৈরি করুন';
+  String get createItInstead => 'বরং নিজের ব্যায়াম হিসেবে বানাও';
 
   @override
   String startCount(int n) {
@@ -175,40 +175,40 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get inProgress => 'চলমান';
+  String get inProgress => 'চলছে';
 
   @override
-  String get paused => 'স্থগিত';
+  String get paused => 'থামানো';
 
   @override
-  String get last => 'সর্বশেষ';
+  String get last => 'শেষবার';
 
   @override
   String get rest => 'বিশ্রাম';
 
   @override
-  String get skip => 'এড়িয়ে যান';
+  String get skip => 'বাদ দাও';
 
   @override
-  String get addSet => '+ সেট যোগ করুন';
+  String get addSet => '+ সেট যোগ করো';
 
   @override
-  String get finishSession => 'সেশন সমাপ্ত করুন';
+  String get finishSession => 'সেশন শেষ করো';
 
   @override
-  String get setDone => 'সেট সম্পন্ন';
+  String get setDone => 'সেট শেষ';
 
   @override
-  String get nextExercise => 'পরবর্তী ব্যায়াম';
+  String get nextExercise => 'পরের ব্যায়াম';
 
   @override
-  String get dropExerciseAction => 'ব্যায়াম বাদ দিন';
+  String get dropExerciseAction => 'ব্যায়াম বাদ দাও';
 
   @override
   String get restOff => 'বন্ধ';
 
   @override
-  String get miniRest => 'রেস্ট-পজ ও ক্লাস্টার রেস্ট';
+  String get miniRest => 'রেস্ট-পজ আর ক্লাস্টার বিশ্রাম';
 
   @override
   String get miniRestHint => 'রেস্ট-পজ বা ক্লাস্টার সেটের আগে';
@@ -217,31 +217,31 @@ class AppLocalizationsBn extends AppLocalizations {
   String get gymPass => 'জিম পাস';
 
   @override
-  String get gymPassEmpty => 'আপনার জিমের কোড এখানে রাখুন এবং কার্ড ছাড়াই প্রবেশ করুন';
+  String get gymPassEmpty => 'তোমার জিমের কোড এখানে রাখো আর কার্ড ছাড়াই ঢোকো';
 
   @override
-  String get gymPassAdd => 'পাস যোগ করুন';
+  String get gymPassAdd => 'পাস যোগ করো';
 
   @override
-  String get gymPassScan => 'কোডের ছবি তুলুন';
+  String get gymPassScan => 'কোডের ছবি তোলো';
 
   @override
-  String get gymPassScanHint => 'আপনার ফোনের ক্যামেরা দিয়ে';
+  String get gymPassScanHint => 'ফোনের ক্যামেরা দিয়ে';
 
   @override
   String get gymPassPhoto => 'ছবি বা স্ক্রিনশট থেকে';
 
   @override
-  String get gymPassPhotoHint => 'যেমন: আপনার জিম অ্যাপের স্ক্রিনশট';
+  String get gymPassPhotoHint => 'যেমন, তোমার জিমের অ্যাপের স্ক্রিনশট';
 
   @override
-  String get gymPassType => 'নম্বর লিখুন';
+  String get gymPassType => 'নম্বরটা টাইপ করো';
 
   @override
-  String get gymPassTypeHint => 'বারকোডের নিচে মুদ্রিত নম্বরটি';
+  String get gymPassTypeHint => 'বারকোডের জন্য: এর নিচে ছাপা নম্বর';
 
   @override
-  String get gymPassNotFound => 'ছবিতে কোনো কোড পাওয়া যায়নি। স্পষ্ট ছবি তুলুন অথবা নম্বর লিখুন।';
+  String get gymPassNotFound => 'ওই ছবিতে কোনো QR কোড নেই। আরও স্পষ্ট ছবি দাও বা নম্বরটা টাইপ করো।';
 
   @override
   String get gymPassName => 'জিমের নাম';
@@ -250,84 +250,84 @@ class AppLocalizationsBn extends AppLocalizations {
   String get gymPassDefaultName => 'আমার জিম';
 
   @override
-  String get gymPassCode => 'Code';
+  String get gymPassCode => 'কোড';
 
   @override
   String get gymPassFormat => 'কোডের ধরন';
 
   @override
-  String get gymPassInvalid => 'এই নম্বরটি এই কোড ধরনের সাথে মেলে না';
+  String get gymPassInvalid => 'ওই নম্বর এই কোডের ধরনের সাথে মেলে না';
 
   @override
-  String get gymPassShowHint => 'স্ক্যানারের সামনে ধরুন। উজ্জ্বলতা নিজে থেকেই বৃদ্ধি পাবে।';
+  String get gymPassShowHint => 'রিডারের কাছে ধরো। উজ্জ্বলতা নিজে থেকেই বাড়বে।';
 
   @override
   String get gymPassDeleted => 'পাস মুছে ফেলা হয়েছে';
 
   @override
-  String get gymPassEdit => 'পাস সম্পাদনা করুন';
+  String get gymPassEdit => 'পাস বদলাও';
 
   @override
-  String get gymPassShow => 'দরজায় দেখান';
+  String get gymPassShow => 'দরজায় দেখাও';
 
   @override
-  String get gymPassPrivate => 'শুধুমাত্র আপনার ফোনে সংরক্ষিত থাকবে। কোনো তথ্য আপলোড হবে না।';
+  String get gymPassPrivate => 'শুধু তোমার ফোনে থাকে। কিছুই আপলোড হয় না।';
 
   @override
   String get gymPassColor => 'রং';
 
   @override
-  String get gymPassRescan => 'কোড পুনরায় স্ক্যান করুন';
+  String get gymPassRescan => 'কোডটা আবার পড়ো';
 
   @override
-  String get gymPassReading => 'কোড পড়া হচ্ছে…';
+  String get gymPassReading => 'কোড পড়া হচ্ছে…';
 
   @override
-  String get gymPassSettingHint => 'আপনার প্রোফাইলে জিম কার্ড';
+  String get gymPassSettingHint => 'প্রোফাইলে তোমার জিম কার্ড';
 
   @override
   String get gymPassMember => 'সদস্য';
 
   @override
-  String get widgetHintActivity => 'আপনার অনুশীলনের দিনের মানচিত্র';
+  String get widgetHintActivity => 'তোমার ট্রেনিংয়ের দিনগুলোর মানচিত্র';
 
   @override
-  String get widgetHintStats => 'এই সপ্তাহের স্ট্রিক, ভলিউম এবং সেশন';
+  String get widgetHintStats => 'এই সপ্তাহের স্ট্রিক, ভলিউম আর সেশন';
 
   @override
-  String get widgetHintBody => 'যেসব পেশীতে আপনি কাজ করেছেন';
+  String get widgetHintBody => 'যে পেশিগুলোতে কাজ করেছ';
 
   @override
-  String get widgetHintToday => 'আজকের দিনে আপনি কি ব্যায়াম করেছেন?';
+  String get widgetHintToday => 'এক নজরে: আজ ট্রেনিং হয়েছে?';
 
   @override
-  String get widgetHintWeek => 'দিন অনুযায়ী আপনার পুরো সপ্তাহের পরিকল্পনা';
+  String get widgetHintWeek => 'তোমার সপ্তাহের প্ল্যান, দিন ধরে ধরে';
 
   @override
-  String get supportHintBug => 'কী সমস্যা হয়েছে GitHub-এ জানান';
+  String get supportHintBug => 'GitHub-এ জানাও কী ভেঙেছে';
 
   @override
-  String get supportHintFeature => 'অ্যাপের জন্য নতুন আইডিয়া প্রস্তাব করুন';
+  String get supportHintFeature => 'অ্যাপের জন্য একটা আইডিয়া দাও';
 
   @override
-  String get supportHintStar => 'অন্যান্য ব্যবহারকারীদের অ্যাপটি খুঁজে পেতে সাহায্য করে';
+  String get supportHintStar => 'আরও মানুষ এটা খুঁজে পায়';
 
   @override
-  String get supportHintCoffee => 'উন্নয়নে সহায়তা করুন। সম্পূর্ণ ফ্রি এবং বিজ্ঞাপনহীন';
+  String get supportHintCoffee => 'উন্নয়নে সাহায্য করে। বিনামূল্যে আর বিজ্ঞাপন ছাড়া';
 
   @override
-  String get bodyweightNoteHint => 'নোট যোগ করুন: কেমন লাগছে, কী চেষ্টা করছেন… (ঐচ্ছিক)';
+  String get bodyweightNoteHint => 'একটা নোট যোগ করো: কেমন লাগছে, কী চেষ্টা করছ… (ঐচ্ছিক)';
 
   @override
   String exerciseUnitSwitch(String unit) {
-    return 'এই অনুশীলনের জন্য $unit ব্যবহার করুন';
+    return 'এই ব্যায়ামে $unit ব্যবহার করো';
   }
 
   @override
   String get setCol => '#';
 
   @override
-  String get repsCol => 'রেপস';
+  String get repsCol => 'রেপ';
 
   @override
   String weightCol(String unit) {
@@ -335,7 +335,7 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get repsTitle => 'রেপস';
+  String get repsTitle => 'রেপ';
 
   @override
   String weightTitle(String unit) {
@@ -343,19 +343,19 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get sessionComplete => 'ব্যায়াম সম্পন্ন';
+  String get sessionComplete => 'ওয়ার্কআউট লেখা হয়েছে';
 
   @override
   String get finishHeadlinePr => 'নতুন ব্যক্তিগত রেকর্ড';
 
   @override
-  String get finishHeadlineGoal => 'সাপ্তাহিক লক্ষ্য অর্জিত';
+  String get finishHeadlineGoal => 'সাপ্তাহিক লক্ষ্য পূরণ';
 
   @override
-  String get finishHeadlineStreak => 'ধারাবাহিকতা বজায় রয়েছে';
+  String get finishHeadlineStreak => 'স্ট্রিক টিকে আছে';
 
   @override
-  String get finishHeadlineDefault => 'আরেকটি সেশন সফলভাবে শেষ';
+  String get finishHeadlineDefault => 'আরও একটা খাতায় উঠল';
 
   @override
   String finishBodyPr(int prs) {
@@ -365,25 +365,25 @@ class AppLocalizationsBn extends AppLocalizations {
       other: '$prsটি ব্যায়ামে',
       one: 'একটি ব্যায়ামে',
     );
-    return 'আপনি $_temp0 আগের চেয়ে বেশি ওজন তুলেছেন। এটি রেকর্ডে যুক্ত হলো।';
+    return 'তুমি $_temp0 আগের চেয়ে বেশি তুলেছ। এখন এটা তোমার রেকর্ডে আছে।';
   }
 
   @override
-  String get finishBodyGoal => 'আপনি এই সপ্তাহের নির্ধারিত সেশন লক্ষ্য পূরণ করেছেন।';
+  String get finishBodyGoal => 'এই সপ্তাহে যতগুলো সেশন ঠিক করেছিলে, সব করেছ।';
 
   @override
   String finishBodyStreak(int streak) {
-    return 'টানা $streak দিন। সবচেয়ে গুরুত্বপূর্ণ হলো থমকে না যাওয়া।';
+    return 'টানা $streak দিন। কঠিন অংশ হলো না থামা।';
   }
 
   @override
-  String get finishBodyDefault => 'লগ ও গণনা সম্পন্ন। ধারাবাহিকতাই আসল অগ্রগতি।';
+  String get finishBodyDefault => 'লেখা হলো, গোনা হলো। ধারাবাহিকতাই সংখ্যা বাড়ায়।';
 
   @override
-  String get vsLastTime => 'গতবারের তুলনায়';
+  String get vsLastTime => 'গতবারের তুলনায়';
 
   @override
-  String get firstTime => 'প্রথমবার লগ করা হয়েছে';
+  String get firstTime => 'প্রথমবার লেখা';
 
   @override
   String prCount(int n) {
@@ -408,51 +408,51 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get decrease => 'কমান';
+  String get decrease => 'কমাও';
 
   @override
-  String get increase => 'বাড়ান';
+  String get increase => 'বাড়াও';
 
   @override
   String markSet(int n) {
-    return 'সেট $n সম্পন্ন চিহ্নিত করুন';
+    return 'সেট $n শেষ বলে চিহ্নিত করো';
   }
 
   @override
-  String get pauseWorkout => 'ব্যায়াম স্থগিত করুন';
+  String get pauseWorkout => 'ওয়ার্কআউট থামাও';
 
   @override
-  String get resumeWorkout => 'ব্যায়াম পুনরায় শুরু করুন';
+  String get resumeWorkout => 'ওয়ার্কআউট আবার শুরু করো';
 
   @override
-  String get discardTitle => 'ব্যায়াম বাতিল করবেন?';
+  String get discardTitle => 'ওয়ার্কআউট বাদ দেবে?';
 
   @override
-  String get discardBody => 'এই সেশনের সমস্ত সেট মুছে যাবে।';
+  String get discardBody => 'এই সেশনের তোমার সেটগুলো হারিয়ে যাবে।';
 
   @override
-  String get keepTraining => 'ট্রেনিং চালিয়ে যান';
+  String get keepTraining => 'ট্রেনিং চালিয়ে যাও';
 
   @override
-  String get discard => 'বাতিল করুন';
+  String get discard => 'বাদ দাও';
 
   @override
-  String get notifRestChannel => 'বিশ্রামের টাইমার';
+  String get notifRestChannel => 'বিশ্রাম টাইমার';
 
   @override
-  String get notifRestChannelWhy => 'সেটের মাঝে বিশ্রাম শেষ হলে আপনাকে জানায়';
+  String get notifRestChannelWhy => 'সেটের মাঝের বিশ্রাম শেষ হলে জানায়';
 
   @override
-  String get notifAlertChannel => 'বিশ্রামের টাইমার (অ্যালার্ট)';
+  String get notifAlertChannel => 'বিশ্রাম টাইমার (সতর্কতা)';
 
   @override
-  String get notifAlertChannelWhy => 'বিশ্রাম শেষ হওয়ার সাথে সাথে ব্যানার প্রদর্শন করে';
+  String get notifAlertChannelWhy => 'বিশ্রাম শেষ হওয়ার মুহূর্তে একটা ব্যানার দেখায়';
 
   @override
   String get restOverTitle => 'বিশ্রাম শেষ';
 
   @override
-  String get restOverBody => 'কাজে ফিরে আসুন — পরবর্তী সেট অপেক্ষা করছে।';
+  String get restOverBody => 'চলো, পরের সেট অপেক্ষা করছে।';
 
   @override
   String get allTimeSessions => 'সেশন';
@@ -471,46 +471,46 @@ class AppLocalizationsBn extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: '$nটি সেশন লগ হয়েছে',
-      one: '$nটি সেশন লগ হয়েছে',
+      other: '$nটি সেশন লেখা',
+      one: '$nটি সেশন লেখা',
     );
     return '$_temp0';
   }
 
   @override
   String streakDays(int n) {
-    return '$n দিনের ধারাবাহিকতা';
+    return '$n দিনের স্ট্রিক';
   }
 
   @override
   String get bodyweight => 'শরীরের ওজন';
 
   @override
-  String get logBodyweight => 'শরীরের ওজন লগ করুন';
+  String get logBodyweight => 'ওজন লিখে রাখো';
 
   @override
-  String get trackWeight => 'সময়ের সাথে আপনার ওজনের পরিবর্তন ট্র্যাক করুন';
+  String get trackWeight => 'সময়ের সাথে তোমার ওজন দেখো';
 
   @override
-  String get muscleMap => 'পেশীর মানচিত্র';
+  String get muscleMap => 'পেশির মানচিত্র';
 
   @override
-  String get days7 => '৭ দিন';
+  String get days7 => '7দি';
 
   @override
-  String get days30 => '৩০ দিন';
+  String get days30 => '30দি';
 
   @override
-  String get days90 => '৯০ দিন';
+  String get days90 => '90দি';
 
   @override
-  String get days365 => '১ বছর';
+  String get days365 => '1ব';
 
   @override
   String get daysAll => 'সব';
 
   @override
-  String get weeklyAvgTitle => 'সাপ্তাহিক গড়';
+  String get weeklyAvgTitle => 'সাপ্তাহিক গড়';
 
   @override
   String weekOfDate(String date) {
@@ -519,24 +519,24 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String weightChangeRange(String change) {
-    return 'এই সময়ে $change';
+    return 'এই সময়ে $change';
   }
 
   @override
-  String get heatLow => 'অব্যবহৃত';
+  String get heatLow => 'অছোঁয়া';
 
   @override
-  String get heatHigh => 'সর্বোচ্চ ভলিউম';
+  String get heatHigh => 'পূর্ণ ভলিউম';
 
   @override
-  String get muscleMapEmpty => 'একটি সেশন লগ করুন এবং শরীর এখানে সক্রিয় হয়ে উঠবে।';
+  String get muscleMapEmpty => 'একটা সেশন লেখো আর তোমার শরীর এখানে জ্বলে উঠতে শুরু করবে।';
 
   @override
-  String get muscleMapHint => 'পেশীতে ট্যাপ করে বিস্তারিত দেখুন।';
+  String get muscleMapHint => 'একটা পেশিতে ট্যাপ করে দেখো সেটা কী পেয়েছে।';
 
   @override
   String muscleMapBehind(String names) {
-    return 'পিছিয়ে রয়েছে: $names';
+    return 'পিছিয়ে আছে: $names';
   }
 
   @override
@@ -545,7 +545,7 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get muscleSplit => 'পেশীর বিভাজন';
+  String get muscleSplit => 'পেশির ভাগ';
 
   @override
   String get personalRecords => 'ব্যক্তিগত রেকর্ড';
@@ -554,7 +554,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get strength1rm => 'শক্তি · আনুমানিক 1RM';
 
   @override
-  String get strengthEmpty => 'যেকোনো ব্যায়াম দুইবার লগ করলে তার শক্তির গ্রাফ এখানে দেখা যাবে।';
+  String get strengthEmpty => 'একটা ব্যায়াম দুবার লেখো আর এখানে তার শক্তির রেখা দেখা যাবে।';
 
   @override
   String oneRmEst(String w) {
@@ -565,17 +565,17 @@ class AppLocalizationsBn extends AppLocalizations {
   String get restDayShort => 'বিশ্রামের দিন';
 
   @override
-  String get restDay => 'বিশ্রামের দিন — কিছুই লগ করা হয়নি।';
+  String get restDay => 'বিশ্রামের দিন, কিছু লেখা নেই।';
 
   @override
-  String get delete => 'মুছুন';
+  String get delete => 'মুছে ফেলো';
 
   @override
-  String get deleteEntry => 'এই এন্ট্রি মুছে ফেলবেন?';
+  String get deleteEntry => 'এই এন্ট্রি মুছবে?';
 
   @override
   String deleteEntryBody(String name) {
-    return '\"$name\" আজকের দিন, রেকর্ড এবং চার্ট থেকে মুছে ফেলা হবে।';
+    return '\"$name\" এই দিন থেকে, আর তোমার রেকর্ড ও চার্ট থেকে মুছে যাবে।';
   }
 
   @override
@@ -592,26 +592,26 @@ class AppLocalizationsBn extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: 'লাইব্রেরিতে $nটি ব্যায়াম',
-      one: 'লাইব্রেরিতে $nটি ব্যায়াম',
+      other: 'তোমার লাইব্রেরিতে $nটি ব্যায়াম',
+      one: 'তোমার লাইব্রেরিতে $nটি ব্যায়াম',
     );
     return '$_temp0';
   }
 
   @override
-  String get searchExercises => 'ব্যায়াম খুঁজুন';
+  String get searchExercises => 'ব্যায়াম খোঁজো';
 
   @override
-  String get muscleFilter => 'পেশী';
+  String get muscleFilter => 'পেশি';
 
   @override
-  String get levelFilter => 'লেভেল';
+  String get levelFilter => 'স্তর';
 
   @override
   String get kindLabel => 'ধরন';
 
   @override
-  String get kindStrength => 'শক্তি (Strength)';
+  String get kindStrength => 'শক্তি';
 
   @override
   String get kindCalisthenics => 'ক্যালিসথেনিক্স';
@@ -632,7 +632,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get equipmentLabel => 'সরঞ্জাম';
 
   @override
-  String get addExercise => 'ব্যায়াম যোগ করুন';
+  String get addExercise => 'ব্যায়াম যোগ করো';
 
   @override
   String get advanced => 'উন্নত';
@@ -641,91 +641,91 @@ class AppLocalizationsBn extends AppLocalizations {
   String get demoMedia => 'ডেমো';
 
   @override
-  String get addMedia => 'মিডিয়া যোগ করুন';
+  String get addMedia => 'মিডিয়া যোগ করো';
 
   @override
-  String get mediaHint => 'ছবি, জিআইএফ বা ভিডিও';
+  String get mediaHint => 'ছবি, GIF বা ভিডিও';
 
   @override
-  String get changeMedia => 'পরিবর্তন';
+  String get changeMedia => 'বদলাও';
 
   @override
-  String get videoSelected => 'ভিডিও নির্বাচিত';
+  String get videoSelected => 'ভিডিও বেছে নেওয়া হয়েছে';
 
   @override
-  String get favouritesOnly => 'প্রিয়গুলো';
+  String get favouritesOnly => 'প্রিয়';
 
   @override
-  String get noFavouritesYet => 'এখনও কোনো প্রিয় ব্যায়াম নেই';
+  String get noFavouritesYet => 'এখনও কোনো প্রিয় নেই';
 
   @override
-  String get noFavouritesHint => 'ব্যায়ামে তারা চিহ্নে ট্যাপ করে এখানে যুক্ত করুন।';
+  String get noFavouritesHint => 'কোনো ব্যায়ামের তারায় ট্যাপ করো, এখানে থাকবে।';
 
   @override
-  String get clearFilters => 'ফিল্টার মুছুন';
+  String get clearFilters => 'ফিল্টার সরাও';
 
   @override
-  String get quickAddAmount => 'কতটুকু নিয়েছিলেন';
+  String get quickAddAmount => 'কতটা খেয়েছ';
 
   @override
-  String get homeCardsTitle => 'Home cards';
+  String get homeCardsTitle => 'হোমের কার্ড';
 
   @override
-  String get homeCardsHint => 'What you switch on shows up in Home';
+  String get homeCardsHint => 'যা চালু করবে তা হোমে দেখা যাবে';
 
   @override
-  String get homeCardFocus => 'Today';
+  String get homeCardFocus => 'আজ';
 
   @override
-  String get homeCardSteps => 'Steps';
+  String get homeCardSteps => 'পদক্ষেপ';
 
   @override
-  String get homeCardWeek => 'This week';
+  String get homeCardWeek => 'এই সপ্তাহ';
 
   @override
-  String get homeCardRoutines => 'Routines';
+  String get homeCardRoutines => 'রুটিন';
 
   @override
-  String get homeCardRecommended => 'Suggested';
+  String get homeCardRecommended => 'পরামর্শ';
 
   @override
-  String get textSizeSetting => 'Text size';
+  String get textSizeSetting => 'লেখার আকার';
 
   @override
-  String get textSizeSmall => 'Small';
+  String get textSizeSmall => 'ছোট';
 
   @override
-  String get textSizeNormal => 'Normal';
+  String get textSizeNormal => 'সাধারণ';
 
   @override
-  String get textSizeLarge => 'Large';
+  String get textSizeLarge => 'বড়';
 
   @override
-  String get textSizeHint => 'On top of your phone\'s text size';
+  String get textSizeHint => 'ফোনের লেখার আকারের উপরে';
 
   @override
-  String get calmMotionSetting => 'Reduce motion';
+  String get calmMotionSetting => 'নড়াচড়া কমাও';
 
   @override
-  String get calmMotionHint => 'Screens appear without sliding in';
+  String get calmMotionHint => 'স্ক্রিন স্লাইড না করেই আসে';
 
   @override
-  String get dishArchive => 'Archive';
+  String get dishArchive => 'আর্কাইভ করো';
 
   @override
-  String get dishUnarchive => 'Restore';
+  String get dishUnarchive => 'ফিরিয়ে আনো';
 
   @override
-  String get dishArchivedToast => 'Dish archived';
+  String get dishArchivedToast => 'পদ আর্কাইভ হয়েছে';
 
   @override
-  String get filterShowLabel => 'Show';
+  String get filterShowLabel => 'দেখাও';
 
   @override
   String get noExercisesFound => 'কোনো ব্যায়াম পাওয়া যায়নি';
 
   @override
-  String get noExercisesHint => 'ভিন্ন অনুসন্ধান করুন বা ফিল্টার সাফ করুন।';
+  String get noExercisesHint => 'অন্য কিছু খোঁজো বা ফিল্টার সরাও।';
 
   @override
   String get personalRecord => 'ব্যক্তিগত রেকর্ড';
@@ -734,59 +734,61 @@ class AppLocalizationsBn extends AppLocalizations {
   String get history => 'ইতিহাস';
 
   @override
-  String get noHistory => 'এখনও কোনো সেশন নেই। ইতিহাস গড়তে এই ব্যায়ামটি করুন।';
+  String get noHistory => 'এখনও কোনো সেশন লেখা নেই। ইতিহাস গড়তে এই ব্যায়ামটা করো।';
 
   @override
   String get notes => 'নোট';
 
   @override
-  String get notePlaceholder => 'পয়েন্ট, সেটআপ, কেমন অনুভব হয়েছে…';
+  String get notePlaceholder => 'টিপস, সেটআপ, কেমন লাগল…';
 
   @override
   String notHere(String gear, String place) {
-    return '$place-এ কোনো $gear নেই';
+    return '$place-এ $gear নেই';
   }
 
   @override
-  String get notHereWhy => 'আজ যা ব্যবহার করতে পারবেন তা দিয়ে বদলে নিন।';
+  String get notHereWhy => 'এমন কিছু দিয়ে বদলাও যা আজ সত্যিই করতে পারবে।';
 
   @override
-  String get altHere => 'এখানে যা করতে পারেন';
+  String get altHere => 'এখানে যা করতে পারো';
 
   @override
-  String get places => 'আমার স্থানসমূহ';
+  String get places => 'আমার জায়গা';
 
   @override
-  String get placesHint => 'প্রতিটি স্থানে কী সরঞ্জাম আছে জানান, লাইব্রেরিতে শুধু সেগুলোই দেখাবে।';
+  String get placesHint =>
+      'বলো প্রতিটা জায়গায় তোমার কী আছে, আর লাইব্রেরি শুধু সেটাই দেখাবে যা সেখানে সত্যিই করতে পারো।';
 
   @override
-  String get placeAll => 'যেকোনো স্থান';
+  String get placeAll => 'যেকোনো জায়গা';
 
   @override
-  String get placeNew => 'নতুন স্থান';
+  String get placeNew => 'নতুন জায়গা';
 
   @override
   String get placeNamePlaceholder => 'বাড়ি, জিম, পার্ক…';
 
   @override
-  String get placeGearLabel => 'এখানে কী আছে';
+  String get placeGearLabel => 'সেখানে কী আছে';
 
   @override
   String placeExercises(int n) {
-    return 'এখানে $nটি ব্যায়াম রয়েছে';
+    return 'এখানে $nটি ব্যায়াম';
   }
 
   @override
-  String get placeEmptyTitle => 'যেখানেই থাকুন অনুশীলন করুন';
+  String get placeEmptyTitle => 'যেখানেই থাকো, ট্রেনিং করো';
 
   @override
-  String get placeEmptyBody => 'স্থান হলো সরঞ্জামের তালিকা। শুরু করতে একটি নির্বাচন করুন।';
+  String get placeEmptyBody =>
+      'জায়গা মানে সেখানে থাকা সরঞ্জামের তালিকা। শুরু করতে একটা বেছে নাও, পরে বদলাও।';
 
   @override
-  String get placeDeleteTitle => 'স্থান মুছুন';
+  String get placeDeleteTitle => 'জায়গা মুছে ফেলো';
 
   @override
-  String get placeDeleteBody => 'কেবল স্থানটি মুছে যাবে — আপনার ব্যায়াম এবং সেশন অক্ষত থাকবে।';
+  String get placeDeleteBody => 'শুধু জায়গাটা যাবে। তোমার ব্যায়াম আর সেশন থেকে যাবে।';
 
   @override
   String get placeGym => 'জিম';
@@ -795,13 +797,13 @@ class AppLocalizationsBn extends AppLocalizations {
   String get placeHome => 'বাড়ি';
 
   @override
-  String get placeOutdoors => 'খোলা মাঠ';
+  String get placeOutdoors => 'বাইরে';
 
   @override
-  String get placeFilterLabel => 'স্থান';
+  String get placeFilterLabel => 'জায়গা';
 
   @override
-  String get noGearOnly => 'সরঞ্জাম ছাড়া';
+  String get noGearOnly => 'সরঞ্জাম ছাড়া';
 
   @override
   String placeActive(String name) {
@@ -809,7 +811,7 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get journal => 'জার্নাল';
+  String get journal => 'ডায়েরি';
 
   @override
   String noteCount(int n) {
@@ -817,7 +819,7 @@ class AppLocalizationsBn extends AppLocalizations {
       n,
       locale: localeName,
       other: '$nটি নোট',
-      one: '১টি নোট',
+      one: '1টি নোট',
       zero: 'কোনো নোট নেই',
     );
     return '$_temp0';
@@ -827,34 +829,34 @@ class AppLocalizationsBn extends AppLocalizations {
   String get noteKindNote => 'নোট';
 
   @override
-  String get noteKindPlan => 'পরিকল্পনা';
+  String get noteKindPlan => 'প্ল্যান';
 
   @override
-  String get noteKindDone => 'সাফল্য';
+  String get noteKindDone => 'জয়';
 
   @override
-  String get noteKindPain => 'ব্যথা';
+  String get noteKindPain => 'অস্বস্তি';
 
   @override
-  String get noteFilterAll => 'সকল';
+  String get noteFilterAll => 'সব';
 
   @override
   String get newNote => 'নতুন নোট';
 
   @override
-  String get editNote => 'নোট সম্পাদনা';
+  String get editNote => 'নোট বদলাও';
 
   @override
-  String get addNote => 'নোট যোগ করুন';
+  String get addNote => 'নোট যোগ করো';
 
   @override
-  String get noteEmptyTitle => 'আপনার চিন্তাভাবনা লিখুন';
+  String get noteEmptyTitle => 'এখনও কিছু লেখা নেই';
 
   @override
-  String get noteEmptyBody => 'আপনার ট্রেনিংয়ের নোট, অনুভূতি ও পরিকল্পনা এখানে সংরক্ষণ করুন।';
+  String get noteEmptyBody => 'টিপস, পরেরবারের প্ল্যান, সেশনটা কেমন লাগল। চাইলে ছবি বা ভিডিও সহ।';
 
   @override
-  String get noteNoneForExercise => 'এই ব্যায়ামের জন্য কোনো নোট নেই';
+  String get noteNoneForExercise => 'এই ব্যায়ামে এখনও কোনো নোট নেই।';
 
   @override
   String get noteKindLabel => 'ধরন';
@@ -866,25 +868,25 @@ class AppLocalizationsBn extends AppLocalizations {
   String get noteDateLabel => 'তারিখ';
 
   @override
-  String get noteExerciseLabel => 'ব্যায়াম (ঐচ্ছিক)';
+  String get noteExerciseLabel => 'ব্যায়াম';
 
   @override
-  String get noteMediaLabel => 'ছবি বা ভিডিও';
+  String get noteMediaLabel => 'ছবি ও ভিডিও';
 
   @override
-  String get noteGeneral => 'সাধারণ নোট';
+  String get noteGeneral => 'কোনো ব্যায়াম নয়';
 
   @override
-  String get noteAttach => 'সংযুক্ত করুন';
+  String get noteAttach => 'যুক্ত করো';
 
   @override
-  String get noteRemoveMedia => 'মিডিয়া সরান';
+  String get noteRemoveMedia => 'সংযুক্তি সরাও';
 
   @override
-  String get deleteNoteTitle => 'নোট মুছবেন?';
+  String get deleteNoteTitle => 'নোট মুছে ফেলো';
 
   @override
-  String get deleteNoteBody => 'এই নোটটি চিরতরে মুছে ফেলা হবে।';
+  String get deleteNoteBody => 'নোট আর এর সাথে যুক্ত সবকিছু চিরতরে চলে যাবে।';
 
   @override
   String get noteToday => 'আজ';
@@ -893,49 +895,61 @@ class AppLocalizationsBn extends AppLocalizations {
   String get noteYesterday => 'গতকাল';
 
   @override
-  String get noteAllNotes => 'সকল নোট';
+  String get noteAllNotes => 'সব নোট';
 
   @override
   String get noteCalendar => 'ক্যালেন্ডার';
 
   @override
-  String get noteNoneOnDay => 'এই দিনে কোনো নোট নেই';
+  String get noteNoneOnDay => 'এই দিনে কিছু লেখা নেই';
 
   @override
-  String get noteAddOnDay => 'এই দিনে নোট যোগ করুন';
+  String get noteAddOnDay => 'এই দিনের নোট';
 
   @override
-  String get notePrevMonth => 'পূর্ববর্তী মাস';
+  String get notePrevMonth => 'আগের মাস';
 
   @override
-  String get noteNextMonth => 'পরবর্তী মাস';
+  String get noteNextMonth => 'পরের মাস';
 
   @override
   String noteMonthCount(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$nটি নোট', one: '$nটি নোট');
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'এই মাসে $nটি নোট',
+      one: 'এই মাসে 1টি নোট',
+      zero: 'এই মাসে কোনো নোট নেই',
+    );
     return '$_temp0';
   }
 
   @override
-  String get measures => 'পরিমাপ';
+  String get measures => 'মাপ';
 
   @override
-  String get measuresHint => 'শরীরের বিভিন্ন অংশের পরিমাপ ট্র্যাক করুন';
+  String get measuresHint => 'গলা থেকে পায়ের ডিম পর্যন্ত: শুধু বার নয়, শরীরের বদল দেখো।';
 
   @override
   String measureCount(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$nটি পরিমাপ', one: '$nটি পরিমাপ');
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$nটি মাপ',
+      one: '1টি মাপ',
+      zero: 'কিছু লেখা নেই',
+    );
     return '$_temp0';
   }
 
   @override
-  String get measureNoneYet => 'এখনও কোনো পরিমাপ নেই';
+  String get measureNoneYet => 'এখনও লেখা হয়নি';
 
   @override
-  String get measureHistory => 'পরিমাপের ইতিহাস';
+  String get measureHistory => 'ইতিহাস';
 
   @override
-  String get measureNeck => 'ঘাড়';
+  String get measureNeck => 'গলা';
 
   @override
   String get measureShoulders => 'কাঁধ';
@@ -947,7 +961,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get measureArm => 'বাহু';
 
   @override
-  String get measureForearm => 'অগ্রবাহু';
+  String get measureForearm => 'বাহুর নিচের অংশ';
 
   @override
   String get measureWaist => 'কোমর';
@@ -956,32 +970,38 @@ class AppLocalizationsBn extends AppLocalizations {
   String get measureHips => 'নিতম্ব';
 
   @override
-  String get measureThigh => 'উরুর মাপ';
+  String get measureThigh => 'উরু';
 
   @override
-  String get measureCalf => 'কাফ';
+  String get measureCalf => 'পায়ের ডিম';
 
   @override
-  String get measureBodyfat => 'শরীরের চর্বি';
+  String get measureBodyfat => 'বডি ফ্যাট';
 
   @override
   String get timeline => 'টাইমলাইন';
 
   @override
-  String get hidePhotos => 'Hide photos';
+  String get hidePhotos => 'ছবি লুকাও';
 
   @override
-  String get showPhotos => 'Show photos';
+  String get showPhotos => 'ছবি দেখাও';
 
   @override
-  String get timelineHint => 'শরীরের রূপান্তরের ছবি';
+  String get timelineHint => 'একই ভঙ্গি, একই জায়গা, একই আলো। এক বছর পর নিজেই বিশ্বাস করতে পারবে না।';
 
   @override
-  String get timelineEmptyTitle => 'আপনার রূপান্তর পর্যবেক্ষণ করুন';
+  String get timelineEmptyTitle => 'তোমার প্রথম ছবি থেকেই গোনা শুরু';
 
   @override
   String photoCount(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$nটি ছবি', one: '$nটি ছবি');
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$nটি ছবি',
+      one: '1টি ছবি',
+      zero: 'কোনো ছবি নেই',
+    );
     return '$_temp0';
   }
 
@@ -989,77 +1009,91 @@ class AppLocalizationsBn extends AppLocalizations {
   String get poseFront => 'সামনে';
 
   @override
-  String get poseSide => 'পাশ থেকে';
+  String get poseSide => 'পাশে';
 
   @override
-  String get poseBack => 'পিছনে';
+  String get poseBack => 'পেছনে';
 
   @override
-  String get photoEvery => 'ছবি তোলার ব্যবধান';
+  String get photoEvery => 'মনে করিয়ে দাও';
 
   @override
   String photoEveryDays(int n) {
-    return 'প্রতি $n দিন অন্তর';
+    return 'প্রতি $n দিনে';
   }
 
   @override
-  String get photoEveryOff => 'বন্ধ';
+  String get photoEveryOff => 'কখনো না';
 
   @override
-  String get timelineEvery => 'প্রতিটি দলভুক্ত করুন';
+  String get timelineEvery => 'এই ব্যবধানে দল';
 
   @override
   String get custom => 'কাস্টম';
 
   @override
   String photoNextIn(int n) {
-    return 'পরবর্তী ছবি $n দিন পর';
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'পরের ছবি $n দিন পরে',
+      one: 'পরের ছবি আগামীকাল',
+    );
+    return '$_temp0';
   }
 
   @override
-  String get photoDueNow => 'আজ ছবি তোলার সময় হয়েছে';
+  String get photoDueNow => 'ছবির সময়: আজই তুলে নাও';
 
   @override
-  String get addTodayPhotos => 'আজকের ছবি যোগ করুন';
+  String get addTodayPhotos => 'আজকের ছবি যোগ করো';
 
   @override
   String posePhoto(String pose) {
-    return '$pose পোজের ছবি';
+    return '$pose ছবি';
   }
 
   @override
-  String get compare => 'তুলনা করুন';
+  String get compare => 'তুলনা';
 
   @override
-  String get compareNeedTwo => 'তুলনা করার জন্য অন্তত ২টি ছবি প্রয়োজন';
+  String get compareNeedTwo => 'তোমার পরের ছবি এখানে আগে আর পরে দেখাবে।';
 
   @override
   String dayNumber(int n) {
-    return '$nতম দিন';
+    return 'দিন $n';
   }
 
   @override
   String daysApart(int n) {
-    return '$n দিনের ব্যবধান';
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n দিনের ব্যবধান',
+      one: '1 দিনের ব্যবধান',
+      zero: 'একই দিন',
+    );
+    return '$_temp0';
   }
 
   @override
-  String get deleteEntryTitle => 'এন্ট্রি মুছবেন?';
+  String get deleteEntryTitle => 'এই দিনটা মুছে ফেলো';
 
   @override
-  String get deleteDayBody => 'এই দিনের সমস্ত ছবি মুছে যাবে।';
+  String get deleteDayBody => 'এর ছবিগুলোও চিরতরে চলে যাবে।';
 
   @override
   String get timelinePhotos => 'ছবি';
 
   @override
-  String get timelineBody => 'শারীরিক রূপান্তর';
+  String get timelineBody => 'পেশির মানচিত্র';
 
   @override
-  String get timelineBodyEmpty => 'ছবি যোগ করে রূপান্তরের গতিধারা দেখুন।';
+  String get timelineBodyEmpty =>
+      'একটা সেশন লেখো আর তোমার পেশির মানচিত্র এখানে ভরতে শুরু করবে, ছবি লাগবে না।';
 
   @override
-  String get timelineBodyHint => 'নিয়মিত ছবি তুললে অগ্রগতি সহজে বোঝা যায়।';
+  String get timelineBodyHint => 'তোমার নিজের সেট থেকে তৈরি, কিছুই আপলোড হয় না।';
 
   @override
   String timelineWindow(String from, String to) {
@@ -1068,83 +1102,90 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String sessionCount(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$nটি সেশন', one: '$nটি সেশন');
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$nটি সেশন',
+      one: '1টি সেশন',
+      zero: 'কোনো সেশন নেই',
+    );
     return '$_temp0';
   }
 
   @override
-  String get notifPhotoChannel => 'অগ্রগতির ছবি অনুস্মারক';
+  String get notifPhotoChannel => 'অগ্রগতির ছবি';
 
   @override
-  String get notifPhotoChannelWhy => 'নতুন অগ্রগতি ছবি তোলার সময় হলে মনে করিয়ে দেয়';
+  String get notifPhotoChannelWhy => 'পরের অগ্রগতির ছবির সময় হলে মনে করিয়ে দেয়।';
 
   @override
-  String get notifPhotoTitle => 'অগ্রগতির ছবি তোলার সময়';
+  String get notifPhotoTitle => 'অগ্রগতির ছবির সময়';
 
   @override
   String notifPhotoBody(int n) {
-    return 'পূর্বের ছবির পর $n দিন পেরিয়ে গেছে। একই ভঙ্গিমা, একই আলো বজায় রাখুন।';
+    return 'শেষটার পর $n দিন। একই ভঙ্গি, একই আলো।';
   }
 
   @override
-  String get share => 'শেয়ার';
+  String get share => 'শেয়ার করো';
 
   @override
-  String get sharePick => 'শেয়ার করার অংশ বেছে নিন';
+  String get sharePick => 'কী দেখাতে চাও?';
 
   @override
-  String get shareStreak => 'ধারাবাহিকতা শেয়ার করুন';
+  String get shareStreak => 'স্ট্রিক আর ধারাবাহিকতা';
 
   @override
-  String get shareBody => 'অগ্রগতি শেয়ার করুন';
+  String get shareBody => 'যে পেশিতে কাজ হয়েছে';
 
   @override
-  String get shareCompare => 'তুলনামূলক ছবি শেয়ার করুন';
+  String get shareCompare => 'আগে আর পরে';
 
   @override
-  String get shareHint => 'কার্ড হিসেবে শেয়ার করুন';
+  String get shareHint =>
+      'কার্ডটা তোমার ফোনেই তৈরি হয়। তুমি কোথায় পাঠাবে বেছে না নেওয়া পর্যন্ত কিছুই বাইরে যায় না।';
 
   @override
-  String get shareFailed => 'শেয়ার করা সম্ভব হয়নি';
+  String get shareFailed => 'কার্ডটা তৈরি করা গেল না';
 
   @override
-  String get shareWeekOf => 'গত ৭ দিন';
+  String get shareWeekOf => 'শেষ 7 দিন';
 
   @override
-  String get shareStreakLabel => 'টানা দিন';
+  String get shareStreakLabel => 'দিনের স্ট্রিক';
 
   @override
   String get shareSessionsLabel => 'সেশন';
 
   @override
-  String get shareVolumeLabel => 'মোট উত্তোলিত';
+  String get shareVolumeLabel => 'ভলিউম';
 
   @override
   String get restForExercise => 'এই ব্যায়ামের বিশ্রাম';
 
   @override
-  String get restUsingDefault => 'ডিফল্ট বিশ্রাম ব্যবহার করা হচ্ছে';
+  String get restUsingDefault => 'তোমার ডিফল্ট';
 
   @override
-  String get restCustom => 'কাস্টম বিশ্রাম';
+  String get restCustom => 'শুধু এটার জন্য';
 
   @override
   String get setType => 'সেটের ধরন';
 
   @override
-  String get setTypeNormal => 'সাধারণ সেট';
+  String get setTypeNormal => 'ওয়ার্কিং';
 
   @override
-  String get setTypeWarmup => 'ওয়ার্মআপ সেট';
+  String get setTypeWarmup => 'ওয়ার্ম-আপ';
 
   @override
   String get setTypeDrop => 'ড্রপ সেট';
 
   @override
-  String get setTypeFailure => 'ব্যর্থতা পর্যন্ত (Failure)';
+  String get setTypeFailure => 'ফেলিওর পর্যন্ত';
 
   @override
-  String get addWarmup => '+ ওয়ার্মআপ যোগ করুন';
+  String get addWarmup => 'ওয়ার্ম-আপ';
 
   @override
   String platesPerSide(String plates) {
@@ -1152,10 +1193,10 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get howTo => 'কীভাবে করবেন';
+  String get howTo => 'কীভাবে করবে';
 
   @override
-  String get similar => 'অনুরূপ ব্যায়াম';
+  String get similar => 'একই রকম';
 
   @override
   String get primaryLabel => 'প্রধান';
@@ -1164,7 +1205,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get secondaryLabel => 'সহায়ক';
 
   @override
-  String get none => 'কিছুই নয়';
+  String get none => 'কিছু না';
 
   @override
   String setCount(int n) {
@@ -1178,13 +1219,13 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get weeklyPlan => 'সাপ্তাহিক পরিকল্পনা';
+  String get weeklyPlan => 'সাপ্তাহিক প্ল্যান';
 
   @override
-  String get yourRoutines => 'আপনার রুটিনসমূহ';
+  String get yourRoutines => 'তোমার রুটিন';
 
   @override
-  String get noRoutines => 'এখনও কোনো রুটিন নেই';
+  String get noRoutines => 'এখনও কোনো রুটিন নেই। একটা বানাও আর তোমার ব্যায়াম যোগ করো।';
 
   @override
   String get newRoutine => 'নতুন রুটিন';
@@ -1193,85 +1234,85 @@ class AppLocalizationsBn extends AppLocalizations {
   String get routineName => 'রুটিনের নাম';
 
   @override
-  String get schedule => 'সময়সূচী';
+  String get schedule => 'সময়সূচি';
 
   @override
-  String get addFromList => 'তালিকা থেকে যোগ করুন';
+  String get addFromList => 'নিচের তালিকা থেকে ব্যায়াম যোগ করো।';
 
   @override
-  String get addExercises => 'ব্যায়াম যোগ করুন';
+  String get addExercises => 'ব্যায়াম যোগ করো';
 
   @override
-  String get deleteRoutine => 'রুটিন মুছুন';
+  String get deleteRoutine => 'এই রুটিন মুছবে?';
 
   @override
   String exercisesWithCount(int n) {
-    return '$nটি ব্যায়াম';
+    return 'ব্যায়াম · $n';
   }
 
   @override
   String setDay(String day) {
-    return '$day নির্ধারণ করুন';
+    return '$day ঠিক করো';
   }
 
   @override
   String get newRoutineName => 'নতুন রুটিন';
 
   @override
-  String get dragToReorder => 'ক্রম পরিবর্তন করতে টানুন';
+  String get dragToReorder => 'ক্রম বদলাতে বিন্দু দেওয়া হাতলটা টানো, এই ক্রমেই তুমি ট্রেনিং করবে।';
 
   @override
   String reorderHandle(String name) {
-    return '$name এর ক্রম পরিবর্তন করুন';
+    return '$name-এর ক্রম বদলাও';
   }
 
   @override
-  String get removeFromRoutine => 'রুটিন থেকে সরান';
+  String get removeFromRoutine => 'রুটিন থেকে সরাও';
 
   @override
-  String get dropExercise => 'ব্যায়াম বাদ দেবেন?';
+  String get dropExercise => 'এই ব্যায়াম বাদ দেবে?';
 
   @override
   String dropExerciseBody(String name) {
-    return '\"$name\" এই ওয়ার্কআউট থেকে বাদ পড়বে। পূর্বে সেভ করা কিছু হারাবে না।';
+    return '\"$name\" এই ওয়ার্কআউট থেকে বাদ যাবে। যা লেখা আছে তা হারাবে না।';
   }
 
   @override
-  String get drop => 'বাদ দিন';
+  String get drop => 'বাদ দাও';
 
   @override
-  String get resetData => 'সব ডেটা রিসেট করুন';
+  String get resetData => 'আমার সব ডেটা মুছে ফেলো';
 
   @override
-  String get resetTitle => 'সমস্ত ডেটা রিসেট করবেন?';
+  String get resetTitle => 'সবকিছু মুছবে?';
 
   @override
   String get resetBody =>
-      'আপনার সমস্ত সেশন, রুটিন এবং অগ্রগতি মুছে যাবে। এই পদক্ষেপটি ফিরিয়ে নেওয়া যাবে না।';
+      'সেশন, রেকর্ড, রুটিন, নোট আর প্রোফাইল। এটা ফেরানো যাবে না: পরে লাগতে পারে মনে হলে আগে একটা ব্যাকআপ এক্সপোর্ট করে নাও।';
 
   @override
-  String get resetConfirm => 'সব মুছে ফেলুন';
+  String get resetConfirm => 'সব মুছে ফেলো';
 
   @override
-  String get resetDone => 'ডেটা সফলভাবে রিসেট হয়েছে';
+  String get resetDone => 'সব ডেটা মুছে ফেলা হয়েছে';
 
   @override
-  String get support => 'সহায়তা';
+  String get support => 'সাপোর্ট';
 
   @override
-  String get reportBug => 'সমস্যার কথা জানান';
+  String get reportBug => 'বাগ রিপোর্ট করো';
 
   @override
-  String get requestFeature => 'নতুন ফিচারের অনুরোধ করুন';
+  String get requestFeature => 'ফিচার চাও';
 
   @override
-  String get starOnGithub => 'গিটহাবে স্টার দিন';
+  String get starOnGithub => 'GitHub-এ স্টার দাও';
 
   @override
-  String get buyCoffee => 'একটি কফি খাওয়ান';
+  String get buyCoffee => 'আমাকে একটা কফি খাওয়াও';
 
   @override
-  String get cantOpenLink => 'লিঙ্কটি খোলা যায়নি';
+  String get cantOpenLink => 'লিংকটা খোলা গেল না';
 
   @override
   String get theme => 'থিম';
@@ -1283,22 +1324,22 @@ class AppLocalizationsBn extends AppLocalizations {
   String get lightTheme => 'লাইট';
 
   @override
-  String get amoledTheme => 'অ্যামোলেড ব্ল্যাক';
+  String get amoledTheme => 'AMOLED কালো';
 
   @override
-  String get editDuration => 'ওয়ার্কআউটের সময়কাল';
+  String get editDuration => 'ওয়ার্কআউটের সময়কাল';
 
   @override
   String get sessionName => 'ওয়ার্কআউটের নাম';
 
   @override
-  String get nameWorkout => 'নাম দিন';
+  String get nameWorkout => 'নাম দাও';
 
   @override
-  String get sessionNameHint => 'যেমন: লেগস, পুশ, ফুল বডি';
+  String get sessionNameHint => 'যেমন লেগস, পুশ, ফুল বডি';
 
   @override
-  String get secondaryPickHint => 'এই ব্যায়ামে কাজ করা অন্যান্য পেশী স্পর্শ করুন।';
+  String get secondaryPickHint => 'এই ব্যায়াম আর যে পেশিগুলোতে কাজ করে সেগুলোতে ট্যাপ করো।';
 
   @override
   String get languageLabel => 'ভাষা';
@@ -1307,142 +1348,143 @@ class AppLocalizationsBn extends AppLocalizations {
   String get unitsLabel => 'একক';
 
   @override
-  String get restTimer => 'বিশ্রামের টাইমার';
+  String get restTimer => 'বিশ্রাম টাইমার';
 
   @override
-  String get alarmBlockedTitle => 'অ্যালার্ম বন্ধ রয়েছে';
+  String get alarmBlockedTitle => 'নোটিফিকেশন বন্ধ';
 
   @override
-  String get alarmBlockedBody => 'বিশ্রামের অ্যালার্ম বাজানোর জন্য নোটিফিকেশনের অনুমতি প্রয়োজন।';
+  String get alarmBlockedBody => 'স্ক্রিন লক থাকলে বিশ্রামের অ্যালার্ম বাজবে না';
 
   @override
-  String get alarmBlockedAction => 'সেটিংসে যান';
+  String get alarmBlockedAction => 'চালু করো';
 
   @override
   String get alarmSound => 'অ্যালার্মের শব্দ';
 
   @override
-  String get alarmDefaultName => 'ডিফল্ট বিপ';
+  String get alarmDefaultName => 'ডিফল্ট';
 
   @override
-  String get alarmSoundHint => 'সেট শেষের শব্দ নির্ধারণ করুন';
+  String get alarmSoundHint => 'নিজের শব্দ দাও, 15 সেকেন্ড পর্যন্ত';
 
   @override
-  String get alarmChoose => 'কাস্টম অডিও বেছে নিন';
+  String get alarmChoose => 'একটা শব্দ বেছে নাও…';
 
   @override
-  String get alarmPreview => 'শব্দ শুনুন';
+  String get alarmPreview => 'বর্তমান শব্দ বাজাও';
 
   @override
-  String get alarmReset => 'ডিফল্টে ফেরত যান';
+  String get alarmReset => 'ডিফল্টে ফেরাও';
 
   @override
-  String get alarmTooLong => 'অডিওটি খুব বড়';
+  String get alarmTooLong => 'ওই শব্দটা 15 সেকেন্ডের বেশি';
 
   @override
-  String get alarmInvalid => 'অকার্যকর অডিও ফাইল';
+  String get alarmInvalid => 'ওই অডিও ফাইলটা পড়া গেল না';
 
   @override
   String alarmChanged(String name) {
-    return 'অ্যালার্ম সাউন্ড \"$name\"-এ সেট করা হয়েছে';
+    return 'অ্যালার্মের শব্দ \"$name\" করা হয়েছে';
   }
 
   @override
-  String get alarmChangedDefault => 'ডিফল্ট শব্দে ফেরত এসেছে';
+  String get alarmChangedDefault => 'ডিফল্ট শব্দে ফেরানো হয়েছে';
 
   @override
-  String get addActivityWidget => 'অ্যাক্টিভিটি উইজেট যোগ করুন';
+  String get addActivityWidget => 'অ্যাক্টিভিটি উইজেট যোগ করো';
 
   @override
-  String get addStatsWidget => 'পরিসংখ্যান উইজেট যোগ করুন';
+  String get addStatsWidget => 'পরিসংখ্যান উইজেট যোগ করো';
 
   @override
-  String get pinUnsupported => 'ডিভাইসে উইজেট পিন সমর্থিত নয়';
+  String get pinUnsupported => 'তোমার লঞ্চারের উইজেট মেনু থেকে যোগ করো';
 
   @override
-  String get background => 'পটভূমি';
+  String get background => 'ব্যাকগ্রাউন্ড';
 
   @override
-  String get bgNone => 'সাদামাটা';
+  String get bgNone => 'কিছু না';
 
   @override
-  String get bgDots => 'ডট প্যাটার্ন';
+  String get bgDots => 'বিন্দু';
 
   @override
-  String get bgGrid => 'গ্রিড প্যাটার্ন';
+  String get bgGrid => 'গ্রিড';
 
   @override
-  String get exportCsv => 'CSV এক্সপোর্ট করুন';
+  String get exportCsv => 'ওয়ার্কআউট এক্সপোর্ট করো (CSV)';
 
   @override
-  String get exportBackup => 'ব্যাকআপ এক্সপোর্ট করুন';
+  String get exportBackup => 'ব্যাকআপ এক্সপোর্ট করো (ZIP)';
 
   @override
-  String get importBackup => 'ব্যাকআপ ইম্পোর্ট করুন';
+  String get importBackup => 'ব্যাকআপ ইমপোর্ট করো';
 
   @override
-  String get importHint => 'জিপ বা জেসন ব্যাকআপ ফাইল নির্বাচন করুন';
+  String get importHint =>
+      'GymMane থেকে এক্সপোর্ট করা একটা .zip (বা পুরোনো .json) ব্যাকআপ বেছে নাও। এতে তোমার বর্তমান ডেটা, মিডিয়াসহ, বদলে যাবে।';
 
   @override
-  String get import => 'ইম্পোর্ট';
+  String get import => 'ইমপোর্ট করো';
 
   @override
-  String get chooseFile => 'ফাইল নির্বাচন করুন';
+  String get chooseFile => 'ফাইল বেছে নাও';
 
   @override
-  String get importFromApp => 'অন্য অ্যাপ থেকে ইম্পোর্ট';
+  String get importFromApp => 'অন্য অ্যাপ থেকে ইমপোর্ট করো';
 
   @override
-  String get importUnknownFormat => 'অজানা ফাইল ফরম্যাট';
+  String get importUnknownFormat => 'ওই ফাইলে তারিখ, ব্যায়াম, রেপ আর ওজনের কলাম লাগবে';
 
   @override
-  String get importZipNoWeights => 'জিপ ফাইলে কোনো ওজন ডেটা নেই';
+  String get importZipNoWeights => 'ওই zip-এ কোনো ওজনের ফাইল নেই';
 
   @override
   String importWeights(int n) {
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: '$nটি ওজন পরিমাপ ইম্পোর্ট করা হয়েছে',
-      one: '$nটি ওজন পরিমাপ ইম্পোর্ট করা হয়েছে',
+      other: '$nটি ওজন ইমপোর্ট হয়েছে',
+      one: '$nটি ওজন ইমপোর্ট হয়েছে',
     );
     return '$_temp0';
   }
 
   @override
-  String get importReadFailed => 'ফাইল পড়া সম্ভব হয়নি';
+  String get importReadFailed => 'ওই ফাইলটা পড়া গেল না';
 
   @override
-  String get importUnitTitle => 'ওজনের একক নির্বাচন করুন';
+  String get importUnitTitle => 'ওই ফাইল কোন এককে?';
 
   @override
-  String get importUnitBody => 'ইম্পোর্ট করা ডেটা কোন এককে সংরক্ষিত?';
+  String get importUnitBody => 'এই এক্সপোর্টে বলা নেই ওজন কোন এককে।';
 
   @override
-  String get importNothing => 'ইম্পোর্ট করার মতো ডেটা পাওয়া যায়নি';
+  String get importNothing => 'ইমপোর্ট করার মতো নতুন কিছু নেই';
 
   @override
   String importDone(int n) {
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: '$nটি সেশন ইম্পোর্ট করা হয়েছে',
-      one: '$nটি সেশন ইম্পোর্ট করা হয়েছে',
+      other: '$nটি সেশন ইমপোর্ট হয়েছে',
+      one: '$nটি সেশন ইমপোর্ট হয়েছে',
     );
     return '$_temp0';
   }
 
   @override
-  String get aboutGymmane => 'Open GYM সম্পর্কে';
+  String get aboutGymmane => 'GymMane সম্পর্কে';
 
   @override
-  String get yourProfile => 'আপনার প্রোফাইল';
+  String get yourProfile => 'তোমার প্রোফাইল';
 
   @override
-  String get autofills => 'ক্যালকুলেটরে স্বয়ংক্রিয় পূরণ';
+  String get autofills => 'ক্যালকুলেটর নিজে থেকে ভরে';
 
   @override
-  String get onbUnitsWhy => 'For weights, measurements and distances. You can change it anytime in Settings.';
+  String get onbUnitsWhy => 'ওজন, মাপ আর দূরত্বের জন্য। সেটিংসে যেকোনো সময় বদলাতে পারো।';
 
   @override
   String get nameLabel => 'নাম';
@@ -1478,167 +1520,167 @@ class AppLocalizationsBn extends AppLocalizations {
   String get weeklyGoal => 'সাপ্তাহিক লক্ষ্য';
 
   @override
-  String get activityLabel => 'দৈনিক কার্যক্ষমতা';
+  String get activityLabel => 'অ্যাক্টিভিটি';
 
   @override
-  String get addPhoto => 'ছবি যোগ করুন';
+  String get addPhoto => 'ছবি যোগ করো';
 
   @override
-  String get removePhoto => 'ছবি সরান';
+  String get removePhoto => 'ছবি সরাও';
 
   @override
-  String get takePhoto => 'ছবি তুলুন';
+  String get takePhoto => 'ছবি তোলো';
 
   @override
-  String get chooseGallery => 'গ্যালারি থেকে বেছে নিন';
+  String get chooseGallery => 'গ্যালারি থেকে বেছে নাও';
 
   @override
-  String get backupImported => 'ব্যাকআপ সফলভাবে পুনরুদ্ধার করা হয়েছে';
+  String get backupImported => 'ব্যাকআপ ইমপোর্ট হয়েছে';
 
   @override
-  String get backupFailed => 'ব্যাকআপ ব্যর্থ হয়েছে';
+  String get backupFailed => 'ওই ব্যাকআপটা পড়া গেল না';
 
   @override
-  String get nothingToExport => 'এক্সপোর্ট করার জন্য কোনো ডেটা নেই';
+  String get nothingToExport => 'এখনও এক্সপোর্ট করার কিছু নেই: আগে একটা সেশন লেখো';
 
   @override
   String calculatorsCount(int n) {
-    return '$nটি ক্যালকুলেটর';
+    return 'তোমার ট্রেনিংয়ের জন্য $nটি ক্যালকুলেটর';
   }
 
   @override
   String get result => 'ফলাফল';
 
   @override
-  String get weightLifted => 'উত্তোলিত ওজন';
+  String get weightLifted => 'তোলা ওজন';
 
   @override
-  String get repsPerformed => 'সম্পন্ন রেপস';
+  String get repsPerformed => 'করা রেপ';
 
   @override
-  String get neck => 'ঘাড়';
+  String get neck => 'গলা';
 
   @override
   String get waist => 'কোমর';
 
   @override
-  String get hip => 'নিতম্ব';
+  String get hip => 'নিতম্ব (মহিলাদের জন্য)';
 
   @override
-  String get targetWeight => 'কাঙ্ক্ষিত ওজন';
+  String get targetWeight => 'লক্ষ্য ওজন';
 
   @override
   String get workingWeight => 'ওয়ার্কিং ওজন';
 
   @override
-  String get activityLevel => 'শারীরিক সক্রিয়তা';
+  String get activityLevel => 'অ্যাক্টিভিটির মাত্রা';
 
   @override
-  String get barWeight => 'রড/বারের ওজন';
+  String get barWeight => 'বারের ওজন';
 
   @override
   String get perSide => 'প্রতি পাশে';
 
   @override
-  String get justTheBar => 'শুধুমাত্র বার';
+  String get justTheBar => 'শুধু বার।';
 
   @override
   String perSideCount(int n) {
-    return 'প্রতি পাশে $n';
+    return '× $n প্রতি পাশে';
   }
 
   @override
-  String get toolNameRm => 'ওয়ান-রেপ ম্যাক্স';
+  String get toolNameRm => '1RM';
 
   @override
-  String get toolNameBmi => 'বিএমআই ক্যালকুলেটর';
+  String get toolNameBmi => 'BMI';
 
   @override
-  String get toolNameCal => 'ক্যালোরি ক্যালকুলেটর';
+  String get toolNameCal => 'ক্যালরি';
 
   @override
-  String get toolNameBf => 'বডি ফ্যাট ক্যালকুলেটর';
+  String get toolNameBf => 'বডি ফ্যাট';
 
   @override
-  String get toolNamePlate => 'প্লেট ক্যালকুলেটর';
+  String get toolNamePlate => 'প্লেট';
 
   @override
-  String get toolNameWarmup => 'ওয়ার্মআপ ক্যালকুলেটর';
+  String get toolNameWarmup => 'ওয়ার্ম-আপ';
 
   @override
-  String get toolTitleRm => 'ওয়ান-রেপ ম্যাক্স';
+  String get toolTitleRm => '1RM ক্যালকুলেটর';
 
   @override
-  String get toolTitleBmi => 'বডি ম্যাস ইনডেক্স';
+  String get toolTitleBmi => 'BMI ক্যালকুলেটর';
 
   @override
-  String get toolTitleCal => 'দৈনিক ক্যালোরি প্রয়োজন';
+  String get toolTitleCal => 'ক্যালরি ও ম্যাক্রো';
 
   @override
-  String get toolTitleBf => 'শরীরের চর্বির শতকরা হার';
+  String get toolTitleBf => 'বডি ফ্যাট %';
 
   @override
-  String get toolTitlePlate => 'প্লেটের হিসাব';
+  String get toolTitlePlate => 'প্লেট ক্যালকুলেটর';
 
   @override
-  String get toolTitleWarmup => 'ওয়ার্মআপ রুটিন';
+  String get toolTitleWarmup => 'ওয়ার্ম-আপ সেট';
 
   @override
-  String get toolHintRm => 'যেকোনো ওজনের রেপস থেকে সর্বাধিক উত্তোলন হিসাব করুন';
+  String get toolHintRm => 'আনুমানিক 1-রেপ ম্যাক্স (Epley সূত্র)';
 
   @override
-  String get toolHintCal => 'বজায় রাখা, কমানো বা বাড়ানোর ক্যালোরি হিসাব';
+  String get toolHintCal => 'আনুমানিক দৈনিক রক্ষণাবেক্ষণ';
 
   @override
-  String get toolHintBf => 'ইউএস নেভি পদ্ধতিতে শারীরিক চর্বির পরিমাপ';
+  String get toolHintBf => 'US Navy পদ্ধতিতে অনুমান';
 
   @override
-  String get toolHintPlate => 'বারে কোন প্লেটগুলো সাজাতে হবে তা দেখুন';
+  String get toolHintPlate => 'বারবেলের মোট ওজন';
 
   @override
-  String get toolHintWarmup => 'ভারী সেটের আগে নিরাপদ ওয়ার্মআপ সেট প্রস্তুত করুন';
+  String get toolHintWarmup => 'ওয়ার্কিং ওজনের লক্ষ্য';
 
   @override
-  String get toolDescRm => 'আপনার সর্বাধিক সক্ষমতা আনুমান করুন।';
+  String get toolDescRm => 'আনুমানিক ওয়ান-রেপ ম্যাক্স';
 
   @override
-  String get toolDescBmi => 'উচ্চতা এবং ওজনের সুষম অনুপাত জানুন।';
+  String get toolDescBmi => 'বডি মাস ইনডেক্স';
 
   @override
-  String get toolDescCal => 'আপনার লক্ষ্যের জন্য উপযুক্ত খাদ্য পরিমাপ করুন।';
+  String get toolDescCal => 'ক্যালরি ও ম্যাক্রো';
 
   @override
-  String get toolDescBf => 'শরীরের চর্বির আনুমানিক শতাংশ জানুন।';
+  String get toolDescBf => 'বডি ফ্যাটের শতাংশ';
 
   @override
-  String get toolDescPlate => 'বারে প্লেট সাজানোর সঠিক নির্দেশিকা।';
+  String get toolDescPlate => 'বারবেল প্লেট ক্যালকুলেটর';
 
   @override
-  String get toolDescWarmup => 'আঘাত এড়িয়ে সর্বোচ্চ কার্যক্ষমতার জন্য প্রস্তুতি নিন।';
+  String get toolDescWarmup => 'ধাপে ধাপে বাড়ানো সেট';
 
   @override
   String get bmiUnderweight => 'কম ওজন';
 
   @override
-  String get bmiNormal => 'স্বাভাবিক ওজন';
+  String get bmiNormal => 'স্বাভাবিক';
 
   @override
-  String get bmiOverweight => 'অতিরিক্ত ওজন';
+  String get bmiOverweight => 'বেশি ওজন';
 
   @override
-  String get bmiObese => 'স্থূলতা';
+  String get bmiObese => 'স্থূল';
 
   @override
-  String get actSedentary => 'অলস / বসে কাজ';
+  String get actSedentary => 'বসে থাকা';
 
   @override
-  String get actLight => 'হালকা সক্রিয় (১-৩ দিন/সপ্তাহ)';
+  String get actLight => 'হালকা';
 
   @override
-  String get actActive => 'অত্যন্ত সক্রিয় (৬-৭ দিন/সপ্তাহ)';
+  String get actActive => 'সক্রিয়';
 
   @override
-  String get actModerate => 'মাঝারি সক্রিয় (৩-৫ দিন/সপ্তাহ)';
+  String get actModerate => 'মাঝারি';
 
   @override
   String get muscleChest => 'বুক';
@@ -1647,40 +1689,40 @@ class AppLocalizationsBn extends AppLocalizations {
   String get muscleBack => 'পিঠ';
 
   @override
-  String get muscleLowerBack => 'লোয়ার ব্যাক';
+  String get muscleLowerBack => 'নিচের পিঠ';
 
   @override
   String get muscleShoulders => 'কাঁধ';
 
   @override
-  String get muscleBiceps => 'বাইসেপ্স';
+  String get muscleBiceps => 'বাইসেপস';
 
   @override
-  String get muscleTriceps => 'ট্রাইসেপ্স';
+  String get muscleTriceps => 'ট্রাইসেপস';
 
   @override
-  String get muscleForearm => 'অগ্রবাহু';
+  String get muscleForearm => 'বাহুর নিচের অংশ';
 
   @override
-  String get muscleTrapezius => 'ট্র্যাপেজিয়াস';
+  String get muscleTrapezius => 'ট্র্যাপিজিয়াস';
 
   @override
-  String get muscleAbdomen => 'অ্যাবস / পেট';
+  String get muscleAbdomen => 'পেট';
 
   @override
-  String get muscleObliques => 'অবলিক্স';
+  String get muscleObliques => 'অবলিক';
 
   @override
-  String get muscleQuads => 'কোয়াড্রিসেপ্স';
+  String get muscleQuads => 'কোয়াড';
 
   @override
-  String get muscleHamstrings => 'হ্যামস্ট্রিংস';
+  String get muscleHamstrings => 'হ্যামস্ট্রিং';
 
   @override
-  String get muscleGlutes => 'গ্লুটস';
+  String get muscleGlutes => 'গ্লুট';
 
   @override
-  String get muscleCalves => 'কাফ';
+  String get muscleCalves => 'পায়ের ডিম';
 
   @override
   String get mgChest => 'বুক';
@@ -1695,7 +1737,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mgShoulders => 'কাঁধ';
 
   @override
-  String get mgArms => 'হাত';
+  String get mgArms => 'বাহু';
 
   @override
   String get mgCore => 'কোর';
@@ -1716,22 +1758,22 @@ class AppLocalizationsBn extends AppLocalizations {
   String get equipBodyweight => 'শরীরের ওজন';
 
   @override
-  String get equipWeighted => 'অতিরিক্ত ওজনযুক্ত';
+  String get equipWeighted => 'ওজনসহ';
 
   @override
-  String get equipBand => 'রেজিস্ট্যান্স ব্যান্ড';
+  String get equipBand => 'ব্যান্ড';
 
   @override
   String get equipKettlebell => 'কেটলবেল';
 
   @override
-  String get equipRings => 'জিমন্যাস্টিক রিংস';
+  String get equipRings => 'রিং';
 
   @override
   String get equipOther => 'অন্যান্য';
 
   @override
-  String get diffBeginner => 'শিক্ষানবিস';
+  String get diffBeginner => 'শিক্ষানবিশ';
 
   @override
   String get diffAdvanced => 'উন্নত';
@@ -1744,32 +1786,32 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String version(String v) {
-    return 'সংস্করণ $v';
+    return 'ভার্সন $v';
   }
 
   @override
-  String get aboutBlurb => 'বিজ্ঞাপনহীন, সম্পূর্ণ অফলাইন ওপেন সোর্স জিম লগ।';
+  String get aboutBlurb => 'যারা ওজন তোলে, তাদেরই হাতে তৈরি, তাদের জন্য।';
 
   @override
   String get freeForever => 'চিরকাল বিনামূল্যে';
 
   @override
-  String get freeForeverWhy => 'কোনো পেওয়াল নেই, কোনো সাবস্ক্রিপশন নেই।';
+  String get freeForeverWhy => 'কোনো সাবস্ক্রিপশন নেই, বিজ্ঞাপন নেই, কিছুই টাকার দেয়ালের পেছনে বন্ধ নয়।';
 
   @override
-  String get fullyOffline => 'সম্পূর্ণ অফলাইন';
+  String get fullyOffline => 'পুরোপুরি অফলাইন';
 
   @override
-  String get fullyOfflineWhy => 'আপনার ডেটা আপনার ডিভাইসেই সুরক্ষিত থাকে।';
+  String get fullyOfflineWhy => 'অ্যাকাউন্ট নেই, সার্ভার নেই। তোমার ট্রেনিং কখনো এই ফোন ছাড়ে না।';
 
   @override
-  String get yoursToTake => 'আপনার ডেটা আপনার নিয়ন্ত্রণেই';
+  String get yoursToTake => 'তোমার ডেটা তোমারই';
 
   @override
-  String get yoursToTakeWhy => 'যেকোনো সময় ব্যাকআপ নিন বা এক্সপোর্ট করুন।';
+  String get yoursToTakeWhy => 'যখন খুশি CSV-তে এক্সপোর্ট করো, আর এক ট্যাপে সব মুছে ফেলো।';
 
   @override
-  String get whatsInside => 'অ্যাপের বৈশিষ্ট্যসমূহ';
+  String get whatsInside => 'ভেতরে কী আছে';
 
   @override
   String exercisesInside(int n) {
@@ -1777,22 +1819,23 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get exercisesInsideWhy => 'সঠিক ফর্ম এবং পদক্ষেপসহ শত শত ব্যায়াম।';
+  String get exercisesInsideWhy => 'প্রতিটার সাথে অ্যানিমেশন আর ধাপে ধাপে নির্দেশনা।';
 
   @override
-  String get calculatorsInside => 'প্রয়োজনীয় ক্যালকুলেটর';
+  String get calculatorsInside => '10টি ক্যালকুলেটর';
 
   @override
-  String get calculatorsInsideWhy => '1RM, BMI, ক্যালোরি এবং প্লেট ক্যালকুলেটর।';
+  String get calculatorsInsideWhy =>
+      '1RM, প্লেট, BMI, ক্যালরি, বডি ফ্যাট, FFMI, ওয়ার্ম-আপ, RPE লোড, আর DOTS ও Wilks শক্তির স্কোর, সবই প্রকাশিত সূত্রে।';
 
   @override
-  String get mathInside => 'স্মার্ট বিশ্লেষণ';
+  String get mathInside => 'সৎ হিসাব';
 
   @override
-  String get mathInsideWhy => 'ভলিউম, ছন্দ এবং রেকর্ডের নিখুঁত হিসাব।';
+  String get mathInsideWhy => 'ভলিউম, রেকর্ড আর স্ট্রিক আসে তোমার নিজের সেট থেকে। এখানে কিছুই শুধু সাজ নয়।';
 
   @override
-  String get streakCaps => 'ধারাবাহিকতা';
+  String get streakCaps => 'স্ট্রিক';
 
   @override
   String daysUnit(int n) {
@@ -1807,10 +1850,10 @@ class AppLocalizationsBn extends AppLocalizations {
   String get welcomeKicker => 'স্বাগতম';
 
   @override
-  String get welcomeBlurb => 'চলুন আপনার ট্রেনিং প্রোফাইল সেট আপ করি।';
+  String get welcomeBlurb => 'সবকিছু তোমার ফোনেই থাকে। অ্যাকাউন্ট নেই, ইন্টারনেট নেই, কোনো খরচ নেই।';
 
   @override
-  String get welcomeStart => 'শুরু করুন';
+  String get welcomeStart => 'শুরু করো';
 
   @override
   String onbStep(int i, int n) {
@@ -1818,60 +1861,66 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get onbNameTitle => 'আপনার নাম কী?';
+  String get onbNameTitle => 'তোমাকে কী নামে ডাকব?';
 
   @override
-  String get onbNameHint => 'আপনার নাম লিখুন';
+  String get onbNameHint => 'তোমার নাম';
 
   @override
-  String get onbPhotoAdd => 'ছবি যোগ করুন';
+  String get onbPhotoAdd => 'ছবি যোগ করো';
 
   @override
-  String get onbPhotoChange => 'ছবি পরিবর্তন';
+  String get onbPhotoChange => 'ছবি বদলাও';
 
   @override
-  String get onbPhotoTitle => 'আপনার প্রোফাইলে ছবি যোগ করুন';
+  String get onbPhotoTitle => 'তোমার প্রোফাইলে একটা মুখ দাও';
 
   @override
-  String get onbPhotoWhy => 'ঐচ্ছিক। এটি ফোনেই থাকে এবং প্রোফাইল থেকে যেকোনো সময় পরিবর্তন করা যায়।';
+  String get onbPhotoWhy => 'ঐচ্ছিক। এটা তোমার ফোনেই থাকে আর প্রোফাইল থেকে যেকোনো সময় বদলাতে পারো।';
 
   @override
   String get onbPhotoLater => 'পরে';
 
   @override
-  String get onbNameWhy => 'অ্যাপটি ব্যক্তিগতকৃত করতে এটি ব্যবহৃত হয়।';
+  String get onbNameWhy => 'শুধু তোমাকে শুভেচ্ছা জানাতে। এটা কখনো ফোন ছাড়ে না।';
 
   @override
-  String get onbBodyTitle => 'শারীরিক গঠন';
+  String get onbBodyTitle => 'কয়েকটা সংখ্যা';
 
   @override
-  String get onbBodyWhy => 'ক্যালকুলেটর এবং অনুপাত নিখুঁত করতে ব্যবহৃত হয়।';
+  String get onbBodyWhy => 'এগুলো ক্যালকুলেটরে কাজে লাগে। সেটিংসে যেকোনো সময় বদলাতে পারো।';
 
   @override
-  String get onbGoalTitle => 'সাপ্তাহিক লক্ষ্য';
+  String get onbGoalTitle => 'কত ঘন ঘন ট্রেনিং করো?';
 
   @override
-  String get onbGoalWhy => 'সপ্তাহে কত দিন জিম করতে চান?';
+  String get onbGoalWhy => 'তোমার সাপ্তাহিক লক্ষ্যের রিং ঠিক করে। সৎ থাকো, উচ্চাকাঙ্ক্ষী নয়।';
 
   @override
   String perWeek(int n) {
-    return 'সপ্তাহে $n দিন';
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'সপ্তাহে $nটি সেশন',
+      one: 'সপ্তাহে $nটি সেশন',
+    );
+    return '$_temp0';
   }
 
   @override
-  String get onbUnitsTitle => 'ওজনের একক';
+  String get onbUnitsTitle => 'কিলো না পাউন্ড?';
 
   @override
-  String get next => 'পরবর্তী';
+  String get next => 'পরের';
 
   @override
-  String get back => 'পিছনে';
+  String get back => 'পেছনে';
 
   @override
-  String get skip2 => 'এড়িয়ে যান';
+  String get skip2 => 'বাদ দাও';
 
   @override
-  String get madeWithLoveBy => 'MADE BY Arafath';
+  String get madeWithLoveBy => 'ভালোবাসায় তৈরি';
 
   @override
   String get sourceCode => 'সোর্স কোড';
@@ -1883,72 +1932,73 @@ class AppLocalizationsBn extends AppLocalizations {
   String get results => 'ফলাফল';
 
   @override
-  String get noMatches => 'কোনো মিল পাওয়া যায়নি';
+  String get noMatches => 'এই খোঁজার সাথে কোনো ব্যায়াম মেলে না।';
 
   @override
-  String get tapToEdit => 'সম্পাদনা করতে স্পর্শ করুন';
+  String get tapToEdit => 'এন্ট্রি ঠিক করতে পেনসিলে, মুছতে ঝুড়িতে ট্যাপ করো।';
 
   @override
-  String get editEntry => 'এন্ট্রি সম্পাদনা';
+  String get editEntry => 'বদলাও';
 
   @override
-  String get editEntryHint => 'ওজন বা রেপস পরিবর্তন করুন';
+  String get editEntryHint => 'যেকোনো সেটের রেপ বা ওজন ঠিক করো।';
 
   @override
-  String get removeSet => 'সেট মুছুন';
+  String get removeSet => 'সেট সরাও';
 
   @override
-  String get continueWorkout => 'ব্যায়াম চালিয়ে যাবেন?';
+  String get continueWorkout => 'চালিয়ে যাও';
 
   @override
-  String get continueWorkoutBody => 'আপনার একটি অসমাপ্ত সেশন রয়েছে।';
+  String get continueWorkoutBody =>
+      'ওয়ার্কআউট আবার চলমান হবে, আগে টিক দেওয়া সেটসহ। আবার শেষ করলে মূল দিনেই সেভ হবে।';
 
   @override
-  String get addBodyWidget => 'বডি উইজেট যোগ করুন';
+  String get addBodyWidget => 'পেশির মানচিত্রের উইজেট যোগ করো';
 
   @override
-  String get repsOnly => 'শুধুমাত্র রেপস';
+  String get repsOnly => 'শুধু রেপ';
 
   @override
-  String get repsOnlyHint => 'ওজন ছাড়া শুধুমাত্র পুনরাবৃত্তির হিসাব রাখুন';
+  String get repsOnlyHint => 'এই ব্যায়ামটা ওজন ছাড়া লেখো।';
 
   @override
-  String get eachSide => 'Each side';
+  String get eachSide => 'প্রতি পাশে';
 
   @override
-  String get eachSideHint => 'The timer runs once per side and the rest starts after both.';
+  String get eachSideHint => 'টাইমার প্রতি পাশে একবার চলে আর দুই পাশের পরে বিশ্রাম শুরু হয়।';
 
   @override
-  String get useDefaultArt => 'ডিফল্ট ছবি ব্যবহার করুন';
+  String get useDefaultArt => 'ডিফল্ট ছবিতে ফেরো';
 
   @override
   String daysShort(int n) {
-    return '$n দিন';
+    return '$nদি';
   }
 
   @override
-  String get focusCard => 'আজকের ফোকাস কার্ড';
+  String get focusCard => 'আজকের ফোকাস';
 
   @override
-  String get autoAdvance => 'স্বয়ংক্রিয় পরবর্তী সেট';
+  String get autoAdvance => 'নিজে থেকে এগিয়ে যাও';
 
   @override
-  String get keepScreenOn => 'স্ক্রিন চালু রাখুন';
+  String get keepScreenOn => 'ট্রেনিংয়ের সময় স্ক্রিন চালু রাখো';
 
   @override
-  String get lockWorkout => 'সেশন লক করুন';
+  String get lockWorkout => 'স্ক্রিন লক করো';
 
   @override
-  String get unlockWorkout => 'আনলক করুন';
+  String get unlockWorkout => 'আনলক করো';
 
   @override
-  String get holdToUnlock => 'আনলক করতে চেপে রাখুন';
+  String get holdToUnlock => 'আনলক করতে চেপে ধরো';
 
   @override
-  String get liveChannel => 'লাইভ সেশন';
+  String get liveChannel => 'চলমান ওয়ার্কআউট';
 
   @override
-  String get liveChannelWhy => 'চলমান সেশনের অবস্থা নোটিফিকেশনে প্রদর্শন করে';
+  String get liveChannelWhy => 'ট্রেনিংয়ের সময় বর্তমান ব্যায়াম, সেট আর বিশ্রাম টাইমার দেখায়';
 
   @override
   String liveSet(int n, int total) {
@@ -1959,16 +2009,16 @@ class AppLocalizationsBn extends AppLocalizations {
   String get liveResting => 'বিশ্রাম';
 
   @override
-  String get liveAllDone => 'সব সেট সম্পন্ন!';
+  String get liveAllDone => 'সব সেট শেষ';
 
   @override
-  String get autoAdvanceHint => 'সেট সম্পন্ন হলে স্বয়ংক্রিয়ভাবে বিশ্রামের টাইমার চালু হবে';
+  String get autoAdvanceHint => 'শেষ সেটের পরে এগিয়ে যায়';
 
   @override
-  String get placePlates => 'উপলব্ধ প্লেটসমূহ';
+  String get placePlates => 'প্লেট আর বার';
 
   @override
-  String get platesAll => 'সকল প্লেট';
+  String get platesAll => 'সব আছে';
 
   @override
   String platesOwned(int n) {
@@ -1977,96 +2027,96 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get platePairs => 'প্লেটের জোড়া';
+  String get platePairs => 'জোড়া';
 
   @override
   String plateAchievable(String w) {
-    return 'সর্বোচ্চ কাছাকাছি লোড: $w';
+    return 'সবচেয়ে কাছের যা লাগাতে পারো: $w';
   }
 
   @override
-  String get autoWarmup => 'স্বয়ংক্রিয় ওয়ার্মআপ';
+  String get autoWarmup => 'ওয়ার্ম-আপ সেট দিয়ে শুরু করো';
 
   @override
-  String get autoWarmupHint => 'ভারী কাজের সেটের আগে প্রয়োজনীয় ওয়ার্মআপ সেট যোগ করে';
+  String get autoWarmupHint => 'ওয়ার্কআউট খুললেই ধাপে ধাপে বাড়ানো সেট যোগ করে।';
 
   @override
-  String get trainReminder => 'ট্রেনিং অনুস্মারক';
+  String get trainReminder => 'ট্রেনিং রিমাইন্ডার';
 
   @override
-  String get trainReminderHint => 'প্রতিদিন ব্যায়ামের নির্দিষ্ট সময়ে নোটিফিকেশন পান';
+  String get trainReminderHint => 'এই সময়ে একটা খোঁচা, শুধু যেদিন তোমার রুটিন ঠিক করা আছে।';
 
   @override
-  String get reminderExactTime => 'নির্দিষ্ট সময়';
+  String get reminderExactTime => 'ঠিক সময়';
 
   @override
-  String get toastSoundSetting => 'নোটিসের শব্দ';
+  String get toastSoundSetting => 'নোটিশের শব্দ';
 
   @override
-  String get toastSoundHint => 'উপরে নোটিশ প্রদর্শিত হলে একটি মৃদু ধ্বনি।';
+  String get toastSoundHint => 'প্রতিটা নোটিশে একটা নরম ঘণ্টা';
 
   @override
-  String get notifTrainChannel => 'ট্রেনিং অনুস্মারক';
+  String get notifTrainChannel => 'ট্রেনিং রিমাইন্ডার';
 
   @override
-  String get notifTrainChannelWhy => 'জিম করার সময় হলে আপনাকে মনে করিয়ে দেয়';
+  String get notifTrainChannelWhy => 'যেদিন ঠিক করেছ সেদিন ট্রেনিংয়ের খোঁচা।';
 
   @override
-  String get notifTrainTitle => 'আজকের ব্যায়ামের সময়';
+  String get notifTrainTitle => 'ট্রেনিংয়ের সময়';
 
   @override
-  String get notifTrainBody => 'লোহা ডাকার সময় হয়েছে — আপনার সেশন প্রস্তুত।';
+  String get notifTrainBody => 'তোমার রুটিন অপেক্ষা করছে।';
 
   @override
-  String get planIntro => 'পরিকল্পনা বিবরণ';
+  String get planIntro => 'শুধু এই তালিকার ব্যায়াম দিয়ে আমার জন্য একটা ট্রেনিং রুটিন বানাও।';
 
   @override
-  String get planFormat => 'পরিকল্পনার কাঠামো';
+  String get planFormat => 'শুধু JSON-এ উত্তর দাও, এই আকারে:';
 
   @override
-  String get planNothing => 'কোনো পরিকল্পনা পাওয়া যায়নি';
+  String get planNothing => 'ওই ফাইলের কোনো ব্যায়াম তোমার লাইব্রেরির সাথে মেলেনি';
 
   @override
-  String get planFailed => 'পরিকল্পনা ইম্পোর্ট ব্যর্থ হয়েছে';
+  String get planFailed => 'ওই ফাইলটা এমন রুটিন নয় যা আমরা পড়তে পারি';
 
   @override
-  String get routineGroup => 'রুটিন গ্রুপ';
+  String get routineGroup => 'দল';
 
   @override
-  String get newGroup => 'নতুন গ্রুপ';
+  String get newGroup => 'নতুন দল';
 
   @override
-  String get noGroup => 'গ্রুপ ছাড়া';
+  String get noGroup => 'কোনো দল নয়';
 
   @override
-  String get groupNameHint => 'গ্রুপের নাম লিখুন';
+  String get groupNameHint => 'পুশ / পুল / লেগস, 5×5…';
 
   @override
   String get filters => 'ফিল্টার';
 
   @override
-  String get setsPlannedHint => 'পরিকল্পিত সেটের সংখ্যা';
+  String get setsPlannedHint => 'প্রতিটার কয়টা সেট চাও বেছে নাও। ওয়ার্কআউট সেগুলো তৈরি রেখে খুলবে।';
 
   @override
-  String get nextTime => 'পরের বার';
+  String get nextTime => 'পরেরবার';
 
   @override
-  String get nextHold => 'পরবর্তী ধরে রাখুন';
+  String get nextHold => 'সব রেপ না হওয়া পর্যন্ত একই ওজন';
 
   @override
-  String get bgPhoto => 'পটভূমির ছবি';
+  String get bgPhoto => 'তোমার ছবি';
 
   @override
-  String get bgPhotoPick => 'ছবি নির্বাচন করুন';
+  String get bgPhotoPick => 'ছবি বেছে নাও';
 
   @override
-  String get bgPhotoChange => 'ছবি পরিবর্তন করুন';
+  String get bgPhotoChange => 'ছবি বদলাও';
 
   @override
-  String get bgPhotoRemove => 'ছবি সরান';
+  String get bgPhotoRemove => 'ছবি সরাও';
 
   @override
-  String get bgDim => 'ছবির অন্ধকার মাত্রা';
+  String get bgDim => 'কতটা গাঢ়';
 
   @override
   String get dimSoft => 'হালকা';
@@ -2075,31 +2125,31 @@ class AppLocalizationsBn extends AppLocalizations {
   String get dimMedium => 'মাঝারি';
 
   @override
-  String get dimStrong => 'গাঢ়';
+  String get dimStrong => 'গাঢ়';
 
   @override
-  String get bgPhotoHint => 'অ্যাপের পটভূমিতে আপনার নিজস্ব ছবি সেট করুন';
+  String get bgPhotoHint => 'এটা সবকিছুর পেছনে থাকে, ঝাপসা করে যাতে অ্যাপ পড়া যায়।';
 
   @override
-  String get reminderSmart => 'স্মার্ট অনুস্মারক';
+  String get reminderSmart => 'স্মার্ট';
 
   @override
-  String get reminderFixed => 'নির্দিষ্ট সময়ে';
+  String get reminderFixed => 'নির্দিষ্ট সময়';
 
   @override
   String get reminderSmartHint =>
-      'আপনার পূর্ববর্তী সেশনের সময়ের ওপর ভিত্তি করে স্বয়ংক্রিয়ভাবে মনে করিয়ে দেয়';
+      'যে দিন আর সময়ে তুমি সত্যিই ট্রেনিং করো সেটা ব্যবহার করে, আর যেদিন ট্রেনিং হয়ে গেছে সেদিন চুপ থাকে।';
 
   @override
-  String get reminderSmartEmpty => 'পর্যাপ্ত ডেটা নেই';
+  String get reminderSmartEmpty => 'আরও কয়েকটা সেশন লেখো, তোমার দিনগুলো শিখে নেবে।';
 
   @override
   String habitFocus(String day) {
-    return 'যা সাধারণত আপনি $day-এ অনুশীলন করেন';
+    return '$day-এ তুমি সাধারণত যা ট্রেন করো';
   }
 
   @override
-  String get duplicateRoutine => 'রুটিন কপি করুন';
+  String get duplicateRoutine => 'রুটিনের কপি বানাও';
 
   @override
   String copySuffix(String name) {
@@ -2107,358 +2157,366 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get saveAsRoutine => 'রুটিন হিসেবে সংরক্ষণ করুন';
+  String get saveAsRoutine => 'রুটিন হিসেবে সেভ করো';
 
   @override
-  String get savedAsRoutine => 'রুটিন হিসেবে সংরক্ষিত হয়েছে';
+  String get savedAsRoutine => 'রুটিন হিসেবে সেভ হয়েছে';
 
   @override
-  String get templates => 'টেমপ্লেটসমূহ';
+  String get templates => 'তৈরি প্ল্যান';
 
   @override
-  String get templatesHint => 'জনপ্রিয় ওয়ার্কআউট টেমপ্লেট থেকে দ্রুত শুরু করুন';
+  String get templatesHint => 'ক্লাসিক প্রোগ্রাম, তোমার নিজের লাইব্রেরি দিয়ে তৈরি। পরে যা খুশি বদলাতে পারো।';
 
   @override
   String templateAdded(int n) {
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: '$nটি রুটিন যোগ করা হয়েছে',
-      one: '$nটি রুটিন যোগ করা হয়েছে',
+      other: '$nটি রুটিন যোগ হয়েছে',
+      one: '$nটি রুটিন যোগ হয়েছে',
     );
     return '$_temp0';
   }
 
   @override
-  String get tplFullbody => 'ফুল বডি ওয়ার্কআউট';
+  String get tplFullbody => 'সপ্তাহে তিনদিন ফুল বডি। শুরু করার জন্য এটাই।';
 
   @override
-  String get tplPpl => 'পুশ পুল লেগ্স (PPL)';
+  String get tplPpl => 'পুশ, পুল আর লেগস। সপ্তাহে তিন বা ছয় দিন।';
 
   @override
-  String get tplArnold => 'Chest and back, shoulders and arms, legs. The classic six-day split.';
+  String get tplArnold => 'বুক আর পিঠ, কাঁধ আর বাহু, পা। ক্লাসিক ছয় দিনের ভাগ।';
 
   @override
-  String get tplUpperlower => 'আপার / লোয়ার বডি';
+  String get tplUpperlower => 'উপরের আর নিচের শরীর, সপ্তাহে চার দিন।';
 
   @override
-  String get tplStronglifts => 'স্ট্রংলিফটস ৫×৫';
+  String get tplStronglifts => 'দুটো ওয়ার্কআউট, পাঁচটার পাঁচ সেট, পালা করে।';
 
   @override
-  String get tplStartingstrength => 'স্টার্টিং স্ট্রেন্থ';
+  String get tplStartingstrength => 'প্রতি সেশনে স্কোয়াট, দুটো ওয়ার্কআউট পালা করে।';
 
   @override
-  String get tplHome => 'হোম বডিওয়েট ওয়ার্কআউট';
+  String get tplHome => 'শুধু ঝোলার মতো একটা বার আর মেঝে।';
 
   @override
   String dayCount(int n) {
-    return '$n দিন';
+    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$n দিন', one: '$n দিন');
+    return '$_temp0';
   }
 
   @override
-  String get logRpe => 'RPE বা RIR লগ করুন';
+  String get logRpe => 'পরিশ্রম লেখো (RPE)';
 
   @override
-  String get rpeHint => '১ থেকে ১০ স্কেলে সেটের পরিশ্রমের মাত্রা চিহ্নিত করুন';
+  String get rpeHint => '10 মানে আর কিছু বাকি নেই, 8 মানে দুটো রেপ বাকি ছিল।';
 
   @override
   String get superset => 'সুপারসেট';
 
   @override
-  String get supersetLink => 'সুপারসেট হিসেবে যুক্ত করুন';
+  String get supersetLink => 'পরেরটার সাথে জোড়ো';
 
   @override
-  String get supersetUnlink => 'Unchain from the next one';
+  String get supersetUnlink => 'পরেরটা থেকে আলাদা করো';
 
   @override
-  String get supersetHint => 'বিশ্রাম ছাড়া পরপর দুটি ব্যায়াম সম্পাদন করুন';
+  String get supersetHint => 'জোড়া ব্যায়ামের মাঝে বিশ্রাম নেই, সরাসরি পরেরটায়।';
 
   @override
-  String get aiRoutine => 'স্মার্ট রুটিন জেনারেটর';
+  String get jumpSet => 'Jump set';
 
   @override
-  String get aiIntro => 'আপনার লক্ষ্য ও সরঞ্জামের ভিত্তিতে নিখুঁত রুটিন তৈরি করুন';
+  String get jumpSetHint => 'Rest after each chained exercise too, then move on to the next one.';
+
+  @override
+  String get jumpSetLink => 'Make it a jump set';
+
+  @override
+  String get aiRoutine => 'AI দিয়ে রুটিন';
+
+  @override
+  String get aiIntro =>
+      'GymMane কখনো কোনো AI-এর সাথে কথা বলে না। তুমি তোমার ব্যায়ামের তালিকা বের করো, যে অ্যাসিস্ট্যান্ট আগে থেকে ব্যবহার করো তাতে পেস্ট করো, আর তার উত্তর ফিরিয়ে আনো। ফোন থেকে নিজে থেকে কিছুই বাইরে যায় না।';
 
   @override
   String aiMissing(int n) {
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: 'লাইব্রেরিতে $nটি নাম ছিল না',
-      one: 'লাইব্রেরিতে ১টি নাম ছিল না',
+      other: '$nটি নাম তোমার লাইব্রেরিতে ছিল না',
+      one: '1টি নাম তোমার লাইব্রেরিতে ছিল না',
     );
     return '$_temp0';
   }
 
   @override
-  String get importApps => 'অ্যাপ থেকে ইম্পোর্ট';
+  String get importApps => 'কোন কোন অ্যাপ পড়ে';
 
   @override
-  String get importOtherCsv => 'অন্যান্য CSV ফাইল';
+  String get importOtherCsv => 'তারিখ, ব্যায়াম, রেপ আর ওজনসহ যেকোনো CSV';
 
   @override
-  String get importAskApp => 'কোন অ্যাপের ব্যাকআপ এটি?';
+  String get importAskApp => 'অন্য অ্যাপ লাগবে? চেয়ে নাও';
 
   @override
   String get awardFirstStepName => 'প্রথম পদক্ষেপ';
 
   @override
-  String get awardFirstStepLine => 'আপনার প্রথম সেশন সফলভাবে সম্পন্ন হয়েছে।';
+  String get awardFirstStepLine => 'GymMane-এ স্বাগতম। এটা আমাদের পক্ষ থেকে।';
 
   @override
   String get awardFirstWorkoutName => 'প্রথম ওয়ার্কআউট';
 
   @override
-  String get awardFirstWorkoutLine => 'যাত্রার সূচনা — প্রথম দিন সম্পন্ন।';
+  String get awardFirstWorkoutLine => 'প্রথমটা লেখা হলো। সেটাই সবচেয়ে কঠিন।';
 
   @override
   String get awardFirstRoutineName => 'প্রথম রুটিন';
 
   @override
-  String get awardFirstRoutineLine => 'একটি নিজস্ব রুটিন তৈরি করেছেন।';
+  String get awardFirstRoutineLine => 'এখন তোমার ফিরে আসার মতো একটা প্ল্যান আছে।';
 
   @override
-  String get awardFirstRecordName => 'প্রথম পিআর';
+  String get awardFirstRecordName => 'প্রথম রেকর্ড';
 
   @override
-  String get awardFirstRecordLine => 'আপনার প্রথম ব্যক্তিগত রেকর্ড।';
+  String get awardFirstRecordLine => 'একটা ব্যায়ামে তুমি তোমার সেরা লিফট ভেঙেছ।';
 
   @override
-  String get awardStreak3Name => '৩ দিনের ধারাবাহিকতা';
+  String get awardStreak3Name => 'টানা তিন';
 
   @override
-  String get awardStreak3Line => 'টানা ৩ দিন ব্যায়াম সম্পন্ন।';
+  String get awardStreak3Line => 'টানা তিন দিন। এভাবেই শুরু হয়।';
 
   @override
-  String get awardTonne1Name => '১ টন উত্তোলন';
+  String get awardTonne1Name => 'এক টন';
 
   @override
-  String get awardTonne1Line => 'মোট ১,০০০ কেজি ওজন উত্তোলন করেছেন।';
+  String get awardTonne1Line => 'তোমার সব সেট মিলিয়ে এক হাজার কিলো তোলা।';
 
   @override
-  String get awardSets100Name => '১০০টি সেট';
+  String get awardSets100Name => 'একশো সেট';
 
   @override
-  String get awardSets100Line => '১০০টি কার্যকরী সেট সম্পন্ন করেছেন।';
+  String get awardSets100Line => 'একশো সেট শেষ, একটা একটা করে।';
 
   @override
-  String get awardHours10Name => '১০ ঘণ্টা শ্রম';
+  String get awardHours10Name => 'দশ ঘণ্টা';
 
   @override
-  String get awardHours10Line => 'জিমে ১০ ঘণ্টা ঘাম ঝরিয়েছেন।';
+  String get awardHours10Line => 'ঘড়িতে দশ ঘণ্টার ট্রেনিং।';
 
   @override
-  String get awardWorkouts50Name => '৫০টি সেশন';
+  String get awardWorkouts50Name => 'পঞ্চাশ ওয়ার্কআউট';
 
   @override
-  String get awardWorkouts50Line => '৫০তম সেশন উদযাপন করুন।';
+  String get awardWorkouts50Line => 'পঞ্চাশটা সেশন পেছনে ফেলে এসেছ।';
 
   @override
-  String get awardHours50Name => '৫০ ঘণ্টা সম্পন্ন';
+  String get awardHours50Name => 'পঞ্চাশ ঘণ্টা';
 
   @override
-  String get awardHours50Line => '৫০ ঘণ্টা নিষ্ঠার সাথে ট্রেনিং করেছেন।';
+  String get awardHours50Line => 'জিমের ভেতরে পঞ্চাশ ঘণ্টা।';
 
   @override
-  String get awardsTitle => 'অর্জন ও মেডেল';
+  String get awardsTitle => 'মেডেল';
 
   @override
-  String get yearTitle => 'বার্ষিক পর্যালোচনা';
+  String get yearTitle => 'তোমার বছর';
 
   @override
   String get yearBestMonth => 'সেরা মাস';
 
   @override
-  String get yearMonths => 'মাসিক হিসাব';
+  String get yearMonths => 'মাস';
 
   @override
-  String get awardSpinHint => 'ঘুরিয়ে মেডেলটি দেখুন';
+  String get awardSpinHint => 'মেডেল ঘোরাতে টানো';
 
   @override
-  String get awardUnlocked => 'নতুন মেডেল আনলক হয়েছে!';
+  String get awardUnlocked => 'নতুন অর্জন খুলেছে';
 
   @override
-  String get awardNice => 'অসাধারণ!';
+  String get awardNice => 'দারুণ!';
 
   @override
-  String get awardSaveImage => 'মেডেলের ছবি সংরক্ষণ করুন';
+  String get awardSaveImage => 'ছবি সেভ করো';
 
   @override
-  String get awardSaved => 'মেডেল গ্যালারিতে সংরক্ষিত হয়েছে';
+  String get awardSaved => 'তোমার গ্যালারিতে সেভ হয়েছে';
 
   @override
-  String get awardStreak7Name => '৭ দিনের ধারাবাহিকতা';
+  String get awardStreak7Name => 'সাত দিন';
 
   @override
-  String get awardStreak7Line => 'টানা এক সপ্তাহ সক্রিয় থেকেছেন।';
+  String get awardStreak7Line => 'একদিনও বাদ না দিয়ে পুরো এক সপ্তাহ।';
 
   @override
-  String get awardStreak30Name => '৩০ দিনের ধারাবাহিকতা';
+  String get awardStreak30Name => 'তিরিশ দিন';
 
   @override
-  String get awardStreak30Line => 'টানা এক মাস লোহার সাথে অটুট।';
+  String get awardStreak30Line => 'টানা এক মাস। এখন এটা অভ্যাস।';
 
   @override
-  String get awardWorkouts100Name => '১০০টি সেশন';
+  String get awardWorkouts100Name => 'একশো ওয়ার্কআউট';
 
   @override
-  String get awardWorkouts100Line => '১০০টি সম্পূর্ণ জিম সেশন সম্পন্ন!';
+  String get awardWorkouts100Line => 'একশো সেশন লেখা, শুরু থেকে শেষ।';
 
   @override
-  String get awardTonnes100Name => '১০০ টন ক্লাব';
+  String get awardTonnes100Name => 'একশো টন';
 
   @override
-  String get awardTonnes100Line => '১,০০,০০০ কেজি লোহা স্থানান্তরিত করেছেন।';
+  String get awardTonnes100Line => 'তুমি যা কিছু তুলেছ সব মিলিয়ে 1,00,000 কিলো।';
 
   @override
-  String get awardSets1000Name => '১,০০০ সেট';
+  String get awardSets1000Name => 'এক হাজার সেট';
 
   @override
-  String get awardSets1000Line => '১,০০০টি সেট সফলভাবে শেষ করেছেন।';
+  String get awardSets1000Line => 'একটা একটা সেট করে, পুরো এক হাজার।';
 
   @override
   String get profile => 'প্রোফাইল';
 
   @override
-  String get editProfile => 'প্রোফাইল সম্পাদনা';
+  String get editProfile => 'প্রোফাইল বদলাও';
 
   @override
-  String get pickBadge => 'ব্যাজ নির্বাচন করুন';
+  String get pickBadge => 'ব্যাজ';
 
   @override
   String get statWorkouts => 'ওয়ার্কআউট';
 
   @override
-  String get statTrained => 'ট্রেনিং সময়';
+  String get statTrained => 'ট্রেনিং';
 
   @override
   String get statSets => 'সেট';
 
   @override
-  String get statLifted => 'উত্তোলিত ওজন';
+  String get statLifted => 'তোলা';
 
   @override
-  String get statStreak => 'ধারাবাহিকতা';
+  String get statStreak => 'স্ট্রিক';
 
   @override
   String get statDays => 'দিন';
 
   @override
-  String get unitHours => 'ঘণ্টা';
+  String get unitHours => 'ঘ';
 
   @override
   String get unitDays => 'দিন';
 
   @override
-  String get snapshots => 'স্ন্যাপশট';
+  String get snapshots => 'ছবি';
 
   @override
-  String get snapNow => 'এখন ছবি তুলুন';
+  String get snapNow => 'একটা তোলো';
 
   @override
-  String get addCover => 'কভার ফটো যোগ করুন';
+  String get addCover => 'কভার যোগ করো';
 
   @override
-  String get addTodayWidget => 'আজকের উইজেট যোগ করুন';
+  String get addTodayWidget => 'আজ হলো কি না';
 
   @override
-  String get photosCard => 'অগ্রগতির ছবি';
+  String get photosCard => 'তোমার ছবি';
 
   @override
-  String get handleLabel => 'ইউজারনেম / হ্যান্ডেল';
+  String get handleLabel => 'ইউজারনেম';
 
   @override
-  String get setupTitle => 'দ্রুত শুরু করুন';
+  String get setupTitle => 'এগুলো ভরো, বাকি পাতা নিজেই ভরে যাবে';
 
   @override
-  String get setupHint => 'আপনার প্রোফাইল সম্পূর্ণ করুন';
+  String get setupHint => 'এখানের প্রতিটা সংখ্যা তোমার লেখা থেকে আসে। কিছুই কোথাও পাঠানো হয় না।';
 
   @override
-  String get setupWorkout => 'প্রথম সেশন শুরু করুন';
+  String get setupWorkout => 'তোমার প্রথম ওয়ার্কআউট লেখো';
 
   @override
-  String get setupWeight => 'শরীরের ওজন যোগ করুন';
+  String get setupWeight => 'তোমার ওজন লেখো';
 
   @override
-  String get setupMeasures => 'পরিমাপ যুক্ত করুন';
+  String get setupMeasures => 'তোমার মাপ নাও';
 
   @override
-  String get setupPhoto => 'প্রথম ছবি তুলুন';
+  String get setupPhoto => 'তোমার প্রথম অগ্রগতির ছবি তোলো';
 
   @override
-  String get progressTitle => 'আপনার শারীরিক উন্নতি';
+  String get progressTitle => 'অগ্রগতি';
 
   @override
-  String get tileVolume30 => '৩০ দিনের ভলিউম';
+  String get tileVolume30 => 'ভলিউম · 30দি';
 
   @override
-  String get tileAddWeight => 'ওজন লিখুন';
+  String get tileAddWeight => 'তোমারটা যোগ করো';
 
   @override
-  String get heatToneTitle => 'হিটম্যাপের রঙ';
+  String get heatToneTitle => 'হিটের রং';
 
   @override
-  String get heatToneHint => 'পেশীর সক্রিয়তার রঙের প্যালেট';
+  String get heatToneHint => 'শুধু গ্রিড আর শরীরের রং বদলায়।';
 
   @override
-  String get thisWeekTitle => 'এই সপ্তাহের পারফরম্যান্স';
+  String get thisWeekTitle => 'এই সপ্তাহ';
 
   @override
-  String get momentsEmptyTitle => 'কোনো বিশেষ মুহূর্ত নেই';
+  String get momentsEmptyTitle => 'এখানে এখনও কিছু নেই';
 
   @override
-  String get deletePhotoTitle => 'ছবি মুছবেন?';
+  String get deletePhotoTitle => 'এই ছবিটা মুছবে?';
 
   @override
-  String get deletePhotoBody => 'এই ছবিটি টাইমলাইন থেকে চিরতরে মুছে যাবে।';
+  String get deletePhotoBody => 'এটা চিরতরে চলে যাবে।';
 
   @override
-  String get awardsEarned => 'অর্জিত মেডেল';
+  String get awardsEarned => 'অর্জিত';
 
   @override
-  String get awardsLocked => 'লক করা মেডেল';
+  String get awardsLocked => 'বন্ধ';
 
   @override
-  String get awardStreak100Name => '১০০ দিনের ধারাবাহিকতা';
+  String get awardStreak100Name => 'একশো দিন';
 
   @override
-  String get awardWorkouts10Name => '১০টি সেশন';
+  String get awardWorkouts10Name => 'দশ ওয়ার্কআউট';
 
   @override
-  String get awardWorkouts10Line => '১০টি সেশন সম্পূর্ণ করেছেন।';
+  String get awardWorkouts10Line => 'প্রথম দশটাই সব ঠিক করে দেয়।';
 
   @override
-  String get awardWorkouts365Name => '৩৬৫টি সেশন';
+  String get awardWorkouts365Name => 'তিনশো পঁয়ষট্টি';
 
   @override
-  String get awardWorkouts365Line => 'বছরের প্রতিটি দিনের সমপরিমাণ ব্যায়াম।';
+  String get awardWorkouts365Line => 'বছরের প্রতিটা দিনের সমান একটা করে ওয়ার্কআউট, একটা একটা করে লেখা।';
 
   @override
-  String get awardTonnes10Name => '১০ টন ক্লাব';
+  String get awardTonnes10Name => 'দশ টন';
 
   @override
-  String get awardTonnes10Line => '১০,০০০ কেজি উত্তোলিত হয়েছে।';
+  String get awardTonnes10Line => 'দশ হাজার কিলো তোমার হাত দিয়ে গেছে।';
 
   @override
-  String get awardHours100Name => '১০০ ঘণ্টা ট্রেনিং';
+  String get awardHours100Name => 'একশো ঘণ্টা';
 
   @override
-  String get awardHours100Line => '১০০ ঘণ্টার নিষ্ঠাবান অনুশীলন।';
+  String get awardHours100Line => 'বারের নিচে একশো ঘণ্টা, হাতে স্টপওয়াচ।';
 
   @override
   String awardWonOn(String date) {
-    return '$date-এ অর্জিত';
+    return '$date তারিখে অর্জিত';
   }
 
   @override
   String badgeName(String id) {
     String _temp0 = intl.Intl.selectLogic(id, {
-      'gold': 'গোল্ড',
-      'blue': 'ব্লু',
-      'green': 'গ্রিন',
-      'red': 'রেড',
-      'black': 'ব্ল্যাক',
-      'violet': 'ভায়োলেট',
+      'gold': 'সোনালি',
+      'blue': 'নীল',
+      'green': 'সবুজ',
       'other': 'ব্যাজ',
     });
     return '$_temp0';
@@ -2466,7 +2524,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String memberSince(String date) {
-    return '$date থেকে সদস্য';
+    return '$date থেকে';
   }
 
   @override
@@ -2479,8 +2537,8 @@ class AppLocalizationsBn extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: 'লেভেল $next-এ পৌঁছাতে আর $nটি ওয়ার্কআউট',
-      one: 'লেভেল $next-এ পৌঁছাতে আর ১টি ওয়ার্কআউট',
+      other: 'লেভেল $next পর্যন্ত $nটি ওয়ার্কআউট',
+      one: 'লেভেল $next পর্যন্ত 1টি ওয়ার্কআউট',
     );
     return '$_temp0';
   }
@@ -2493,7 +2551,7 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String heatToneName(String id) {
     String _temp0 = intl.Intl.selectLogic(id, {
-      'ember': 'অ্যাম্বার',
+      'ember': 'অঙ্গার',
       'green': 'সবুজ',
       'blue': 'নীল',
       'mono': 'ধূসর',
@@ -2504,7 +2562,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String setsThisWeek(int n) {
-    return 'এই সপ্তাহে $nটি সেট';
+    return '$nটি সেট';
   }
 
   @override
@@ -2514,105 +2572,105 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String momentCount(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$nটি মুহূর্ত', one: '$nটি মুহূর্ত');
-    return '$_temp0';
+    return '$nটি ছবি';
   }
 
   @override
   String photosSelected(int n) {
-    return '$nটি নির্বাচিত';
+    return '$nটি বাছাই';
   }
 
   @override
   String deletePhotosTitle(int n) {
-    return '$nটি ছবি মুছবেন?';
+    return '$nটি ছবি মুছবে?';
   }
 
   @override
-  String get momentsEmptyHint => 'সেশন শেষে ছবি তুলে মুহূর্তগুলো ধরে রাখুন।';
+  String get momentsEmptyHint =>
+      'জিম, হোয়াইটবোর্ড, প্লেট সাজানো, যা মনে রাখতে চাও তার ছবি তোলো। এগুলো ফোনেই থাকে আর শুধু তুমি দেখো।';
 
   @override
-  String get awardStreak100Line => 'টানা ১০০ দিন ব্যায়ামের অনন্য রেকর্ড!';
+  String get awardStreak100Line => 'টানা একশো দিন। এটা আর প্রেরণা নয়, এটাই তুমি।';
 
   @override
-  String get coverLabel => 'কভার ফটো';
+  String get coverLabel => 'কভার';
 
   @override
-  String get removeCover => 'কভার সরান';
+  String get removeCover => 'কভার সরাও';
 
   @override
-  String get startTitle => 'শুরু করুন';
+  String get startTitle => 'ওয়ার্কআউট শুরু করো';
 
   @override
-  String get logTitle => 'সেশন লগ করুন';
+  String get logTitle => 'ওয়ার্কআউট লেখো';
 
   @override
-  String get logHint => 'সরাসরি বা রুটিন থেকে শুরু করুন';
+  String get logHint => 'টাইমার নেই, শুধু যা করেছ তা ভরো।';
 
   @override
-  String get orStartFrom => 'অথবা শুরু করুন এখান থেকে';
+  String get orStartFrom => 'অথবা এখান থেকে শুরু করো';
 
   @override
-  String get pickExercisesOption => 'ব্যায়াম নির্বাচন করুন';
+  String get pickExercisesOption => 'ব্যায়াম বেছে নাও';
 
   @override
-  String get chooseFocusOption => 'পেশীর ফোকাস বেছে নিন';
+  String get chooseFocusOption => 'ফোকাস বেছে নাও';
 
   @override
-  String get plannedRoutine => 'পরিকল্পিত রুটিন';
+  String get plannedRoutine => 'পরিকল্পিত';
 
   @override
-  String get logWorkoutAction => 'লগ শুরু করুন';
+  String get logWorkoutAction => 'ওয়ার্কআউট লেখো';
 
   @override
-  String get logging => 'লগিং চলছে';
+  String get logging => 'লেখা হচ্ছে';
 
   @override
-  String get placesLabel => 'স্থান';
+  String get placesLabel => 'আমার জায়গা';
 
   @override
-  String get undo => 'পূর্বাবস্থায় ফেরান';
+  String get undo => 'ফেরাও';
 
   @override
-  String get deleteSet => 'সেট মুছুন';
+  String get deleteSet => 'সেট মুছে ফেলো';
 
   @override
   String get setDeleted => 'সেট মুছে ফেলা হয়েছে';
 
   @override
-  String get removeWarmup => 'ওয়ার্মআপ সরান';
+  String get removeWarmup => 'ওয়ার্ম-আপ সরাও';
 
   @override
-  String get addWeightAction => 'ওজন যোগ করুন';
+  String get addWeightAction => 'ওজন যোগ করো';
 
   @override
-  String get workoutOverview => 'ওয়ার্কআউট সারাংশ';
+  String get workoutOverview => 'এই ওয়ার্কআউট';
 
   @override
-  String get allExercisesShort => 'সকল ব্যায়াম';
+  String get allExercisesShort => 'সব';
 
   @override
   String setsDoneOf(int done, int total) {
-    return '$total-এর মধ্যে $doneটি সম্পন্ন';
+    return '$done/$total সেট';
   }
 
   @override
   String get nowLabel => 'এখন';
 
   @override
-  String get deleteWorkout => 'ওয়ার্কআউট মুছবেন?';
+  String get deleteWorkout => 'ওয়ার্কআউট মুছে ফেলো';
 
   @override
-  String get deleteWorkoutBody => 'এই সেশন এবং এর সমস্ত তথ্য স্থায়ীভাবে মুছে যাবে।';
+  String get deleteWorkoutBody => 'এই ওয়ার্কআউট আর এর সব সেট তোমার ইতিহাস থেকে মুছে যাবে।';
 
   @override
-  String get themeAuto => 'সিস্টেম ডিফল্ট';
+  String get themeAuto => 'অটো';
 
   @override
-  String get themeAutoHint => 'ডিভাইসের সিস্টেম থিম অনুসরণ করবে';
+  String get themeAutoHint => 'ফোন অনুযায়ী';
 
   @override
-  String get demoSizeTitle => 'ডেমো প্রিভিউ সাইজ';
+  String get demoSizeTitle => 'ট্রেনিংয়ের সময় ব্যায়ামের ডেমো';
 
   @override
   String get demoLarge => 'বড়';
@@ -2621,7 +2679,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get demoSmall => 'ছোট';
 
   @override
-  String get demoOff => 'বন্ধ';
+  String get demoOff => 'লুকানো';
 
   @override
   String get demoLoopTitle => 'ডেমো অ্যানিমেশন';
@@ -2630,46 +2688,49 @@ class AppLocalizationsBn extends AppLocalizations {
   String get demoLoopAlways => 'লুপ';
 
   @override
-  String get demoLoopShort => '১০ সেকেন্ড';
+  String get demoLoopShort => '10 সেকেন্ড';
 
   @override
-  String get demoLoopHint => 'প্রায় ১০ সেকেন্ড চলে শুরুর ভঙ্গিতে থামবে। পুনরায় দেখতে ডেমোতে ট্যাপ করুন।';
+  String get demoLoopHint => 'প্রায় 10 সেকেন্ড চলে আর শুরুর ভঙ্গিতে থামে। আবার দেখতে ডেমোতে ট্যাপ করো।';
 
   @override
-  String get alarmStyleTitle => 'অ্যালার্মের ধরন';
+  String get alarmStyleTitle => 'বিশ্রাম শেষ হলে';
 
   @override
-  String get alarmStyleLoud => 'শব্দসহ';
+  String get alarmStyleLoud => 'সবসময় বাজবে';
 
   @override
-  String get alarmStyleQuiet => 'মৃদু শব্দ';
+  String get alarmStyleQuiet => 'সাইলেন্ট মোড মানবে';
 
   @override
-  String get alarmStyleVibrate => 'শুধুমাত্র কম্পন';
+  String get alarmStyleVibrate => 'শুধু ভাইব্রেট';
 
   @override
-  String get alarmStyleHint => 'বিশ্রাম শেষ হলে কীভাবে সতর্ক করবে তা নির্ধারণ করুন';
+  String get alarmStyleHint =>
+      'সবসময় বাজবে অ্যালার্মের ভলিউম ব্যবহার করে, সাইলেন্টেও। সাইলেন্ট মোড মানবে নোটিফিকেশনের ভলিউম ব্যবহার করে আর ফোন মিউট থাকলে শুধু ভাইব্রেট করে।';
 
   @override
-  String get suggestedPicks => 'প্রস্তাবিত পছন্দ';
+  String get suggestedPicks => 'তোমার জন্য পরামর্শ';
 
   @override
-  String get moreOptions => 'আরও অপশন';
+  String get moreOptions => 'আরও বিকল্প';
 
   @override
-  String get suggestInWorkouts => 'ওয়ার্কআউটে প্রস্তাব করুন';
+  String get suggestInWorkouts => 'দ্রুত ওয়ার্কআউটে পরামর্শ দাও';
 
   @override
-  String get suggestInWorkoutsHint => 'সেশন তৈরির সময় এই ব্যায়ামটি সুপারিশ করবে';
+  String get suggestInWorkoutsHint =>
+      'বন্ধ থাকলে তোমার জন্য বাছাইয়ে এটা আসবে না। হাতে করে তবুও যোগ করতে পারবে।';
 
   @override
-  String get onbPlaceTitle => 'আপনি কোথায় ব্যায়াম করেন?';
+  String get onbPlaceTitle => 'কোথায় ট্রেনিং করো?';
 
   @override
-  String get onbPlaceWhy => 'আপনার স্থান নির্বাচন করুন যাতে সঠিক ব্যায়াম সুপারিশ করা যায়।';
+  String get onbPlaceWhy =>
+      'যেখানে যেখানে ট্রেনিং করো সব বেছে নাও। আমরা প্রতিটায় শুধু সেটাই পরামর্শ দেব যা সেখানে করতে পারো।';
 
   @override
-  String get onbPlaceGear => 'উপলব্ধ সরঞ্জাম';
+  String get onbPlaceGear => 'সেখানে কী কী আছে?';
 
   @override
   String distanceCol(String unit) {
@@ -2680,13 +2741,13 @@ class AppLocalizationsBn extends AppLocalizations {
   String get timeCol => 'সময়';
 
   @override
-  String get timePerSideCol => 'TIME / SIDE';
+  String get timePerSideCol => 'সময় / পাশ';
 
   @override
-  String get timeMinutesTitle => 'মিনিট';
+  String get timeMinutesTitle => 'সময় (মিনিট)';
 
   @override
-  String get timeSecondsTitle => 'সেকেন্ড';
+  String get timeSecondsTitle => 'সময় (সেকেন্ড)';
 
   @override
   String distanceTitle(String unit) {
@@ -2694,10 +2755,10 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get holdLabel => 'ধরে রাখুন';
+  String get holdLabel => 'ধরে রাখো';
 
   @override
-  String get stopLabel => 'থামুন';
+  String get stopLabel => 'থামো';
 
   @override
   String startHold(String time) {
@@ -2705,177 +2766,181 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get exerciseTypeLabel => 'ব্যায়ামের ধরন';
+  String get exerciseTypeLabel => 'কী দিয়ে লিখবে';
 
   @override
-  String get typeReps => 'ওজন ও রেপস';
+  String get typeReps => 'রেপ ও ওজন';
 
   @override
-  String get typeTime => 'সময়ভিত্তিক';
+  String get typeTime => 'সময়';
 
   @override
-  String get typeCardio => 'কার্ডিও / দূরত্ব';
+  String get typeCardio => 'দূরত্ব ও সময়';
 
   @override
-  String get exerciseTypeHint => 'ব্যায়ামটি কীভাবে ট্র্যাক করবেন তা নির্বাচন করুন';
+  String get exerciseTypeHint =>
+      'দৌড় বা সাঁতারের মতো কার্ডিও দূরত্ব আর সময় লেখে। প্ল্যাঙ্কের মতো ধরে রাখার ব্যায়াম সময় লেখে।';
 
   @override
-  String get howToLabel => 'নির্দেশনা';
+  String get howToLabel => 'কীভাবে করবে (ঐচ্ছিক)';
 
   @override
-  String get howToHint => 'ব্যায়ামটি সঠিকভাবে করার পদক্ষেপগুলো';
+  String get howToHint => 'প্রতি লাইনে একটা ধাপ';
 
   @override
-  String get editExercise => 'ব্যায়াম সম্পাদনা';
+  String get editExercise => 'ব্যায়াম বদলাও';
 
   @override
-  String get saveChanges => 'পরিবর্তন সংরক্ষণ করুন';
+  String get saveChanges => 'পরিবর্তন সেভ করো';
 
   @override
-  String get noStepsYet => 'এখনও কোনো পদক্ষেপ যোগ করা হয়নি';
+  String get noStepsYet => 'এখনও কোনো ধাপ নেই। নিজে লেখো যাতে মনে থাকে তুমি কীভাবে করো।';
 
   @override
-  String get addSteps => 'পদক্ষেপ যোগ করুন';
+  String get addSteps => 'ধাপগুলো লেখো';
 
   @override
-  String get setTypeRestPause => 'রেস্ট-পজ সেট';
+  String get setTypeRestPause => 'রেস্ট-পজ';
 
   @override
-  String get setTypeNormalInfo => 'একটি নিয়মিত সেট। এটি ভলিউম ও রেকর্ডে যুক্ত হয়।';
+  String get setTypeNormalInfo => 'সাধারণ সেট। তোমার ভলিউম আর রেকর্ডে গোনা হয়।';
 
   @override
-  String get setTypeWarmupInfo => 'প্রস্তুতির জন্য হালকা সেট। এগুলো ভলিউম বা রেকর্ডে যুক্ত হয় না।';
+  String get setTypeWarmupInfo => 'প্রস্তুত হওয়ার হালকা সেট। ভলিউম বা রেকর্ডে গোনা হয় না।';
 
   @override
-  String get setTypeDropInfo => 'সেট শেষ করেই বিশ্রাম ছাড়া ওজন কমিয়ে অনুশীলন চালিয়ে যান।';
+  String get setTypeDropInfo => 'একটা সেটের ঠিক পরে ওজন কমাও আর বিশ্রাম না নিয়ে চালিয়ে যাও।';
 
   @override
   String get setTypeFailureInfo =>
-      'আর একটিও নিখুঁত রেপ না পারা পর্যন্ত চালিয়ে যান। প্রকৃত রেপ সংখ্যা লগ করুন।';
+      'যতক্ষণ না আর একটা পরিষ্কার রেপ করতে পারছ ততক্ষণ চালাও। সত্যিই যতগুলো রেপ করেছ সেটাই লেখো।';
 
   @override
-  String get setTypeRestPauseInfo => 'সেটের পর ১০-২০ সেকেন্ড বিশ্রাম নিন, তারপর আরও কয়েকটি রেপ করুন।';
+  String get setTypeRestPauseInfo =>
+      'সেটের পরে 10 থেকে 20 সেকেন্ড বিশ্রাম নাও, তারপর আরও কয়েকটা রেপ বের করো।';
 
   @override
-  String get planFormatNotes => 'পরিকল্পনার কাঠামো সংক্রান্ত নোট';
+  String get planFormatNotes =>
+      'ব্যায়ামের নাম ঠিক তালিকায় যেমন আছে তেমনই লেখো। \"sets\", \"reps\" (একটা সংখ্যা বা \"8-12\"-এর মতো পরিসর), \"weight\" (দেওয়া এককে), সেকেন্ডে \"rest\" আর \"days\" ঐচ্ছিক। তালিকায় কার্ডিও বা সময় চিহ্নিত ব্যায়ামের জন্য \"reps\"-এর বদলে \"time\" (সেকেন্ডে, বা \"30:00\"-এর মতো) আর \"distance\" (কিমিতে) ব্যবহার করো; প্রতিটা সেটকে আলাদা মান দিতে \"plan\"-এ লেখো, প্রতি সেটের জন্য একটা এন্ট্রি তার নিজের \"reps\" আর \"weight\" সহ (ওয়ার্ম-আপ সেটের জন্য \"type\": \"warmup\" যোগ করো)। \"superset\": true একটা ব্যায়ামকে পরেরটার সাথে জোড়ে। কয়েক সপ্তাহের জন্য রুটিনগুলো \"weeks\"-এর ভেতরে দলবদ্ধ করো, দ্বিতীয় উদাহরণের মতো।';
 
   @override
-  String get planSets => 'পরিকল্পিত সেট';
+  String get planSets => 'সেট ঠিক করো';
 
   @override
-  String get planSetsHint => 'প্রতি সেশনে কাঙ্ক্ষিত সেটের লক্ষ্য';
+  String get planSetsHint =>
+      'প্রতিটা সেটের ধরন, রেপ আর ওজন বেছে নাও। শেষ সেশন থেকে শুরু করতে ওজন অটোতে রাখো।';
 
   @override
-  String get planHintReps => 'প্রতিটি সেটের ধরন ও রেপ নির্বাচন করুন। শেষ সেশন থেকে স্বয়ংক্রিয়ভাবে শুরু হবে।';
+  String get planHintReps => 'প্রতিটা সেটের ধরন আর রেপ বেছে নাও। অটো শেষ সেশন থেকে শুরু করে।';
 
   @override
-  String get planHintTime =>
-      'প্রতিটি সেটের ধরন ও সময় নির্ধারণ করুন। আপনার শেষ সেশন থেকে স্বয়ংক্রিয়ভাবে শুরু হবে।';
+  String get planHintTime => 'প্রতিটা সেটের ধরন আর সময় বেছে নাও। অটো শেষ সেশন থেকে শুরু করে।';
 
   @override
-  String get planHintTimeWeight => 'প্রতিটি সেটের ধরন, সময় ও ওজন বেছে নিন। শেষ সেশন থেকে শুরু হবে।';
+  String get planHintTimeWeight => 'প্রতিটা সেটের ধরন, সময় আর ওজন বেছে নাও। অটো শেষ সেশন থেকে শুরু করে।';
 
   @override
-  String get planHintCardio => 'প্রতিটি সেটের দূরত্ব ও সময় বেছে নিন। শেষ সেশন থেকে শুরু হবে।';
+  String get planHintCardio => 'প্রতিটা সেটের দূরত্ব আর সময় বেছে নাও। অটো শেষ সেশন থেকে শুরু করে।';
 
   @override
-  String get timeOnly => 'শুধুমাত্র সময়';
+  String get timeOnly => 'শুধু সময়';
 
   @override
-  String get autoValue => 'স্বয়ংক্রিয়';
+  String get autoValue => 'অটো';
 
   @override
-  String get clearPlan => 'পরিকল্পনা মুছুন';
+  String get clearPlan => 'প্ল্যান মুছে ফেলো';
 
   @override
-  String get shareRoutine => 'রুটিন শেয়ার করুন';
+  String get shareRoutine => 'রুটিন শেয়ার করো';
 
   @override
-  String get shareWeek => 'সপ্তাহ শেয়ার করুন';
+  String get shareWeek => 'আমার সপ্তাহ শেয়ার করো';
 
   @override
-  String get shareWeekHint => 'পুরো সপ্তাহের পারফরম্যান্স কার্ড';
+  String get shareWeekHint => 'তোমার সব রুটিন আর প্রতিটার দিন।';
 
   @override
   String shareMessage(String name) {
-    return '$name — এটি যোগ করতে Open GYM দিয়ে ফাইলটি খুলুন।';
+    return '$name: যোগ করতে ফাইলটা GymMane দিয়ে খোলো।';
   }
 
   @override
-  String get importRoutines => 'রুটিন ইম্পোর্ট';
+  String get importRoutines => 'রুটিন ইমপোর্ট করো';
 
   @override
-  String get importPasteHint => 'ক্লিপবোর্ড থেকে রুটিন টেক্সট পেস্ট করুন';
+  String get importPasteHint =>
+      'এখানে একটা রুটিন পেস্ট করো: GymMane থেকে শেয়ার করা, AI-এর উত্তর, JSON বা CSV।';
 
   @override
-  String get pasteAction => 'পেস্ট করুন';
+  String get pasteAction => 'পেস্ট করো';
 
   @override
   String routineCount(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$nটি রুটিন', one: '$nটি রুটিন');
+    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$nটি রুটিন', one: '1টি রুটিন');
     return '$_temp0';
   }
 
   @override
-  String get useTheirSchedule => 'তাদের সময়সূচী গ্রহণ করুন';
+  String get useTheirSchedule => 'এর সাপ্তাহিক সময়সূচিও ব্যবহার করো';
 
   @override
-  String get useTheirScheduleHint => 'রুটিনের নির্ধারিত দিনগুলো আপনার ক্যালেন্ডারে যুক্ত হবে';
+  String get useTheirScheduleHint => 'এর আনা দিনগুলো সেই দিনের তোমার প্ল্যানের জায়গা নেবে।';
 
   @override
-  String get addToMyRoutines => 'আমার রুটিনে যোগ করুন';
+  String get addToMyRoutines => 'আমার রুটিনে যোগ করো';
 
   @override
   String routinesAdded(int n) {
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: '$nটি রুটিন যুক্ত হয়েছে',
-      one: '১টি রুটিন যুক্ত হয়েছে',
+      other: '$nটি রুটিন যোগ হয়েছে',
+      one: '1টি রুটিন যোগ হয়েছে',
     );
     return '$_temp0';
   }
 
   @override
-  String get nothingToImport => 'ইম্পোর্ট করার মতো কিছু নেই';
+  String get nothingToImport => 'এখানে GymMane ইমপোর্ট করার মতো কিছু নেই';
 
   @override
-  String get aiStepCopy => '১. তথ্য কপি করুন';
+  String get aiStepCopy => 'অনুরোধটা কপি করো। এতে তোমার ব্যায়ামের তালিকা আর GymMane যে ফরম্যাট পড়ে তা আছে।';
 
   @override
-  String get aiStepAsk => '২. এআই-কে জিজ্ঞাসা করুন';
+  String get aiStepAsk => 'যেকোনো AI-তে পেস্ট করো আর বলো কী চাও: সপ্তাহে কয় দিন, লক্ষ্য, কয় সপ্তাহ।';
 
   @override
-  String get aiStepPaste => '৩. ফলাফল পেস্ট করুন';
+  String get aiStepPaste => 'এর উত্তর নিচে পেস্ট করো আর ইমপোর্ট করো। ফাইল লাগবে না।';
 
   @override
-  String get copyForAi => 'এআই-এর জন্য কপি করুন';
+  String get copyForAi => 'AI-এর জন্য কপি করো';
 
   @override
-  String get copiedDone => 'ক্লিপবোর্ডে কপি করা হয়েছে';
+  String get copiedDone => 'কপি হয়েছে';
 
   @override
-  String get aiPasteHint => 'এআই-এর তৈরি করা টেক্সট এখানে পেস্ট করুন';
+  String get aiPasteHint => 'AI-এর উত্তর এখানে পেস্ট করো';
 
   @override
-  String get importAction => 'ইম্পোর্ট করুন';
+  String get importAction => 'ইমপোর্ট করো';
 
   @override
-  String get showFormat => 'ফরম্যাট দেখুন';
+  String get showFormat => 'ফরম্যাট দেখো';
 
   @override
-  String get shareAsFile => 'ফাইল হিসেবে শেয়ার করুন';
+  String get shareAsFile => 'ফাইল হিসেবে শেয়ার করো';
 
   @override
   String get recoveryTab => 'রিকভারি';
 
   @override
   String recoveryOverall(int pct) {
-    return 'শরীর $pct% রিকভার হয়েছে';
+    return 'শরীর $pct% রিকভার';
   }
 
   @override
-  String get recoveryAllFresh => 'সমস্ত পেশী প্রস্তুত';
+  String get recoveryAllFresh => 'সব রিকভার হয়ে গেছে। যা খুশি ট্রেন করার ভালো দিন।';
 
   @override
   String recoveryStill(String muscles) {
@@ -2883,155 +2948,158 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get recoveryTired => 'ক্লান্ত পেশী';
+  String get recoveryTired => 'ক্লান্ত';
 
   @override
-  String get recoveryFresh => 'সতেজ';
+  String get recoveryFresh => 'তাজা';
 
   @override
-  String get recoveryHint => 'পেশীর বিশ্রাম ও পুনরায় প্রশিক্ষণের প্রস্তুতি নির্দেশ করে';
+  String get recoveryHint =>
+      'পেশিতে ট্যাপ করে দেখো কতটা রিকভার হয়েছে। সাম্প্রতিক সেট বেশি গুরুত্ব পায়, আর ভারী সেট (RPE অনুযায়ী) আরও বেশি।';
 
   @override
   String recoveryPct(int pct) {
-    return '$pct% প্রস্তুত';
+    return '$pct% রিকভার';
   }
 
   @override
   String readyInHours(int h) {
-    return '~$h ঘণ্টার মধ্যে প্রস্তুত';
+    return '~$h ঘ-এ তৈরি';
   }
 
   @override
-  String get tplAbcd => '৪-দিনের স্প্লিট (ABCD)';
+  String get tplAbcd => 'চার দিন: বুক আর ট্রাইসেপস, পিঠ আর বাইসেপস, পা, কাঁধ আর পেট।';
 
   @override
-  String get tplAbcde => '৫-দিনের ব্রো স্প্লিট (ABCDE)';
+  String get tplAbcde => 'পাঁচ দিন, প্রতিদিন একটা পেশির দল: বুক, পিঠ, পা, কাঁধ, বাহু।';
 
   @override
-  String get elapsedCaps => 'অতিবাহিত সময়';
+  String get elapsedCaps => 'কেটেছে';
 
   @override
-  String get tapToChange => 'Tap to change';
+  String get tapToChange => 'বদলাতে ট্যাপ করো';
 
   @override
-  String get swipeToSkipHint => 'Swipe the timer sideways to skip the rest.';
+  String get swipeToSkipHint => 'বিশ্রাম বাদ দিতে টাইমারটা পাশে সোয়াইপ করো।';
 
   @override
-  String get screenLocked => 'স্ক্রিন লক করা';
+  String get screenLocked => 'স্ক্রিন লক';
 
   @override
-  String get lockedHint => 'আনলক করতে চেপে ধরে রাখুন';
+  String get lockedHint => 'আনলক করতে উপরের আঙুলের ছাপে চেপে ধরো';
 
   @override
-  String get liveDoneSet => 'সেট সম্পন্ন';
+  String get liveDoneSet => 'সেট শেষ';
 
   @override
-  String get liveSkipRest => 'বিশ্রাম এড়িয়ে যান';
+  String get liveSkipRest => 'বিশ্রাম বাদ দাও';
 
   @override
-  String get livePause => 'বিরতি';
+  String get livePause => 'থামাও';
 
   @override
-  String get liveResume => 'চালিয়ে যান';
+  String get liveResume => 'চালিয়ে যাও';
 
   @override
-  String get liveNext => 'পরবর্তী';
+  String get liveNext => 'পরের';
 
   @override
   String liveUpNext(String name) {
-    return 'পরবর্তীতে: $name';
+    return 'এরপর: $name';
   }
 
   @override
-  String get stickerOpen => 'স্টিকার খুলুন';
+  String get stickerOpen => 'ছবির উপর শেয়ার করো';
 
   @override
-  String get stickerNoPhoto => 'কোনো ছবি পাওয়া যায়নি';
+  String get stickerNoPhoto => 'ছবি ছাড়া';
 
   @override
-  String get stickerWorkout => 'ওয়ার্কআউট স্টিকার';
+  String get stickerWorkout => 'ওয়ার্কআউট';
 
   @override
-  String get stickerStreak => 'ধারাবাহিকতার স্টিকার';
+  String get stickerStreak => 'স্ট্রিক';
 
   @override
-  String get stickerDate => 'তারিখের স্টিকার';
+  String get stickerDate => 'তারিখ';
 
   @override
-  String get stickerHint => 'সোশ্যাল মিডিয়ার জন্য স্টাইলিশ স্টিকার';
+  String get stickerHint => 'সরাতে টানো, আকার বদলাতে বা ঘোরাতে পিঞ্চ করো';
 
   @override
-  String get stickerSaved => 'স্টিকার গ্যালারিতে সংরক্ষিত হয়েছে';
+  String get stickerSaved => 'তোমার গ্যালারিতে সেভ হয়েছে';
 
   @override
-  String get stickerWeek => 'সাপ্তাহিক স্টিকার';
+  String get stickerWeek => 'এই সপ্তাহ';
 
   @override
-  String get getReady => 'প্রস্তুত হন';
+  String get getReady => 'তৈরি হও';
 
   @override
   String sideOfTwo(String n) {
-    return 'Side $n of 2';
+    return 'পাশ $n / 2';
   }
 
   @override
-  String get switchSides => 'Switch sides';
+  String get switchSides => 'পাশ বদলাও';
 
   @override
-  String get stickerGallery => 'গ্যালারি থেকে ছবি';
+  String get stickerGallery => 'গ্যালারি';
 
   @override
-  String get stickerCamera => 'ক্যামেরা দিয়ে তুলুন';
+  String get stickerCamera => 'ক্যামেরা';
 
   @override
-  String get shareIntroTitle => 'আপনার সাফল্য তুলে ধরুন';
+  String get shareIntroTitle => 'এই রুটিন শেয়ার করো';
 
   @override
-  String get shareIntroBody => 'অনুপ্রেরণাদায়ী কার্ড আকারে বন্ধুদের সাথে শেয়ার করুন।';
+  String get shareIntroBody =>
+      'তোমার সঙ্গী, বন্ধু বা পরিবারকে পাঠাও। ওরা একটা ছোট ফাইল পাবে যা GymMane-এ খোলে আর এক ট্যাপে যোগ হয়, সেট আর ওজনসহ।';
 
   @override
   String get removedFromRoutine => 'রুটিন থেকে সরানো হয়েছে';
 
   @override
-  String get radarTitle => 'পেশীর ভারসাম্য বিশ্লেষণ';
+  String get radarTitle => 'শেষ 30 দিন';
 
   @override
-  String get radarHint => 'শরীরের বিভিন্ন অংশের ভলিউম অনুপাত';
+  String get radarHint => 'দেখো কোন অংশে আরও কাজ লাগবে';
 
   @override
-  String get radarEmpty => 'ভারসাম্য দেখতে অন্তত কয়েকটি সেশন সম্পন্ন করুন';
+  String get radarEmpty => 'তোমার ভারসাম্য দেখতে কয়েক দিন ট্রেনিং করো';
 
   @override
-  String get radarBalanced => 'শারীরিক ভারসাম্য চমৎকার';
+  String get radarBalanced => 'এখন পর্যন্ত ভালো ভারসাম্য';
 
   @override
   String radarFocus(String list) {
-    return 'আরও প্রয়োজন: $list';
+    return 'আরও লাগবে: $list';
   }
 
   @override
-  String get countdownReady => 'শুরু করতে প্রস্তুত?';
+  String get countdownReady => 'তৈরি হও';
 
   @override
-  String get countdownSkip => 'কাউন্টডাউন এড়িয়ে যান';
+  String get countdownSkip => 'এখনই শুরু করতে ট্যাপ করো';
 
   @override
   String get countdownSetting => 'শুরুর আগে কাউন্টডাউন';
 
   @override
-  String get effortSetting => 'সেট প্রতি প্রচেষ্টার মাত্রা রেকর্ড';
+  String get effortSetting => 'প্রতি সেটে পরিশ্রম লেখো';
 
   @override
-  String get effortHint => 'RPE: ১০ মানে আর সম্ভব নয়, ৮ মানে আরও ২টি রেপ বাকি ছিল।';
+  String get effortHint =>
+      'RPE: 10 মানে আর কিছু বাকি নেই, 8 মানে দুটো রেপ বাকি ছিল। RIR বাকি থাকা রেপ গোনে। কোনো সেটে এটা থাকলে আনুমানিক 1RM RPE চার্ট ব্যবহার করে।';
 
   @override
-  String get rirHint => '০ মানে শক্তিক্ষয়, ২ মানে আরও ২টি রেপ বাকি ছিল।';
+  String get rirHint => '0 মানে আর কিছু বাকি নেই, 2 মানে দুটো রেপ বাকি ছিল।';
 
   @override
-  String get addWeekWidget => 'সাপ্তাহিক উইজেট যোগ করুন';
+  String get addWeekWidget => 'সপ্তাহের উইজেট যোগ করো';
 
   @override
-  String get gamificationSetting => 'মেডেল ও স্তর বিন্যাস';
+  String get gamificationSetting => 'মেডেল আর লেভেল';
 
   @override
   String repCount(int n) {
@@ -3043,71 +3111,71 @@ class AppLocalizationsBn extends AppLocalizations {
   String get prBestSet => 'সেরা সেট';
 
   @override
-  String get weekStartSetting => 'সপ্তাহ শুরু হয়';
+  String get weekStartSetting => 'সপ্তাহ শুরু হয়';
 
   @override
-  String get stepOutOfWorkout => 'স্থগিত করে প্রস্থান';
+  String get stepOutOfWorkout => 'থামাও আর বেরোও';
 
   @override
-  String get saveToRoutine => 'রুটিনে পরিবর্তন সংরক্ষণ করুন';
+  String get saveToRoutine => 'পরিবর্তন রুটিনে সেভ করো';
 
   @override
   String get routineUpdated => 'রুটিন আপডেট হয়েছে';
 
   @override
   String saveChangesTitle(String name) {
-    return '$name-এ পরিবর্তন সংরক্ষণ করবেন?';
+    return '$name-এ পরিবর্তন সেভ করবে?';
   }
 
   @override
-  String get saveChangesBody => 'পরের বার শুরু করলে রুটিনে এই পরিবর্তনগুলো থাকবে।';
+  String get saveChangesBody => 'পরেরবার শুরু করলে রুটিনে এই পরিবর্তনগুলো থাকবে।';
 
   @override
   String get routineOrderChanged => 'ব্যায়ামের নতুন ক্রম';
 
   @override
-  String get mineOnly => 'আপনার তৈরি';
+  String get mineOnly => 'তোমার বানানো';
 
   @override
   String createNamed(String name) {
-    return 'খুঁজে পাননি? \"$name\" তৈরি করুন';
+    return 'এখানে নেই? “$name” বানাও';
   }
 
   @override
-  String get orStartWith => 'অথবা শুরু করুন';
+  String get orStartWith => 'অথবা এটা দিয়ে শুরু করো';
 
   @override
   String get warmupFocus => 'ওয়ার্ম-আপ';
 
   @override
-  String get warmupFocusHint => 'ওয়ার্ম-আপ ও পেশী সচল করা';
+  String get warmupFocusHint => 'মোবিলিটি আর অ্যাক্টিভেশন, সরঞ্জামসহ বা ছাড়া';
 
   @override
   String get cardioFocus => 'কার্ডিও';
 
   @override
-  String get cardioFocusHint => 'দৌড়, সাইক্লিং, রোয়িং বা স্কিপিং';
+  String get cardioFocusHint => 'দৌড়, সাইকেল, রোয়িং বা স্কিপিং, দূরত্ব আর সময় দিয়ে';
 
   @override
-  String get homeRecommended => 'হোমে সুপারিশকৃত';
+  String get homeRecommended => 'হোমে প্রস্তাবিত';
 
   @override
-  String get homeRoutines => 'হোমে রুটিনসমূহ';
+  String get homeRoutines => 'হোমে রুটিন';
 
   @override
-  String get homeRoutinesHint => 'আপনার রুটিনসমূহ। শুরু করতে স্পর্শ করুন।';
+  String get homeRoutinesHint => 'সবশেষে করাটা আগে';
 
   @override
-  String get homeWeekStats => 'হোমে এই সপ্তাহের পরিসংখ্যান';
+  String get homeWeekStats => 'হোমে এই সপ্তাহ';
 
   @override
-  String get homeWeekStatsHint => 'সপ্তাহের ভলিউম, সেট ও ব্যক্তিগত রেকর্ড।';
+  String get homeWeekStatsHint => 'সপ্তাহের ভলিউম, সেট আর PR';
 
   @override
-  String get stepsSetting => 'হেলথ কানেক্ট থেকে পদক্ষেপ';
+  String get stepsSetting => 'Health Connect থেকে পদক্ষেপ';
 
   @override
-  String get stepsSettingHint => 'হোম স্ক্রিনে আজকের পদক্ষেপ দেখায়। ফোন থেকে কোনো ডেটা বাইরে যায় না।';
+  String get stepsSettingHint => 'হোমে আজকের পদক্ষেপ';
 
   @override
   String get stepsToday => 'আজকের পদক্ষেপ';
@@ -3119,36 +3187,36 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String stepsTodayCount(String count) {
-    return 'আজ $countটি পদক্ষেপ';
+    return 'আজ $count পদক্ষেপ';
   }
 
   @override
-  String get stepsGoal => 'দৈনিক পদক্ষেপ লক্ষ্য';
+  String get stepsGoal => 'দৈনিক পদক্ষেপের লক্ষ্য';
 
   @override
-  String get stepsNoAccess => 'পদক্ষেপে অ্যাক্সেস নেই';
+  String get stepsNoAccess => 'তোমার পদক্ষেপে প্রবেশাধিকার নেই';
 
   @override
-  String get stepsGrant => 'হেলথ কানেক্টে অনুমতি দিতে ট্যাপ করুন';
+  String get stepsGrant => 'Health Connect-এ অনুমতি দিতে ট্যাপ করো';
 
   @override
   String get stepsInfoRead =>
-      'এটি শুধুমাত্র আপনার পদক্ষেপ সংখ্যা পড়ে। হেলথ কানেক্টে অন্য কিছু পড়ে না বা লেখে না।';
+      'এটা শুধু তোমার পদক্ষেপের সংখ্যা পড়ে। অন্য কিছু কখনো পড়ে না, আর Health Connect-এ লেখেও না।';
 
   @override
-  String get stepsInfoLocal => 'পদক্ষেপের তথ্য কেবল ফোনে থাকে। অ্যাপ কোনো ইন্টারনেটের সাথে যুক্ত হয় না।';
+  String get stepsInfoLocal => 'তোমার পদক্ষেপ তোমার ফোনেই থাকে। GymMane কখনো ইন্টারনেটে যুক্ত হয় না।';
 
   @override
-  String get stepsInfoOff => 'সেটিংস বা হেলথ কানেক্টে যেকোনো সময় এটি বন্ধ করতে পারেন।';
+  String get stepsInfoOff => 'সেটিংস বা Health Connect-এ যেকোনো সময় বন্ধ করো।';
 
   @override
-  String get stepsManage => 'অনুমতি পরিচালনা';
+  String get stepsManage => 'অনুমতি সামলাও';
 
   @override
-  String get routineDoneToday => 'আজকের জন্য সম্পন্ন — চমৎকার!';
+  String get routineDoneToday => 'আজকের মতো শেষ · দারুণ';
 
   @override
-  String get trainAgain => 'পুনরায় অনুশীলন করুন';
+  String get trainAgain => 'আবার ট্রেনিং করো';
 
   @override
   String lastDoneAgo(int n) {
@@ -3156,42 +3224,41 @@ class AppLocalizationsBn extends AppLocalizations {
       n,
       locale: localeName,
       other: '$n দিন আগে',
-      one: 'গতকাল সম্পন্ন',
-      zero: 'আজ সম্পন্ন',
+      one: 'গতকাল করা',
+      zero: 'আজ করা',
     );
     return '$_temp0';
   }
 
   @override
-  String get archivedFilter => 'আর্কাইভকৃত';
+  String get archivedFilter => 'আর্কাইভ';
 
   @override
-  String get archiveExercise => 'ব্যায়াম আর্কাইভ করুন';
+  String get archiveExercise => 'ব্যায়াম আর্কাইভ করো';
 
   @override
-  String get restoreExercise => 'পুনরুদ্ধার';
+  String get restoreExercise => 'ফিরিয়ে আনো';
 
   @override
-  String get archivedToast => 'ব্যায়াম আর্কাইভ করা হয়েছে';
+  String get archivedToast => 'ব্যায়াম আর্কাইভ হয়েছে';
 
   @override
-  String get archivedToastHint => 'ব্যায়াম · আর্কাইভে পাবেন';
+  String get archivedToastHint => 'ব্যায়াম › আর্কাইভ-এ খুঁজে পাবে';
 
   @override
-  String get archivedBanner =>
-      'আর্কাইভ করা হয়েছে। এটি তালিকা ও পরামর্শ থেকে বাইরে থাকবে; আপনার ইতিহাস সংরক্ষিত থাকবে।';
+  String get archivedBanner => 'আর্কাইভ। এটা তালিকা আর পরামর্শের বাইরে থাকে; তোমার ইতিহাস রাখা আছে।';
 
   @override
-  String get videoMarksHint => 'একটি ধাপে থামুন এবং পরবর্তীতে সেখানে যেতে পিন চাপুন।';
+  String get videoMarksHint => 'কোনো ধাপে থামাও আর পিনে ট্যাপ করো, পরেরবার সরাসরি সেখানে যেতে।';
 
   @override
-  String get videoMarkHere => 'এই ধাপটি এখানে চিহ্নিত করুন';
+  String get videoMarkHere => 'এই ধাপটা এখানে চিহ্নিত করো';
 
   @override
   String get sectionGeneral => 'সাধারণ';
 
   @override
-  String get sectionTraining => 'প্রশিক্ষণ';
+  String get sectionTraining => 'ট্রেনিং';
 
   @override
   String get sectionAlerts => 'রিমাইন্ডার ও অ্যালার্ম';
@@ -3206,10 +3273,10 @@ class AppLocalizationsBn extends AppLocalizations {
   String get sectionData => 'ডেটা ও ব্যাকআপ';
 
   @override
-  String get multiPlanSetting => 'দিনে একাধিক রুটিন';
+  String get multiPlanSetting => 'দিনে কয়েকটা রুটিন';
 
   @override
-  String get multiPlanHint => 'এই দিনের জন্য প্রতিটি রুটিন স্পর্শ করুন। যোগ করার ক্রমানুসারে থাকবে।';
+  String get multiPlanHint => 'এই দিনের প্রতিটা রুটিনে ট্যাপ করো। যে ক্রমে যোগ করবে সেই ক্রমে চলবে।';
 
   @override
   String routineOfDay(int n, int total) {
@@ -3217,31 +3284,32 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get nextToday => 'পরবর্তীতে আজ';
+  String get nextToday => 'আজ এরপর';
 
   @override
-  String get planAboutMe => 'আমার পরিচয়:';
+  String get planAboutMe => 'আমার সম্পর্কে:';
 
   @override
   String planBody(String sex, int age, String height, String weight) {
-    return '$sex, বয়স $age বছর, উচ্চতা $height, ওজন $weight।';
+    return '$sex, $age বছর, উচ্চতা $height, $weight।';
   }
 
   @override
   String planDays(int n) {
-    return 'আমি সপ্তাহে $n দিন অনুশীলন করতে চাই।';
+    return 'আমি সপ্তাহে $n দিন ট্রেনিং করতে চাই।';
   }
 
   @override
-  String get planNoHistory => 'এখনও কোনো লগ নেই: আমাকে শিক্ষানবিস ধরে ভলিউম ও ওজন সাবধানে রাখুন।';
+  String get planNoHistory =>
+      'এখনও কোনো ওয়ার্কআউট লেখা নেই: আমাকে শিক্ষানবিশ ধরো আর ভলিউম ও ওজন সাবধানে রাখো।';
 
   @override
   String planHistory(int n) {
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: 'গত ৩০ দিনে $nটি ওয়ার্কআউট লগ হয়েছে।',
-      one: 'গত ৩০ দিনে ১টি ওয়ার্কআউট লগ হয়েছে।',
+      other: 'শেষ 30 দিনে $nটি ওয়ার্কআউট লেখা।',
+      one: 'শেষ 30 দিনে 1টি ওয়ার্কআউট লেখা।',
     );
     return '$_temp0';
   }
@@ -3251,195 +3319,195 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get planAskFirst =>
-      'আমার লক্ষ্য বা সময়কাল জানা না থাকলে সংক্ষেপে একটি বার্তায় জিজ্ঞেস করুন। তথ্য পেলে কেবল JSON ফরম্যাটে উত্তর দিন।';
+      'যদি আমার লক্ষ্য (শক্তি, পেশি, চর্বি কমানো বা সাধারণ ফিটনেস) বা প্রতিটা সেশন কতক্ষণ হতে পারে না জানো, আগে একটা ছোট বার্তায় জিজ্ঞেস করো। উত্তর পেলে শুধু JSON-এ উত্তর দাও।';
 
   @override
-  String get backToTop => 'উপরে যান';
+  String get backToTop => 'উপরে ফেরো';
 
   @override
-  String get deleteExerciseTitle => 'এই ব্যায়ামটি মুছবেন?';
+  String get deleteExerciseTitle => 'এই ব্যায়াম মুছবে?';
 
   @override
   String deleteExerciseBody(String name) {
-    return '\"$name\" লাইব্রেরি ও রুটিন থেকে মুছে যাবে। অতীত সেট সংরক্ষিত থাকবে।';
+    return '\"$name\" তোমার লাইব্রেরি আর রুটিন থেকে মুছে যাবে। তোমার আগের সেট রাখা থাকবে।';
   }
 
   @override
   String get exportForStravaHint =>
-      'ব্রাউজারে strava.com/upload/select-এ আপলোড করুন। আপনার সেটের সাথে ওয়েট ট্রেনিং হিসেবে দেখাবে।';
+      'ব্রাউজারে strava.com/upload/select-এ আপলোড করো (Strava অ্যাপ ফাইল ইমপোর্ট করতে পারে না)। এটা তোমার সেটসহ Weight Training হিসেবে দেখা যাবে।';
 
   @override
-  String get manualStartTime => 'শুরুর সময়';
+  String get manualStartTime => 'শুরুর সময়';
 
   @override
-  String get manualDuration => 'সময়কাল';
+  String get manualDuration => 'সময়কাল';
 
   @override
-  String get manualDurationUnset => 'সময়কাল দিন';
+  String get manualDurationUnset => 'সময়কাল যোগ করো';
 
   @override
-  String get stravaRow => 'স্ট্রাভাতে এক্সপোর্ট (বেটা)';
+  String get stravaRow => 'Strava-য় এক্সপোর্ট করো (বেটা)';
 
   @override
   String get stravaBeta => 'বেটা';
 
   @override
   String get stravaIntro =>
-      'স্ট্রাভাতে নিতে একটি ওয়ার্কআউট বেছে নিন। আপনি একটি .fit ফাইল পাবেন: ব্রাউজারে strava.com/upload/select-এ আপলোড করুন।';
+      'Strava-য় নিতে একটা ওয়ার্কআউট বেছে নাও। একটা .fit ফাইল পাবে: ব্রাউজারে strava.com/upload/select-এ আপলোড করো আর এটা তোমার সেটসহ Weight Training হিসেবে দেখা যাবে।';
 
   @override
-  String get stravaEmpty => 'এক্সপোর্ট করার মতো কোনো ওয়ার্কআউট নেই।';
+  String get stravaEmpty => 'এখনও এক্সপোর্ট করার মতো ওয়ার্কআউট নেই।';
 
   @override
-  String get tapToPause => 'স্থগিত করতে স্পর্শ করুন';
+  String get tapToPause => 'থামাতে ট্যাপ করো';
 
   @override
-  String get holdPausedHint => 'স্থগিত — পুনরায় শুরু করতে চাপুন';
+  String get holdPausedHint => 'থামানো · চালাতে ট্যাপ করো';
 
   @override
-  String get finishHoldNow => 'সেট এখনই শেষ করুন';
+  String get finishHoldNow => 'সেট এখনই শেষ করো';
 
   @override
-  String get barWeightExercise => 'বার বা স্লেডের ওজন';
+  String get barWeightExercise => 'বার বা স্লেজের ওজন';
 
   @override
-  String get barWeightHint => 'প্লেট ক্যালকুলেটরে ব্যবহৃত হয়';
+  String get barWeightHint => 'প্লেট ক্যালকুলেটর ব্যবহার করে';
 
   @override
-  String get barWeightCustom => 'নিজের ওজন · রিসেট করতে ট্যাপ করুন';
+  String get barWeightCustom => 'তোমার · রিসেট করতে ট্যাপ করো';
 
   @override
-  String get groupRename => 'গ্রুপের নাম পরিবর্তন';
+  String get groupRename => 'দলের নাম বদলাও';
 
   @override
-  String get groupUngroup => 'গ্রুপ সরান, রুটিন রাখুন';
+  String get groupUngroup => 'দল সরাও, রুটিন রাখো';
 
   @override
-  String get groupDeleteAll => 'গ্রুপ ও রুটিন মুছুন';
+  String get groupDeleteAll => 'দল আর রুটিন মুছে ফেলো';
 
   @override
   String groupDeleteTitle(String name) {
-    return '\"$name\" মুছবেন?';
+    return '“$name” মুছবে?';
   }
 
   @override
   String groupDeleteBody(String count) {
-    return '$countটি মুছে ফেলা হবে। ইতিহাস সংরক্ষিত থাকবে।';
+    return '$count মুছে যাবে। তোমার ওয়ার্কআউটের ইতিহাস রাখা থাকবে।';
   }
 
   @override
-  String get tplRr => 'r/bodyweightfitness ক্লাসিক: সপ্তাহে তিন দিন ফুল বডি। সহজ মনে হলে পরবর্তী ধাপে যান।';
+  String get tplRr => 'r/bodyweightfitness-এর ক্লাসিক: সপ্তাহে তিন দিন ফুল বডি। সহজ লাগলে এক ধাপ উপরে।';
 
   @override
-  String get levelUpKicker => 'পরবর্তী ধাপ';
+  String get levelUpKicker => 'পরের ধাপ';
 
   @override
   String levelUpBody(int reps, String name) {
-    return '$name-এ পরপর দুটি ওয়ার্কআউটে ৩×$reps। পরবর্তী ধাপে যেতে প্রস্তুত?';
+    return '$name-এ টানা দুটো ওয়ার্কআউটে 3×$reps। পরের ধাপের জন্য তৈরি?';
   }
 
   @override
   String levelUpSwap(String routine) {
-    return '$routine-এ এটি প্রতিস্থাপন করুন';
+    return '$routine-এ বদলাও';
   }
 
   @override
-  String get levelUpSee => 'কীভাবে করতে হয় দেখুন';
+  String get levelUpSee => 'কীভাবে করে দেখো';
 
   @override
-  String get levelUpLater => 'এখন নয়';
+  String get levelUpLater => 'এখন না';
 
   @override
-  String get levelUpStay => 'এটাই রাখুন';
+  String get levelUpStay => 'এটাই রাখো';
 
   @override
   String levelUpSwapped(String name, String routine) {
-    return '$routine-এ এখন $name যুক্ত';
+    return '$name এখন $routine-এ';
   }
 
   @override
-  String get levelUpStayed => 'এটির জন্য আর কোনো উচ্চতর ধাপের পরামর্শ নেই';
+  String get levelUpStayed => 'এটার জন্য আর লেভেল-আপের পরামর্শ নয়';
 
   @override
-  String get levelHintsSetting => 'পরবর্তী ধাপের পরামর্শ';
+  String get levelHintsSetting => 'পরের ধাপের পরামর্শ দাও';
 
   @override
-  String get heatmapLabelsSetting => 'অ্যাক্টিভিটি ম্যাপে দিন ও মাস';
+  String get heatmapLabelsSetting => 'অ্যাক্টিভিটি মানচিত্রে দিন আর মাস';
 
   @override
   String get rmPercent => 'শতাংশ';
 
   @override
   String rmAtPercent(String pct) {
-    return 'আপনার সর্বোচ্চ ওজনের $pct';
+    return 'তোমার সর্বোচ্চের $pct';
   }
 
   @override
-  String get copyWorkout => 'টেক্সট হিসেবে কপি';
+  String get copyWorkout => 'লেখা হিসেবে কপি করো';
 
   @override
-  String get goalSet => 'লক্ষ্য নির্ধারণ';
+  String get goalSet => 'লক্ষ্য ঠিক করো';
 
   @override
-  String get goalTargetReps => 'লক্ষ্য রেপ্স';
+  String get goalTargetReps => 'লক্ষ্য রেপ';
 
   @override
   String goalToGo(String value) {
-    return 'আরও $value বাকি';
+    return 'আর $value';
   }
 
   @override
-  String get goalReached => 'লক্ষ্য অর্জিত';
+  String get goalReached => 'লক্ষ্য পূরণ';
 
   @override
   String goalDaysLeft(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$n দিন বাকি', one: '১ দিন বাকি');
+    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$n দিন বাকি', one: '1 দিন বাকি');
     return '$_temp0';
   }
 
   @override
-  String get goalOverdue => 'তারিখ পেরিয়ে গেছে';
+  String get goalOverdue => 'তারিখ পেরিয়ে গেছে';
 
   @override
-  String get goalDeadline => 'সময়সীমা';
+  String get goalDeadline => 'শেষ তারিখ';
 
   @override
-  String get goalNoDeadline => 'নির্দিষ্ট সময়সীমা নেই';
+  String get goalNoDeadline => 'শেষ তারিখ নেই';
 
   @override
-  String get goalRemove => 'লক্ষ্য সরান';
+  String get goalRemove => 'লক্ষ্য সরাও';
 
   @override
-  String get exerciseNameMissing => 'একটি নাম দিন';
+  String get exerciseNameMissing => 'একটা নাম দাও';
 
   @override
-  String get aliasesLabel => 'বিকল্প নাম (ঐচ্ছিক)';
+  String get aliasesLabel => 'অন্য নাম (ঐচ্ছিক)';
 
   @override
-  String get aliasesHint => 'অন্যান্য নাম, কমা দিয়ে আলাদা করুন';
+  String get aliasesHint => 'অন্য নাম, কমা দিয়ে আলাদা';
 
   @override
   String alsoCalled(String names) {
-    return 'আরও পরিচিত: $names';
+    return 'আরও: $names';
   }
 
   @override
-  String get addToRoutine => 'রুটিনে যোগ করুন';
+  String get addToRoutine => 'রুটিনে যোগ করো';
 
   @override
   String inRoutines(int n) {
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: '$nটি রুটিনে রয়েছে',
-      one: '১টি রুটিনে রয়েছে',
+      other: '$nটি রুটিনে',
+      one: '1টি রুটিনে',
       zero: 'এখনও কোনো রুটিনে নেই',
     );
     return '$_temp0';
   }
 
   @override
-  String get alreadyInRoutine => 'ইতিমধ্যেই যুক্ত আছে';
+  String get alreadyInRoutine => 'আগে থেকেই আছে';
 
   @override
   String get restInRoutine => 'এই রুটিনে বিশ্রাম';
@@ -3448,50 +3516,221 @@ class AppLocalizationsBn extends AppLocalizations {
   String get restInRoutineHint => 'ব্যায়ামের মতোই';
 
   @override
-  String get restInRoutineReset => 'শুধুমাত্র এখানে · বাতিল করতে ট্যাপ করুন';
+  String get restInRoutineReset => 'শুধু এখানে · ফেরাতে ট্যাপ করো';
 
   @override
-  String get swapExercise => 'ব্যায়াম বদলান';
+  String get swapExercise => 'ব্যায়াম বদলাও';
 
   @override
-  String get swapShort => 'বদল';
+  String get swapShort => 'বদলাও';
 
   @override
   String swapHint(String name) {
-    return 'শুধুমাত্র আজকের জন্য $name-এর বিকল্প। শেষ হলে রুটিনে স্থায়ী রাখতে পারেন।';
+    return '$name-এর বদলে, শুধু আজকের জন্য। শেষ করলে এটা রুটিনে রাখতে পারবে।';
   }
 
   @override
-  String get swapKeepsDone => 'যে সেটগুলো সম্পন্ন করেছেন তা লগ থাকবে; বাকি সেট নতুনটি দিয়ে চলবে।';
+  String get swapKeepsDone => 'যে সেটগুলো করে ফেলেছ সেগুলো লেখা থাকবে; নতুনটা বাকিটা সামলাবে।';
 
   @override
   String swapSameMuscle(String muscle) {
-    return 'একই পেশী · $muscle';
+    return 'একই পেশি · $muscle';
   }
 
   @override
-  String get swapDoneBefore => 'পূর্বে সম্পন্ন হয়েছে';
+  String get swapDoneBefore => 'আগে করা';
 
   @override
-  String get multiPlanSettingHint => 'একই দিনে একাধিক রুটিন নির্ধারণ।';
+  String get multiPlanSettingHint => 'একই দিনে একাধিক রুটিন';
 
   @override
-  String get levelHintsHint => 'ব্যায়াম সহজ হয়ে গেলে এটি আপনাকে তুলনামূলক কঠিন সংস্করণের পরামর্শ দেবে।';
+  String get levelHintsHint => 'কঠিন সংস্করণের পরামর্শ দেয়';
 
   @override
-  String get focusCardHint => 'আজকের রুটিন, হোমের শীর্ষে।';
+  String get focusCardHint => 'আজকের রুটিন, হোমের একদম উপরে';
 
   @override
-  String get gamificationHint => 'মেডেল, লেভেল ও ওয়ার্কআউট শেষের উৎসব。';
+  String get gamificationHint => 'মেডেল, লেভেল আর উদযাপন';
 
   @override
   String get exerciseSettings => 'এই ব্যায়ামের সেটিংস';
 
   @override
-  String get placeActiveNow => 'আপনি এখন এখানে আছেন';
+  String get exerciseSettingsHint => 'বিশ্রাম, অগ্রগতি, ওয়ার্ম-আপ আর আরও';
 
   @override
-  String get placeTapToUse => 'এখানে অনুশীলন করতে স্পর্শ করুন';
+  String get appIcon => 'অ্যাপ আইকন';
+
+  @override
+  String get appIconHint => 'হোম স্ক্রিনে GymMane দেখতে কেমন';
+
+  @override
+  String get appIconColors => 'রং';
+
+  @override
+  String get appIconDesigns => 'ডিজাইন';
+
+  @override
+  String get appIconNote => 'হোম স্ক্রিনে পরিবর্তন দেখাতে কয়েক সেকেন্ড লাগতে পারে।';
+
+  @override
+  String get appIconDefault => 'আসল';
+
+  @override
+  String get appIconLight => 'হালকা';
+
+  @override
+  String get appIconSand => 'বালি';
+
+  @override
+  String get appIconGraphite => 'গ্রাফাইট';
+
+  @override
+  String get appIconSage => 'সেজ';
+
+  @override
+  String get appIconNight => 'রাত';
+
+  @override
+  String get appIconMaterial => 'Material';
+
+  @override
+  String get appIconMedal => 'পদক';
+
+  @override
+  String get appIconGlass => 'কাচ';
+
+  @override
+  String get appIconStopwatch => 'স্টপওয়াচ';
+
+  @override
+  String get appIconMarble => 'মার্বেল';
+
+  @override
+  String get nfcRow => 'NFC স্টিকার';
+
+  @override
+  String get nfcRowHint => 'ফোন কাছে এনে আজকের ওয়ার্কআউট দেখো';
+
+  @override
+  String get nfcTitle => 'NFC স্টিকার';
+
+  @override
+  String get nfcSubtitle => 'পুরো সপ্তাহের জন্য একটি স্টিকার';
+
+  @override
+  String get nfcPoint1 => 'আজকের ওয়ার্কআউট, তৈরি';
+
+  @override
+  String get nfcPoint1Body =>
+      'ফোন কাছে আনো, আজকের রুটিন তার এক্সারসাইজসহ খুলে যাবে। তৈরি হলে নিজেই শুরু করো।';
+
+  @override
+  String get nfcPoint2 => 'বিশ্রামের দিনে জানিয়ে দেয়';
+
+  @override
+  String get nfcPoint2Body => 'আজ বিশ্রামের দিন হলে দেখতে পাবে, আর চাইলে তবুও ট্রেনিং করতে পারো।';
+
+  @override
+  String get nfcPoint3 => 'একবার লিখলেই হয়';
+
+  @override
+  String get nfcPoint3Body => 'যখন খুশি প্ল্যান বদলাও: স্টিকার সবসময় সেদিনের নির্ধারিত ওয়ার্কআউট খোলে।';
+
+  @override
+  String get nfcUse => 'স্টিকার ব্যবহার করো';
+
+  @override
+  String get nfcUseHint => 'বন্ধ থাকলে স্টিকার কাছে আনলে কিছুই হয় না';
+
+  @override
+  String get nfcWrite => 'স্টিকার লেখো';
+
+  @override
+  String get nfcOn => 'চালু';
+
+  @override
+  String get nfcOff => 'বন্ধ';
+
+  @override
+  String get todayRestBody => 'বিশ্রামও প্ল্যানের অংশ। রিকভারির সময় পেশি বাড়ে।';
+
+  @override
+  String get todayNotNow => 'এখন না';
+
+  @override
+  String get nfcWaitTitle => 'স্টিকার ফোনের কাছে আনো';
+
+  @override
+  String get nfcWaitBody => 'ফোনের পেছনে, ক্যামেরার কাছে, কাঁপা পর্যন্ত ধরে রাখো।';
+
+  @override
+  String get nfcTip => 'যেকোনো NTAG213, 215 বা 216 স্টিকার চলবে। এগুলোই সবচেয়ে প্রচলিত আর খুব সস্তা।';
+
+  @override
+  String get nfcDoneTitle => 'স্টিকার তৈরি';
+
+  @override
+  String get nfcDoneBody => 'এমন জায়গায় লাগাও যেখানে পৌঁছেই চোখে পড়ে: জিম ব্যাগ, বোতল বা লকার।';
+
+  @override
+  String get nfcOffTitle => 'NFC বন্ধ আছে';
+
+  @override
+  String get nfcOffBody => 'স্টিকার লিখতে ফোনের সেটিংসে NFC চালু করো।';
+
+  @override
+  String get nfcOpenSettings => 'সেটিংস খোলো';
+
+  @override
+  String get nfcFailTitle => 'লেখা গেল না';
+
+  @override
+  String get nfcErrLocked => 'এই স্টিকার লক করা, এতে লেখা যায় না।';
+
+  @override
+  String get nfcErrSmall => 'এই স্টিকারে আঁটে না। NTAG213 বা বড় কিছু ব্যবহার করো।';
+
+  @override
+  String get nfcErrLost => 'শেষ হওয়ার আগেই স্টিকার নড়ে গেছে। স্থির রেখে আবার চেষ্টা করো।';
+
+  @override
+  String get nfcErrUnsupported => 'এই স্টিকার সমর্থিত নয়। NTAG213, 215 বা 216 ব্যবহার করো।';
+
+  @override
+  String get nfcRetry => 'আবার চেষ্টা করো';
+
+  @override
+  String get raceTitle => 'গত সেশনের তুলনায়';
+
+  @override
+  String raceSince(String date) {
+    return '$date-এর তুলনায়';
+  }
+
+  @override
+  String get raceAhead => 'তুমি এগিয়ে';
+
+  @override
+  String get raceBehind => 'এখনও ধরছ';
+
+  @override
+  String get raceEven => 'সমানে সমান';
+
+  @override
+  String get raceToday => 'আজ';
+
+  @override
+  String get raceThen => 'তখন';
+
+  @override
+  String get raceHint => 'শুধু একই সেট তুলনা হয়: 2টি করলে সেদিনের প্রথম 2টির সাথে।';
+
+  @override
+  String get placeActiveNow => 'তুমি এখানে';
+
+  @override
+  String get placeTapToUse => 'এখানে ট্রেনিং করতে ট্যাপ করো';
 
   @override
   String get intervalDays => 'দিন';
@@ -3505,10 +3744,10 @@ class AppLocalizationsBn extends AppLocalizations {
   String get toolNameRpe => 'RPE লোড';
 
   @override
-  String get toolTitleRpe => 'RPE অনুযায়ী লোড';
+  String get toolTitleRpe => 'RPE অনুযায়ী লোড';
 
   @override
-  String get toolDescRpe => 'আপনার কাঙ্ক্ষিত প্রচেষ্টার ওজন';
+  String get toolDescRpe => 'যে পরিশ্রম চাও তার জন্য ওজন';
 
   @override
   String get toolNameDots => 'শক্তির স্তর';
@@ -3517,18 +3756,18 @@ class AppLocalizationsBn extends AppLocalizations {
   String get toolTitleDots => 'শক্তির স্তর (DOTS)';
 
   @override
-  String get toolDescDots => 'শরীরের ওজন অনুযায়ী আপনার শারীরিক শক্তি';
+  String get toolDescDots => 'তোমার ওজনের তুলনায় তোমার শক্তি';
 
   @override
   String rpeResultHint(int reps, String rpe) {
-    return 'RPE $rpe-তে $repsটি রেপের জন্য';
+    return 'RPE $rpe-এ $reps রেপের জন্য';
   }
 
   @override
-  String get rpeYourSet => 'আপনার করা একটি সেট';
+  String get rpeYourSet => 'এইমাত্র করা একটা সেট';
 
   @override
-  String get rpeGoal => 'আপনি কী অর্জন করতে চান';
+  String get rpeGoal => 'যা করতে চাও';
 
   @override
   String rpeOneRmLine(String value) {
@@ -3536,10 +3775,10 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get rpeExplain => 'RPE 10 মানে আর একটিও সম্ভব ছিল না; 8 মানে আরও ২টি রেপ বাকি ছিল।';
+  String get rpeExplain => 'RPE 10 মানে আর একটাও হতো না; 8 মানে দুটো বাকি ছিল।';
 
   @override
-  String get dotsBestLifts => 'আপনার সেরা লিফটস';
+  String get dotsBestLifts => 'তোমার সেরা লিফট';
 
   @override
   String get dotsSquat => 'স্কোয়াট';
@@ -3548,7 +3787,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get dotsBench => 'বেঞ্চ প্রেস';
 
   @override
-  String get dotsDeadlift => 'ডেডলিফ্ট';
+  String get dotsDeadlift => 'ডেডলিফট';
 
   @override
   String dotsTotalLine(String value) {
@@ -3557,13 +3796,13 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get dotsExplain =>
-      'ওজন নির্বিশেষে যে কারও শক্তির সাথে তুলনা করে। আপনার সেরা সিঙ্গেল রেপ বা আনুমানিক 1RM ব্যবহার করুন।';
+      'তোমার শক্তি যে কারও সাথে তুলনা করে, তার ওজন যা-ই হোক। তোমার সেরা একক রেপ, বা আনুমানিক 1RM ব্যবহার করো।';
 
   @override
-  String get dotsLevel0 => 'শিক্ষানবিস';
+  String get dotsLevel0 => 'শিক্ষানবিশ';
 
   @override
-  String get dotsLevel1 => 'মধ্যবর্তী';
+  String get dotsLevel1 => 'মাঝারি';
 
   @override
   String get dotsLevel2 => 'উন্নত';
@@ -3575,29 +3814,29 @@ class AppLocalizationsBn extends AppLocalizations {
   String get dotsLevel4 => 'এলিট';
 
   @override
-  String get toolNameWilks => 'উইল্কস';
+  String get toolNameWilks => 'Wilks';
 
   @override
-  String get toolTitleWilks => 'উইল্কস স্কোর';
+  String get toolTitleWilks => 'Wilks স্কোর';
 
   @override
-  String get toolDescWilks => 'পাওয়ারলিফটিংয়ের ঐতিহ্যবাহী স্কোর';
+  String get toolDescWilks => 'ক্লাসিক পাওয়ারলিফটিং স্কোর';
 
   @override
   String get wilksExplain =>
-      'পাওয়ারলিফটিংয়ের ক্লাসিক সূত্র। ২০২০ সালে DOTS এটি প্রতিস্থাপন করলেও এখনও বহুল ব্যবহৃত।';
+      'ক্লাসিক পাওয়ারলিফটিং সূত্র। 2020 সালে DOTS এর জায়গা নিয়েছে, কিন্তু অনেক প্রতিযোগিতা আর র‍্যাঙ্কিং এখনও এটা ব্যবহার করে।';
 
   @override
   String get toolNameFfmi => 'FFMI';
 
   @override
-  String get toolTitleFfmi => 'ফ্যাট-ফ্রি মাস ইনডেক্স (FFMI)';
+  String get toolTitleFfmi => 'চর্বিহীন ভর সূচক';
 
   @override
-  String get toolDescFfmi => 'উচ্চতা অনুযায়ী পেশীর অনুপাত';
+  String get toolDescFfmi => 'তোমার উচ্চতার তুলনায় কতটা পেশি';
 
   @override
-  String get ffmiBodyFat => 'শরীরের চর্বি (BODY FAT)';
+  String get ffmiBodyFat => 'বডি ফ্যাট';
 
   @override
   String ffmiLeanLine(String value) {
@@ -3606,93 +3845,93 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get ffmiExplain =>
-      'BMI-এর মতো, তবে চর্বি ছাড়া: এটি কেবল চর্বিহীন ভর গণনা করে। উচ্চতার সাথে সামঞ্জস্যপূর্ণ হওয়ায় যে কারও সাথে তুলনা করা যায়।';
+      'BMI-এর মতো, তবে চর্বি বাদে: শুধু তোমার চর্বিহীন ভর গোনে। উচ্চতা অনুযায়ী সমন্বয় করা, যাতে লম্বা আর খাটো মানুষের তুলনা ন্যায্য হয়।';
 
   @override
-  String get ffmiLevel0 => 'গড়ের নিচে';
+  String get ffmiLevel0 => 'গড়ের নিচে';
 
   @override
-  String get ffmiLevel1 => 'গড়';
+  String get ffmiLevel1 => 'গড়';
 
   @override
-  String get ffmiLevel2 => 'গড়ের উপরে';
+  String get ffmiLevel2 => 'গড়ের উপরে';
 
   @override
   String get ffmiLevel3 => 'চমৎকার';
 
   @override
-  String get ffmiLevel4 => 'ব্যতিক্রমী';
+  String get ffmiLevel4 => 'অসাধারণ';
 
   @override
-  String get rpeEffortLabel => 'প্রচেষ্টা (RPE)';
+  String get rpeEffortLabel => 'পরিশ্রম (RPE)';
 
   @override
-  String get restRowHint => 'সেটের মাঝে বিশ্রাম, ব্যায়ামের নিজস্ব সময় না থাকলে।';
+  String get restRowHint => 'সেটের মাঝে, যদি না ব্যায়ামের নিজের থাকে';
 
   @override
-  String get effortRowHint => 'প্রতিটি সেটে RPE বা RIR লগ করুন।';
+  String get effortRowHint => 'প্রতিটা সেটে RPE বা RIR লেখো';
 
   @override
-  String get countdownHint => 'প্রথম সেটের পূর্বে ৩, ২, ১ কাউন্টডাউন।';
+  String get countdownHint => 'প্রথম সেটের আগে 3, 2, 1';
 
   @override
-  String get keepScreenOnHint => 'অনুশীলনের সময় স্ক্রিন সক্রিয় থাকবে।';
+  String get keepScreenOnHint => 'ট্রেনিংয়ের সময় স্ক্রিন চালু থাকে';
 
   @override
-  String get demoSizeRowHint => 'ওয়ার্কআউটের সময় ব্যায়ামের চিত্র।';
+  String get demoSizeRowHint => 'ওয়ার্কআউটের সময় ব্যায়ামের ছবি';
 
   @override
-  String get demoLoopRowHint => 'অ্যানিমেশন পুনরায় চলবে নাকি থামবে।';
+  String get demoLoopRowHint => 'অ্যানিমেশন বারবার চলবে নাকি থামবে';
 
   @override
-  String get trainReminderRowHint => 'যেদিন আপনি অনুশীলন করবেন সেদিন একটি নোটিফিকেশন।';
+  String get trainReminderRowHint => 'ট্রেনিংয়ের দিনে একটা খোঁচা';
 
   @override
-  String get alarmSoundRowHint => 'বিশ্রাম শেষ হলে যে সুর বাজবে।';
+  String get alarmSoundRowHint => 'বিশ্রাম শেষ হলে কী বাজবে';
 
   @override
-  String get alarmStyleRowHint => 'সাইলেন্ট মোডে বাজবে কিনা।';
+  String get alarmStyleRowHint => 'সাইলেন্ট মোডে বাজবে কি না';
 
   @override
-  String get recommendedRowHint => 'হোম স্ক্রিনে প্রস্তাবিত ব্যায়াম।';
+  String get recommendedRowHint => 'হোমে আমাদের প্রস্তাবিত ব্যায়াম';
 
   @override
-  String get weightStepSetting => 'ওজন পরিবর্তনের ধাপ';
+  String get weightStepSetting => 'ওজনের ধাপ';
 
   @override
-  String get weightStepHint => '− এবং + বোতামে যে পরিমাণ যোগ বা বিয়োগ হবে।';
+  String get weightStepHint => '− আর + বোতাম কতটা যোগ করে';
 
   @override
   String get prBestWorkout => 'সেরা ওয়ার্কআউট';
 
   @override
-  String get mergeExercise => 'একত্রীকরণ';
+  String get mergeExercise => 'মেশাও';
 
   @override
   String mergeExerciseInto(String name) {
-    return '\"$name\" একত্রীকরণ করুন…';
+    return '$name-কে মেশাও এর সাথে…';
   }
 
   @override
-  String get mergeExerciseTitle => 'ব্যায়াম একত্রিত করবেন?';
+  String get mergeExerciseTitle => 'ব্যায়াম মেশাবে?';
 
   @override
   String mergeExerciseBody(String from, String to) {
-    return '\"$from\"-এর সমস্ত ইতিহাস \"$to\"-তে যুক্ত হবে। \"$from\" লাইব্রেরিতেই থাকবে। এটি পূর্বাবস্থায় ফেরানো যাবে না।';
+    return '\"$from\"-এর পুরো ইতিহাস \"$to\"-তে চলে যাবে। \"$from\" তোমার লাইব্রেরিতে থেকে যাবে। এটা ফেরানো যাবে না।';
   }
 
   @override
-  String get mergedToast => 'ইতিহাস একত্রিত হয়েছে';
+  String get mergedToast => 'ইতিহাস মেশানো হয়েছে';
 
   @override
-  String get nutrition => 'পুষ্টি ও ডায়েট';
+  String get nutrition => 'পুষ্টি';
 
   @override
-  String get nutritionHomeEmpty => 'আজকের খাবার ও পানি ট্র্যাক করুন';
+  String get nutritionHomeEmpty => 'পানি, প্রোটিন আর ক্যালরি';
 
   @override
   String nutritionHomeDetail(String energy, int protein) {
-    return '$energy · $protein গ্রাম প্রোটিন';
+    return '$energy · $protein গ্রা প্রোটিন';
   }
 
   @override
@@ -3705,19 +3944,19 @@ class AppLocalizationsBn extends AppLocalizations {
   String get nutritionGoals => 'দৈনিক লক্ষ্য';
 
   @override
-  String get kcalLabel => 'ক্যালোরি';
+  String get kcalLabel => 'ক্যালরি';
 
   @override
-  String get kcalOver => 'অতিরিক্ত';
+  String get kcalOver => 'বেশি';
 
   @override
   String get waterLabel => 'পানি';
 
   @override
-  String get waterDone => 'লক্ষ্য পূরণ হয়েছে';
+  String get waterDone => 'লক্ষ্য পূরণ';
 
   @override
-  String get waterCustom => 'অন্যান্য পরিমাণ';
+  String get waterCustom => 'অন্য পরিমাণ';
 
   @override
   String get glassSize => 'গ্লাসের আকার';
@@ -3726,30 +3965,30 @@ class AppLocalizationsBn extends AppLocalizations {
   String get supplementsLabel => 'সাপ্লিমেন্ট';
 
   @override
-  String get supplementsEmpty => 'যোগ করতে ট্যাপ করুন, অথবা নিজেরটি তৈরি করতে + চাপুন।';
+  String get supplementsEmpty => 'যোগ করতে একটায় ট্যাপ করো, বা নিজের জন্য +।';
 
   @override
   String get addSupplement => 'নতুন সাপ্লিমেন্ট';
 
   @override
-  String get supplementNameHint => 'ক্রিয়েটিন, ভিটামিন ডি…';
+  String get supplementNameHint => 'ক্রিয়েটিন, ভিটামিন D…';
 
   @override
   String removeSupplementTitle(String name) {
-    return '$name সরাবেন?';
+    return '$name সরাবে?';
   }
 
   @override
-  String get removeSupplementBody => 'যে দিনগুলোতে এটি গ্রহণ করেছেন সেই লগগুলো মুছে যাবে।';
+  String get removeSupplementBody => 'যে দিনগুলো খাওয়া বলে চিহ্নিত করেছিলে সেগুলোও যাবে।';
 
   @override
   String get suppCreatine => 'ক্রিয়েটিন';
 
   @override
-  String get suppVitaminD => 'ভিটামিন ডি';
+  String get suppVitaminD => 'ভিটামিন D';
 
   @override
-  String get suppOmega3 => 'ওমেগা-৩';
+  String get suppOmega3 => 'ওমেগা-3';
 
   @override
   String get suppMagnesium => 'ম্যাগনেসিয়াম';
@@ -3767,42 +4006,42 @@ class AppLocalizationsBn extends AppLocalizations {
   String get newFood => 'নতুন খাবার';
 
   @override
-  String get editFood => 'খাবার সম্পাদনা';
+  String get editFood => 'খাবার বদলাও';
 
   @override
-  String get foodNameHint => 'হুই প্রোটিন, ওটস, রুটি…';
+  String get foodNameHint => 'হুয়ে প্রোটিন, ওটস, পাউরুটি…';
 
   @override
   String get servingLabel => 'পরিবেশন';
 
   @override
-  String get servingHint => '১ স্কুপ · ৩০ গ্রাম';
+  String get servingHint => '1 স্কুপ · 30 গ্রা';
 
   @override
-  String get perServing => 'প্রতি পরিবেশন';
+  String get perServing => 'প্রতি পরিবেশনে';
 
   @override
-  String get servingsLabel => 'পরিবেশন সংখ্যা';
+  String get servingsLabel => 'পরিবেশন';
 
   @override
-  String get foodPhotoHint => 'সাদা ব্যাকগ্রাউন্ডে তুললে এটি স্টিকারে রূপ নেবে।';
+  String get foodPhotoHint => 'সাদামাটা ব্যাকগ্রাউন্ডে এটা স্টিকার হয়ে যায়।';
 
   @override
-  String get cutoutWorking => 'কাটআউট করা হচ্ছে…';
+  String get cutoutWorking => 'কাটা হচ্ছে…';
 
   @override
-  String get cutoutTry => 'কাটআউট';
+  String get cutoutTry => 'ব্যাকগ্রাউন্ড সরাও';
 
   @override
-  String get cutoutKeep => 'সম্পূর্ণ ছবি';
+  String get cutoutKeep => 'পুরো ছবি';
 
   @override
   String deleteFoodTitle(String name) {
-    return '$name মুছবেন?';
+    return '$name মুছবে?';
   }
 
   @override
-  String get deleteFoodBody => 'এটি আপনার খাবার তালিকা থেকে সরবে। ইতিমধ্যেই যা লগ করেছেন তা থাকবে।';
+  String get deleteFoodBody => 'এটা তোমার খাবার থেকে চলে যাবে। যা আগে লিখেছ তা থাকবে।';
 
   @override
   String get mealBreakfast => 'সকালের নাস্তা';
@@ -3814,83 +4053,83 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mealDinner => 'রাতের খাবার';
 
   @override
-  String get mealSnacks => 'স্ন্যাক্স';
+  String get mealSnacks => 'জলখাবার';
 
   @override
-  String get nothingLogged => 'এখনও কিছু লগ করা হয়নি।';
+  String get nothingLogged => 'এখনও কিছু লেখা নেই।';
 
   @override
   String addToMeal(String meal) {
-    return '$meal-এ যোগ করুন';
+    return '$meal-এ যোগ করো';
   }
 
   @override
   String get quickAdd => 'দ্রুত যোগ';
 
   @override
-  String get quickAddHint => 'খাবার সংরক্ষণ ছাড়া কেবল পুষ্টিমান যোগ।';
+  String get quickAddHint => 'শুধু সংখ্যা, খাবার সেভ না করে।';
 
   @override
-  String get quickAddName => 'এটি কী ছিল? (ঐচ্ছিক)';
+  String get quickAddName => 'কী ছিল? (ঐচ্ছিক)';
 
   @override
-  String get logFood => 'যোগ করুন';
+  String get logFood => 'যোগ করো';
 
   @override
   String loggedToast(String meal) {
-    return '$meal-এ যোগ করা হয়েছে';
+    return '$meal-এ যোগ হয়েছে';
   }
 
   @override
-  String get entryRemoved => 'মুছে ফেলা হয়েছে';
+  String get entryRemoved => 'সরানো হয়েছে';
 
   @override
-  String get goalsFromProfile => 'প্রোফাইল থেকে গণনা করুন';
+  String get goalsFromProfile => 'আমার প্রোফাইল থেকে হিসাব করো';
 
   @override
   String get goalsFromProfileHint =>
-      'প্রোফাইল অনুযায়ী ক্যালোরি, এবং কেজি প্রতি ১.৮ গ্রাম প্রোটিন ও ৩৫ মিলি পানি।';
+      'তোমার প্রোফাইল থেকে ক্যালরি, আর শরীরের প্রতি কিলোতে 1.8 গ্রা প্রোটিন ও 35 মিলি পানি।';
 
   @override
-  String get kcalEaten => 'গ্রহণকৃত';
+  String get kcalEaten => 'খাওয়া';
 
   @override
-  String get kcalRemaining => 'অবশিষ্ট';
+  String get kcalRemaining => 'বাকি';
 
   @override
   String waterTapHint(String amount) {
-    return 'গ্লাসে ট্যাপ করুন: + $amount';
+    return 'গ্লাসে ট্যাপ করো: + $amount';
   }
 
   @override
-  String get shakeEmpty => 'শেক বেছে নিতে ট্যাপ করুন';
+  String get shakeEmpty => 'তোমার শেক বেছে নিতে ট্যাপ করো';
 
   @override
   String shakeTapHint(String name) {
-    return 'ট্যাপ করুন: + $name';
+    return 'ট্যাপ করো: + $name';
   }
 
   @override
-  String get shakePick => 'আপনার শেক';
+  String get shakePick => 'তোমার শেক';
 
   @override
-  String get shakePickHint => 'শেক স্পর্শ করলেই এক ক্লিকে লগ হয়ে যাবে।';
+  String get shakePickHint => 'শেকারে ট্যাপ করো, এক বারেই লেখা হয়ে যাবে।';
 
   @override
-  String get proteinLetter => 'প্রো';
+  String get proteinLetter => 'P';
 
   @override
-  String get carbsLetter => 'কা';
+  String get carbsLetter => 'C';
 
   @override
-  String get fatLetter => 'চ';
+  String get fatLetter => 'F';
 
   @override
-  String get addBurnedLabel => 'বার্ন করা ক্যালোরি যোগ করুন';
+  String get addBurnedLabel => 'পোড়ানো ক্যালরি যোগ করো';
 
   @override
   String get addBurnedHint =>
-      'আপনার লক্ষ্য ইতিমধ্যেই আপনার স্বাভাবিক দৈনন্দিন পরিশ্রমকে গণ্য করে। কেবল নিষ্ক্রিয় জীবনযাপন বেছে নিলে এটি চালু করুন: এটি বিশ্রামের ক্যালোরির সাথে প্রতিটি ওয়ার্কআউটের বার্ন যোগ করে।';
+      'তোমার লক্ষ্য আগে থেকেই তোমার সাধারণ অ্যাক্টিভিটি গোনে। শুধু যদি নিজেকে বসে থাকা হিসেবে ঠিক করে থাকো তবেই চালু করো: এটা বিশ্রামের উপরে প্রতিটা ওয়ার্কআউটে পোড়া ক্যালরি যোগ করে।';
 
   @override
   String get amountLabel => 'পরিমাণ';
@@ -3901,7 +4140,7 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get bodyweightLabel => 'শারীরিক ওজন';
+  String get bodyweightLabel => 'শরীরের ওজন';
 
   @override
   String copiedMealToast(int count) {
@@ -3909,13 +4148,13 @@ class AppLocalizationsBn extends AppLocalizations {
       count,
       locale: localeName,
       other: '$countটি খাবার কপি হয়েছে',
-      one: '১টি খাবার কপি হয়েছে',
+      one: '1টি খাবার কপি হয়েছে',
     );
     return '$_temp0';
   }
 
   @override
-  String get deleteSavedMealBody => 'ইতিমধ্যেই লগ করা খাবারে কোনো পরিবর্তন হবে না।';
+  String get deleteSavedMealBody => 'যা আগে লিখেছ তা যেমন আছে তেমনই থাকবে।';
 
   @override
   String get fiberLabel => 'ফাইবার';
@@ -3927,16 +4166,16 @@ class AppLocalizationsBn extends AppLocalizations {
   String get sodiumLabel => 'সোডিয়াম';
 
   @override
-  String get foodDatabase => 'খাদ্য ডেটাবেস';
+  String get foodDatabase => 'খাবারের ডেটাবেস';
 
   @override
-  String get kcalBurned => 'বার্নকৃত';
+  String get kcalBurned => 'পোড়ানো';
 
   @override
   String get mealOptions => 'খাবারের বিকল্প';
 
   @override
-  String get moreNutrients => 'ফাইবার, চিনি ও সোডিয়াম';
+  String get moreNutrients => 'ফাইবার, চিনি আর সোডিয়াম';
 
   @override
   String ofGoal(int goal, String unit) {
@@ -3945,30 +4184,30 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String per100(String unit) {
-    return 'প্রতি ১০০ $unit';
+    return 'প্রতি 100 $unit';
   }
 
   @override
-  String get perServingShort => 'প্রতি পরিবেশন';
+  String get perServingShort => 'প্রতি পরিবেশনে';
 
   @override
-  String get foodCategory => 'CATEGORY';
+  String get foodCategory => 'বিভাগ';
 
   @override
   String portionUnit(int count) {
-    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count পিস', one: '১ পিস');
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$countটি', one: '1টি');
     return '$_temp0';
   }
 
   @override
   String portionSlice(int count) {
-    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count টুকরা', one: '১ টুকরা');
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count টুকরো', one: '1 টুকরো');
     return '$_temp0';
   }
 
   @override
   String portionScoop(int count) {
-    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count স্কুপ', one: '১ স্কুপ');
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count স্কুপ', one: '1 স্কুপ');
     return '$_temp0';
   }
 
@@ -3978,7 +4217,7 @@ class AppLocalizationsBn extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count টেবিল চামচ',
-      one: '১ টেবিল চামচ',
+      one: '1 টেবিল চামচ',
     );
     return '$_temp0';
   }
@@ -3989,20 +4228,20 @@ class AppLocalizationsBn extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count চা চামচ',
-      one: '১ চা চামচ',
+      one: '1 চা চামচ',
     );
     return '$_temp0';
   }
 
   @override
   String portionCup(int count) {
-    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count কাপ', one: '১ কাপ');
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count কাপ', one: '1 কাপ');
     return '$_temp0';
   }
 
   @override
   String portionGlass(int count) {
-    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count গ্লাস', one: '১ গ্লাস');
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count গ্লাস', one: '1 গ্লাস');
     return '$_temp0';
   }
 
@@ -4014,54 +4253,54 @@ class AppLocalizationsBn extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$countটি উপাদান',
-      one: '১টি উপাদান',
+      other: '$countটি খাবার',
+      one: '1টি খাবার',
     );
     return '$_temp0';
   }
 
   @override
-  String get renameLabel => 'নাম পরিবর্তন';
+  String get renameLabel => 'নাম বদলাও';
 
   @override
-  String get repeatFrom => 'পুনরাবৃত্তি করুন';
+  String get repeatFrom => 'এখান থেকে আবার';
 
   @override
-  String get repeatNone => 'অন্যান্য দিনে এই খাবারের কোনো লগ নেই।';
+  String get repeatNone => 'অন্য দিনে এই খাবারের জন্য এখনও কিছু লেখা নেই।';
 
   @override
-  String get restDayGoals => 'বিশ্রামের দিনে ভিন্ন লক্ষ্য';
+  String get restDayGoals => 'বিশ্রামের দিনে আলাদা লক্ষ্য';
 
   @override
-  String get trainingDays => 'প্রশিক্ষণের দিনসমূহ';
+  String get trainingDays => 'ট্রেনিংয়ের দিন';
 
   @override
   String get restDays => 'বিশ্রামের দিন';
 
   @override
-  String get trainingDay => 'প্রশিক্ষণের দিন';
+  String get trainingDay => 'ট্রেনিংয়ের দিন';
 
   @override
-  String get saveAsMeal => 'খাবার হিসেবে সংরক্ষণ';
+  String get saveAsMeal => 'খাবার হিসেবে সেভ করো';
 
   @override
-  String get savedMealNameHint => 'যেমন: সকালের নিয়মিত নাস্তা';
+  String get savedMealNameHint => 'যেমন রোজকার নাস্তা';
 
   @override
-  String get savedMealToast => 'খাবার সংরক্ষিত হয়েছে';
+  String get savedMealToast => 'খাবার সেভ হয়েছে';
 
   @override
-  String get savedMeals => 'সংরক্ষিত খাবার';
+  String get savedMeals => 'সেভ করা খাবার';
 
   @override
-  String get searchFoodsHint => 'খাবার খুঁজুন';
+  String get searchFoodsHint => 'খাবার খোঁজো';
 
   @override
-  String get searchFoodsEmpty => 'ছবির সাথে ৫০০+ খাবার খুঁজুন, অথবা নিজেরটি তৈরি করুন।';
+  String get searchFoodsEmpty => 'ছবিসহ 500-র বেশি খাবার খোঁজো, বা নিজের যোগ করো।';
 
   @override
   String searchFoodsNone(String query) {
-    return '\"$query\"-এর জন্য কিছু মেলেনি। এটি নিজস্ব খাবার হিসেবে তৈরি করুন।';
+    return '\"$query\"-এর জন্য কিছু পাওয়া যায়নি। নিজের খাবার হিসেবে বানাও।';
   }
 
   @override
@@ -4071,25 +4310,25 @@ class AppLocalizationsBn extends AppLocalizations {
   String get weekAverage => 'এই সপ্তাহ';
 
   @override
-  String get weekAvgEnergy => 'দৈনিক গড়';
+  String get weekAvgEnergy => 'দৈনিক গড়';
 
   @override
-  String get weekAvgProtein => 'দৈনিক প্রোটিন';
+  String get weekAvgProtein => 'দিনে প্রোটিন';
 
   @override
-  String get weekEnergyOnTarget => 'লক্ষ্য অনুযায়ী ক্যালোরি';
+  String get weekEnergyOnTarget => 'ক্যালরি লক্ষ্যে';
 
   @override
-  String get weekProteinOnTarget => 'লক্ষ্য অনুযায়ী প্রোটিন';
+  String get weekProteinOnTarget => 'প্রোটিন লক্ষ্যে';
 
   @override
   String weekProteinAvg(int grams) {
-    return 'দৈনিক $grams গ্রাম প্রোটিন';
+    return 'দিনে $grams গ্রা প্রোটিন';
   }
 
   @override
   String weekDaysOnTarget(int met, int days) {
-    return '$days দিনের মধ্যে $met দিন লক্ষ্য পূরণ';
+    return '$days দিনের মধ্যে $met দিন লক্ষ্যে';
   }
 
   @override
@@ -4097,17 +4336,17 @@ class AppLocalizationsBn extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count দিন লগ হয়েছে',
-      one: '১ দিন লগ হয়েছে',
+      other: '$count দিন লেখা',
+      one: '1 দিন লেখা',
     );
     return '$_temp0';
   }
 
   @override
-  String get weekNoData => 'এখনও কিছু লগ করা হয়নি';
+  String get weekNoData => 'এখনও কিছু লেখা নেই';
 
   @override
-  String get weekOnTargetHint => 'লক্ষ্যে পৌঁছানো: ক্যালোরি ১০%-এর মধ্যে এবং প্রোটিন কমপক্ষে ৯০%।';
+  String get weekOnTargetHint => 'লক্ষ্যে মানে: ক্যালরি লক্ষ্যের 10%-এর মধ্যে আর অন্তত 90% প্রোটিন।';
 
   @override
   String get weightGoalLabel => 'লক্ষ্য ওজন';
@@ -4123,19 +4362,19 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get weightGoalNone => 'লক্ষ্য সেট করতে চেপে ধরুন';
+  String get weightGoalNone => 'লক্ষ্য ঠিক করতে চেপে ধরো';
 
   @override
-  String get weightGoalReached => 'লক্ষ্য পূরণ হয়েছে';
+  String get weightGoalReached => 'লক্ষ্য পূরণ';
 
   @override
   String weightToLose(String weight) {
-    return '$weight কমাতে হবে';
+    return 'আরও $weight কমাতে হবে';
   }
 
   @override
   String weightToGain(String weight) {
-    return '$weight বাড়াতে হবে';
+    return 'আরও $weight বাড়াতে হবে';
   }
 
   @override
@@ -4154,13 +4393,13 @@ class AppLocalizationsBn extends AppLocalizations {
   String get aminoSaa => 'মেথিওনিন';
 
   @override
-  String get aminoAaa => 'ফেনিল্যালানিন';
+  String get aminoAaa => 'ফিনাইলঅ্যালানিন';
 
   @override
   String get aminoThr => 'থ্রিওনিন';
 
   @override
-  String get aminoTrp => 'ট্রিপ্টোফ্যান';
+  String get aminoTrp => 'ট্রিপটোফ্যান';
 
   @override
   String get aminoVal => 'ভ্যালিন';
@@ -4169,38 +4408,38 @@ class AppLocalizationsBn extends AppLocalizations {
   String get animalProtein => 'প্রাণিজ প্রোটিন';
 
   @override
-  String get proteinQuality => 'প্রোটিনের গুণমান';
+  String get proteinQuality => 'প্রোটিনের মান';
 
   @override
   String get qualityComplete => 'সম্পূর্ণ';
 
   @override
-  String get qualityAlmost => 'প্রায় সম্পূর্ণ';
+  String get qualityAlmost => 'প্রায় সম্পূর্ণ';
 
   @override
   String get qualityIncomplete => 'অসম্পূর্ণ';
 
   @override
-  String get qualityNoData => 'কোনো ডেটা নেই';
+  String get qualityNoData => 'এখনও ডেটা নেই';
 
   @override
-  String get qualityNoDataHint => 'অ্যামিনো অ্যাসিড দেখতে ডেটাবেস থেকে খাবার লগ করুন।';
+  String get qualityNoDataHint => 'তোমার অ্যামিনো অ্যাসিড দেখতে ডেটাবেস থেকে খাবার লেখো।';
 
   @override
-  String get qualityAllCovered => 'সবকটি নয়টি প্রয়োজনীয় অ্যামিনো অ্যাসিড বিদ্যমান।';
+  String get qualityAllCovered => 'নয়টি প্রয়োজনীয় অ্যামিনো অ্যাসিডই পূরণ হয়েছে।';
 
   @override
   String qualityLimiting(String amino) {
-    return '$amino-এর ঘাটতি রয়েছে। এটি সমৃদ্ধ খাবারের সাথে গ্রহণ করুন।';
+    return '$amino কম। এতে ভরপুর খাবারের সাথে মিলিয়ে খাও।';
   }
 
   @override
   String qualityCoverage(int pct) {
-    return '$pct% প্রোটিনের উপর ভিত্তি করে: আপনার নিজস্ব খাবারে অ্যামিনো অ্যাসিডের ডেটা নেই।';
+    return 'তোমার প্রোটিনের $pct%-এর ভিত্তিতে: তোমার নিজের খাবারে অ্যামিনো অ্যাসিডের ডেটা নেই।';
   }
 
   @override
-  String get fatTypes => 'চর্বির প্রকারভেদ';
+  String get fatTypes => 'চর্বির ধরন';
 
   @override
   String get fatSaturated => 'স্যাচুরেটেড';
@@ -4213,11 +4452,11 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String satLimitLine(String grams, int limit) {
-    return 'স্যাচুরেটেড $grams গ্রাম (সর্বোচ্চ $limit গ্রাম, মোট ক্যালোরির ১০%)';
+    return 'স্যাচুরেটেড $grams গ্রা, সর্বোচ্চ $limit গ্রা (ক্যালরির 10%)';
   }
 
   @override
-  String get sugarSodium => 'চিনি ও সোডিয়াম';
+  String get sugarSodium => 'চিনি আর সোডিয়াম';
 
   @override
   String get shakeCard => 'প্রোটিন শেক';
@@ -4226,22 +4465,22 @@ class AppLocalizationsBn extends AppLocalizations {
   String get mealOther => 'খাবার';
 
   @override
-  String get mealAdd => 'খাবার যোগ করুন';
+  String get mealAdd => 'একটা খাবার যোগ করো';
 
   @override
-  String get mealAddHint => 'যেমন: প্রি-ওয়ার্কআউট';
+  String get mealAddHint => 'যেমন প্রি-ওয়ার্কআউট';
 
   @override
-  String get mealsOfDay => 'দিনের খাবারসমূহ';
+  String get mealsOfDay => 'দিনের খাবার';
 
   @override
-  String get mealsHint => 'যত ইচ্ছা তৈরি করুন। একটি মুছলে তার ভেতরের লগ উপরেরটিতে চলে যাবে।';
+  String get mealsHint => 'যত খুশি বানাও। একটা সরালে তাতে যা লিখেছিলে তা উপরেরটায় চলে যায়।';
 
   @override
-  String get trackersTitle => 'কাস্টমাইজ';
+  String get trackersTitle => 'সাজিয়ে নাও';
 
   @override
-  String get trackersHint => 'যা ট্র্যাক করতে চান কেবল তা-ই দেখান।';
+  String get trackersHint => 'শুধু সেটাই দেখাও যা ট্র্যাক করতে চাও।';
 
   @override
   String get trackersDaily => 'দৈনিক সারাংশ';
@@ -4262,75 +4501,74 @@ class AppLocalizationsBn extends AppLocalizations {
   String get prepNew => 'নতুন ব্যাচ';
 
   @override
-  String get prepEdit => 'ব্যাচ সম্পাদনা';
+  String get prepEdit => 'ব্যাচ বদলাও';
 
   @override
-  String get prepHint => 'পুরো রান্নার উপাদান একবার লগ করুন, তারপর প্রয়োজনমতো অংশ খান।';
+  String get prepHint => 'পুরো হাঁড়ি একবার লেখো, তারপর একটু একটু করে খাও।';
 
   @override
-  String get prepEmpty => 'একসাথে অনেক রান্না করেছেন? একবার লগ করুন এবং অবশিষ্ট অংশের কতটুকু খেলেন তা দিন।';
+  String get prepEmpty => 'বড় করে রান্না করেছ? একবার লেখো, তারপর শুধু বলো বাকিটার কতটা খেলে।';
 
   @override
-  String get prepNameHint => 'যেমন: চিকেন ও রাইস';
+  String get prepNameHint => 'যেমন চিকেন আর ভাত';
 
   @override
   String get prepDefaultName => 'ব্যাচ';
 
   @override
-  String get prepIngredients => 'উপাদানসমূহ';
+  String get prepIngredients => 'উপকরণ';
 
   @override
-  String get prepAddIngredient => 'উপাদান যোগ করুন';
+  String get prepAddIngredient => 'উপকরণ যোগ করো';
 
   @override
-  String get prepCookedWeight => 'রান্না করা ওজন';
+  String get prepCookedWeight => 'রান্নার পরের ওজন';
 
   @override
   String prepCookedHint(String grams) {
-    return 'সঠিক পরিমাপের জন্য রান্নার পর পুরো পাত্র ওজন করুন। খালি রাখলে কাঁচা মোট ওজন ($grams গ্রাম) ব্যবহার হবে।';
+    return 'সঠিক সংখ্যার জন্য রান্নার পর হাঁড়িটা মাপো। খালি রাখলে কাঁচা মোট ($grams গ্রা) ব্যবহার হবে।';
   }
 
   @override
-  String get prepNeedWeight => 'রান্না করা ওজন দিন: কিছু উপাদানের গ্রাম নেই।';
+  String get prepNeedWeight => 'রান্নার পরের ওজন যোগ করো: কিছু উপকরণের গ্রাম নেই।';
 
   @override
   String prepLeftOf(String left, String total) {
-    return '$total-এর মধ্যে $left অবশিষ্ট';
+    return '$total-এর মধ্যে $left বাকি';
   }
 
   @override
-  String get prepOfWhatsLeft => 'অবশিষ্ট অংশের %';
+  String get prepOfWhatsLeft => 'বাকির %';
 
   @override
   String get prepAll => 'সব';
 
   @override
   String prepLogAmount(String grams) {
-    return '$grams গ্রাম লগ করুন';
+    return '$grams লেখো';
   }
 
   @override
-  String get prepWeighLeft => 'অবশিষ্ট ওজন মাপুন';
+  String get prepWeighLeft => 'বাকিটা মাপো';
 
   @override
-  String get prepFinished => 'এই ব্যাচ শেষ হয়েছে।';
+  String get prepFinished => 'এই ব্যাচ শেষ।';
 
   @override
   String get approxValues => 'আনুমানিক';
 
   @override
-  String get editValues => 'মান সম্পাদনা';
+  String get editValues => 'মান বদলাও';
 
   @override
-  String get editValuesHint =>
-      'শুধুমাত্র এই লগের জন্য পরিবর্তন হবে। স্থায়ী করতে \'আমার খাবার\' থেকে সম্পাদন করুন।';
+  String get editValuesHint => 'শুধু এই এন্ট্রি বদলায়। পরের জন্য খাবারটা ঠিক করতে আমার খাবার থেকে বদলাও।';
 
   @override
-  String get editLibraryHint => 'একই ছবিসহ নিজের খাবার হিসেবে সংরক্ষিত';
+  String get editLibraryHint => 'তোমার নিজের খাবার হিসেবে সেভ, একই ছবিসহ';
 
   @override
   String per100Line(String energy, String unit) {
-    return 'প্রতি ১০০ $unit-এ $energy';
+    return 'প্রতি 100 $unit-এ $energy';
   }
 
   @override
@@ -4344,7 +4582,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String cookedHint(String factor) {
-    return 'রান্না করার পরের ওজন (কাঁচা ওজনের ×$factor)';
+    return 'রান্নার পরের ওজন (কাঁচা ওজনের ×$factor)';
   }
 
   @override
@@ -4352,14 +4590,14 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String logAmount(String energy) {
-    return 'লগ · $energy';
+    return 'লেখো · $energy';
   }
 
   @override
-  String get catFruit => 'ফলমূল';
+  String get catFruit => 'ফল';
 
   @override
-  String get catVeg => 'শাকসবজি';
+  String get catVeg => 'সবজি';
 
   @override
   String get catMeat => 'মাংস';
@@ -4374,13 +4612,13 @@ class AppLocalizationsBn extends AppLocalizations {
   String get catDairy => 'দুগ্ধজাত';
 
   @override
-  String get catGrain => 'শস্যদানা';
+  String get catGrain => 'শস্য';
 
   @override
   String get catBakery => 'বেকারি';
 
   @override
-  String get catLegume => 'ডাল ও শিম';
+  String get catLegume => 'ডাল';
 
   @override
   String get catNut => 'বাদাম';
@@ -4389,7 +4627,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get catOil => 'তেল';
 
   @override
-  String get catPantry => 'প্যান্ট্রি';
+  String get catPantry => 'ভাঁড়ার';
 
   @override
   String get catDrink => 'পানীয়';
@@ -4401,1881 +4639,1894 @@ class AppLocalizationsBn extends AppLocalizations {
   String get catSpice => 'মশলা';
 
   @override
-  String get searchFoodsPrompt => 'আপনি কী খেয়েছেন?';
+  String get searchFoodsPrompt => 'কী খেয়েছ?';
 
   @override
-  String get shelfEmpty => 'খাবার খুঁজুন বা ছবি তুলুন: সর্বাধিক লগ করা খাবার এখানে দেখাবে।';
+  String get shelfEmpty =>
+      'একটা খাবার খোঁজো বা নিজের খাবারের ছবি তোলো: যেগুলো সবচেয়ে বেশি লেখো সেগুলো এখানে দেখা যাবে।';
 
   @override
-  String get repeatEntry => 'পুনরায় লগ করুন';
+  String get repeatEntry => 'আবার লেখো';
 
   @override
   String get notifSuppChannel => 'সাপ্লিমেন্ট';
 
   @override
-  String get notifSuppChannelWhy => 'সাপ্লিমেন্ট নেওয়ার দৈনিক অনুস্মারক';
+  String get notifSuppChannelWhy => 'সাপ্লিমেন্ট খাওয়ার দৈনিক রিমাইন্ডার';
 
   @override
-  String get energySplit => 'ক্যালোরির উৎস';
+  String get energySplit => 'ক্যালরি কোথা থেকে আসে';
 
   @override
-  String get typicalServing => 'স্বাভাবিক পরিবেশন';
+  String get typicalServing => 'সাধারণ পরিবেশন';
 
   @override
   String cookedYieldLine(String factor) {
-    return 'কাঁচা ওজনের তুলনায় $factor× ওজন';
+    return 'কাঁচা ওজনের $factor× হয়';
   }
 
   @override
-  String get readyDishes => 'Dishes';
+  String get readyDishes => 'পদ';
 
   @override
   String weightLastLine(String weight) {
-    return 'Last weigh-in $weight';
+    return 'শেষ ওজন $weight';
   }
 
   @override
-  String get proteinAnimalShort => 'Animal';
+  String get proteinAnimalShort => 'প্রাণিজ';
 
   @override
-  String get proteinPlantShort => 'Plant';
+  String get proteinPlantShort => 'উদ্ভিজ্জ';
 
   @override
   String kcalFromMacros(String value) {
-    return 'These macros add up to about $value';
+    return 'এই ম্যাক্রো মিলিয়ে প্রায় $value';
   }
 
   @override
-  String get useValue => 'Use';
+  String get useValue => 'ব্যবহার করো';
 
   @override
-  String get suppRowHint => 'Tap to mark · hold for details';
+  String get suppRowHint => 'চিহ্নিত করতে ট্যাপ · বিস্তারিত দেখতে চেপে ধরো';
 
   @override
-  String get suppPhoto => 'Photo';
+  String get suppPhoto => 'ছবি';
 
   @override
-  String get suppDose => 'Dose';
+  String get suppDose => 'ডোজ';
 
   @override
-  String get suppDoseHint => '5 g, 2 capsules…';
+  String get suppDoseHint => '5 গ্রা, 2টি ক্যাপসুল…';
 
   @override
-  String get suppRemind => 'Remind me';
+  String get suppRemind => 'মনে করিয়ে দাও';
 
   @override
   String mealPlanDefault(int n) {
-    return 'Plan $n';
+    return 'প্ল্যান $n';
   }
 
   @override
-  String get mealPlansTitle => 'Meal plans';
+  String get mealPlansTitle => 'খাবারের প্ল্যান';
 
   @override
-  String get mealPlanNew => 'New plan';
+  String get mealPlanNew => 'নতুন প্ল্যান';
 
   @override
   String fromPlan(String name) {
-    return 'From $name';
+    return '$name থেকে';
   }
 
   @override
-  String get logPlan => 'Log';
+  String get logPlan => 'লেখো';
 
   @override
-  String get planFromDay => 'Copy this day';
+  String get planFromDay => 'এই দিনটা কপি করো';
 
   @override
-  String get planNewHint => 'Plan your days like your routines, then log a whole meal with one tap.';
+  String get planNewHint => 'রুটিনের মতো দিনগুলো প্ল্যান করো, তারপর এক ট্যাপে পুরো খাবার লেখো।';
 
   @override
-  String get planLogDay => 'Log the empty meals';
+  String get planLogDay => 'খালি খাবারগুলো লেখো';
 
   @override
   String planLogged(int n) {
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: '$n foods logged',
-      one: '1 food logged',
+      other: '$nটি খাবার লেখা হয়েছে',
+      one: '1টি খাবার লেখা হয়েছে',
     );
     return '$_temp0';
   }
 
   @override
-  String get planNoPlan => 'No plan';
+  String get planNoPlan => 'প্ল্যান নেই';
 
   @override
-  String get planWeekHint => 'Tap a day to give it a plan.';
+  String get planWeekHint => 'একটা দিনে প্ল্যান দিতে সেই দিনে ট্যাপ করো।';
 
   @override
-  String get planDuplicate => 'Duplicate';
+  String get planDuplicate => 'কপি বানাও';
 
   @override
   String planDeleteTitle(String name) {
-    return 'Delete $name?';
+    return '$name মুছবে?';
   }
 
   @override
-  String get planDeleteBody => 'Your logged days stay as they are.';
+  String get planDeleteBody => 'তোমার লেখা দিনগুলো যেমন আছে তেমনই থাকবে।';
 
   @override
   String get sectionBeta => 'বেটা';
 
   @override
-  String get nutritionBeta => 'পুষ্টি (Nutrition)';
+  String get nutritionBeta => 'পুষ্টি';
 
   @override
-  String get nutritionBetaHint =>
-      'খাবার, পানি, প্রোটিন ও সাপ্লিমেন্ট। এটি বন্ধ রাখলেও আপনার ডেটা সংরক্ষিত থাকবে।';
+  String get nutritionBetaHint => 'খাবার, পানি আর সাপ্লিমেন্ট';
 
   @override
   String get nutritionAboutTitle => 'পুষ্টি সম্পর্কে';
 
   @override
-  String get nutritionAboutSub => 'এটি কী এবং এটি কখনো কী হবে না।';
+  String get nutritionAboutSub => 'এটা কী, আর এটা কখনো কী হবে না।';
 
   @override
-  String get nutritionAboutWhatTitle => 'আপনার প্রশিক্ষণের অংশ';
+  String get nutritionAboutWhatTitle => 'তোমার ট্রেনিংয়ের অংশ';
 
   @override
   String get nutritionAboutWhat =>
-      'আপনার ওয়ার্কআউটের পাশাপাশি খাবার, পানি, প্রোটিন ও সাপ্লিমেন্ট ট্র্যাক করার সহজ উপায়। Open-GYM মূলত একটি জিম অ্যাপ: সবকিছু এক জায়গায় রাখার সুবিধার্থে পুষ্টি ফিচারটি দেওয়া হয়েছে।';
+      'ওয়ার্কআউটের ঠিক পাশে খাবার, পানি, প্রোটিন আর সাপ্লিমেন্ট লেখার সহজ উপায়। GymMane আগে জিম অ্যাপ: পুষ্টি এখানে আছে যাতে সব এক জায়গায় রাখতে পারো, কোনো আলাদা ডায়েট অ্যাপের জায়গা নিতে নয়।';
 
   @override
-  String get nutritionAboutScanTitle => 'স্ক্যানার কখনোই থাকবে না';
+  String get nutritionAboutScanTitle => 'স্ক্যানিং কখনো নয়';
 
   @override
   String get nutritionAboutScan =>
-      'বারকোড স্ক্যান করে সব তথ্য নিজে থেকে পূরণ হওয়া সুবিধাজনক মনে হতে পারে। তবে এর জন্য ইন্টারনেট ও বিশাল অনলাইন ফুড ডেটাবেস প্রয়োজন, যার ফলে আপনার খাদ্যাভ্যাস অন্যের সার্ভারে চলে যায়। সেই তথ্যে থাকে আপনি কখন খান, কী খান এবং শরীরের যত্ন কীভাবে নেন—যা বিজ্ঞাপন বা বড় কোম্পানির কাছে পৌঁছাতে পারে। তাই কোনো স্ক্যানার নেই এবং কখনো থাকবেও না।';
+      'বারকোড স্ক্যান করলেই সব তথ্য ভরে গেলে সুবিধা হতো। কিন্তু তার জন্য ইন্টারনেট আর বিশাল এক অনলাইন খাবারের ডেটাবেস লাগে, আর তুমি কী খাও তা অন্য কারও সার্ভারে গিয়ে পৌঁছায়। সেই ডেটা দেখায় তুমি কখন খাও, কী খাও আর শরীরের কীভাবে যত্ন নাও, আর এটা বিজ্ঞাপনে ব্যবহার হতে পারে বা বড় কোম্পানির হাতে যেতে পারে। তাই কোনো স্ক্যানার নেই, আর কখনো থাকবেও না।';
 
   @override
-  String get nutritionAboutLocalTitle => 'সবকিছু আপনার ফোনেই সংরক্ষিত';
+  String get nutritionAboutLocalTitle => 'সব তোমার ফোনে';
 
   @override
   String get nutritionAboutLocal =>
-      'অ্যাপটিতে ৫০০টিরও বেশি খাবারের পুষ্টিমান দেওয়া আছে। আপনি নিজের খাবার যোগ করতে, ছবি পরিবর্তন করতে এবং মান সম্পাদনা করতে পারবেন। বাকি Open-GYM-এর মতোই সবকিছু আপনার ফোনেই সংরক্ষিত থাকে।';
+      'ছবিসহ 500-র বেশি খাবার অ্যাপের ভেতরেই আছে। তুমি নিজের খাবার যোগ করতে, ছবি বদলাতে আর মান সম্পাদনা করতে পারো। GymMane-এর বাকি সবকিছুর মতো, সব তোমার ফোনেই থাকে।';
 
   @override
-  String get nutritionAboutBetaTitle => 'এখনও বেটা সংস্করণে রয়েছে';
+  String get nutritionAboutBetaTitle => 'এখনও বেটায়';
 
   @override
   String get nutritionAboutBeta =>
-      'কিছু যোগ করতে চাইলে GitHub-এ পরামর্শ দিন। স্ক্যানিং বা বিশাল অনলাইন ডেটাবেস যুক্ত করা হবে না। নিউট্রিশন না চাইলে সেটিংসে বন্ধ রাখুন।';
+      'কিছু কম মনে হলে GitHub-এ জানাও। শুধু স্ক্যানিং বা আরও বড় খাবারের ডেটাবেস নয়: তোমার গোপনীয়তার পাশাপাশি এতে অ্যাপটা অনেক ভারী হয়ে যাবে। পুষ্টি লাগবে না? সেটিংসে বন্ধ করো, তোমার ডেটা থেকে যাবে।';
 
   @override
-  String get nutritionAboutSuggest => 'পরামর্শ দিন';
+  String get nutritionAboutSuggest => 'আইডিয়া দাও';
 
   @override
   String get nutritionAboutOk => 'বুঝেছি';
 
   @override
-  String get planShare => 'Share';
+  String get planShare => 'শেয়ার করো';
 
   @override
-  String get planImport => 'Import a plan';
+  String get planImport => 'প্ল্যান ইমপোর্ট করো';
 
   @override
   String planImported(int n) {
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: 'রুটিনে $nটি ব্যায়াম যোগ করা হয়েছে',
-      one: 'রুটিনে $nটি ব্যায়াম যোগ করা হয়েছে',
+      other: '$nটি প্ল্যান ইমপোর্ট হয়েছে',
+      one: '1টি প্ল্যান ইমপোর্ট হয়েছে',
     );
     return '$_temp0';
   }
 
   @override
-  String get planImportNone => 'That file has no meal plans.';
+  String get planImportNone => 'ওই ফাইলে কোনো খাবারের প্ল্যান নেই।';
 
   @override
-  String get planMoveUp => 'Move up';
+  String get planMoveUp => 'উপরে সরাও';
 
   @override
-  String get planMoveDown => 'Move down';
+  String get planMoveDown => 'নিচে সরাও';
 
   @override
-  String get cutoutEdit => 'Touch up cutout';
+  String get cutoutEdit => 'কাটআউট ঠিক করো';
 
   @override
   String get cutoutEditHint =>
-      'Drag to erase or restore. Tap an area to remove or bring it back whole. Pinch to zoom.';
+      'মুছতে বা ফেরাতে টানো। একটা অংশ পুরো সরাতে বা ফেরাতে তাতে ট্যাপ করো। জুম করতে পিঞ্চ করো।';
 
   @override
-  String get cutoutErase => 'Erase';
+  String get cutoutErase => 'মুছে ফেলো';
 
   @override
-  String get cutoutRestore => 'Restore';
+  String get cutoutRestore => 'ফেরাও';
 
   @override
-  String get cutoutReset => 'Back to automatic';
+  String get cutoutReset => 'স্বয়ংক্রিয়তে ফেরো';
 
   @override
-  String get cutoutByHand => 'Cut out by hand';
+  String get cutoutByHand => 'হাতে কাটো';
 
   @override
   String notifSuppTitleFor(String names) {
-    return 'Time to take: $names';
+    return 'খাওয়ার সময়: $names';
   }
 
   @override
-  String get notifSuppTap => 'নেওয়ার পর Open-GYM-এ সম্পন্ন হিসেবে চিহ্নিত করুন।';
+  String get notifSuppTap => 'খাওয়ার পর GymMane-এ টিক দাও।';
 
   @override
-  String get suppNoneToday => 'Nothing to take today.';
+  String get suppNoneToday => 'আজ কিছু খাওয়ার নেই।';
 
   @override
-  String get suppOtherDays => 'Other days';
+  String get suppOtherDays => 'অন্য দিন';
 
   @override
   String suppEveryN(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: 'Every $n days', one: 'Every day');
+    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: 'প্রতি $n দিনে', one: 'প্রতিদিন');
     return '$_temp0';
   }
 
   @override
-  String get suppDaily => 'Every day';
+  String get suppDaily => 'প্রতিদিন';
 
   @override
   String suppFromDate(String date) {
-    return 'from $date';
+    return '$date থেকে';
   }
 
   @override
   String suppUntilDate(String date) {
-    return 'until $date';
+    return '$date পর্যন্ত';
   }
 
   @override
-  String get suppSomeDays => 'Some days';
+  String get suppSomeDays => 'কিছু দিন';
 
   @override
-  String get suppEveryShort => 'Every X days';
+  String get suppEveryShort => 'প্রতি X দিনে';
 
   @override
-  String get suppWhen => 'When';
+  String get suppWhen => 'কখন';
 
   @override
-  String get suppEveryLead => 'Every';
+  String get suppEveryLead => 'প্রতি';
 
   @override
   String suppEveryTail(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: 'days', one: 'day');
+    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: 'দিনে');
     return '$_temp0';
   }
 
   @override
-  String get suppStarts => 'Starts';
+  String get suppStarts => 'শুরু';
 
   @override
-  String get suppEnds => 'Ends';
+  String get suppEnds => 'শেষ';
 
   @override
-  String get suppTomorrow => 'Tomorrow';
+  String get suppTomorrow => 'আগামীকাল';
 
   @override
-  String get suppPickDate => 'Pick a date';
+  String get suppPickDate => 'তারিখ বেছে নাও';
 
   @override
-  String get suppNever => 'Never';
+  String get suppNever => 'কখনো না';
 
   @override
-  String get suppOneWeek => 'In 1 week';
+  String get suppOneWeek => '1 সপ্তাহ পরে';
 
   @override
-  String get suppOneMonth => 'In 1 month';
+  String get suppOneMonth => '1 মাস পরে';
 
   @override
-  String get planPickHint => 'Pick the plan for this day, or make a new one.';
+  String get planPickHint => 'এই দিনের প্ল্যান বেছে নাও, বা নতুন বানাও।';
 
   @override
   String planSetForDay(String day) {
-    return 'Plan set for $day';
+    return '$day-এর জন্য প্ল্যান ঠিক হয়েছে';
   }
 
   @override
-  String get planSaved => 'Plan saved';
+  String get planSaved => 'প্ল্যান সেভ হয়েছে';
 
   @override
-  String get planDiscardTitle => 'Discard changes?';
+  String get planDiscardTitle => 'পরিবর্তন বাদ দেবে?';
 
   @override
-  String get planDiscardBody => 'What you changed won\'t be saved.';
+  String get planDiscardBody => 'যা বদলেছ তা সেভ হবে না।';
 
   @override
-  String get planDiscard => 'Discard';
+  String get planDiscard => 'বাদ দাও';
 
   @override
-  String get planEdit => 'Edit plan';
+  String get planEdit => 'প্ল্যান বদলাও';
 
   @override
-  String get planNameHint => 'Plan name';
+  String get planNameHint => 'প্ল্যানের নাম';
 
   @override
-  String get planDaysQuestion => 'Which days?';
+  String get planDaysQuestion => 'কোন কোন দিন?';
 
   @override
-  String get planDaysHint => 'On those days it shows up in Nutrition so you can log it in one tap.';
+  String get planDaysHint => 'সেই দিনগুলোতে এটা পুষ্টিতে দেখা যাবে যাতে এক ট্যাপে লিখতে পারো।';
 
   @override
-  String get planDaysNone => 'Pick at least one day, or it won\'t show up anywhere.';
+  String get planDaysNone => 'অন্তত একটা দিন বেছে নাও, নইলে কোথাও দেখা যাবে না।';
 
   @override
-  String get planNothingToLog => 'Those meals are already logged';
+  String get planNothingToLog => 'ওই খাবারগুলো আগেই লেখা আছে';
 
   @override
-  String get planSave => 'Save plan';
+  String get planSave => 'প্ল্যান সেভ করো';
 
   @override
-  String get planToday => 'Today\'s plan';
+  String get planToday => 'আজকের প্ল্যান';
 
   @override
-  String get planLogRest => 'Log the rest';
+  String get planLogRest => 'বাকিটা লেখো';
 
   @override
-  String get dishNew => 'Create my dish';
+  String get dishNew => 'আমার পদ বানাও';
 
   @override
-  String get dishNewHint => 'Pick ingredients and amounts, save it and log it in one tap.';
+  String get dishNewHint => 'উপকরণ আর পরিমাণ বেছে নাও, সেভ করো আর এক ট্যাপে লেখো।';
 
   @override
-  String get dishEdit => 'Edit dish';
+  String get dishEdit => 'পদ বদলাও';
 
   @override
-  String get dishNameHint => 'E.g. Mum\'s lentils';
+  String get dishNameHint => 'যেমন মায়ের ডাল';
 
   @override
-  String get dishIngredients => 'Ingredients';
+  String get dishIngredients => 'উপকরণ';
 
   @override
-  String get dishEmptyHint => 'Add what goes in it with the amount you usually eat.';
+  String get dishEmptyHint => 'এতে যা যায় তা সাধারণত যতটা খাও সেই পরিমাণে যোগ করো।';
 
   @override
-  String get dishSave => 'Save dish';
+  String get dishSave => 'পদ সেভ করো';
 
   @override
-  String get dishNeedsName => 'Give it a name';
+  String get dishNeedsName => 'একটা নাম দাও';
 
   @override
-  String get dishNeedsItems => 'Add at least one ingredient';
+  String get dishNeedsItems => 'অন্তত একটা উপকরণ যোগ করো';
 
   @override
-  String get suppHistory => 'Last 14 days';
+  String get suppHistory => 'শেষ 14 দিন';
 
   @override
   String suppTakenOf(int n, int total) {
-    return '$n of $total taken';
+    return '$total-এর মধ্যে $n খাওয়া';
   }
 
   @override
-  String get suppNoReminder => 'No reminder';
+  String get suppNoReminder => 'রিমাইন্ডার নেই';
 
   @override
-  String get suppMarkTaken => 'Mark as taken';
+  String get suppMarkTaken => 'খাওয়া হয়েছে বলে চিহ্নিত করো';
 
   @override
-  String get suppUnmark => 'Unmark';
+  String get suppUnmark => 'চিহ্ন সরাও';
 
   @override
-  String get suppEdit => 'Edit';
+  String get suppEdit => 'বদলাও';
 
   @override
-  String get mealMoveTo => 'Move to';
+  String get mealMoveTo => 'এখানে সরাও';
 
   @override
-  String get mealClear => 'Clear meal';
+  String get mealClear => 'খাবার খালি করো';
 
   @override
-  String get mealCleared => 'Meal cleared';
+  String get mealCleared => 'খাবার খালি হয়েছে';
 
   @override
   String movedMealToast(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count foods moved',
-      one: '1 food moved',
+      other: '$countটি খাবার সরানো হয়েছে',
+      one: '1টি খাবার সরানো হয়েছে',
     );
     return '$_temp0';
   }
 
   @override
-  String get repeatWholeDay => 'Repeat the whole day';
+  String get repeatWholeDay => 'পুরো দিনটা আবার করো';
 
   @override
   String createFoodNamed(String name) {
-    return 'Create “$name”';
+    return '“$name” বানাও';
   }
 
   @override
-  String get entryDay => 'Day';
+  String get entryDay => 'দিন';
 
   @override
-  String get movedToDay => 'Moved';
+  String get movedToDay => 'সরানো হয়েছে';
 
   @override
-  String get favFoodsHint => 'Tap ☆ on a food';
+  String get favFoodsHint => 'কোনো খাবারে ☆ ট্যাপ করো';
 
   @override
-  String get favFoodsEmpty => 'Tap the star on any food to keep it here, one tap away.';
+  String get favFoodsEmpty => 'যেকোনো খাবারের তারায় ট্যাপ করো যাতে এখানে এক ট্যাপ দূরে থাকে।';
 
   @override
   String savedMealsCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count meals', one: '1 meal');
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countটি খাবার',
+      one: '1টি খাবার',
+    );
     return '$_temp0';
   }
 
   @override
-  String get savedMealsEmpty => 'Save a meal from its ••• menu, or build your own dish.';
+  String get savedMealsEmpty => 'একটা খাবার তার ••• মেনু থেকে সেভ করো, বা নিজের পদ বানাও।';
 
   @override
-  String get sugarLimitLabel => 'Sugar limit';
+  String get sugarLimitLabel => 'চিনির সীমা';
 
   @override
-  String get sodiumLimitLabel => 'Sodium limit';
+  String get sodiumLimitLabel => 'সোডিয়ামের সীমা';
 
   @override
-  String get waterOptions => 'Water options';
+  String get waterOptions => 'পানির বিকল্প';
 
   @override
-  String get waterNone => 'No water logged yet.';
+  String get waterNone => 'এখনও পানি লেখা নেই।';
 
   @override
-  String get waterDailyGoal => 'Daily water';
+  String get waterDailyGoal => 'দৈনিক পানি';
 
   @override
-  String get trackersScreen => 'Screen';
+  String get trackersScreen => 'স্ক্রিন';
 
   @override
-  String get vesselMotion => 'Moving water and shake';
+  String get vesselMotion => 'নড়তে থাকা পানি আর শেক';
 
   @override
-  String get vesselMotionHint =>
-      'Turn it off if the screen feels slow: the glasses still fill up, they just stop moving.';
+  String get vesselMotionHint => 'স্ক্রিন ধীর মনে হলে বন্ধ করো: গ্লাস তবুও ভরে, শুধু নড়া বন্ধ হয়।';
 
   @override
-  String get planFixedWeek => 'Fixed week';
+  String get planFixedWeek => 'নির্দিষ্ট সপ্তাহ';
 
   @override
-  String get planRotation => 'Rotation';
+  String get planRotation => 'রোটেশন';
 
   @override
-  String get rotationTitle => 'ROTATION';
+  String get rotationTitle => 'রোটেশন';
 
   @override
-  String get rotationHint => 'Next up is whatever follows your last workout, whatever the day.';
+  String get rotationHint => 'পরেরটা হলো তোমার শেষ ওয়ার্কআউটের পরে যেটা আসে, দিন যা-ই হোক।';
 
   @override
-  String get rotationEmpty => 'Add your routines in the order you’ll do them: A, B, C…';
+  String get rotationEmpty => 'যে ক্রমে করবে সেই ক্রমে রুটিন যোগ করো: A, B, C…';
 
   @override
   String rotationProgress(int done, int total) {
-    return '$done of $total done this round';
+    return 'এই রাউন্ডে $total-এর মধ্যে $done শেষ';
   }
 
   @override
-  String get rotationNext => 'Next';
+  String get rotationNext => 'পরের';
 
   @override
-  String get rotationAdd => 'Add routines';
+  String get rotationAdd => 'রুটিন যোগ করো';
 
   @override
-  String get rotationPickHint => 'They go in the order you tap them.';
+  String get rotationPickHint => 'যে ক্রমে ট্যাপ করবে সেই ক্রমে যাবে।';
 
   @override
-  String get rotationSkip => 'Skip to the next one';
+  String get rotationSkip => 'পরেরটায় যাও';
 
   @override
-  String get rotationRestart => 'Start a new round';
+  String get rotationRestart => 'নতুন রাউন্ড শুরু করো';
 
   @override
-  String get rotationMakeNext => 'Make it the next one';
+  String get rotationMakeNext => 'এটাকে পরেরটা করো';
 
   @override
-  String get rotationRemove => 'Remove from rotation';
+  String get rotationRemove => 'রোটেশন থেকে সরাও';
 
   @override
   String rotationPlace(int n, int total) {
-    return '$n of $total in the rotation';
+    return 'রোটেশনে $total-এর মধ্যে $n';
   }
 
   @override
-  String get moveToDay => 'Move to another day';
+  String get moveToDay => 'অন্য দিনে সরাও';
 
   @override
-  String get moveToDayHint => 'Just this once; your weekly plan stays the same.';
+  String get moveToDayHint => 'শুধু এবারের জন্য; তোমার সাপ্তাহিক প্ল্যান একই থাকবে।';
 
   @override
-  String get movedToast => 'Workout moved';
+  String get movedToast => 'ওয়ার্কআউট সরানো হয়েছে';
 
   @override
-  String get backToPlan => 'Back to the weekly plan';
+  String get backToPlan => 'সাপ্তাহিক প্ল্যানে ফেরো';
 
   @override
-  String get tomorrow => 'Tomorrow';
+  String get tomorrow => 'আগামীকাল';
 
   @override
-  String get untrainedTab => 'Untrained';
+  String get untrainedTab => 'ট্রেন না করা';
 
   @override
-  String get untrainedRecent => 'Recent';
+  String get untrainedRecent => 'সাম্প্রতিক';
 
   @override
-  String get untrainedLong => 'Long ago';
+  String get untrainedLong => 'অনেক আগে';
 
   @override
   String untrainedWaiting(String list) {
-    return 'Waiting the longest: $list';
+    return 'সবচেয়ে বেশি অপেক্ষায়: $list';
   }
 
   @override
-  String get untrainedAllRecent => 'Every muscle got work this week. Nice.';
+  String get untrainedAllRecent => 'এই সপ্তাহে প্রতিটা পেশিতে কাজ হয়েছে। দারুণ।';
 
   @override
   String trainedAgo(int n) {
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: '$n days ago',
-      one: 'Trained yesterday',
-      zero: 'Trained today',
+      other: '$n দিন আগে',
+      one: 'গতকাল ট্রেন করা',
+      zero: 'আজ ট্রেন করা',
     );
     return '$_temp0';
   }
 
   @override
-  String get neverTrained => 'Not trained yet';
+  String get neverTrained => 'এখনও ট্রেন করা হয়নি';
 
   @override
-  String get layoutSetting => 'Workout layout';
+  String get layoutSetting => 'ওয়ার্কআউটের বিন্যাস';
 
   @override
-  String get layoutCards => 'Cards';
+  String get layoutCards => 'কার্ড';
 
   @override
-  String get layoutList => 'List';
+  String get layoutList => 'তালিকা';
 
   @override
   String get layoutHint =>
-      'Cards show one exercise at a time. List shows the whole workout on one screen, set by set.';
+      'কার্ড একবারে একটা ব্যায়াম দেখায়। তালিকা পুরো ওয়ার্কআউট এক স্ক্রিনে, সেট ধরে ধরে দেখায়।';
 
   @override
-  String get layoutRowHint => 'One exercise at a time, or the whole workout as a list';
+  String get layoutRowHint => 'একবারে একটা ব্যায়াম, বা পুরো ওয়ার্কআউট তালিকায়';
 
   @override
-  String get previousCol => 'PREVIOUS';
+  String get previousCol => 'আগের';
 
   @override
-  String get usePrevious => 'Use last time’s numbers';
+  String get usePrevious => 'গতবারের সংখ্যা ব্যবহার করো';
 
   @override
-  String get skipShort => 'Skip';
+  String get skipShort => 'বাদ দাও';
 
   @override
-  String get moveUp => 'Move up';
+  String get moveUp => 'উপরে সরাও';
 
   @override
-  String get moveDown => 'Move down';
+  String get moveDown => 'নিচে সরাও';
 
   @override
-  String get widgetNutritionOff => 'Turn on Nutrition in Settings › Beta to use this widget.';
+  String get widgetNutritionOff => 'এই উইজেট ব্যবহার করতে সেটিংস › বেটা-তে পুষ্টি চালু করো।';
 
   @override
-  String get widgetPickShake => 'Pick your shake';
+  String get widgetPickShake => 'তোমার শেক বেছে নাও';
 
   @override
-  String get heatRangeSetting => 'Activity calendar';
+  String get heatRangeSetting => 'অ্যাক্টিভিটি ক্যালেন্ডার';
 
   @override
-  String get heatRangeWeeks => '12 weeks';
+  String get heatRangeWeeks => '12 সপ্তাহ';
 
   @override
-  String get heatRangeYear => '12 months';
+  String get heatRangeYear => '12 মাস';
 
   @override
   String get heatRangeHint =>
-      '12 months shows the whole year. Swipe it sideways to go back, all the way to your first workout.';
+      '12 মাস পুরো বছর দেখায়। পেছনে যেতে পাশে সোয়াইপ করো, একদম প্রথম ওয়ার্কআউট পর্যন্ত।';
 
   @override
-  String get pdfPlan => 'Plan as PDF';
+  String get pdfPlan => 'প্ল্যান PDF হিসেবে';
 
   @override
-  String get pdfPlanHint => 'A clean sheet with your week and every routine, ready to print or send.';
+  String get pdfPlanHint =>
+      'তোমার সপ্তাহ আর প্রতিটা রুটিন নিয়ে একটা পরিষ্কার পাতা, প্রিন্ট বা পাঠানোর জন্য তৈরি।';
 
   @override
-  String get pdfExport => 'Export as PDF';
+  String get pdfExport => 'PDF হিসেবে এক্সপোর্ট করো';
 
   @override
-  String get pdfFooter => 'Free, open source and offline';
+  String get pdfFooter => 'বিনামূল্যে, ওপেন সোর্স আর অফলাইন';
 
   @override
-  String get shakeTag => 'It’s a shake';
+  String get shakeTag => 'এটা একটা শেক';
 
   @override
-  String get shakeTagHint => 'It shows up in Your shake';
+  String get shakeTagHint => 'এটা তোমার শেক-এ দেখা যায়';
 
   @override
-  String get shakeNone => 'Mark your shakes and only those show up here.';
+  String get shakeNone => 'তোমার শেকগুলো চিহ্নিত করো, এখানে শুধু সেগুলোই দেখা যাবে।';
 
   @override
-  String get shakeMarkLabel => 'MARK AS A SHAKE';
+  String get shakeMarkLabel => 'শেক হিসেবে চিহ্নিত করো';
 
   @override
-  String get shakeNew => 'New shake';
+  String get shakeNew => 'নতুন শেক';
 
   @override
-  String get shakeUntag => 'Not a shake';
+  String get shakeUntag => 'শেক নয়';
 
   @override
-  String get pdfKicker => 'TRAINING PLAN';
+  String get pdfKicker => 'ট্রেনিং প্ল্যান';
 
   @override
-  String get pdfStatDays => 'DAYS / WEEK';
+  String get pdfStatDays => 'দিন / সপ্তাহ';
 
   @override
-  String get pdfStatMinutes => 'MIN / WORKOUT';
+  String get pdfStatMinutes => 'মিনিট / ওয়ার্কআউট';
 
   @override
   String pdfMinutes(int n) {
-    return '≈ $n min';
+    return '≈ $n মিনিট';
   }
 
   @override
-  String get workoutNotesTitle => 'Exercise notes';
+  String get workoutNotesTitle => 'ব্যায়ামের নোট';
 
   @override
-  String get workoutNoteEvery => 'Every time';
+  String get workoutNoteEvery => 'প্রতিবার';
 
   @override
-  String get workoutNoteNext => 'Next time';
+  String get workoutNoteNext => 'পরেরবার';
 
   @override
-  String get workoutNoteEveryHint =>
-      'Shows each time you do this exercise. Good for seat or pulley settings.';
+  String get workoutNoteEveryHint => 'প্রতিবার এই ব্যায়াম করলে দেখা যায়। সিট বা পুলির সেটিংয়ের জন্য ভালো।';
 
   @override
-  String get workoutNoteNextHint => 'Shows the next time only, then goes away.';
+  String get workoutNoteNextHint => 'শুধু পরেরবার দেখা যায়, তারপর চলে যায়।';
 
   @override
   String workoutNoteFromLast(String date) {
-    return 'From last time · $date';
+    return 'গতবার থেকে · $date';
   }
 
   @override
-  String get workoutNoteHint => 'Seat in hole 2, pulley at 19…';
+  String get workoutNoteHint => 'সিট গর্ত 2-এ, পুলি 19-এ…';
 
   @override
-  String get notePinWorkout => 'Show during workouts';
+  String get notePinWorkout => 'ওয়ার্কআউটের সময় দেখাও';
 
   @override
-  String get assistedSetting => 'Assisted machine';
+  String get assistedSetting => 'সহায়ক মেশিন';
 
   @override
   String get assistedSettingHint =>
-      'The weight helps you, so less is better: your records and suggestions go down.';
+      'ওজন তোমাকে সাহায্য করে, তাই কম মানে ভালো: তোমার রেকর্ড আর পরামর্শ নিচে নামে।';
 
   @override
-  String get assistedRecordHint => 'Least assistance';
+  String get assistedRecordHint => 'সবচেয়ে কম সাহায্য';
 
   @override
-  String get trainAgainLabel => 'Haven’t trained yet? Remind me again';
+  String get trainAgainLabel => 'এখনও ট্রেনিং হয়নি? আবার মনে করিয়ে দাও';
 
   @override
-  String get trainAgainOff => 'No';
+  String get trainAgainOff => 'না';
 
   @override
   String trainAgainAfter(int n) {
-    return '+$n h';
+    return '+$n ঘ';
   }
 
   @override
-  String get trainAgainHint => 'Just once, and only if you haven’t logged a workout that day.';
+  String get trainAgainHint => 'শুধু একবার, আর শুধু যদি সেদিন কোনো ওয়ার্কআউট লেখা না থাকে।';
 
   @override
-  String get notifTrainAgainBody => 'There’s still time to train today.';
+  String get notifTrainAgainBody => 'আজ ট্রেনিংয়ের এখনও সময় আছে।';
 
   @override
   String nextDeload(int n) {
-    return 'lighter: $n workouts in a row without every rep';
+    return 'হালকা: টানা $nটি ওয়ার্কআউটে সব রেপ হয়নি';
   }
 
   @override
-  String get historyTitle => 'History';
+  String get historyTitle => 'ইতিহাস';
 
   @override
   String historyWorkouts(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$n WORKOUTS', one: '1 WORKOUT');
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$nটি ওয়ার্কআউট',
+      one: '1টি ওয়ার্কআউট',
+    );
     return '$_temp0';
   }
 
   @override
-  String get historyEmpty => 'No workouts this month';
+  String get historyEmpty => 'এই মাসে কোনো ওয়ার্কআউট নেই';
 
   @override
-  String get historyEmptyHint => 'Swipe sideways or use the arrows to see other months.';
+  String get historyEmptyHint => 'অন্য মাস দেখতে পাশে সোয়াইপ করো বা তীর ব্যবহার করো।';
 
   @override
   String historyMore(int n) {
-    return '+$n more';
+    return '+$n আরও';
   }
 
   @override
-  String get stopwatch => 'Stopwatch';
+  String get stopwatch => 'স্টপওয়াচ';
 
   @override
-  String get proteinSource => 'Protein source';
+  String get proteinSource => 'প্রোটিনের উৎস';
 
   @override
-  String get proteinMixedShort => 'Mixed';
+  String get proteinMixedShort => 'মিশ্র';
 
   @override
-  String get kcalActive => 'active';
+  String get kcalActive => 'সক্রিয়';
 
   @override
-  String get kcalEstimated => 'estimated';
+  String get kcalEstimated => 'আনুমানিক';
 
   @override
-  String get kcalYours => 'your value';
+  String get kcalYours => 'তোমার মান';
 
   @override
   String kcalTotalRest(String value) {
-    return '$value in total, counting what you burn at rest';
+    return 'মোট $value, বিশ্রামে পোড়া ক্যালরিসহ';
   }
 
   @override
-  String get inclineLabel => 'Incline';
+  String get inclineLabel => 'ঢাল';
 
   @override
-  String get kcalUseOwn => 'Use my value';
+  String get kcalUseOwn => 'আমার মান ব্যবহার করো';
 
   @override
-  String get kcalBackToEstimate => 'Back to the estimate';
+  String get kcalBackToEstimate => 'অনুমানে ফেরো';
 
   @override
-  String get kcalNeedsData => 'Add distance and time to estimate the calories';
+  String get kcalNeedsData => 'ক্যালরি অনুমান করতে দূরত্ব আর সময় যোগ করো';
 
   @override
-  String get kcalHowEstimated => 'Estimated from distance, time, incline and your weight (ACSM formula).';
+  String get kcalHowEstimated => 'দূরত্ব, সময়, ঢাল আর তোমার ওজন থেকে অনুমান (ACSM সূত্র)।';
 
   @override
-  String get kcalOwnTitle => 'Active calories';
+  String get kcalOwnTitle => 'সক্রিয় ক্যালরি';
 
   @override
-  String get planMine => 'My plan';
+  String get planMine => 'আমার প্ল্যান';
 
   @override
-  String get planNew => 'New plan';
+  String get planNew => 'নতুন প্ল্যান';
 
   @override
-  String get planSaveWeek => 'Save this week';
+  String get planSaveWeek => 'এই সপ্তাহ সেভ করো';
 
   @override
-  String get planSaveWeekHint => 'Keep the current week as a plan you can come back to';
+  String get planSaveWeekHint => 'বর্তমান সপ্তাহটা এমন প্ল্যান হিসেবে রাখো যাতে ফিরে আসতে পারো';
 
   @override
-  String get planEmptyWeek => 'Start an empty week';
+  String get planEmptyWeek => 'খালি সপ্তাহ শুরু করো';
 
   @override
-  String get planEmptyWeekHint => 'Your current week stays saved as a plan';
+  String get planEmptyWeekHint => 'তোমার বর্তমান সপ্তাহ প্ল্যান হিসেবে সেভ থাকবে';
 
   @override
-  String get planName => 'Plan name';
+  String get planName => 'প্ল্যানের নাম';
 
   @override
-  String get planRename => 'Rename';
+  String get planRename => 'নাম বদলাও';
 
   @override
-  String get planDelete => 'Delete plan';
+  String get planDelete => 'প্ল্যান মুছে ফেলো';
 
   @override
-  String get plansHint => 'Changes to the week are saved in the selected plan';
+  String get plansHint => 'সপ্তাহের পরিবর্তন বেছে নেওয়া প্ল্যানে সেভ হয়';
 
   @override
-  String get progression => 'Progression';
+  String get progression => 'প্রোগ্রেশন';
 
   @override
-  String get progManual => 'Manual';
+  String get progManual => 'হাতে';
 
   @override
-  String get progManualHint => 'No suggestions: you choose every weight.';
+  String get progManualHint => 'কোনো পরামর্শ নেই: প্রতিটা ওজন তুমি বেছে নাও।';
 
   @override
-  String get progLinear => 'Linear';
+  String get progLinear => 'লিনিয়ার';
 
   @override
-  String get progLinearHint => 'Hit every rep and the weight goes up.';
+  String get progLinearHint => 'সব রেপ হলে ওজন বাড়ে।';
 
   @override
-  String get progDouble => 'Double progression';
+  String get progDouble => 'ডাবল প্রোগ্রেশন';
 
   @override
-  String get progDoubleHint => 'More reps up to the top of the range, then more weight.';
+  String get progDoubleHint => 'পরিসরের উপর পর্যন্ত রেপ বাড়াও, তারপর ওজন।';
 
   @override
-  String get progVolume => 'Reps, sets and weight';
+  String get progVolume => 'রেপ, সেট আর ওজন';
 
   @override
-  String get progVolumeHint => 'Reps to the top, then one more set, then more weight.';
+  String get progVolumeHint => 'উপর পর্যন্ত রেপ, তারপর আরও একটা সেট, তারপর বেশি ওজন।';
 
   @override
-  String get progAmrap => 'Last set all-out';
+  String get progAmrap => 'শেষ সেট পুরো জোরে';
 
   @override
-  String get progAmrapHint => 'Last set: as many reps as you can. Double the target and it jumps twice.';
+  String get progAmrapHint => 'শেষ সেট: যত রেপ পারো। লক্ষ্যের দ্বিগুণ হলে দুবার লাফ দেয়।';
 
   @override
-  String get progStep => 'Weight jump';
+  String get progStep => 'ওজনের লাফ';
 
   @override
-  String get progRange => 'Rep range';
+  String get progRange => 'রেপের পরিসর';
 
   @override
-  String get progSets => 'Sets';
+  String get progSets => 'সেট';
 
   @override
-  String get progDeload => 'Lighter after';
+  String get progDeload => 'এর পরে হালকা';
 
   @override
   String progFails(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$n misses', one: '1 miss');
+    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$nটি ব্যর্থতা', one: '1টি ব্যর্থতা');
     return '$_temp0';
   }
 
   @override
-  String get progDeloadPct => 'Lighten by';
+  String get progDeloadPct => 'এতটা হালকা করো';
 
   @override
-  String get progApply => 'Fill in the next workout';
+  String get progApply => 'পরের ওয়ার্কআউট ভরো';
 
   @override
-  String get progApplyHint => 'Off, it only shows as a suggestion.';
+  String get progApplyHint => 'বন্ধ থাকলে শুধু পরামর্শ হিসেবে দেখা যায়।';
 
   @override
-  String get nextMoreReps => 'same weight, one more rep';
+  String get nextMoreReps => 'একই ওজন, আরও একটা রেপ';
 
   @override
-  String get nextAddSet => 'one more set';
+  String get nextAddSet => 'আরও একটা সেট';
 
   @override
-  String get nextAmrap => 'last set: as many as you can';
+  String get nextAmrap => 'শেষ সেট: যত পারো';
 
   @override
   String fillDay(String amount) {
-    return 'Fill your day · $amount';
+    return 'তোমার দিন পূরণ করো · $amount';
   }
 
   @override
   String leftAfterKcal(String kcal) {
-    return 'You\'ll have $kcal left';
+    return 'তোমার $kcal বাকি থাকবে';
   }
 
   @override
   String leftAfterBoth(String kcal, String grams) {
-    return 'You\'ll have $kcal and $grams g protein left';
+    return 'তোমার $kcal আর $grams গ্রা প্রোটিন বাকি থাকবে';
   }
 
   @override
   String leftAfterOver(String kcal) {
-    return '$kcal over your goal';
+    return 'লক্ষ্যের চেয়ে $kcal বেশি';
   }
 
   @override
   String perDayUnit(String unit) {
-    return '$unit a day';
+    return 'দিনে $unit';
   }
 
   @override
-  String get byZone => 'By area';
+  String get byZone => 'অংশ অনুযায়ী';
 
   @override
-  String get importAlreadyHave => 'You already have these routines. You can add them again as a copy.';
+  String get importAlreadyHave => 'এই রুটিনগুলো আগেই তোমার আছে। কপি হিসেবে আবার যোগ করতে পারো।';
 
   @override
-  String get importAsCopy => 'Add as a copy';
+  String get importAsCopy => 'কপি হিসেবে যোগ করো';
 
   @override
-  String get importOwned => 'Already yours';
+  String get routineExerciseNote => 'রুটিন নোট';
 
   @override
-  String get setDuplicated => 'Set duplicated';
+  String get importRoutineNotes => 'রুটিনের বাদ পড়া নোট যোগ করো';
 
   @override
-  String get setTypeCluster => 'Cluster';
+  String get routineNotesAdded => 'রুটিন নোট যোগ হয়েছে';
 
   @override
-  String get setTypeClusterInfo =>
-      'One set split into small blocks with 15–30 seconds between them. Log the total reps.';
+  String get importOwned => 'আগেই তোমার';
+
+  @override
+  String get setDuplicated => 'সেটের কপি হয়েছে';
+
+  @override
+  String get setTypeCluster => 'ক্লাস্টার';
+
+  @override
+  String get setTypeClusterInfo => 'একটা সেট ছোট ছোট খণ্ডে ভাগ, মাঝে 15–30 সেকেন্ড। মোট রেপ লেখো।';
 
   @override
   String timesBodyweight(String value) {
-    return '$value× your bodyweight';
+    return 'তোমার ওজনের $value×';
   }
 
   @override
-  String get archiveRoutine => 'Archive routine';
+  String get archiveRoutine => 'রুটিন আর্কাইভ করো';
 
   @override
-  String get routineArchived => 'Routine archived';
+  String get routineArchived => 'রুটিন আর্কাইভ হয়েছে';
 
   @override
-  String get archivedRoutines => 'Archived';
+  String get archivedRoutines => 'আর্কাইভ';
 
   @override
-  String get autoBackup => 'Auto backup';
+  String get autoBackup => 'অটো ব্যাকআপ';
 
   @override
   String get autoBackupHint =>
-      'Saves a ZIP with all your data to a folder you choose. Point Nextcloud, Syncthing or any sync app at that folder to keep a copy off your phone.';
+      'তোমার সব ডেটা নিয়ে একটা ZIP তোমার বেছে নেওয়া ফোল্ডারে সেভ করে। ফোনের বাইরে কপি রাখতে Nextcloud, Syncthing বা যেকোনো সিঙ্ক অ্যাপ সেই ফোল্ডারে লাগাও।';
 
   @override
-  String get autoBackupFolder => 'Choose folder';
+  String get autoBackupFolder => 'ফোল্ডার বেছে নাও';
 
   @override
-  String get autoBackupNoFolder => 'No folder yet';
+  String get autoBackupNoFolder => 'এখনও ফোল্ডার নেই';
 
   @override
-  String get autoBackupOff => 'Off';
+  String get autoBackupOff => 'বন্ধ';
 
   @override
-  String get autoBackupWorkout => 'After each workout';
+  String get autoBackupWorkout => 'প্রতিটা ওয়ার্কআউটের পরে';
 
   @override
-  String get autoBackupDaily => 'Once a day';
+  String get autoBackupDaily => 'দিনে একবার';
 
   @override
-  String get autoBackupWeekly => 'Once a week';
+  String get autoBackupWeekly => 'সপ্তাহে একবার';
 
   @override
-  String get autoBackupOnLeave => 'When you leave the app';
+  String get autoBackupOnLeave => 'অ্যাপ থেকে বেরোলে';
 
   @override
-  String get autoBackupKeep => 'Copies to keep';
+  String get autoBackupKeep => 'কয়টা কপি রাখবে';
 
   @override
-  String get autoBackupNow => 'Back up now';
+  String get autoBackupNow => 'এখনই ব্যাকআপ নাও';
 
   @override
   String autoBackupLast(String when) {
-    return 'Last backup $when';
+    return 'শেষ ব্যাকআপ $when';
   }
 
   @override
-  String get autoBackupNever => 'No backup yet';
+  String get autoBackupNever => 'এখনও কোনো ব্যাকআপ নেই';
 
   @override
-  String get autoBackupLost => 'Couldn\'t save the last backup. Choose the folder again.';
+  String get autoBackupLost => 'শেষ ব্যাকআপ সেভ করা যায়নি। ফোল্ডারটা আবার বেছে নাও।';
 
   @override
-  String get autoBackupSaved => 'Backup saved';
+  String get autoBackupSaved => 'ব্যাকআপ সেভ হয়েছে';
 
   @override
-  String get prepPortions => 'Portions';
+  String get prepPortions => 'ভাগ';
 
   @override
-  String get rotationAddRest => 'Add a rest day';
+  String get rotationAddRest => 'একটা বিশ্রামের দিন যোগ করো';
 
   @override
-  String get rotationRestHint => 'Moves on by itself the next day';
+  String get rotationRestHint => 'পরের দিন নিজে থেকেই এগিয়ে যায়';
 
   @override
-  String get rotationRestToday => 'Today';
+  String get rotationRestToday => 'আজ';
 
   @override
-  String get rotationSkipRest => 'Skip this rest day';
+  String get rotationSkipRest => 'এই বিশ্রামের দিন বাদ দাও';
 
   @override
   String rotationRestUpNext(String name) {
-    return 'Next: $name';
+    return 'এরপর: $name';
   }
 
   @override
-  String get trainAnyway => 'Train anyway';
+  String get trainAnyway => 'তবুও ট্রেনিং করো';
 
   @override
-  String get healthTitle => 'Health';
+  String get healthTitle => 'স্বাস্থ্য';
 
   @override
-  String get healthSetting => 'Health data';
+  String get healthSetting => 'স্বাস্থ্যের ডেটা';
 
   @override
-  String get healthSettingHint => 'Health Connect data in Progress';
+  String get healthSettingHint => 'অগ্রগতিতে Health Connect-এর ডেটা';
 
   @override
-  String get healthPickTitle => 'Health data';
+  String get healthPickTitle => 'স্বাস্থ্যের ডেটা';
 
   @override
   String get healthPickHint =>
-      'Pick what to bring from Health Connect. Android asks once for each one. It\'s only read, and it never leaves your phone.';
+      'Health Connect থেকে কী আনবে বেছে নাও। Android প্রতিটার জন্য একবার জিজ্ঞেস করে। এটা শুধু পড়া হয়, আর কখনো ফোন ছাড়ে না।';
 
   @override
-  String get healthGroupHeart => 'Heart';
+  String get healthGroupHeart => 'হৃদয়';
 
   @override
-  String get healthGroupVitals => 'Vitals';
+  String get healthGroupVitals => 'প্রাণচিহ্ন';
 
   @override
-  String get healthGroupActivity => 'Activity';
+  String get healthGroupActivity => 'অ্যাক্টিভিটি';
 
   @override
-  String get healthRestingHr => 'Resting heart rate';
+  String get healthRestingHr => 'বিশ্রামের হৃৎস্পন্দন';
 
   @override
-  String get healthHeartRate => 'Average heart rate';
+  String get healthHeartRate => 'গড় হৃৎস্পন্দন';
 
   @override
-  String get healthHrv => 'Heart rate variability';
+  String get healthHrv => 'হৃৎস্পন্দনের পরিবর্তনশীলতা';
 
   @override
-  String get healthSpo2 => 'Blood oxygen';
+  String get healthSpo2 => 'রক্তে অক্সিজেন';
 
   @override
-  String get healthRespiration => 'Breathing rate';
+  String get healthRespiration => 'শ্বাসের হার';
 
   @override
-  String get healthBloodPressure => 'Blood pressure';
+  String get healthBloodPressure => 'রক্তচাপ';
 
   @override
-  String get healthTemperature => 'Body temperature';
+  String get healthTemperature => 'শরীরের তাপমাত্রা';
 
   @override
-  String get healthSleep => 'Sleep';
+  String get healthSleep => 'ঘুম';
 
   @override
-  String get healthDistance => 'Distance';
+  String get healthDistance => 'দূরত্ব';
 
   @override
-  String get healthFloors => 'Floors climbed';
+  String get healthFloors => 'ওঠা তলা';
 
   @override
-  String get healthElevation => 'Elevation gained';
+  String get healthElevation => 'ওঠা উচ্চতা';
 
   @override
-  String get healthActiveKcal => 'Active calories';
+  String get healthActiveKcal => 'সক্রিয় ক্যালরি';
 
   @override
-  String get healthNoData => 'No data yet';
+  String get healthNoData => 'এখনও ডেটা নেই';
 
   @override
-  String get healthReadFailed => 'Couldn\'t read it';
+  String get healthReadFailed => 'পড়া গেল না';
 
   @override
-  String get healthAllow => 'Tap to allow';
+  String get healthAllow => 'অনুমতি দিতে ট্যাপ করো';
 
   @override
-  String get healthLast7 => 'Last 7 days';
+  String get healthLast7 => 'শেষ 7 দিন';
 
   @override
-  String get healthAvg30 => '30-day avg';
+  String get healthAvg30 => '30 দিনের গড়';
 
   @override
-  String get healthLow => 'Lowest';
+  String get healthLow => 'সর্বনিম্ন';
 
   @override
-  String get healthHigh => 'Highest';
+  String get healthHigh => 'সর্বোচ্চ';
 
   @override
-  String get healthFrom => 'From Health Connect · last 30 days';
+  String get healthFrom => 'Health Connect থেকে · শেষ 30 দিন';
 
   @override
   String get healthBpm => 'bpm';
 
   @override
-  String get healthBreaths => 'br/min';
+  String get healthBreaths => 'শ্বাস/মিনিট';
 
   @override
-  String get weekTab => 'Week';
+  String get weekTab => 'সপ্তাহ';
 
   @override
-  String get muscleSetsList => 'Sets per muscle';
+  String get muscleSetsList => 'প্রতি পেশির সেট';
 
   @override
-  String get fatTrans => 'Trans';
+  String get fatTrans => 'ট্রান্স';
 
   @override
-  String get fatTypesHint => 'Optional. Leave blank what the label doesn\'t say.';
+  String get fatTypesHint => 'ঐচ্ছিক। লেবেলে যা লেখা নেই তা খালি রাখো।';
 
   @override
-  String get sessionPhotos => 'Workout photos';
+  String get sessionPhotos => 'ওয়ার্কআউটের ছবি';
 
   @override
-  String get sessionPhotosAdd => 'Add photos';
+  String get sessionPhotosAdd => 'ছবি যোগ করো';
 
   @override
-  String get sessionPhotosHint => 'They\'re also kept in Your photos.';
+  String get sessionPhotosHint => 'এগুলো তোমার ছবিতেও রাখা হয়।';
 
   @override
-  String get ladderTitle => 'Progression';
+  String get ladderTitle => 'প্রোগ্রেশন';
 
   @override
   String get ladderHint =>
-      'ধাপগুলো সহজ থেকে কঠিন ক্রমে সাজান। পরপর দুটি সেশনে ৩ সেটে ৮টি রেপ সম্পন্ন করলে, Open-GYM পরবর্তী ধাপ প্রস্তাব করবে।';
+      'ধাপগুলো সবচেয়ে সহজ থেকে সবচেয়ে কঠিন ক্রমে সাজাও। টানা দুই সেশনে 8-এর 3 সেট করলে (ধীরগুলোতে 5), GymMane পরের ধাপ প্রস্তাব করবে।';
 
   @override
   String get ladderBuiltIn =>
-      'Starts from the app\'s progression. Add, remove or reorder steps and it becomes this routine\'s own.';
+      'অ্যাপের প্রোগ্রেশন থেকে শুরু হয়। ধাপ যোগ করো, সরাও বা ক্রম বদলাও, তাহলে এটা এই রুটিনের নিজের হয়ে যাবে।';
 
   @override
-  String get ladderNone => 'None yet. Tap to build one.';
+  String get ladderNone => 'এখনও নেই। বানাতে ট্যাপ করো।';
 
   @override
   String ladderStep(int n, int total) {
-    return 'Step $n of $total';
+    return 'ধাপ $n / $total';
   }
 
   @override
-  String get ladderAdd => 'Add step';
+  String get ladderAdd => 'ধাপ যোগ করো';
 
   @override
-  String get ladderInRoutine => 'In the routine';
+  String get ladderInRoutine => 'রুটিনে';
 
   @override
-  String get ladderClear => 'Use the app\'s progression';
+  String get ladderClear => 'অ্যাপের প্রোগ্রেশন ব্যবহার করো';
 
   @override
-  String get ladderPick => 'Pick a step';
+  String get ladderPick => 'একটা ধাপ বেছে নাও';
 
   @override
-  String get periodWeek => 'this week';
+  String get periodWeek => 'এই সপ্তাহে';
 
   @override
-  String get periodMonth => 'this month';
+  String get periodMonth => 'এই মাসে';
 
   @override
-  String get periodYear => 'this year';
+  String get periodYear => 'এই বছরে';
 
   @override
-  String get periodAll => 'all time';
+  String get periodAll => 'সব মিলিয়ে';
 
   @override
-  String get settingsSearch => 'Search settings';
+  String get settingsSearch => 'সেটিংস খোঁজো';
 
   @override
-  String get settingsNoResults => 'No setting with that name';
+  String get settingsNoResults => 'এই নামে কোনো সেটিং নেই';
 
   @override
-  String get settingsGroupApp => 'Your app';
+  String get settingsGroupApp => 'তোমার অ্যাপ';
 
   @override
-  String get settingsGroupHome => 'Home and extras';
+  String get settingsGroupHome => 'হোম আর বাড়তি';
 
   @override
-  String get settingsGroupData => 'Data and help';
+  String get settingsGroupData => 'ডেটা আর সাহায্য';
 
   @override
-  String get healthAllowAll => 'Turn all on';
+  String get healthAllowAll => 'সব চালু করো';
 
   @override
-  String get healthSeeAll => 'See all';
+  String get healthSeeAll => 'সব দেখো';
 
   @override
-  String get healthPinTitle => 'On the card';
+  String get healthPinTitle => 'কার্ডে';
 
   @override
-  String get healthPinHint => 'Pick up to 3 for the Progress card.';
+  String get healthPinHint => 'অগ্রগতি কার্ডের জন্য 3টি পর্যন্ত বেছে নাও।';
 
   @override
-  String get blurSetting => 'Blur effects';
+  String get blurSetting => 'ব্লার ইফেক্ট';
 
   @override
-  String get blurSettingHint => 'Turn off if your phone feels slow';
+  String get blurSettingHint => 'ফোন ধীর মনে হলে বন্ধ করো';
 
   @override
-  String get lowEndTitle => 'Your phone is short on memory';
+  String get lowEndTitle => 'তোমার ফোনে মেমরি কম';
 
   @override
-  String get lowEndBody =>
-      'Turning blur off makes everything smoother on it. You can bring it back in Settings → General.';
+  String get lowEndBody => 'ব্লার বন্ধ করলে এতে সবকিছু আরও মসৃণ চলে। সেটিংস → সাধারণ-এ আবার চালু করতে পারো।';
 
   @override
-  String get lowEndOff => 'Turn blur off';
+  String get lowEndOff => 'ব্লার বন্ধ করো';
 
   @override
-  String get lowEndKeep => 'Keep it';
+  String get lowEndKeep => 'রেখে দাও';
 
   @override
-  String get momentsThisMonth => 'This month';
+  String get momentsThisMonth => 'এই মাস';
 
   @override
-  String get momentsDays => 'Days with a photo';
+  String get momentsDays => 'ছবিওয়ালা দিন';
 
   @override
-  String get awardsPick => 'Choose for your profile';
+  String get awardsPick => 'তোমার প্রোফাইলের জন্য বেছে নাও';
 
   @override
-  String get awardsPickHint => 'Tap the ones you want on your profile';
+  String get awardsPickHint => 'প্রোফাইলে যেগুলো চাও সেগুলোতে ট্যাপ করো';
 
   @override
-  String get gymPassPicture => 'Save a picture of the code';
+  String get gymPassPicture => 'কোডের ছবি সেভ করো';
 
   @override
-  String get gymPassPictureHint => 'For codes the app can\'t read: it shows your photo at full brightness';
+  String get gymPassPictureHint => 'যে কোড অ্যাপ পড়তে পারে না তার জন্য: তোমার ছবি পুরো উজ্জ্বলতায় দেখায়';
 
   @override
-  String get gymPassPictureFormat => 'Photo';
+  String get gymPassPictureFormat => 'ছবি';
 
   @override
-  String get gymPassUsePicture => 'Save the photo';
+  String get gymPassUsePicture => 'ছবিটা সেভ করো';
 
   @override
-  String get gymPassChangePicture => 'Change the photo';
+  String get gymPassChangePicture => 'ছবিটা বদলাও';
 
   @override
-  String get cropTitle => 'Crop the code';
+  String get cropTitle => 'কোডটা কাটো';
 
   @override
-  String get cropHint => 'Drag the corners so only the code is inside';
+  String get cropHint => 'কোণগুলো টানো যাতে ভেতরে শুধু কোড থাকে';
 
   @override
-  String get rotatePhoto => 'Rotate';
+  String get rotatePhoto => 'ঘোরাও';
 
   @override
-  String get cardioNoSets => 'Cardio doesn\'t add to your weekly sets per muscle';
+  String get cardioNoSets => 'কার্ডিও প্রতি পেশির সাপ্তাহিক সেটে যোগ হয় না';
 
   @override
-  String get countsAsWater => 'Counts toward water';
+  String get countsAsWater => 'পানি হিসেবে গোনা হয়';
 
   @override
-  String get countsAsWaterHint => 'For shakes made with water: logging it adds to your water too';
+  String get countsAsWaterHint => 'পানিতে বানানো শেকের জন্য: লিখলে তোমার পানিতেও যোগ হয়';
 
   @override
-  String get waterPerServing => 'Water per serving';
+  String get waterPerServing => 'প্রতি পরিবেশনে পানি';
 
   @override
-  String get estOneRm => 'est. 1RM';
+  String get estOneRm => 'আনু. 1RM';
 
   @override
-  String get newInWorkout => 'New in this workout';
+  String get newInWorkout => 'এই ওয়ার্কআউটে নতুন';
 
   @override
   String newInWorkoutHint(String routine) {
-    return 'Add it to $routine with the sets you just did. The rest of the routine stays as it is.';
+    return 'এইমাত্র করা সেটসহ এটা $routine-এ যোগ করো। রুটিনের বাকিটা যেমন আছে তেমনই থাকবে।';
   }
 
   @override
-  String get addedToRoutine => 'Added';
+  String get addedToRoutine => 'যোগ হয়েছে';
 
   @override
-  String get addShort => 'Add';
+  String get addShort => 'যোগ করো';
 
   @override
-  String get allTimeLifted => 'LIFTED';
+  String get allTimeLifted => 'তোলা';
 
   @override
-  String get pctBodyweight => '% bodyweight';
+  String get pctBodyweight => '% শরীরের ওজন';
 
   @override
-  String get ofBodyweight => 'of your bodyweight';
+  String get ofBodyweight => 'তোমার শরীরের ওজনের';
 
   @override
-  String get recoveryStateMid => 'Recovering';
+  String get recoveryStateMid => 'রিকভার হচ্ছে';
 
   @override
-  String get recoveryStateReady => 'Ready';
+  String get recoveryStateReady => 'তৈরি';
 
   @override
   String recoveringIn(String time) {
-    return 'Recovering in $time';
+    return '$time-এ রিকভার';
   }
 
   @override
   String readyIn(String time) {
-    return 'Ready in $time';
+    return '$time-এ তৈরি';
   }
 
   @override
-  String get recoveryReadyNow => 'Ready to train it again';
+  String get recoveryReadyNow => 'আবার ট্রেন করার জন্য তৈরি';
 
   @override
-  String get restAfterThisSet => 'Rest after this set';
+  String get restAfterThisSet => 'এই সেটের পরে বিশ্রাম';
 
   @override
   String restUsual(String time) {
-    return 'Usual: $time';
+    return 'সাধারণত: $time';
   }
 
   @override
-  String get restJustToday => 'Only for this set, today';
+  String get restJustToday => 'শুধু এই সেটের জন্য, আজ';
 
   @override
-  String get restUseUsual => 'Back to the usual rest';
+  String get restUseUsual => 'সাধারণ বিশ্রামে ফেরো';
 
   @override
-  String get restChange => 'Change';
+  String get restChange => 'বদলাও';
 
   @override
-  String get noRestTimer => 'No timer';
+  String get noRestTimer => 'টাইমার নেই';
 
   @override
-  String get sessionMuscles => 'Muscles in this workout';
+  String get sessionMuscles => 'এই ওয়ার্কআউটের পেশি';
 
   @override
   String get sessionMusclesHint =>
-      'Faint is still to come, bright is done. Sets per muscle, secondary ones count half.';
+      'হালকা মানে এখনও বাকি, উজ্জ্বল মানে শেষ। প্রতি পেশির সেট, সহায়কগুলো অর্ধেক গোনা হয়।';
 
   @override
-  String get miniBodySetting => 'Small body map on routines';
+  String get miniBodySetting => 'রুটিনে ছোট শরীরের মানচিত্র';
 
   @override
-  String get miniBodySettingHint => 'Muscles each routine works';
+  String get miniBodySettingHint => 'প্রতিটা রুটিন কোন পেশিতে কাজ করে';
 
   @override
-  String get balanceTitle => 'Strength balance';
+  String get balanceTitle => 'শক্তির ভারসাম্য';
 
   @override
-  String get balanceWhy => 'How it works';
+  String get balanceWhy => 'কীভাবে কাজ করে';
 
   @override
-  String get balanceGood => 'Your main lifts are in balance';
+  String get balanceGood => 'তোমার প্রধান লিফটগুলো ভারসাম্যে আছে';
 
   @override
   String balanceBehind(String lift, String gap) {
-    return '$lift is lagging: about $gap to catch up';
+    return '$lift পিছিয়ে: সমান হতে প্রায় $gap';
   }
 
   @override
   String get balanceHint =>
-      'Compares your estimated 1RMs from the last 4 months against classic proportions: squat 100%, deadlift 120%, bench 75%, row 52%, overhead press 45%. A lift far below the rest is usually a weak spot worth more work.';
+      'শেষ 4 মাসের তোমার আনুমানিক 1RM ক্লাসিক অনুপাতের সাথে তুলনা করে: স্কোয়াট 100%, ডেডলিফট 120%, বেঞ্চ 75%, রো 52%, ওভারহেড প্রেস 45%। যে লিফট বাকিগুলোর চেয়ে অনেক নিচে, সেটা সাধারণত দুর্বল জায়গা যেখানে আরও কাজ দরকার।';
 
   @override
-  String get balanceEven => 'In balance';
+  String get balanceEven => 'ভারসাম্যে';
 
   @override
-  String get balanceBehindShort => 'Behind';
+  String get balanceBehindShort => 'পিছিয়ে';
 
   @override
-  String get balanceAheadShort => 'Ahead';
+  String get balanceAheadShort => 'এগিয়ে';
 
   @override
-  String get holdProgress => 'Progress by time';
+  String get holdProgress => 'সময় দিয়ে অগ্রগতি';
 
   @override
-  String get holdProgressHint => 'Adds seconds when you hold every set';
+  String get holdProgressHint => 'প্রতিটা সেট ধরে রাখতে পারলে সেকেন্ড যোগ করে';
 
   @override
   String holdProgressOn(int s) {
-    return '+$s s each time you hold every set';
+    return 'প্রতিটা সেট ধরে রাখলে প্রতিবার +$s সে';
   }
 
   @override
-  String get paceTitle => 'Weekly rate';
+  String get paceTitle => 'সাপ্তাহিক হার';
 
   @override
-  String get paceOn => 'On pace';
+  String get paceOn => 'হার ঠিক আছে';
 
   @override
-  String get paceTooFast => 'Faster than the range you set';
+  String get paceTooFast => 'তোমার ঠিক করা পরিসরের চেয়ে দ্রুত';
 
   @override
-  String get paceTooSlow => 'Slower than the range you set';
+  String get paceTooSlow => 'তোমার ঠিক করা পরিসরের চেয়ে ধীর';
 
   @override
-  String get paceWrongWay => 'Going the other way';
+  String get paceWrongWay => 'উল্টো দিকে যাচ্ছে';
 
   @override
-  String get paceDrifting => 'Moving more than a hold allows';
+  String get paceDrifting => 'ধরে রাখার সীমার চেয়ে বেশি বদলাচ্ছে';
 
   @override
-  String get paceSetAim => 'Tap to set what you aim for';
+  String get paceSetAim => 'তোমার লক্ষ্য ঠিক করতে ট্যাপ করো';
 
   @override
-  String get paceBasis =>
-      'Trend of your weigh-ins from the last 3 weeks, so one salty dinner can\'t fool it.';
+  String get paceBasis => 'শেষ 3 সপ্তাহের ওজনের প্রবণতা, তাই এক রাতের নোনতা খাবার একে বোকা বানাতে পারে না।';
 
   @override
-  String get paceAimTitle => 'What are you aiming for?';
+  String get paceAimTitle => 'তোমার লক্ষ্য কী?';
 
   @override
-  String get paceAimHint => 'The card tells you if your weekly rate fits it';
+  String get paceAimHint => 'কার্ড বলে দেয় তোমার সাপ্তাহিক হার এর সাথে মেলে কি না';
 
   @override
-  String get paceLose => 'Lose';
+  String get paceLose => 'কমানো';
 
   @override
-  String get paceHold => 'Hold';
+  String get paceHold => 'ধরে রাখা';
 
   @override
-  String get paceGain => 'Gain';
+  String get paceGain => 'বাড়ানো';
 
   @override
-  String get paceAuto => 'Automatic';
+  String get paceAuto => 'স্বয়ংক্রিয়';
 
   @override
-  String get paceLoseRange => '0.5 to 1% of your weight a week';
+  String get paceLoseRange => 'সপ্তাহে ওজনের 0.5 থেকে 1%';
 
   @override
-  String get paceHoldRange => 'Within 0.25% a week';
+  String get paceHoldRange => 'সপ্তাহে 0.25%-এর মধ্যে';
 
   @override
-  String get paceGainRange => '0.25 to 0.5% of your weight a week';
+  String get paceGainRange => 'সপ্তাহে ওজনের 0.25 থেকে 0.5%';
 
   @override
-  String get paceAutoHint => 'From your weight goal';
+  String get paceAutoHint => 'তোমার লক্ষ্য ওজন থেকে';
 
   @override
-  String get weekShort => 'wk';
+  String get weekShort => 'সপ্তাহ';
 
   @override
-  String get weightStack => 'Weight stack';
+  String get weightStack => 'ওজনের স্ট্যাক';
 
   @override
   String get weightStackHint =>
-      'The weights this machine really has. The + and − buttons, progression and deloads land only on them.';
+      'এই মেশিনে সত্যিই যে ওজনগুলো আছে। + আর − বোতাম, প্রোগ্রেশন আর ডিলোড শুধু এগুলোতেই পড়ে।';
 
   @override
-  String get weightStackOff => 'Off: normal weight steps';
+  String get weightStackOff => 'বন্ধ: সাধারণ ওজনের ধাপ';
 
   @override
-  String get stackFrom => 'From';
+  String get stackFrom => 'থেকে';
 
   @override
-  String get stackTo => 'To';
+  String get stackTo => 'পর্যন্ত';
 
   @override
-  String get stackEvery => 'Every';
+  String get stackEvery => 'প্রতি';
 
   @override
-  String get stackFill => 'Fill the stack';
+  String get stackFill => 'স্ট্যাক ভরো';
 
   @override
-  String get stackTapToFix => 'Tap a weight to fix an odd one or remove it.';
+  String get stackTapToFix => 'কোনো অদ্ভুত ওজন ঠিক করতে বা সরাতে তাতে ট্যাপ করো।';
 
   @override
-  String get stackAddWeight => 'Add a weight';
+  String get stackAddWeight => 'ওজন যোগ করো';
 
   @override
-  String get stackEditWeight => 'Weight on the pin';
+  String get stackEditWeight => 'পিনের ওজন';
 
   @override
-  String get stackClear => 'Remove the stack';
+  String get stackClear => 'স্ট্যাক সরাও';
 
   @override
   String stackCount(int n) {
-    return '$n weights';
+    return '$nটি ওজন';
   }
 
   @override
-  String get healthLinksTitle => 'With your workouts';
+  String get healthLinksTitle => 'তোমার ওয়ার্কআউটের সাথে';
 
   @override
-  String get healthLinkHeart => 'Heart rate from your watch';
+  String get healthLinkHeart => 'ঘড়ি থেকে হৃৎস্পন্দন';
 
   @override
-  String get healthLinkHeartHint =>
-      'Average and peak heart rate of each workout, from whatever watch recorded it';
+  String get healthLinkHeartHint => 'প্রতিটা ওয়ার্কআউটের গড় আর সর্বোচ্চ হৃৎস্পন্দন, যে ঘড়িই রেকর্ড করুক';
 
   @override
-  String get healthLinkWeight => 'Weigh-ins from other apps';
+  String get healthLinkWeight => 'অন্য অ্যাপ থেকে ওজন';
 
   @override
-  String get healthLinkWeightHint =>
-      'Your scale\'s weigh-ins from the last 30 days. Never overwrites one you typed.';
+  String get healthLinkWeightHint => 'শেষ 30 দিনের তোমার স্কেলের ওজন। তোমার টাইপ করা কখনো বদলায় না।';
 
   @override
-  String get healthLinkDenied => 'Health Connect did not give permission';
+  String get healthLinkDenied => 'Health Connect অনুমতি দেয়নি';
 
   @override
-  String get healthOpenSettings => 'Open';
+  String get healthOpenSettings => 'খোলো';
 
   @override
   String hrMaxShort(int bpm) {
-    return 'max $bpm';
+    return 'সর্বোচ্চ $bpm';
   }
 
   @override
-  String get setNote => 'Note for this set';
+  String get setNote => 'এই সেটের নোট';
 
   @override
-  String get setNoteHint => 'Grip, pain, a cue that worked…';
+  String get setNoteHint => 'গ্রিপ, ব্যথা, কাজে লাগা কোনো টিপ…';
 
   @override
   String setNoteLast(String note) {
-    return 'Last time: $note';
+    return 'গতবার: $note';
   }
 
   @override
-  String get lastTimeNotes => 'Last time';
+  String get lastTimeNotes => 'গতবার';
 
   @override
   String setNoteLine(int n, String note) {
-    return 'Set $n · $note';
+    return 'সেট $n · $note';
   }
 
   @override
-  String get newMeasure => 'New measurement';
+  String get newMeasure => 'নতুন মাপ';
 
   @override
-  String get newMeasureHint => 'Anything you want to follow: wrist, resting pulse, body water…';
+  String get newMeasureHint => 'যা অনুসরণ করতে চাও: কব্জি, বিশ্রামের নাড়ি, শরীরের পানি…';
 
   @override
-  String get measureKindLength => 'Length';
+  String get measureKindLength => 'দৈর্ঘ্য';
 
   @override
-  String get measureKindLengthHint => 'In cm or inches, like the rest';
+  String get measureKindLengthHint => 'সেমি বা ইঞ্চিতে, বাকিগুলোর মতো';
 
   @override
-  String get measureKindOther => 'Other';
+  String get measureKindOther => 'অন্যান্য';
 
   @override
-  String get measureKindOtherHint => 'With your own unit';
+  String get measureKindOtherHint => 'নিজের এককে';
 
   @override
-  String get measureUnit => 'Unit';
+  String get measureUnit => 'একক';
 
   @override
-  String get measureUnitHint => 'mm, bpm, kg…';
+  String get measureUnitHint => 'মিমি, bpm, কেজি…';
 
   @override
-  String get measureNameHint => 'Wrist, resting pulse…';
+  String get measureNameHint => 'কব্জি, বিশ্রামের নাড়ি…';
 
   @override
-  String get measureRename => 'Rename';
+  String get measureRename => 'নাম বদলাও';
 
   @override
   String measureDeleteTitle(String name) {
-    return 'Delete $name?';
+    return '$name মুছবে?';
   }
 
   @override
-  String get measureDeleteBody => 'Every value you logged for it goes too.';
+  String get measureDeleteBody => 'এর জন্য লেখা প্রতিটা মানও চলে যাবে।';
 
   @override
-  String get measureDelete => 'Delete this measurement';
+  String get measureDelete => 'এই মাপ মুছে ফেলো';
 
   @override
-  String get measureEvery => 'Remind me to measure';
+  String get measureEvery => 'মাপার কথা মনে করিয়ে দাও';
 
   @override
   String measureNextIn(int n) {
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: 'In $n days',
-      one: 'Tomorrow',
-      zero: 'Today',
+      other: '$n দিন পরে',
+      one: 'আগামীকাল',
+      zero: 'আজ',
     );
     return '$_temp0';
   }
 
   @override
-  String get measureDueNow => 'Time to measure';
+  String get measureDueNow => 'মাপার সময়';
 
   @override
-  String get notifMeasureChannel => 'Body measurements';
+  String get notifMeasureChannel => 'শরীরের মাপ';
 
   @override
-  String get notifMeasureChannelWhy => 'A nudge when it is time to measure again.';
+  String get notifMeasureChannelWhy => 'আবার মাপার সময় হলে মনে করিয়ে দেয়।';
 
   @override
-  String get notifMeasureTitle => 'Time to measure';
+  String get notifMeasureTitle => 'মাপার সময়';
 
   @override
   String notifMeasureBody(int n) {
-    return '$n days since the last time. Same spot, same time of day.';
+    return 'গতবারের পর $n দিন। একই জায়গা, দিনের একই সময়।';
   }
 
   @override
-  String get healthLinkWrite => 'Save your workouts';
+  String get healthLinkWrite => 'তোমার ওয়ার্কআউট সেভ করো';
 
   @override
   String get healthLinkWriteHint =>
-      'Each finished workout goes to Health Connect with its time and type, so other apps count it too. Also sends the last 30 days.';
+      'প্রতিটা শেষ করা ওয়ার্কআউট তার সময় আর ধরনসহ Health Connect-এ যায়, যাতে অন্য অ্যাপও গোনে। শেষ 30 দিনও পাঠায়।';
 
   @override
-  String get healthWorkoutTitle => 'Workout';
+  String get healthWorkoutTitle => 'ওয়ার্কআউট';
 
   @override
-  String get circuits => 'Timed circuits';
+  String get circuits => 'সময় ধরা সার্কিট';
 
   @override
-  String get circuitsHint => 'Work and rest by the clock, round after round';
+  String get circuitsHint => 'ঘড়ি ধরে কাজ আর বিশ্রাম, রাউন্ডের পর রাউন্ড';
 
   @override
-  String get newCircuit => 'New circuit';
+  String get newCircuit => 'নতুন সার্কিট';
 
   @override
-  String get editCircuit => 'Edit circuit';
+  String get editCircuit => 'সার্কিট বদলাও';
 
   @override
-  String get circuitDefaultName => 'Circuit';
+  String get circuitDefaultName => 'সার্কিট';
 
   @override
-  String get circuitNameHint => 'Name, like Core finisher';
+  String get circuitNameHint => 'নাম, যেমন কোর ফিনিশার';
 
   @override
-  String get circuitRounds => 'Rounds';
+  String get circuitRounds => 'রাউন্ড';
 
   @override
-  String get circuitRoundRest => 'Rest between rounds';
+  String get circuitRoundRest => 'রাউন্ডের মাঝে বিশ্রাম';
 
   @override
-  String get circuitWork => 'Work';
+  String get circuitWork => 'কাজ';
 
   @override
-  String get circuitRest => 'Rest';
+  String get circuitRest => 'বিশ্রাম';
 
   @override
-  String get circuitAdd => 'Add exercise';
+  String get circuitAdd => 'ব্যায়াম যোগ করো';
 
   @override
   String get circuitEmpty =>
-      'Add the exercises in the order you\'ll do them. One can go twice, like a side plank for each side.';
+      'যে ক্রমে করবে সেই ক্রমে ব্যায়াম যোগ করো। একটা দুবারও রাখতে পারো, যেমন প্রতি পাশের জন্য সাইড প্ল্যাঙ্ক।';
 
   @override
   String circuitSummary(int steps, int rounds, String time) {
     String _temp0 = intl.Intl.pluralLogic(
       steps,
       locale: localeName,
-      other: '$steps exercises',
-      one: '1 exercise',
+      other: '$stepsটি ব্যায়াম',
+      one: '1টি ব্যায়াম',
     );
     String _temp1 = intl.Intl.pluralLogic(
       rounds,
       locale: localeName,
-      other: '$rounds rounds',
-      one: '1 round',
+      other: '$rounds রাউন্ড',
+      one: '1 রাউন্ড',
     );
     return '$_temp0 · $_temp1 · $time';
   }
 
   @override
-  String get circuitStart => 'Start';
+  String get circuitStart => 'শুরু';
 
   @override
-  String get circuitGetReady => 'Get ready';
+  String get circuitGetReady => 'তৈরি হও';
 
   @override
   String circuitRoundOf(int n, int total) {
-    return 'Round $n of $total';
+    return 'রাউন্ড $n / $total';
   }
 
   @override
   String circuitNext(String name) {
-    return 'Next: $name';
+    return 'এরপর: $name';
   }
 
   @override
-  String get circuitFinishLine => 'Last one, then done';
+  String get circuitFinishLine => 'এটাই শেষ, তারপর শেষ';
 
   @override
-  String get circuitDone => 'Circuit done';
+  String get circuitDone => 'সার্কিট শেষ';
 
   @override
   String circuitDoneBody(String time) {
-    return '$time · saved to your history';
+    return '$time · তোমার ইতিহাসে সেভ হয়েছে';
   }
 
   @override
-  String get circuitStopTitle => 'Stop the circuit?';
+  String get circuitStopTitle => 'সার্কিট থামাবে?';
 
   @override
-  String get circuitStopBody => 'What you\'ve done so far is saved to your history.';
+  String get circuitStopBody => 'এখন পর্যন্ত যা করেছ তা তোমার ইতিহাসে সেভ হবে।';
 
   @override
-  String get circuitStop => 'Stop';
+  String get circuitStop => 'থামাও';
 
   @override
-  String get circuitKeepGoing => 'Keep going';
+  String get circuitKeepGoing => 'চালিয়ে যাও';
 
   @override
   String circuitDeleteTitle(String name) {
-    return 'Delete $name?';
+    return '$name মুছবে?';
   }
 
   @override
-  String get circuitDeleteBody => 'Workouts you already did with it stay in your history.';
+  String get circuitDeleteBody => 'এটা দিয়ে করা ওয়ার্কআউটগুলো তোমার ইতিহাসে থেকে যাবে।';
 
   @override
-  String get circuitPickExercise => 'Pick an exercise';
+  String get circuitPickExercise => 'একটা ব্যায়াম বেছে নাও';
 
   @override
-  String get circuitNoSteps => 'Add at least one exercise';
+  String get circuitNoSteps => 'অন্তত একটা ব্যায়াম যোগ করো';
 
   @override
-  String get circuitPrevious => 'Previous';
+  String get circuitPrevious => 'আগের';
 
   @override
-  String get circuitUpNext => 'Up next';
+  String get circuitUpNext => 'এরপর';
 
   @override
-  String get foodGroupNew => 'New category';
+  String get foodGroupNew => 'নতুন বিভাগ';
 
   @override
-  String get foodGroupHint => 'Ready meals, frozen…';
+  String get foodGroupHint => 'তৈরি খাবার, হিমায়িত…';
 
   @override
   String foodGroupCount(int n) {
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: '$n foods',
-      one: '1 food',
-      zero: 'No foods yet',
+      other: '$nটি খাবার',
+      one: '1টি খাবার',
+      zero: 'এখনও কোনো খাবার নেই',
     );
     return '$_temp0';
   }
 
   @override
   String foodGroupDeleteTitle(String name) {
-    return 'Delete $name?';
+    return '$name মুছবে?';
   }
 
   @override
-  String get foodGroupDeleteBody => 'Your foods stay, just without this category.';
+  String get foodGroupDeleteBody => 'তোমার খাবারগুলো থাকবে, শুধু এই বিভাগ ছাড়া।';
 
   @override
   String onbHello(String name) {
-    return 'Hi, $name';
+    return 'হাই, $name';
   }
 
   @override
-  String get onbPlaceHero => 'exercises you can do';
+  String get onbPlaceHero => 'যে ব্যায়ামগুলো করতে পারো';
 
   @override
-  String get settingsRests => 'Rest';
+  String get settingsRests => 'বিশ্রাম';
 
   @override
-  String get settingsDuring => 'While you train';
+  String get settingsDuring => 'ট্রেনিংয়ের সময়';
 
   @override
-  String get settingsLook => 'How it looks';
+  String get settingsLook => 'দেখতে কেমন';
 
   @override
-  String get importCardTitle => 'Bring your workouts here';
+  String get importCardTitle => 'তোমার ওয়ার্কআউট এখানে আনো';
 
   @override
-  String get importCardBody => 'From Hevy, Strong, FitNotes and more';
+  String get importCardBody => 'Hevy, Strong, FitNotes আর আরও থেকে';
 
   @override
-  String get checkInTitle => 'How did you show up?';
+  String get checkInTitle => 'আজ কেমন ছিলে?';
 
   @override
-  String get checkInSleep => 'Sleep';
+  String get checkInSleep => 'ঘুম';
 
   @override
-  String get checkInEnergy => 'Energy';
+  String get checkInEnergy => 'শক্তি';
 
   @override
-  String get checkInSkip => 'Optional';
+  String get checkInSkip => 'ঐচ্ছিক';
 
   @override
-  String get checkInLevel1 => 'Awful';
+  String get checkInLevel1 => 'খুব খারাপ';
 
   @override
-  String get checkInLevel2 => 'Poor';
+  String get checkInLevel2 => 'খারাপ';
 
   @override
-  String get checkInLevel3 => 'Okay';
+  String get checkInLevel3 => 'চলনসই';
 
   @override
-  String get checkInLevel4 => 'Good';
+  String get checkInLevel4 => 'ভালো';
 
   @override
-  String get checkInLevel5 => 'Great';
+  String get checkInLevel5 => 'দারুণ';
 
   @override
-  String get checkInSetting => 'Sleep and energy';
+  String get checkInSetting => 'ঘুম আর শক্তি';
 
   @override
-  String get checkInSettingHint => 'Ask when you finish a workout';
+  String get checkInSettingHint => 'ওয়ার্কআউট শেষ করলে জিজ্ঞেস করে';
 
   @override
-  String get readinessTitle => 'Sleep and energy';
+  String get readinessTitle => 'ঘুম আর শক্তি';
 
   @override
-  String get readinessWaiting => 'Keep rating your workouts';
+  String get readinessWaiting => 'তোমার ওয়ার্কআউটগুলো রেট করতে থাকো';
 
   @override
-  String get readinessWaitingHint => 'After a few good and bad days you\'ll see how they change your lifts.';
+  String get readinessWaitingHint => 'কয়েকটা ভালো আর খারাপ দিনের পর দেখবে এগুলো তোমার লিফট কীভাবে বদলায়।';
 
   @override
   String readinessSleepLess(int n) {
-    return 'On short-sleep days you lift $n% less';
+    return 'কম ঘুমের দিনে তুমি $n% কম তোলো';
   }
 
   @override
   String readinessSleepMore(int n) {
-    return 'Funny: on short-sleep days you lift $n% more';
+    return 'মজার ব্যাপার: কম ঘুমের দিনে তুমি $n% বেশি তোলো';
   }
 
   @override
-  String get readinessSleepNone => 'Sleep barely changes your lifts';
+  String get readinessSleepNone => 'ঘুমে তোমার লিফট প্রায় বদলায় না';
 
   @override
   String readinessEnergyLess(int n) {
-    return 'On low-energy days you lift $n% less';
+    return 'কম শক্তির দিনে তুমি $n% কম তোলো';
   }
 
   @override
   String readinessEnergyMore(int n) {
-    return 'On low-energy days you still lift $n% more';
+    return 'কম শক্তির দিনেও তুমি $n% বেশি তোলো';
   }
 
   @override
-  String get readinessEnergyNone => 'Your energy barely changes your lifts';
+  String get readinessEnergyNone => 'তোমার শক্তিতে লিফট প্রায় বদলায় না';
 
   @override
-  String get readinessHint => 'Compares each estimated 1RM with your best of the previous 90 days.';
+  String get readinessHint => 'প্রতিটা আনুমানিক 1RM আগের 90 দিনের তোমার সেরার সাথে তুলনা করে।';
 
   @override
-  String get readinessLast30 => 'Average of the last 30 days';
+  String get readinessLast30 => 'শেষ 30 দিনের গড়';
 
   @override
-  String get kindSport => 'Sport';
+  String get kindSport => 'খেলা';
 
   @override
-  String get clearWorkouts => 'Delete workouts only';
+  String get clearWorkouts => 'শুধু ওয়ার্কআউট মুছে ফেলো';
 
   @override
-  String get clearWorkoutsNone => 'There are no workouts to delete';
+  String get clearWorkoutsNone => 'মোছার মতো কোনো ওয়ার্কআউট নেই';
 
   @override
   String clearWorkoutsTitle(int n) {
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: 'Delete $n workouts?',
-      one: 'Delete 1 workout?',
+      other: '$nটি ওয়ার্কআউট মুছবে?',
+      one: '1টি ওয়ার্কআউট মুছবে?',
     );
     return '$_temp0';
   }
 
   @override
   String get clearWorkoutsBody =>
-      'Your history, records and medals go. Routines, exercises, photos, measurements, nutrition and settings stay. Export a backup first if you might want them back.';
+      'তোমার ইতিহাস, রেকর্ড আর মেডেল চলে যাবে। রুটিন, ব্যায়াম, ছবি, মাপ, পুষ্টি আর সেটিংস থাকবে। পরে ফেরত চাইতে পারো মনে হলে আগে একটা ব্যাকআপ এক্সপোর্ট করো।';
 
   @override
-  String get clearWorkoutsConfirm => 'Delete workouts';
+  String get clearWorkoutsConfirm => 'ওয়ার্কআউট মুছে ফেলো';
 
   @override
-  String get clearWorkoutsDone => 'Workouts deleted';
+  String get clearWorkoutsDone => 'ওয়ার্কআউট মুছে ফেলা হয়েছে';
 
   @override
   String get reportTitle => 'রিপোর্ট';
 
   @override
-  String get reportHint => 'আপনার অগ্রগতি ও পরিসংখ্যানের সারাংশ শেয়ার বা সংরক্ষণ করুন。';
+  String get reportHint => 'তারিখ বেছে নাও আর PDF বা CSV হিসেবে শেয়ার করো';
 
   @override
-  String get reportCustom => 'কাস্টম রেঞ্জ';
+  String get reportCustom => 'অন্যান্য';
 
   @override
-  String get reportPickRange => 'একটি তারিখের সীমা নির্বাচন করুন';
+  String get reportPickRange => 'তারিখ বেছে নাও';
 
   @override
-  String get reportEmpty => 'এই সময়ের জন্য কোনো ওয়ার্কআউট নেই';
+  String get reportEmpty => 'এই তারিখগুলোর মধ্যে কিছু লেখা নেই।';
 
   @override
-  String get reportKicker => 'ওয়ার্কআউট রিপোর্ট';
+  String get reportKicker => 'ট্রেনিং রিপোর্ট';
 
   @override
   String reportDays(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$n days', one: '1 day');
+    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$n দিন', one: '1 দিন');
     return '$_temp0';
   }
 
   @override
-  String get reportWorkouts => 'অনুশীলনসমূহ';
+  String get reportWorkouts => 'ওয়ার্কআউট';
 
   @override
   String get reportPerWeek => 'প্রতি সপ্তাহে';
@@ -6284,40 +6535,40 @@ class AppLocalizationsBn extends AppLocalizations {
   String get reportHours => 'ঘণ্টা';
 
   @override
-  String get reportVsPrev => 'Percentages compare with the same number of days just before.';
+  String get reportVsPrev => 'শতাংশের তুলনা ঠিক আগের সমান সংখ্যক দিনের সাথে।';
 
   @override
-  String get reportRecords => 'রেকর্ডসমূহ';
+  String get reportRecords => 'নতুন রেকর্ড';
 
   @override
-  String get reportLifts => 'Exercises';
+  String get reportLifts => 'ব্যায়াম';
 
   @override
-  String get reportSessionsCol => 'DAYS';
+  String get reportSessionsCol => 'দিন';
 
   @override
-  String get reportBestCol => 'BEST 1RM';
+  String get reportBestCol => 'সেরা 1RM';
 
   @override
-  String get reportChangeCol => 'CHANGE';
+  String get reportChangeCol => 'পরিবর্তন';
 
   @override
   String get reportBestHint =>
-      'Best 1RM is estimated from your sets. Change compares the first and last day of the exercise in this report.';
+      'সেরা 1RM তোমার সেট থেকে অনুমান করা। পরিবর্তন এই রিপোর্টে ব্যায়ামের প্রথম আর শেষ দিনের তুলনা করে।';
 
   @override
-  String get reportMuscles => 'পেশীসমূহ';
+  String get reportMuscles => 'প্রতি পেশির সেট';
 
   @override
-  String get reportBody => 'Body and recovery';
+  String get reportBody => 'শরীর আর রিকভারি';
 
   @override
   String reportFood(int n) {
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: 'Nutrition · average of $n days',
-      one: 'Nutrition · average of 1 day',
+      other: 'পুষ্টি · $n দিনের গড়',
+      one: 'পুষ্টি · 1 দিনের গড়',
     );
     return '$_temp0';
   }
@@ -6327,478 +6578,485 @@ class AppLocalizationsBn extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: '$n new records',
-      one: '1 new record',
+      other: '$nটি নতুন রেকর্ড',
+      one: '1টি নতুন রেকর্ড',
     );
     return '$_temp0';
   }
 
   @override
   String reportLiftsLine(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$n exercises', one: '1 exercise');
+    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$nটি ব্যায়াম', one: '1টি ব্যায়াম');
     return '$_temp0';
   }
 
   @override
   String reportFoodLine(String kcal, int protein, int days) {
-    return '$kcal and $protein g protein a day · $days days logged';
+    return 'দিনে $kcal আর $protein গ্রা প্রোটিন · $days দিন লেখা';
   }
 
   @override
-  String get reportSharePdf => 'পিডিএফ শেয়ার করুন';
+  String get reportSharePdf => 'PDF শেয়ার করো';
 
   @override
-  String get reportShareCsv => 'সিএসভি শেয়ার করুন';
+  String get reportShareCsv => 'CSV এক্সপোর্ট করো';
 
   @override
-  String get reportShareCsvBoth => 'Export CSV (workouts and nutrition)';
+  String get reportChooseCsv => 'কোন CSV ফাইলগুলো শেয়ার করবে বেছে নাও।';
+
+  @override
+  String get reportWeighIns => 'ওজনের রেকর্ড';
+
+  @override
+  String get reportSessionDetails => 'সেশনের বিবরণ';
+
+  @override
+  String get reportShareCsvBoth => 'CSV এক্সপোর্ট করো (ওয়ার্কআউট আর পুষ্টি)';
 
   @override
   String fastMinutes(int n) {
-    return '$n min';
+    return '$n মিনিট';
   }
 
   @override
   String fastHours(int n) {
-    return '$n h';
+    return '$n ঘ';
   }
 
   @override
   String fastHoursMinutes(int h, int m) {
-    return '$h h $m min';
+    return '$h ঘ $m মিনিট';
   }
 
   @override
-  String get fastTracker => 'রোজা / ফাস্টিং';
+  String get fastTracker => 'ইন্টারমিটেন্ট ফাস্টিং';
 
   @override
   String fastTitle(int fast, int eat) {
-    return 'Fasting $fast:$eat';
+    return 'ফাস্টিং $fast:$eat';
   }
 
   @override
-  String get fastOptions => 'Fasting options';
+  String get fastOptions => 'ফাস্টিংয়ের বিকল্প';
 
   @override
-  String get fastWindowOpen => 'Eating window open';
+  String get fastWindowOpen => 'খাওয়ার সময় খোলা';
 
   @override
-  String get fastLeft => 'Left';
+  String get fastLeft => 'বাকি';
 
   @override
-  String get fastDoneLabel => 'Goal reached';
+  String get fastDoneLabel => 'লক্ষ্য পূরণ';
 
   @override
-  String get fastIdle => 'Start it after your last meal';
+  String get fastIdle => 'শেষ খাবারের পরে শুরু করো';
 
   @override
   String fastLast(String time) {
-    return 'Last fast: $time';
+    return 'শেষ ফাস্টিং: $time';
   }
 
   @override
   String fastStreak(int n) {
-    return '$n in a row';
+    return 'টানা $n';
   }
 
   @override
   String fastReached(String time) {
-    return '$time past your goal';
+    return 'লক্ষ্যের চেয়ে $time বেশি';
   }
 
   @override
   String fastEndsAt(String time) {
-    return 'Ends at $time';
+    return '$time-এ শেষ';
   }
 
   @override
   String fastSince(String time) {
-    return 'Since $time';
+    return '$time থেকে';
   }
 
   @override
-  String get fastStartedAt => 'When did you start fasting?';
+  String get fastStartedAt => 'কখন ফাস্টিং শুরু করেছ?';
 
   @override
-  String get fastStart => 'Start fast';
+  String get fastStart => 'ফাস্টিং শুরু করো';
 
   @override
   String fastFromMeal(String time) {
-    return 'From $time';
+    return '$time থেকে';
   }
 
   @override
-  String get fastEnd => 'End fast';
+  String get fastEnd => 'ফাস্টিং শেষ করো';
 
   @override
-  String get fastCancel => 'Cancel this fast';
+  String get fastCancel => 'এই ফাস্টিং বাতিল করো';
 
   @override
-  String get fastPlan => 'Fasting plan';
+  String get fastPlan => 'ফাস্টিং প্ল্যান';
 
   @override
-  String get fastPlanHint => 'Hours fasting : hours to eat';
+  String get fastPlanHint => 'ফাস্টিংয়ের ঘণ্টা : খাওয়ার ঘণ্টা';
 
   @override
-  String get fastThisWeek => 'Last 7 days';
+  String get fastThisWeek => 'শেষ 7 দিন';
 
   @override
-  String get fastCount => 'Fasts';
+  String get fastCount => 'ফাস্টিং';
 
   @override
-  String get fastReachedCount => 'Reached';
+  String get fastReachedCount => 'পূরণ';
 
   @override
-  String get fastAverage => 'Average';
+  String get fastAverage => 'গড়';
 
   @override
-  String get fastHistory => 'Recent fasts';
+  String get fastHistory => 'সাম্প্রতিক ফাস্টিং';
 
   @override
-  String get notifFastLiveChannel => 'Fasting in progress';
+  String get notifFastLiveChannel => 'ফাস্টিং চলছে';
 
   @override
-  String get notifFastLiveChannelWhy => 'A quiet countdown while you fast.';
+  String get notifFastLiveChannelWhy => 'ফাস্টিংয়ের সময় একটা শান্ত কাউন্টডাউন।';
 
   @override
-  String get notifFastChannel => 'Fasting';
+  String get notifFastChannel => 'ফাস্টিং';
 
   @override
-  String get notifFastChannelWhy => 'Tells you when your fast is done.';
+  String get notifFastChannelWhy => 'ফাস্টিং শেষ হলে জানায়।';
 
   @override
-  String get notifFastLiveTitle => 'Fasting';
+  String get notifFastLiveTitle => 'ফাস্টিং';
 
   @override
   String notifFastLiveBody(String time) {
-    return 'Your eating window opens at $time';
+    return 'খাওয়ার সময় খুলবে $time-এ';
   }
 
   @override
-  String get notifFastDoneTitle => 'Fast done';
+  String get notifFastDoneTitle => 'ফাস্টিং শেষ';
 
   @override
   String notifFastDoneBody(int n) {
-    return '$n hours. Your eating window is open.';
+    return '$n ঘণ্টা। খাওয়ার সময় খোলা।';
   }
 
   @override
-  String get newExerciseHint => 'Only the name is required. The rest helps, but you can add it later.';
+  String get newExerciseHint => 'শুধু নাম দরকার। বাকিটা সাহায্য করে, তবে পরে যোগ করতে পারো।';
 
   @override
-  String get supportThanksTitle => 'Thanks for being here 🤍';
+  String get supportThanksTitle => 'এখানে থাকার জন্য ধন্যবাদ 🤍';
 
   @override
   String get supportThanksBody =>
-      'Open-GYM সম্পূর্ণ ফ্রি এবং সবসময় থাকবে, কোনো বিজ্ঞাপন বা লুকানো খরচ নেই।\n\nএটি যদি আপনার অনুশীলনে সাহায্য করে, তবে আমাকে এক কাপ কফি খাওয়াতে পারেন ☕\nআর সম্ভব না হলেও সমস্যা নেই: GitHub-এ একটি স্টারও অনুপ্রেরণা দেয় ⭐';
+      'GymMane বিনামূল্যে আর সবসময় তাই থাকবে, বিজ্ঞাপন ছাড়া আর কিছু লুকানো ছাড়া।\n\nএটা যদি তোমার ট্রেনিংয়ে কাজে লাগে, আমাকে একটা কফি খাওয়ালে আমার দিনটা ভালো হয়ে যাবে ☕\nআর না পারলে চিন্তা নেই: GitHub-এ একটা স্টারও অনেক ⭐';
 
   @override
-  String get perfSetting => 'Performance';
+  String get perfSetting => 'পারফরম্যান্স';
 
   @override
-  String get perfSheetHint =>
-      'Open-GYM আপনার ফোনের কতটা রিসোর্স ব্যবহার করবে। আপনি নিচের অংশগুলো পরিবর্তন করতে পারেন।';
+  String get perfSheetHint => 'GymMane তোমার ফোনের কতটা ব্যবহার করবে। নিচে প্রতিটা অংশ বদলাতে পারো।';
 
   @override
-  String get perfLite => 'Saver';
+  String get perfLite => 'সাশ্রয়ী';
 
   @override
-  String get perfLiteHint => 'No blur and calmer motion. For phones that struggle.';
+  String get perfLiteHint => 'ব্লার নেই আর শান্ত নড়াচড়া। যে ফোনগুলো হিমশিম খায় তাদের জন্য।';
 
   @override
-  String get perfBalanced => 'Balanced';
+  String get perfBalanced => 'ভারসাম্য';
 
   @override
-  String get perfBalancedHint => 'Blur and animations without draining the battery.';
+  String get perfBalancedHint => 'ব্যাটারি না ফুরিয়ে ব্লার আর অ্যানিমেশন।';
 
   @override
-  String get perfMax => 'Maximum';
+  String get perfMax => 'সর্বোচ্চ';
 
   @override
   String perfMaxHint(int hz) {
-    return 'Finer blur and the screen at $hz Hz. For high-end phones.';
+    return 'আরও সূক্ষ্ম ব্লার আর $hz Hz স্ক্রিন। হাই-এন্ড ফোনের জন্য।';
   }
 
   @override
-  String get perfMaxHintNoHz => 'Finer blur everywhere. For high-end phones.';
+  String get perfMaxHintNoHz => 'সব জায়গায় আরও সূক্ষ্ম ব্লার। হাই-এন্ড ফোনের জন্য।';
 
   @override
-  String get perfCustom => 'Custom';
+  String get perfCustom => 'কাস্টম';
 
   @override
-  String get perfTweak => 'Fine-tuning';
+  String get perfTweak => 'সূক্ষ্ম সমন্বয়';
 
   @override
-  String get perfFine => 'Fine blur';
+  String get perfFine => 'সূক্ষ্ম ব্লার';
 
   @override
-  String get perfFineHint => 'Softer edges and a sharper backdrop behind sheets';
+  String get perfFineHint => 'প্যানেলের পেছনে নরম কিনারা আর আরও স্পষ্ট ব্যাকগ্রাউন্ড';
 
   @override
   String perfHz(int hz) {
-    return 'Screen at $hz Hz';
+    return '$hz Hz স্ক্রিন';
   }
 
   @override
-  String get perfHzHint => 'Everything scrolls smoother, at a little more battery';
+  String get perfHzHint => 'সবকিছু আরও মসৃণ স্ক্রল হয়, একটু বেশি ব্যাটারিতে';
 
   @override
   String get lowEndLiteBody =>
-      'Saver mode (no blur, calmer motion) will run smoother on it. You can change it in Settings → General → Performance.';
+      'সাশ্রয়ী মোড (ব্লার নেই, শান্ত নড়াচড়া) এতে আরও মসৃণ চলবে। সেটিংস → সাধারণ → পারফরম্যান্স-এ বদলাতে পারো।';
 
   @override
-  String get lowEndLiteOn => 'Turn on Saver';
+  String get lowEndLiteOn => 'সাশ্রয়ী চালু করো';
 
   @override
-  String get dayOffHint => 'Your streak and the reminder leave this day alone';
+  String get dayOffHint => 'তোমার স্ট্রিক আর রিমাইন্ডার এই দিনটা ছুঁয়েও দেখবে না';
 
   @override
-  String get dayOffTrained => 'I trained, just didn\'t log it';
+  String get dayOffTrained => 'ট্রেনিং করেছি, শুধু লেখা হয়নি';
 
   @override
-  String get dayOffSick => 'Illness';
+  String get dayOffSick => 'অসুস্থতা';
 
   @override
-  String get dayOffTravel => 'Travel';
+  String get dayOffTravel => 'ভ্রমণ';
 
   @override
-  String get dayOffInjury => 'Injury';
+  String get dayOffInjury => 'চোট';
 
   @override
-  String get dayOffRest => 'Rest';
+  String get dayOffRest => 'বিশ্রাম';
 
   @override
-  String get altsTitle => 'Backups';
+  String get altsTitle => 'বিকল্প';
 
   @override
-  String get altsHint => 'In case the machine is taken';
+  String get altsHint => 'যদি মেশিনটা ব্যস্ত থাকে';
 
   @override
   String altsPickHint(int count) {
-    return 'Pick up to $count. If the machine is taken, swap in one tap.';
+    return '$countটি পর্যন্ত বেছে নাও। মেশিন ব্যস্ত থাকলে এক ট্যাপে বদলাও।';
   }
 
   @override
-  String get placeDumbbells => 'Dumbbells';
+  String get placeDumbbells => 'ডাম্বেল';
 
   @override
-  String get dumbbellsHint =>
-      'The weight of one dumbbell. Progression and the + and − buttons will only land on these here.';
+  String get dumbbellsHint => 'একটা ডাম্বেলের ওজন। এখানে প্রোগ্রেশন আর + ও − বোতাম শুধু এগুলোতেই পড়বে।';
 
   @override
-  String get dumbbellOther => 'Another weight';
+  String get dumbbellOther => 'অন্য ওজন';
 
   @override
-  String get tuneTitle => 'Today\'s volume';
+  String get tuneTitle => 'আজকের ভলিউম';
 
   @override
-  String get tuneHint => 'Tell me how each muscle felt and I\'ll adjust the sets for next time.';
+  String get tuneHint => 'বলো প্রতিটা পেশি কেমন লাগল, পরেরবারের সেট সেই অনুযায়ী ঠিক হয়ে যাবে।';
 
   @override
-  String get tuneLess => 'Too little';
+  String get tuneLess => 'খুব কম';
 
   @override
-  String get tuneRight => 'Right';
+  String get tuneRight => 'ঠিক';
 
   @override
-  String get tuneMore => 'Too much';
+  String get tuneMore => 'খুব বেশি';
 
   @override
   String tuneNext(String sets, String name) {
-    return 'Next time: $sets of $name';
+    return 'পরেরবার: $name-এর $sets';
   }
 
   @override
-  String get tuneSame => 'Stays the same next time';
+  String get tuneSame => 'পরেরবারও একই থাকবে';
 
   @override
-  String get tuneSetting => 'Tune sets per muscle';
+  String get tuneSetting => 'প্রতি পেশিতে সেট ঠিক করো';
 
   @override
-  String get tuneSettingHint => 'After a routine, rate each muscle and the sets adjust';
+  String get tuneSettingHint => 'রুটিনের পরে প্রতিটা পেশিকে রেট করো, সেট নিজে থেকে মানিয়ে নেবে';
 
   @override
   String insightLoad(int pct) {
-    return '$pct % more sets than your usual week. Watch your recovery.';
+    return 'তোমার সাধারণ সপ্তাহের চেয়ে $pct % বেশি সেট। রিকভারির দিকে খেয়াল রাখো।';
   }
 
   @override
   String insightMuscle(String muscle, int days) {
-    return '$muscle: $days days untouched.';
+    return '$muscle: $days দিন ছোঁয়া হয়নি।';
   }
 
   @override
   String insightPushHeavy(int a, int b) {
-    return 'You push more than you pull: $a sets against $b in four weeks.';
+    return 'তুমি টানার চেয়ে বেশি ঠেলো: চার সপ্তাহে $a সেট বনাম $b।';
   }
 
   @override
   String insightPullHeavy(int a, int b) {
-    return 'You pull more than you push: $a sets against $b in four weeks.';
+    return 'তুমি ঠেলার চেয়ে বেশি টানো: চার সপ্তাহে $a সেট বনাম $b।';
   }
 
   @override
   String insightStronger(String name, int pct) {
-    return '$name: $pct % stronger than last month.';
+    return '$name: গত মাসের চেয়ে $pct % বেশি শক্তিশালী।';
   }
 
   @override
   String recapPull(String month) {
-    return 'Keep pulling to see your $month';
+    return 'তোমার $month দেখতে টানতে থাকো';
   }
 
   @override
-  String get recapRelease => 'Let go';
+  String get recapRelease => 'ছেড়ে দাও';
 
   @override
   String recapHi(String name) {
-    return 'Hi, $name';
+    return 'হাই, $name';
   }
 
   @override
   String recapReady(String month) {
-    return 'Shall we see what you did in $month?';
+    return '$month-এ তুমি কী করেছ দেখবে?';
   }
 
   @override
-  String get recapGo => 'Let\'s go';
+  String get recapGo => 'চলো';
 
   @override
   String recapEmpty(String month) {
-    return 'No workouts in $month yet. Your first one opens this up.';
+    return '$month-এ এখনও কোনো ওয়ার্কআউট নেই। তোমার প্রথমটাই এটা খুলবে।';
   }
 
   @override
-  String get recapClose => 'Close';
+  String get recapClose => 'বন্ধ করো';
 
   @override
-  String get recapShare => 'Share';
+  String get recapShare => 'শেয়ার করো';
 
   @override
-  String get recapWorkoutsKicker => 'This month you trained';
+  String get recapWorkoutsKicker => 'এই মাসে তুমি ট্রেন করেছ';
 
   @override
   String recapWorkouts(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: 'workouts', one: 'workout');
+    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: 'ওয়ার্কআউট', one: 'ওয়ার্কআউট');
     return '$_temp0';
   }
 
   @override
   String recapDays(int n) {
-    String _temp0 = intl.Intl.pluralLogic(
-      n,
-      locale: localeName,
-      other: 'On $n different days',
-      one: 'On one day',
-    );
+    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$nটি আলাদা দিনে', one: 'এক দিনে');
     return '$_temp0';
   }
 
   @override
-  String get recapTimeKicker => 'Time under the bar';
+  String get recapTimeKicker => 'বারের নিচে সময়';
 
   @override
   String recapLongest(String time, String date) {
-    return 'Longest session: $time, on $date';
+    return 'সবচেয়ে লম্বা সেশন: $time, $date-এ';
   }
 
   @override
-  String get recapVolumeKicker => 'You moved';
+  String get recapVolumeKicker => 'তুমি সরিয়েছ';
 
   @override
   String recapCars(int n, String count) {
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: 'Like lifting $count cars',
-      one: 'Like lifting a car',
+      other: '$countটা গাড়ি তোলার মতো',
+      one: 'একটা গাড়ি তোলার মতো',
     );
     return '$_temp0';
   }
 
   @override
   String recapTop(String name, String volume) {
-    return 'Most of it: $name, $volume';
+    return 'সবচেয়ে বেশি: $name, $volume';
   }
 
   @override
-  String get recapMuscleKicker => 'Muscle of the month';
+  String get recapMuscleKicker => 'মাসের পেশি';
 
   @override
-  String get recapRecordsKicker => 'New records';
+  String get recapRecordsKicker => 'নতুন রেকর্ড';
 
   @override
   String recapNoRecords(int n) {
-    return 'No records this time, but $n sets went in the bank.';
+    return 'এবার কোনো রেকর্ড নেই, তবে $nটি সেট জমা হয়েছে।';
   }
 
   @override
-  String get recapHabitKicker => 'Your moment';
+  String get recapHabitKicker => 'তোমার সময়';
 
   @override
   String recapHabitStart(String time) {
-    return 'You usually start at $time';
+    return 'তুমি সাধারণত $time-এ শুরু করো';
   }
 
   @override
-  String get recapShareKicker => 'Your month, ready to share';
+  String get recapShareKicker => 'তোমার মাস, শেয়ারের জন্য তৈরি';
 
   @override
-  String get recapTickWorkouts => 'Workouts';
+  String get recapTickWorkouts => 'ওয়ার্কআউট';
 
   @override
-  String get recapTickTime => 'Time';
+  String get recapTickTime => 'সময়';
 
   @override
-  String get recapTickVolume => 'Load';
+  String get recapTickVolume => 'ভার';
 
   @override
-  String get recapTickRecords => 'Records';
+  String get recapTickRecords => 'রেকর্ড';
 
   @override
   String recapAvg(int n) {
-    return '$n min per workout on average';
+    return 'প্রতি ওয়ার্কআউটে গড়ে $n মিনিট';
   }
 
   @override
-  String get recapLiftKicker => 'Exercise of the month';
+  String get recapLiftKicker => 'মাসের ব্যায়াম';
 
   @override
-  String get recapBest => 'Best';
+  String get recapBest => 'সেরা';
 
   @override
-  String get recapTimes => 'Days';
+  String get recapTimes => 'দিন';
 
   @override
-  String get recapDaysLabel => 'Days';
+  String get recapDaysLabel => 'দিন';
 
   @override
-  String get recapAvgLabel => 'Average';
+  String get recapAvgLabel => 'গড়';
 
   @override
   String recapCalendarLine(int workouts, int days) {
-    return '$workouts workouts on $days days';
+    return '$days দিনে $workoutsটি ওয়ার্কআউট';
   }
 
   @override
-  String get recapFavLabel => 'Your day';
+  String get recapFavLabel => 'তোমার দিন';
 
   @override
-  String get recapWatermark => 'free gym log';
+  String get recapWatermark => 'ফ্রি জিম লগ';
 
   @override
-  String get recapTickSteps => 'Steps';
+  String get recapTickSteps => 'পদক্ষেপ';
 
   @override
-  String get recapTickFood => 'Food';
+  String get recapTickFood => 'খাবার';
 
   @override
-  String get recapCardioKicker => 'Cardio';
+  String get recapCardioKicker => 'কার্ডিও';
 
   @override
   String recapCardioTime(int minutes, int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$n workouts', one: 'one workout');
-    return '$minutes min across $_temp0';
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$nটি ওয়ার্কআউটে',
+      one: 'একটা ওয়ার্কআউটে',
+    );
+    return '$_temp0 $minutes মিনিট';
   }
 
   @override
@@ -6806,126 +7064,136 @@ class AppLocalizationsBn extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: '$n cardio workouts',
-      one: 'One cardio workout',
+      other: '$nটি কার্ডিও ওয়ার্কআউট',
+      one: 'একটা কার্ডিও ওয়ার্কআউট',
     );
     return '$_temp0';
   }
 
   @override
   String recapCardioTop(String name) {
-    return 'Your go-to: $name';
+    return 'তোমার প্রিয়: $name';
   }
 
   @override
-  String get recapStepsKicker => 'You walked';
+  String get recapStepsKicker => 'তুমি হেঁটেছ';
 
   @override
-  String get recapStepsWord => 'steps';
+  String get recapStepsWord => 'পদক্ষেপ';
 
   @override
   String recapStepsAvg(String value) {
-    return '$value a day on average';
+    return 'দিনে গড়ে $value';
   }
 
   @override
   String recapStepsBest(String value, String date) {
-    return 'Best day: $value, $date';
+    return 'সেরা দিন: $value, $date';
   }
 
   @override
-  String get recapFoodKicker => 'On your plate';
+  String get recapFoodKicker => 'তোমার প্লেটে';
 
   @override
-  String get recapLiftRest => 'Right behind it';
+  String get recapLiftRest => 'ঠিক পেছনে';
 
   @override
   String recapSameAs(String month) {
-    return 'Same as in $month';
+    return '$month-এর মতোই';
   }
 
   @override
   String recapMoreThan(String value, String month) {
-    return '$value more than in $month';
+    return '$month-এর চেয়ে $value বেশি';
   }
 
   @override
   String recapLessThan(String value, String month) {
-    return '$value less than in $month';
+    return '$month-এর চেয়ে $value কম';
   }
 
   @override
-  String get recapTickMedals => 'Medals';
+  String get recapTickMedals => 'মেডেল';
 
   @override
-  String get recapTickSleep => 'Sleep';
+  String get recapTickSleep => 'ঘুম';
 
   @override
-  String get recapMedalsKicker => 'Medals you won';
+  String get recapMedalsKicker => 'তোমার জেতা মেডেল';
 
   @override
   String recapMedalsMore(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: 'And $n more', one: 'And one more');
+    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: 'আর $nটি', one: 'আর একটা');
     return '$_temp0';
   }
 
   @override
-  String get recapSleepKicker => 'You slept';
+  String get recapSleepKicker => 'তুমি ঘুমিয়েছ';
 
   @override
-  String get recapSleepAvg => 'a night on average';
+  String get recapSleepAvg => 'রাতে গড়ে';
 
   @override
   String recapSleepBest(String value, String date) {
-    return 'Best night: $value, $date';
+    return 'সেরা রাত: $value, $date';
   }
 
   @override
-  String get recapCardSummary => 'Summary';
+  String get recapCardSummary => 'সারসংক্ষেপ';
 
   @override
-  String get recapCardCalendar => 'Calendar';
+  String get recapCardCalendar => 'ক্যালেন্ডার';
 
   @override
-  String get recapCardLift => 'Exercise';
+  String get recapCardLift => 'ব্যায়াম';
 
   @override
-  String get recapPeakKicker => 'Your toughest session';
+  String get recapPeakKicker => 'তোমার সবচেয়ে কঠিন সেশন';
 
   @override
-  String get recapTickPeak => 'Session';
+  String get recapTickPeak => 'সেশন';
 
   @override
-  String get recapFreshKicker => 'First time this month';
+  String get recapFreshKicker => 'এই মাসে প্রথমবার';
 
   @override
   String recapFresh(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: 'new exercises', one: 'new exercise');
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'নতুন ব্যায়াম',
+      one: 'নতুন ব্যায়াম',
+    );
     return '$_temp0';
   }
 
   @override
-  String get recapTickFresh => 'New';
+  String get recapTickFresh => 'নতুন';
 
   @override
   String recapStreak(int n) {
-    return '$n days in a row, your longest streak';
+    return 'টানা $n দিন, তোমার সবচেয়ে লম্বা স্ট্রিক';
   }
 
   @override
   String recapYearAgo(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$n workouts', one: '1 workout');
-    return 'A year ago: $_temp0';
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$nটি ওয়ার্কআউট',
+      one: '1টি ওয়ার্কআউট',
+    );
+    return 'এক বছর আগে: $_temp0';
   }
 
   @override
   String recapForgot(String muscle) {
-    return 'Left out this month: $muscle';
+    return 'এই মাসে বাদ পড়েছে: $muscle';
   }
 
   @override
   String recapFoodProtein(int goal) {
-    return 'protein a day · goal $goal g';
+    return 'দিনে প্রোটিন · লক্ষ্য $goal গ্রা';
   }
 
   @override
@@ -6933,245 +7201,239 @@ class AppLocalizationsBn extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: 'On your plate $n days',
-      one: 'On your plate 1 day',
+      other: '$n দিন তোমার প্লেটে',
+      one: '1 দিন তোমার প্লেটে',
     );
     return '$_temp0';
   }
 
   @override
-  String get recapFoodProteinLabel => 'Protein · g/day';
+  String get recapFoodProteinLabel => 'প্রোটিন · গ্রা/দিন';
 
   @override
-  String get recapFoodGoalDays => 'Goal met';
+  String get recapFoodGoalDays => 'লক্ষ্য পূরণ';
 
   @override
-  String get recapFoodWaterLabel => 'Water/day';
+  String get recapFoodWaterLabel => 'পানি/দিন';
 
   @override
   String recapFoodTimes(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$n days', one: '1 day');
+    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$n দিন', one: '1 দিন');
     return '$_temp0';
   }
 
   @override
-  String get recapFoodStarKicker => 'Your food of the month';
+  String get recapFoodStarKicker => 'মাসের তোমার খাবার';
 
   @override
-  String get onbSpeedTitle => 'Make it run smooth';
+  String get onbSpeedTitle => 'মসৃণ করে চালাও';
 
   @override
   String get onbSpeedWhy =>
-      'Your phone seems to be working hard. Turn these off and everything will flow better: try them and watch the preview.';
+      'তোমার ফোন মনে হচ্ছে বেশ খাটছে। এগুলো বন্ধ করলে সবকিছু আরও ভালো চলবে: চেষ্টা করো আর প্রিভিউ দেখো।';
 
   @override
-  String get onbSpeedMotion => 'Animations';
+  String get onbSpeedMotion => 'অ্যানিমেশন';
 
   @override
-  String get onbSpeedBlurHint => 'Frosted glass behind sheets and bars';
+  String get onbSpeedBlurHint => 'শিট আর বারের পেছনে ঘষা কাচ';
 
   @override
-  String get onbSpeedMotionHint => 'Screens and sheets that slide in';
+  String get onbSpeedMotionHint => 'স্লাইড করে আসা স্ক্রিন আর শিট';
 
   @override
-  String get onbSpeedLater => 'You can change it anytime in Settings › General › Performance.';
+  String get onbSpeedLater => 'যেকোনো সময় সেটিংস › সাধারণ › পারফরম্যান্স-এ বদলাতে পারো।';
 
   @override
-  String get notifSoundSetting => 'Notification sounds';
+  String get notifSoundSetting => 'নোটিফিকেশনের শব্দ';
 
   @override
-  String get notifSoundRowHint => 'How each kind of reminder sounds';
+  String get notifSoundRowHint => 'প্রতিটা ধরনের রিমাইন্ডার কেমন শোনায়';
 
   @override
   String get notifSoundHint =>
-      'Pick a sound for each kind of reminder. From phone opens your phone sounds, and on most phones you can add your own song there.';
+      'প্রতিটা ধরনের রিমাইন্ডারের জন্য একটা শব্দ বেছে নাও। ফোন থেকে তোমার ফোনের শব্দগুলো খোলে, আর বেশিরভাগ ফোনে সেখানে নিজের গানও যোগ করতে পারো।';
 
   @override
-  String get notifSoundTrain => 'Workouts';
+  String get notifSoundTrain => 'ওয়ার্কআউট';
 
   @override
-  String get notifSoundFood => 'Food, supplements and fasting';
+  String get notifSoundFood => 'খাবার, সাপ্লিমেন্ট আর ফাস্টিং';
 
   @override
-  String get notifSoundOther => 'Photos and measurements';
+  String get notifSoundOther => 'ছবি আর মাপ';
 
   @override
-  String get notifSoundNormal => 'Normal';
+  String get notifSoundNormal => 'সাধারণ';
 
   @override
-  String get notifSoundPhone => 'From phone';
+  String get notifSoundPhone => 'ফোন থেকে';
 
   @override
-  String get notifSoundSilent => 'Silent';
+  String get notifSoundSilent => 'নীরব';
 
   @override
-  String get notifSoundPhoneHint => 'Tap one to hear it. It saves right away.';
+  String get notifSoundPhoneHint => 'শুনতে একটায় ট্যাপ করো। সঙ্গে সঙ্গে সেভ হয়।';
 
   @override
-  String get notifSoundMore => 'Another file…';
+  String get notifSoundMore => 'অন্য ফাইল…';
 
   @override
-  String get notifSoundChange => 'Change';
+  String get notifSoundChange => 'বদলাও';
 
   @override
-  String get workoutNoteAdd => 'Pinned note: seat, grip, machine…';
+  String get workoutNoteAdd => 'পিন করা নোট: সিট, গ্রিপ, মেশিন…';
 
   @override
-  String get autoProgressSetting => 'স্বয়ংক্রিয় প্রগ্রেস';
+  String get autoProgressSetting => 'স্বয়ংক্রিয় প্রোগ্রেশন';
 
   @override
-  String get autoProgressRowHint => 'প্রতি সেশনে ওজন ও রেপ বৃদ্ধি পরিচালনা করুন';
+  String get autoProgressRowHint => 'পরেরবারের জন্য কী প্রস্তাব করে';
 
   @override
   String get autoProgressOff => 'বন্ধ';
 
   @override
-  String get autoProgressWeight => 'ওজন যোগ করুন';
+  String get autoProgressWeight => 'ওজন যোগ করো';
 
   @override
-  String get autoProgressReps => 'রেপ যোগ করুন';
+  String get autoProgressReps => 'রেপ যোগ করো';
 
   @override
   String get autoProgressHint =>
-      'ওয়ার্কআউট শুরু করলে, Open-GYM প্রতিটি অনুশীলনের পরবর্তী ধাপ নিজে থেকেই ঠিক করে নেয়। রেপ যোগ করার মাধ্যমে আপনি প্রতি সেটে ১২টি পর্যন্ত একটি করে রেপ বাড়াবেন, তারপর ওজন বাড়বে এবং আবার ৮ থেকে শুরু হবে। আপনি চাইলে যেকোনো অনুশীলনের পাতায় এটি পরিবর্তন করতে পারেন।';
+      'ওয়ার্কআউট শুরু করলে GymMane প্রতিটা ব্যায়ামের পরের ধাপ ভরে দেয়। রেপ যোগ করো দিয়ে প্রতি সেটে এক রেপ করে 12 পর্যন্ত বাড়াও, তারপর ওজন বাড়ে আর আবার 8 থেকে শুরু করো। প্রতিটা ব্যায়াম তার পেজে আলাদা করেও ঠিক করতে পারো।';
 
   @override
-  String get noteFolders => 'Folders';
+  String get noteFolders => 'ফোল্ডার';
 
   @override
-  String get noteFolderNew => 'New folder';
+  String get noteFolderNew => 'নতুন ফোল্ডার';
 
   @override
-  String get noteFolderEdit => 'Edit folder';
+  String get noteFolderEdit => 'ফোল্ডার বদলাও';
 
   @override
-  String get noteFolderName => 'Folder name';
+  String get noteFolderName => 'ফোল্ডারের নাম';
 
   @override
-  String get noteFolderLabel => 'Folder';
+  String get noteFolderLabel => 'ফোল্ডার';
 
   @override
-  String get noteFolderNone => 'No folder';
+  String get noteFolderNone => 'ফোল্ডার নেই';
 
   @override
-  String get noteFolderDelete => 'Delete the folder?';
+  String get noteFolderDelete => 'ফোল্ডার মুছবে?';
 
   @override
-  String get noteFolderDeleteBody => 'Notes are kept: they just leave the folder.';
+  String get noteFolderDeleteBody => 'নোটগুলো থাকবে: শুধু ফোল্ডার থেকে বেরিয়ে যাবে।';
 
   @override
-  String get foodArchivedToast => 'Food archived';
+  String get foodArchivedToast => 'খাবার আর্কাইভ করা হয়েছে';
 
   @override
-  String get planArchivedToast => 'Plan archived';
+  String get planArchivedToast => 'প্ল্যান আর্কাইভ করা হয়েছে';
 
   @override
-  String get suppArchivedToast => 'Supplement archived';
+  String get suppArchivedToast => 'সাপ্লিমেন্ট আর্কাইভ করা হয়েছে';
 
   @override
-  String get voiceSetting => 'Workout voice';
+  String get voiceSetting => 'ওয়ার্কআউটের কণ্ঠ';
 
   @override
-  String get voiceSettingHint =>
-      'Says your next set and counts down the end of the rest, with the phone voice';
+  String get voiceSettingHint => 'ফোনের কণ্ঠে তোমার পরের সেট বলে আর বিশ্রামের শেষটা গুনে দেয়';
 
   @override
-  String get voiceHello => 'Voice on';
+  String get voiceHello => 'কণ্ঠ চালু';
 
   @override
   String voiceRest(String time) {
-    return 'Rest $time.';
+    return 'বিশ্রাম $time।';
   }
 
   @override
   String voiceNext(String name, String load) {
-    return 'Next: $name, $load.';
+    return 'এরপর: $name, $load।';
   }
 
   @override
   String voiceLoad(int reps, String weight) {
-    return '$reps reps at $weight';
+    return '$weight-এ $reps রেপ';
   }
 
   @override
   String voiceReps(int reps) {
-    return '$reps reps';
+    return '$reps রেপ';
   }
 
   @override
-  String get voiceGo => 'Let\'s go!';
+  String get voiceGo => 'চলো শুরু করি!';
 
   @override
-  String get deloadSetting => 'Deload week';
+  String get deloadSetting => 'ডিলোড সপ্তাহ';
 
   @override
-  String get deloadOff => 'Never';
+  String get deloadOff => 'কখনো না';
 
   @override
   String deloadEvery(int weeks) {
-    return 'Every $weeks weeks';
+    return 'প্রতি $weeks সপ্তাহে';
   }
 
   @override
   String get deloadHint =>
-      'Every few weeks, an easier one to recover: half the sets and 10 % less weight. That week does not count for progression.';
+      'কয়েক সপ্তাহ পরপর রিকভারির জন্য একটা হালকা সপ্তাহ: অর্ধেক সেট আর 10 % কম ওজন। সেই সপ্তাহ প্রোগ্রেশনে গোনা হয় না।';
 
   @override
-  String get deloadRowHint => 'An easy week every few weeks';
+  String get deloadRowHint => 'কয়েক সপ্তাহ পরপর একটা হালকা সপ্তাহ';
 
   @override
-  String get deloadNow => 'Deload week';
+  String get deloadNow => 'ডিলোড সপ্তাহ';
 
   @override
-  String get deloadNowHint => 'Today, half the sets and 10 % less weight';
+  String get deloadNowHint => 'আজ, অর্ধেক সেট আর 10 % কম ওজন';
 
   @override
   String deloadIn(int weeks) {
     String _temp0 = intl.Intl.pluralLogic(
       weeks,
       locale: localeName,
-      other: 'In $weeks weeks',
-      one: 'Next week',
-      zero: 'This week',
+      other: '$weeks সপ্তাহ পরে',
+      one: 'আগামী সপ্তাহে',
+      zero: 'এই সপ্তাহে',
     );
     return '$_temp0';
   }
 
   @override
-  String get deloadSkip => 'Train as usual';
+  String get deloadSkip => 'সাধারণভাবে ট্রেন করো';
 
   @override
-  String get voiceSheetTitle => 'How the voice works';
+  String get voiceSheetTitle => 'কণ্ঠ কীভাবে কাজ করে';
 
   @override
-  String get voicePointRest => 'When you tick a set, it tells you the rest time and what comes next.';
+  String get voicePointRest => 'একটা সেট টিক দিলে বিশ্রামের সময় আর এরপর কী আছে তা বলে।';
 
   @override
-  String get voicePointCount => 'It counts 3, 2, 1 at the end of the rest and calls you back.';
+  String get voicePointCount => 'বিশ্রামের শেষে 3, 2, 1 গুনে তোমাকে ডেকে আনে।';
 
   @override
-  String get voicePointPhone => 'It uses your phone\'s voice and plays over your music.';
+  String get voicePointPhone => 'তোমার ফোনের কণ্ঠ ব্যবহার করে আর তোমার গানের ওপর দিয়ে বাজে।';
 
   @override
-  String get voiceTry => 'Try the voice';
+  String get voiceTry => 'কণ্ঠ চেষ্টা করো';
 
   @override
-  String get voiceNoEngine => 'Your phone has no voice engine turned on.';
+  String get voiceNoEngine => 'তোমার ফোনে কোনো ভয়েস ইঞ্জিন চালু নেই।';
 
   @override
-  String get voiceNoLang => 'Your language\'s voice is missing. Download it in your phone\'s voice settings.';
+  String get voiceNoLang => 'তোমার ভাষার কণ্ঠ নেই। ফোনের ভয়েস সেটিংসে ডাউনলোড করো।';
 
   @override
-  String get voiceOpenSettings => 'Voice settings';
+  String get voiceOpenSettings => 'ভয়েস সেটিংস';
 
   @override
   String voiceMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count minutes',
-      one: '1 minute',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count মিনিট', one: '1 মিনিট');
     return '$_temp0';
   }
 
@@ -7180,45 +7442,45 @@ class AppLocalizationsBn extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count seconds',
-      one: '1 second',
+      other: '$count সেকেন্ড',
+      one: '1 সেকেন্ড',
     );
     return '$_temp0';
   }
 
   @override
-  String get voiceAnd => 'and';
+  String get voiceAnd => 'এবং';
 
   @override
-  String get repRecordsTitle => 'Best weight by reps';
+  String get repRecordsTitle => 'রেপ অনুযায়ী সেরা ওজন';
 
   @override
   String suppUnitCapsule(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: 'capsules', one: 'capsule');
+    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: 'ক্যাপসুল', one: 'ক্যাপসুল');
     return '$_temp0';
   }
 
   @override
   String suppUnitPill(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: 'pills', one: 'pill');
+    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: 'বড়ি', one: 'বড়ি');
     return '$_temp0';
   }
 
   @override
   String suppUnitScoop(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: 'scoops', one: 'scoop');
+    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: 'স্কুপ', one: 'স্কুপ');
     return '$_temp0';
   }
 
   @override
   String suppUnitDrop(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: 'drops', one: 'drop');
+    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: 'ফোঁটা', one: 'ফোঁটা');
     return '$_temp0';
   }
 
   @override
   String suppUnitServing(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: 'servings', one: 'serving');
+    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: 'সার্ভিং', one: 'সার্ভিং');
     return '$_temp0';
   }
 
@@ -7226,231 +7488,1337 @@ class AppLocalizationsBn extends AppLocalizations {
   String get suppUnitIu => 'IU';
 
   @override
-  String get suppLeft => 'Left';
+  String get suppLeft => 'বাকি';
 
   @override
-  String get suppLeftHint => 'Optional';
+  String get suppLeftHint => 'ঐচ্ছিক';
 
   @override
   String suppLeftFor(int n) {
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: 'Left for $n days',
-      one: 'Left for 1 day',
+      other: '$n দিনের জন্য বাকি',
+      one: '1 দিনের জন্য বাকি',
     );
     return '$_temp0';
   }
 
   @override
   String suppForDays(int n) {
-    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$n days', one: '1 day');
+    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$n দিন', one: '1 দিন');
     return '$_temp0';
   }
 
   @override
-  String get suppRanOut => 'Ran out';
+  String get suppRanOut => 'ফুরিয়ে গেছে';
 
   @override
-  String get lightSession => 'Light session';
+  String get lightSession => 'হালকা সেশন';
 
   @override
-  String get lightSessionHint => 'Saved in your history and stats, but it won\'t change your next targets.';
+  String get lightSessionHint => 'তোমার ইতিহাস আর পরিসংখ্যানে সেভ হয়, তবে তোমার পরের লক্ষ্য বদলাবে না।';
 
   @override
-  String get lightSessionNote => 'Doesn\'t count for progression';
+  String get lightSessionNote => 'প্রোগ্রেশনে গোনা হয় না';
 
   @override
-  String get lightSessionOff => 'Turn off';
+  String get lightSessionOff => 'বন্ধ করো';
 
   @override
-  String get eachSideRepsHint =>
-      'Log the left and right reps separately. Progression follows the weaker side.';
+  String get eachSideRepsHint => 'বাম আর ডান রেপ আলাদা করে লেখো। প্রোগ্রেশন দুর্বল পাশ অনুসরণ করে।';
 
   @override
-  String get repsLeftCol => 'REPS L';
+  String get repsLeftCol => 'রেপ বা';
 
   @override
-  String get repsRightCol => 'REPS R';
+  String get repsRightCol => 'রেপ ডা';
 
   @override
-  String get repsLeftTitle => 'LEFT REPS';
+  String get repsLeftTitle => 'বাম রেপ';
 
   @override
-  String get repsRightTitle => 'RIGHT REPS';
+  String get repsRightTitle => 'ডান রেপ';
 
   @override
   String sidesReps(int l, int r) {
-    return 'L$l R$r';
+    return 'বা$l ডা$r';
   }
 
   @override
-  String get progSchemeTitle => 'Weight progression';
+  String get progSchemeTitle => 'ওজনের প্রোগ্রেশন';
 
   @override
-  String get groupMoveUp => 'Move group up';
+  String get groupMoveUp => 'গ্রুপ ওপরে নাও';
 
   @override
-  String get groupMoveDown => 'Move group down';
+  String get groupMoveDown => 'গ্রুপ নিচে নাও';
 
   @override
-  String get mealAiRow => 'Ask an AI';
+  String get mealAiRow => 'AI-কে জিজ্ঞেস করো';
 
   @override
-  String get mealAiRowHint => 'আপনার খাবার বা উপাদানের তালিকা লিখুন, এআই ম্যাক্রো হিসাব করে দেবে।';
+  String get mealAiRowHint => 'একটা অনুরোধ কপি করো, উত্তর পেস্ট করো';
 
   @override
-  String get mealAiTitle => 'এআই মিল সহকারী';
+  String get mealAiTitle => 'AI দিয়ে খাবার';
 
   @override
-  String get mealAiSubtitle => 'Works with any chatbot. The app stays offline.';
+  String get mealAiSubtitle => 'যেকোনো চ্যাটবটে কাজ করে। অ্যাপ অফলাইনেই থাকে।';
 
   @override
-  String get mealAiStepAsk => 'Ask';
+  String get mealAiStepAsk => 'জিজ্ঞেস করো';
 
   @override
-  String get mealAiStepPaste => 'Paste';
+  String get mealAiStepPaste => 'পেস্ট করো';
 
   @override
-  String get mealAiWholeDay => 'Whole day';
+  String get mealAiWholeDay => 'পুরো দিন';
 
   @override
-  String get mealAiTarget => 'Target';
+  String get mealAiTarget => 'লক্ষ্য';
 
   @override
   String mealAiLeft(String kcal, int protein) {
-    return 'You have $kcal and $protein g of protein left today';
+    return 'আজ তোমার $kcal আর $protein গ্রা প্রোটিন বাকি';
   }
 
   @override
-  String get mealAiStyle => 'Your taste';
+  String get mealAiStyle => 'তোমার রুচি';
 
   @override
-  String get mealAiTagProtein => 'High protein';
+  String get mealAiTagProtein => 'উচ্চ প্রোটিন';
 
   @override
-  String get mealAiTagVeggie => 'Vegetarian';
+  String get mealAiTagVeggie => 'নিরামিষ';
 
   @override
-  String get mealAiTagVegan => 'Vegan';
+  String get mealAiTagVegan => 'ভেগান';
 
   @override
-  String get mealAiTagNoGluten => 'Gluten free';
+  String get mealAiTagNoGluten => 'গ্লুটেন ছাড়া';
 
   @override
-  String get mealAiTagNoLactose => 'Lactose free';
+  String get mealAiTagNoLactose => 'ল্যাকটোজ ছাড়া';
 
   @override
-  String get mealAiTagQuick => 'Quick';
+  String get mealAiTagQuick => 'দ্রুত';
 
   @override
-  String get mealAiTagNoCook => 'No cooking';
+  String get mealAiTagNoCook => 'রান্না ছাড়া';
 
   @override
-  String get mealAiTagCheap => 'Budget';
+  String get mealAiTagCheap => 'কম খরচে';
 
   @override
-  String get mealAiNotesHint => 'I have at home… I don’t like… allergies…';
+  String get mealAiNotesHint => 'বাড়িতে আছে… পছন্দ করি না… অ্যালার্জি…';
 
   @override
-  String get mealAiOptions => 'Options';
+  String get mealAiOptions => 'বিকল্প';
 
   @override
-  String get mealAiCopy => 'Copy request';
+  String get mealAiCopy => 'অনুরোধ কপি করো';
 
   @override
-  String get mealAiCopied => 'Request copied';
+  String get mealAiCopied => 'অনুরোধ কপি হয়েছে';
 
   @override
-  String get mealAiCopiedHint => 'Paste it into your AI and come back here with the answer';
+  String get mealAiCopiedHint => 'তোমার AI-তে পেস্ট করো আর উত্তর নিয়ে এখানে ফিরে এসো';
 
   @override
-  String get mealAiShowText => 'See the request';
+  String get mealAiShowText => 'অনুরোধ দেখো';
 
   @override
-  String get mealAiHideText => 'Hide the request';
+  String get mealAiHideText => 'অনুরোধ লুকাও';
 
   @override
-  String get mealAiPasteHint => 'Paste the AI’s answer here';
+  String get mealAiPasteHint => 'AI-এর উত্তর এখানে পেস্ট করো';
 
   @override
-  String get mealAiReview => 'Review answer';
+  String get mealAiReview => 'উত্তর দেখো';
 
   @override
-  String get mealAiUnreadable => 'I couldn’t find any food in that text';
+  String get mealAiUnreadable => 'ওই লেখায় কোনো খাবার খুঁজে পাইনি';
 
   @override
-  String get mealAiUnreadableHint =>
-      'Ask the AI to send only the JSON, in one code block, with the format of the request.';
+  String get mealAiUnreadableHint => 'AI-কে বলো শুধু JSON পাঠাতে, একটা কোড ব্লকে, অনুরোধের ফরম্যাটে।';
 
   @override
-  String get mealAiCopyFix => 'Copy that sentence';
+  String get mealAiCopyFix => 'ওই বাক্যটা কপি করো';
 
   @override
   String mealAiOption(int n) {
-    return 'Option $n';
+    return 'বিকল্প $n';
   }
 
   @override
   String mealAiAddTo(String meal) {
-    return 'Add to $meal';
+    return '$meal-এ যোগ করো';
   }
 
   @override
-  String get mealAiAddDay => 'Add to today';
+  String get mealAiAddDay => 'আজকে যোগ করো';
 
   @override
-  String get mealAiAddPick => 'Add';
+  String get mealAiAddPick => 'যোগ করো';
 
   @override
   String mealAiAdded(int n) {
     String _temp0 = intl.Intl.pluralLogic(
       n,
       locale: localeName,
-      other: '$n foods added',
-      one: '1 food added',
+      other: '$nটি খাবার যোগ হয়েছে',
+      one: '1টি খাবার যোগ হয়েছে',
     );
     return '$_temp0';
   }
 
   @override
-  String get mealAiSaveRecipe => 'Save as a recipe';
+  String get mealAiSaveRecipe => 'রেসিপি হিসেবে সেভ করো';
 
   @override
-  String get mealAiSavePlan => 'Save as a plan';
+  String get mealAiSavePlan => 'প্ল্যান হিসেবে সেভ করো';
 
   @override
-  String get mealAiRecipeSaved => 'Recipe saved';
+  String get mealAiRecipeSaved => 'রেসিপি সেভ হয়েছে';
 
   @override
-  String get mealAiPlanSaved => 'Plan saved';
+  String get mealAiPlanSaved => 'প্ল্যান সেভ হয়েছে';
 
   @override
-  String get mealAiFlagEstimated => 'Estimated by the AI';
+  String get mealAiFlagEstimated => 'AI-এর অনুমান';
 
   @override
-  String get mealAiFlagAdjusted => 'Calories fixed to match the macros';
+  String get mealAiFlagAdjusted => 'ম্যাক্রোর সাথে মেলাতে ক্যালোরি ঠিক করা হয়েছে';
 
   @override
-  String get mealAiFlagDoubtful => 'Doesn’t add up, check it';
+  String get mealAiFlagDoubtful => 'হিসাব মিলছে না, দেখে নাও';
 
   @override
-  String get mealAiFlagNoValues => 'No nutrition values';
+  String get mealAiFlagNoValues => 'পুষ্টিমান নেই';
 
   @override
-  String get mealAiFlagNoAmount => 'No amount given';
+  String get mealAiFlagNoAmount => 'পরিমাণ দেওয়া নেই';
 
   @override
-  String get mealAiTruncated => 'The answer looks cut off. I kept the complete foods.';
+  String get mealAiTruncated => 'উত্তরটা কাটা মনে হচ্ছে। সম্পূর্ণ খাবারগুলো রেখেছি।';
 
   @override
-  String get mealAiAmount => 'Amount';
+  String get mealAiAmount => 'পরিমাণ';
 
   @override
   String mealAiTargetLine(String kcal) {
-    return 'Target $kcal';
+    return 'লক্ষ্য $kcal';
   }
 
   @override
-  String get mealAiNothingChosen => 'Turn on at least one food';
+  String get mealAiNothingChosen => 'অন্তত একটা খাবার চালু করো';
+
+  @override
+  String get cholesterolLabel => 'কোলেস্টেরল';
+
+  @override
+  String get mealAiFlagMatched => 'তোমার সেভ করা একটা খাবারের মতোই';
+
+  @override
+  String get mealAiNotSame => 'একই নয়';
+
+  @override
+  String get homeOrderRow => 'অংশগুলোর ক্রম';
+
+  @override
+  String get homeOrderHint => 'হোমের ক্রম বদলাতে ধরে রেখে টেনে আনো।';
+
+  @override
+  String get homeOrderFolders => 'শর্টকাট';
+
+  @override
+  String get equipNew => 'নতুন';
+
+  @override
+  String get equipNewTitle => 'নতুন সরঞ্জাম';
+
+  @override
+  String get equipNewHint => 'যেমন ওয়েট বেল্ট';
+
+  @override
+  String get homeOrderWeekdays => 'সপ্তাহের টিক';
+
+  @override
+  String get repsMaxTitle => 'রেপ পর্যন্ত';
+
+  @override
+  String get repsRangeHint => '8-12-এর মতো পরিসর দিতে রেপে লং প্রেস করো।';
+
+  @override
+  String get repsRangeClear => 'পরিসর সরাও';
+
+  @override
+  String get noteLinksLabel => 'লিংক';
+
+  @override
+  String get noteLinkAdd => 'লিংক যোগ করো';
+
+  @override
+  String get noteLinkEdit => 'লিংক বদলাও';
+
+  @override
+  String get noteLinkNameHint => 'নাম';
+
+  @override
+  String get noteLinkUrlHint => 'ওয়েব ঠিকানা';
+
+  @override
+  String get noteLinkInvalid => 'ঠিকানাটা ঠিক মনে হচ্ছে না';
+
+  @override
+  String get changeRest => 'ব্যায়ামের মাঝে বিশ্রাম';
+
+  @override
+  String get changeRestHint => 'শেষ সেটের পরে, পরের ব্যায়ামের আগে';
+
+  @override
+  String get notifSuppTake => 'নেওয়া হয়েছে';
+
+  @override
+  String get sideRest => 'দুই পাশের মাঝে বিশ্রাম';
+
+  @override
+  String get sideRestHint => 'প্রতি পাশের ব্যায়াম: প্রথম ✓ একটা পাশ শেষ করে';
+
+  @override
+  String get gfxCompat => 'সামঞ্জস্যপূর্ণ গ্রাফিক্স';
+
+  @override
+  String get gfxCompatHint => 'যে ফোনে অক্ষর ভাঙা দেখায় তাদের জন্য। ব্লার থাকে, কয়েকটা ইফেক্ট সরল হয়';
+
+  @override
+  String get gfxRestartTitle => 'GymMane রিস্টার্ট করবে?';
+
+  @override
+  String get gfxRestartBody =>
+      'স্ক্রিন আঁকার ধরন বদলাতে এটা বন্ধ হয়ে আবার খোলে। তোমার সেভ করা কিছুই হারাবে না।';
+
+  @override
+  String get gfxRestart => 'রিস্টার্ট';
+
+  @override
+  String get webSynced => 'অন্য ডিভাইসের পরিবর্তন দিয়ে আপডেট হয়েছে';
+
+  @override
+  String get webSyncedPhone => 'তোমার ফোনের পরিবর্তন এসে গেছে';
+
+  @override
+  String get webWelcomeBlurb =>
+      'সবকিছু তোমার নিজের সার্ভারেই থাকে। কোনো অ্যাকাউন্ট নেই, ক্লাউড নেই, কিছু দিতে হয় না।';
+
+  @override
+  String get webOwnServer => 'তোমার সার্ভার, তোমার নিয়ম';
+
+  @override
+  String get webOwnServerWhy =>
+      'কোনো অ্যাকাউন্ট নেই আর অন্য কারো ক্লাউড নেই। তুমি যেখানে চালাও তোমার ডেটা সেখানেই থাকে।';
+
+  @override
+  String get webServerSaved => 'তোমার সার্ভারে সেভ হয়েছে';
+
+  @override
+  String get webServerOffline => 'তোমার সার্ভারে পৌঁছানো যাচ্ছে না';
+
+  @override
+  String get webServerLocal => 'এই ব্রাউজারে সেভ হয়েছে';
+
+  @override
+  String get webServerTitle => 'তোমার সার্ভার';
+
+  @override
+  String webPhoneLast(String date) {
+    return 'তোমার ফোন থেকে শেষ কপি: $date';
+  }
+
+  @override
+  String get webPhoneNone => 'এখনও তোমার ফোন থেকে কোনো কপি নেই';
+
+  @override
+  String get webPhoneScan => 'ফোন থেকে আনো';
+
+  @override
+  String get webPhoneExport => 'ফোনে পাঠাও';
+
+  @override
+  String get webPhoneExportDone => 'শেয়ার করা ফোল্ডারে রাখা হয়েছে। সিঙ্ক হলে তোমার ফোন এটা নিয়ে নেবে';
+
+  @override
+  String get webPhoneImported => 'তোমার ফোনের পরিবর্তন এসে গেছে';
+
+  @override
+  String get webPhoneNothing => 'তোমার ফোন থেকে নতুন কিছু নেই';
+
+  @override
+  String get webPhoneHow =>
+      'তোমার ফোনে স্বয়ংক্রিয় ব্যাকআপ চালু করো এমন একটা ফোল্ডারে যা Syncthing দিয়ে সিঙ্ক করো। সার্ভার আর ফোন নিজে থেকেই একে অপরের পরিবর্তন নিয়ে আসে, আর মেলানোর সময় কিছুই মোছে না।';
+
+  @override
+  String get webPhoneGuide => 'কীভাবে সেট আপ করবে';
+
+  @override
+  String get webSignOut => 'সাইন আউট';
+
+  @override
+  String get wearSyncTitle => 'ফোন';
+
+  @override
+  String get wearSyncNever => 'এখনও সিঙ্ক হয়নি';
+
+  @override
+  String wearSyncLast(String when) {
+    return '$when সিঙ্ক হয়েছে';
+  }
+
+  @override
+  String wearSyncWaiting(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$nটি ওয়ার্কআউট ফোনে যাওয়ার অপেক্ষায়',
+      one: '১টি ওয়ার্কআউট ফোনে যাওয়ার অপেক্ষায়',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get wearSyncNow => 'এখনই সিঙ্ক করুন';
+
+  @override
+  String get wearSyncHow => 'ফোনে সেটিংস › Wear OS ঘড়ি চালু করুন এবং দুটোতেই GymMane খুলুন।';
+
+  @override
+  String get routinesOrder => 'রুটিনের ক্রম বদলান';
+
+  @override
+  String get routinesOrderHint => 'দেখানোর ক্রম বদলাতে টেনে আনুন।';
+
+  @override
+  String get webPhoneOff => 'এই সার্ভারে ফোন সিঙ্ক বন্ধ';
+
+  @override
+  String get toolGroupBody => 'শরীর';
+
+  @override
+  String get toolNameProtein => 'প্রোটিন';
+
+  @override
+  String get toolTitleProtein => 'দৈনিক প্রোটিন';
+
+  @override
+  String get toolDescProtein => 'দিনে কতটা প্রোটিন';
+
+  @override
+  String get toolHintProtein => 'দিনে গ্রাম, তোমার খাবারগুলোতে ভাগ করে';
+
+  @override
+  String get proteinGoalLabel => 'লক্ষ্য';
+
+  @override
+  String get proteinExplain =>
+      'যারা ট্রেন করে তাদের জন্য বেশিরভাগ গবেষণা যে পরিসরে একমত তার ওপর ভিত্তি করে: ওজন কমানোর সময় বেশি, যাতে পেশি থাকে। এর বেশি খাওয়া নিরাপদ, শুধু তেমন কিছু যোগ করে না।';
+
+  @override
+  String get toolNameWater => 'পানি';
+
+  @override
+  String get toolTitleWater => 'দৈনিক পানি';
+
+  @override
+  String get toolDescWater => 'দিনে কতটা পানি খাবে';
+
+  @override
+  String get toolHintWater => 'দিনে লিটার, খাবারসহ';
+
+  @override
+  String get waterTrainingLabel => 'দিনে ট্রেনিং';
+
+  @override
+  String get waterExplain =>
+      'শরীরের ওজনের প্রতি কেজিতে প্রায় 35 মিলি, আর ট্রেনিংয়ের প্রতি মিনিটে একটু বেশি। গরমের দিনে বেশি খাও।';
+
+  @override
+  String get autoBackupSync => 'এখন সিঙ্ক করো';
+
+  @override
+  String get autoBackupMerged => 'তোমার অন্য ডিভাইসের পরিবর্তন এসে গেছে';
+
+  @override
+  String get autoBackupSyncHint =>
+      'এই ফোল্ডার Syncthing দিয়ে শেয়ার করো, প্রতিটা ডিভাইস অন্যরা এখানে যা রাখে তা নিয়ে আসবে। মেলানোর সময় কিছুই মোছে না।';
+
+  @override
+  String get webPhoneFolder => 'শেয়ার করা ফোল্ডার';
+
+  @override
+  String get webPhoneFolderHow =>
+      'সার্ভার ইনস্টল করার সময় বেছে নেওয়া হয়। বদলাতে সার্ভারের .env ফাইলে GYMMANE_SYNC দাও আর রিস্টার্ট করো।';
+
+  @override
+  String get webPhoneOffHow => 'চালু করতে সার্ভারের .env ফাইল থেকে GYMMANE_SYNC=off সরাও আর রিস্টার্ট করো।';
+
+  @override
+  String webPhoneDevices(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$nটি ফোন সিঙ্ক হয়েছে',
+      one: '1টি ফোন সিঙ্ক হয়েছে',
+      zero: 'এখনও কোনো ফোন সিঙ্ক হয়নি',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String webPhoneError(String error) {
+    return 'ফোল্ডার পড়া গেল না: $error';
+  }
+
+  @override
+  String get duplicateExercise => 'ডুপ্লিকেট';
+
+  @override
+  String exerciseCopyName(String name) {
+    return '$name (কপি)';
+  }
+
+  @override
+  String get foodAiRow => 'Fill in with an AI';
+
+  @override
+  String get foodAiRowHint => 'From a label, a screenshot or a link';
+
+  @override
+  String get foodAiTitle => 'Food with AI';
+
+  @override
+  String get foodAiHow =>
+      'Copy the request and paste it into any chatbot together with a photo of the nutrition label, a screenshot of the product or a link to it. Then paste its answer here.';
+
+  @override
+  String get foodAiCheck => 'The form fills itself in. Check the values against the label before saving.';
+
+  @override
+  String get foodAiFill => 'Fill in the food';
+
+  @override
+  String get foodAiFilled => 'Food filled in';
+
+  @override
+  String get foodAiFilledHint => 'Check the values before saving';
+
+  @override
+  String get fastAdd => 'Add a past fast';
+
+  @override
+  String get fastAddTitle => 'Add a fast';
+
+  @override
+  String get fastEditTitle => 'Edit fast';
+
+  @override
+  String get fastStartRow => 'Start';
+
+  @override
+  String get fastEndRow => 'End';
+
+  @override
+  String get fastEndedAt => 'When did you end it?';
+
+  @override
+  String fastLasted(String time) {
+    return 'Lasted $time';
+  }
+
+  @override
+  String get fastErrFuture => 'The end can\'t be later than now';
+
+  @override
+  String get fastErrOrder => 'The end has to come after the start';
+
+  @override
+  String get fastErrShort => 'A fast lasts at least 10 minutes';
+
+  @override
+  String get fastErrOverlap => 'It overlaps another fast';
+
+  @override
+  String get fastSaved => 'Fast saved';
+
+  @override
+  String get fastAdjust => 'Adjust';
+
+  @override
+  String get keepCounting => 'গোনা চালিয়ে যান';
+
+  @override
+  String get keepCountingHint => 'আপনার সময়ে বাজে এবং থামানো পর্যন্ত চলতে থাকে';
+
+  @override
+  String get holdOvertime => 'অতিরিক্ত সময়';
+
+  @override
+  String get pairSetting => 'এক জোড়া ডাম্বেল';
+
+  @override
+  String get pairSettingHint => 'একটির ওজন লিখুন। ভলিউম দুটোই গোনে।';
+
+  @override
+  String get helpCommon => 'সাধারণ প্রশ্ন';
+
+  @override
+  String get helpQuestions => 'প্রশ্ন';
+
+  @override
+  String get helpNoResults => 'কিছু মেলেনি। অন্য শব্দ চেষ্টা করুন';
+
+  @override
+  String get helpLbQ => 'শুধু একটি ব্যায়ামে কি lb ব্যবহার করা যায়?';
+
+  @override
+  String helpLbA(String option) {
+    return 'হ্যাঁ। ওয়ার্কআউটের সময় ব্যায়ামের ⋯ মেনু খুলে “$option” বেছে নিন।';
+  }
+
+  @override
+  String get helpSupersetQ => 'সুপারসেট কীভাবে বানাব?';
+
+  @override
+  String get helpSupersetA => 'রুটিন এডিটরে দুটি ব্যায়ামের মাঝের লিঙ্কে ট্যাপ করে সেগুলো জুড়ুন।';
+
+  @override
+  String get helpRangeQ => '৮-১২ এর মতো রেপ রেঞ্জ কীভাবে সেট করব?';
+
+  @override
+  String get helpRangeA => 'রুটিন এডিটরে রেপে দীর্ঘক্ষণ চাপুন।';
+
+  @override
+  String get helpRestQ => 'প্রতিটি ব্যায়ামের কি নিজস্ব বিশ্রাম থাকতে পারে?';
+
+  @override
+  String helpRestA(String settings, String rest, String section) {
+    return 'হ্যাঁ: ব্যায়াম খুলুন › $settings › $rest। আপনার ডিফল্ট বিশ্রাম সেটিংস › $section-এ আছে।';
+  }
+
+  @override
+  String get helpSidesQ => 'বাম আর ডান আলাদা করে কীভাবে লিখব?';
+
+  @override
+  String helpSidesA(String settings, String sides) {
+    return 'ব্যায়াম খুলুন › $settings › $sides।';
+  }
+
+  @override
+  String get helpPairQ => 'ডাম্বেল: একটা লিখব নাকি দুটো?';
+
+  @override
+  String helpPairA(String pair) {
+    return 'একটা। ব্যায়ামের সেটিংসে “$pair” চালু করুন, ভলিউম দুটোই গুনবে।';
+  }
+
+  @override
+  String get helpKeepQ => 'সময়ভিত্তিক সেট কি সময় পেরিয়ে চলতে পারে?';
+
+  @override
+  String helpKeepA(String keep) {
+    return 'হ্যাঁ: ব্যায়ামের সেটিংসে “$keep” চালু করুন। আপনার সময়ে বাজে এবং থামানো পর্যন্ত গুনতে থাকে।';
+  }
+
+  @override
+  String get helpDayOffQ => 'বিশ্রাম, অসুস্থতা বা ভ্রমণের দিন কীভাবে চিহ্নিত করব?';
+
+  @override
+  String get helpDayOffA =>
+      'হোমে আপনার সপ্তাহের সেই দিনে দীর্ঘক্ষণ চাপুন। স্ট্রিক আর রিমাইন্ডার সেটি ছুঁয়ে দেখে না।';
+
+  @override
+  String get helpImportQ => 'Hevy, Strong বা অন্য অ্যাপ থেকে কি ওয়ার্কআউট আনা যায়?';
+
+  @override
+  String helpImportA(String section, String row) {
+    return 'হ্যাঁ: সেটিংস › $section › $row। এটি FitNotes, Fitbod, JEFIT, StrongLifts, Liftosaur ও Lyfta-ও পড়ে।';
+  }
+
+  @override
+  String get helpPhoneQ => 'নতুন ফোনে ডেটা কীভাবে নেব?';
+
+  @override
+  String helpPhoneA(String section, String import) {
+    return 'সেটিংস › $section-এ একটি কপি এক্সপোর্ট করুন এবং নতুন ফোনে “$import” দিয়ে খুলুন।';
+  }
+
+  @override
+  String get helpSlowQ => 'আমার ফোনে অ্যাপ ধীর লাগছে';
+
+  @override
+  String helpSlowA(String section, String perf, String lite) {
+    return 'সেটিংস › $section › $perf › $lite। এটি ব্লার বন্ধ করে, যা সবচেয়ে ভারী অংশ।';
+  }
+
+  @override
+  String get helpPlatesQ => 'বারে কয়টা প্লেট লাগবে?';
+
+  @override
+  String helpPlatesA(String tool, String places) {
+    return 'টুলসে “$tool” ব্যবহার করুন। আপনার জিমের প্লেট আর বার “$places”-এ সেট হয়।';
+  }
+
+  @override
+  String get helpRaceQ => 'শেষ ওয়ার্কআউটের সাথে কীভাবে তুলনা করব?';
+
+  @override
+  String helpRaceA(String race) {
+    return 'ওয়ার্কআউটের সময় উপরের পিলে ট্যাপ করুন: “$race”।';
+  }
+
+  @override
+  String get helpFastQ => 'রোজা শেষ করতে ভুলে গেছি';
+
+  @override
+  String helpFastA(String adjust) {
+    return 'এটি শেষ করে নোটিশে “$adjust” ট্যাপ করুন, অথবা সময় বদলাতে রোজার শিটে সেই রোজায় ট্যাপ করুন।';
+  }
+
+  @override
+  String get helpGo => 'দেখান';
+
+  @override
+  String get helpHomeOrderQ => 'হোমের ক্রম কি বদলানো যায়?';
+
+  @override
+  String helpHomeOrderA(String section, String row) {
+    return 'হ্যাঁ: সেটিংস › $section › “$row”। অংশগুলো ধরে টেনে আনুন, অথবা যেগুলো ব্যবহার করেন না সেগুলো বন্ধ করুন।';
+  }
+
+  @override
+  String get helpCustomQ => 'নিজের ব্যায়াম কি বানানো যায়?';
+
+  @override
+  String helpCustomA(String button) {
+    return 'হ্যাঁ: ব্যায়ামে “$button” ট্যাপ করুন। নাম, পেশি আর সরঞ্জাম বাছুন, আর এটি অন্য সবগুলোর মতোই কাজ করে।';
+  }
+
+  @override
+  String get helpWarmupQ => 'অ্যাপ কি আমার জন্য ওয়ার্ম-আপ সেট যোগ করতে পারে?';
+
+  @override
+  String helpWarmupA(String settings, String warm, String tool) {
+    return 'হ্যাঁ: ব্যায়াম খুলুন › $settings › “$warm”। হাতে হিসাব করতে টুলসে “$tool” ব্যবহার করুন।';
+  }
+
+  @override
+  String get helpPassQ => 'জিম কার্ড কি অ্যাপে রাখা যায়?';
+
+  @override
+  String helpPassA(String row, String section) {
+    return 'হ্যাঁ: সেটিংস › $section-এ “$row”। এটি দরজায় স্ক্যান করার বারকোড বা QR কোড দেখায়।';
+  }
+
+  @override
+  String get helpStepsQ => 'আমার পদক্ষেপ দেখাচ্ছে না কেন?';
+
+  @override
+  String helpStepsA(String row, String section) {
+    return 'পদক্ষেপ Health Connect থেকে পড়া হয়, যা Android 14 ও পরের সংস্করণে থাকে। পুরোনো ফোনে এটি নেই। আপনার থাকলে সেটিংস › $section-এ “$row” চালু করুন।';
+  }
+
+  @override
+  String get helpNfcQ => 'ফোন ছুঁইয়ে কি ওয়ার্কআউট শুরু করা যায়?';
+
+  @override
+  String helpNfcA(String row, String section) {
+    return 'হ্যাঁ, NFC স্টিকার দিয়ে: সেটিংস › $section-এ “$row”। জিমে লাগিয়ে রাখুন, ছোঁয়ালেই আজকের ওয়ার্কআউট খুলবে।';
+  }
+
+  @override
+  String get helpCleanQ => 'পুষ্টির স্ক্রিন কীভাবে পরিচ্ছন্ন করব?';
+
+  @override
+  String helpCleanA(String button) {
+    return 'পুষ্টিতে উপরের স্লাইডার বোতামে (“$button”) ট্যাপ করুন এবং যা ট্র্যাক করেন না তা বন্ধ করুন।';
+  }
+
+  @override
+  String alsoWorksMuscles(String muscles) {
+    return '$muscles-ও কাজ করে';
+  }
+
+  @override
+  String get wearSyncAllow => 'ব্লুটুথের অনুমতি দিন';
+
+  @override
+  String get wearSyncSearching => 'ফোন খোঁজা হচ্ছে…';
+
+  @override
+  String get wearSyncNotFound => 'ফোন পাওয়া যায়নি';
+
+  @override
+  String get wearSyncBluetoothOff => 'ব্লুটুথ বন্ধ';
+
+  @override
+  String get watchRow => 'Wear OS ঘড়ি';
+
+  @override
+  String get watchTitle => 'Wear OS ঘড়ি';
+
+  @override
+  String get watchSubtitle => 'রুটিন কবজিতে, ওয়ার্কআউট আবার ফোনে';
+
+  @override
+  String get watchPoint1 => 'ঘড়িতে GymMane ইনস্টল করুন';
+
+  @override
+  String get watchPoint1Body => 'এটি ফোনের মতোই একই অ্যাপ। ইনস্টল গাইড দেখতে ট্যাপ করুন।';
+
+  @override
+  String get watchPoint2 => 'দুটোতেই GymMane খুলুন';
+
+  @override
+  String get watchPoint2Body =>
+      'ফোন আর ঘড়িকে আগে থেকেই যুক্ত রাখা ব্লুটুথ দিয়ে এরা নিজে থেকেই সিঙ্ক হয়। ইন্টারনেট ছাড়া।';
+
+  @override
+  String get watchPoint3 => 'ঘড়ি দিয়ে ব্যায়াম করুন';
+
+  @override
+  String get watchPoint3Body => 'ঘড়িতে যা করবেন তা পরের বার দুটো খোলা থাকলে ফোনে পৌঁছে যাবে।';
+
+  @override
+  String get watchUse => 'ঘড়ির সাথে সিঙ্ক করুন';
+
+  @override
+  String get watchUseHint => 'শুধু ঘড়ি থাকলে। ব্লুটুথের অনুমতি চায়';
+
+  @override
+  String get watchTurnOnBluetooth => 'ব্লুটুথ চালু করুন';
+
+  @override
+  String get watchSyncNow => 'এখনই সিঙ্ক করুন';
+
+  @override
+  String get watchSearching => 'ঘড়ি খোঁজা হচ্ছে…';
+
+  @override
+  String get watchSearchingHint => 'এখনও না খুলে থাকলে ঘড়িতে GymMane খুলুন।';
+
+  @override
+  String get watchBluetoothOff => 'ব্লুটুথ বন্ধ।';
+
+  @override
+  String get watchNotFound => 'ঘড়ি পাওয়া যায়নি। এতে GymMane খুলে আবার চেষ্টা করুন।';
+
+  @override
+  String get watchNever => 'এখনও সিঙ্ক হয়নি।';
+
+  @override
+  String watchLast(String when) {
+    return '$when সিঙ্ক হয়েছে।';
+  }
+
+  @override
+  String watchLastWith(String name, String when) {
+    return '$name-এর সাথে $when সিঙ্ক হয়েছে।';
+  }
+
+  @override
+  String get watchTip => 'বেটা: এখনও সব ঘড়িতে পরীক্ষা হয়নি। কাজ না করলে GitHub-এ জানান।';
+
+  @override
+  String get mineralsTracker => 'Iron and potassium';
+
+  @override
+  String get ironLabel => 'Iron';
+
+  @override
+  String get potassiumLabel => 'Potassium';
+
+  @override
+  String mineralsCoverage(int known, int total) {
+    return '$known of $total foods today have iron and potassium';
+  }
+
+  @override
+  String get mineralsHint =>
+      'Few foods in the list come with iron and potassium, so the total only counts the ones that do. Add them to your own foods or with the AI.';
+
+  @override
+  String get qsRow => 'কুইক সেটিংস টাইল';
+
+  @override
+  String get qsRowHint => 'আজকের ওয়ার্কআউট বা জিম পাস, ওপরের প্যানেল থেকে';
+
+  @override
+  String get qsTitle => 'কুইক সেটিংস টাইল';
+
+  @override
+  String get qsSubtitle => 'কুইক সেটিংস নিচে টানুন আর অ্যাপ না খুঁজেই এক ট্যাপে পৌঁছে যান';
+
+  @override
+  String get qsToday => 'আজকের ওয়ার্কআউট';
+
+  @override
+  String get qsTodayHint => 'NFC স্টিকারের মতো: আজ যা ঠিক করা আছে তা খোলে';
+
+  @override
+  String get qsPass => 'জিম পাস';
+
+  @override
+  String qsPassHint(String name) {
+    return 'দরজায় স্ক্যান করতে $name খোলে';
+  }
+
+  @override
+  String get qsPassNone => 'আগে আপনার জিম পাস যোগ করুন';
+
+  @override
+  String get qsRest => 'বিশ্রামের দিন';
+
+  @override
+  String get qsAdd => 'যোগ করুন';
+
+  @override
+  String get qsAdded => 'যোগ হয়েছে';
+
+  @override
+  String get qsManual =>
+      'কুইক সেটিংস নিচে টানুন, পেনসিলে ট্যাপ করুন আর GymMane-এর টাইল আপনার টাইলগুলোর মধ্যে টেনে আনুন।';
+
+  @override
+  String get qsPassUse => 'কুইক সেটিংস থেকে খুলুন';
+
+  @override
+  String get qsPassUseHint => 'কুইক সেটিংসের টাইল এই পাস খোলে';
+
+  @override
+  String get measureAbdomen => 'পেট';
+
+  @override
+  String get bfNeckBelow => 'ঘাড় (কণ্ঠার নিচে)';
+
+  @override
+  String get bfAbdomen => 'পেট (নাভির উচ্চতায়)';
+
+  @override
+  String get bfWaistNarrow => 'কোমর (সবচেয়ে সরু জায়গা)';
+
+  @override
+  String get bfHipWide => 'নিতম্ব (সবচেয়ে চওড়া জায়গা)';
+
+  @override
+  String get measureBp => 'রক্তচাপ';
+
+  @override
+  String get measureLeft => 'বাঁ';
+
+  @override
+  String get measureRight => 'ডান';
+
+  @override
+  String get measureLeftShort => 'বাঁ';
+
+  @override
+  String get measureRightShort => 'ডা';
+
+  @override
+  String get measureOneValue => 'একটি মান';
+
+  @override
+  String get measureNoteHint => 'নোট (ঐচ্ছিক)';
+
+  @override
+  String get bpHigh => 'সিস্টোলিক';
+
+  @override
+  String get bpLow => 'ডায়াস্টোলিক';
+
+  @override
+  String get bpPulse => 'পালস';
+
+  @override
+  String get bpPulseAdd => '+ পালস';
+
+  @override
+  String get autoHold => 'Chain timed sets';
+
+  @override
+  String get autoHoldHint => 'After the rest, the next timed set starts on its own';
+
+  @override
+  String get recoveryTitle => 'Recovery';
+
+  @override
+  String get recoverySettingHint => 'Sauna, cold and breathing, kept apart from your lifting';
+
+  @override
+  String get recoveryKindSauna => 'Sauna';
+
+  @override
+  String get recoveryKindCold => 'Cold plunge';
+
+  @override
+  String get recoveryKindContrast => 'Contrast';
+
+  @override
+  String get recoveryKindBreath => 'Breathing';
+
+  @override
+  String get recoveryDescSauna => 'Time, heat and rounds';
+
+  @override
+  String get recoveryDescCold => 'Ice bath or cold shower';
+
+  @override
+  String get recoveryDescContrast => 'Hot and cold, round after round';
+
+  @override
+  String get recoveryDescBreath => 'Guided, to slow everything down';
+
+  @override
+  String get recoveryThisWeek => 'This week';
+
+  @override
+  String get recoveryHeat => 'Heat';
+
+  @override
+  String get recoveryCold => 'Cold';
+
+  @override
+  String get recoveryLog => 'Log';
+
+  @override
+  String get recoveryRecent => 'Latest';
+
+  @override
+  String get recoveryEmpty =>
+      'Nothing yet. Log a sauna, a cold plunge or a few minutes of breathing: it stays apart from your workouts.';
+
+  @override
+  String get recoveryMinutes => 'Minutes';
+
+  @override
+  String get recoveryTemp => 'Temperature';
+
+  @override
+  String get recoveryRounds => 'Rounds';
+
+  @override
+  String get recoveryAdd => 'Add';
+
+  @override
+  String get recoveryNoteHint => 'How did it feel? (optional)';
+
+  @override
+  String get recoveryTimer => 'Time it';
+
+  @override
+  String get recoveryTimerStop => 'Stop';
+
+  @override
+  String get recoveryDeleteTitle => 'Delete this entry?';
+
+  @override
+  String recoveryRoundsCount(int n) {
+    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$n rounds', one: '1 round');
+    return '$_temp0';
+  }
+
+  @override
+  String recoveryHomeDetail(int min) {
+    return '$min min this week';
+  }
+
+  @override
+  String get breathIn => 'Breathe in';
+
+  @override
+  String get breathHold => 'Hold';
+
+  @override
+  String get breathOut => 'Breathe out';
+
+  @override
+  String get breathRest => 'Rest';
+
+  @override
+  String get breathBox => 'Box';
+
+  @override
+  String get breathRelax => 'Relax';
+
+  @override
+  String get breathEven => 'Even';
+
+  @override
+  String get breathStart => 'Start';
+
+  @override
+  String get breathAgain => 'Again';
+
+  @override
+  String get breathDone => 'Done';
+
+  @override
+  String get mealAiNoData => 'The AI answered in words, with no data';
+
+  @override
+  String get mealAiNoDataHint =>
+      'Paste the whole request again. Some assistants refuse when they can’t see the photo or the meal isn’t clear: describe it in one sentence.';
+
+  @override
+  String get mealAiCutOff => 'The answer got cut off';
+
+  @override
+  String get mealAiCutOffHint => 'Ask it to send the rest, or to answer with fewer foods.';
+
+  @override
+  String get recoveryGoal => 'Goal';
+
+  @override
+  String get recoveryRest => 'Rest';
+
+  @override
+  String get recoveryStart => 'Start timer';
+
+  @override
+  String get recoveryJustLog => 'Log without the timer';
+
+  @override
+  String recoveryRoundOf(int n, int total) {
+    return 'Round $n of $total';
+  }
+
+  @override
+  String get recoveryPause => 'Pause';
+
+  @override
+  String get recoveryResume => 'Resume';
+
+  @override
+  String get recoveryNext => 'Next';
+
+  @override
+  String get recoveryFinish => 'Finish';
+
+  @override
+  String get recoveryOvertime => 'Extra';
+
+  @override
+  String get recoveryFeel => 'How did it feel?';
+
+  @override
+  String get recoveryFeelLow => 'Worse';
+
+  @override
+  String get recoveryFeelHigh => 'Better';
+
+  @override
+  String get recoveryGoalHeat => 'Heat goal (minutes a week)';
+
+  @override
+  String get recoveryGoalCold => 'Cold goal (minutes a week)';
+
+  @override
+  String recoveryOfGoal(int min) {
+    return 'of $min min this week';
+  }
+
+  @override
+  String recoveryBestCold(String time) {
+    return 'Longest cold: $time';
+  }
+
+  @override
+  String recoveryBestHold(String time) {
+    return 'Longest hold: $time';
+  }
+
+  @override
+  String get recoveryMobility => 'Mobility and stretching';
+
+  @override
+  String get recoveryMobilityHint => 'Open the stretches in the library';
+
+  @override
+  String get recoveryTipTitle => 'Before you start';
+
+  @override
+  String get recoveryTipBody =>
+      'Drink water, get out if you feel dizzy and never do intense cold alone. If you have a heart or blood pressure condition, ask your doctor first.';
+
+  @override
+  String get recoveryTipOk => 'Got it';
+
+  @override
+  String get breathRetention => 'Retention';
+
+  @override
+  String breathRetentionHow(int breaths, int rounds) {
+    return '$breaths deep breaths, then breathe out and hold as long as is comfortable. $rounds rounds.';
+  }
+
+  @override
+  String get breathRetentionSafe => 'Sit or lie down, never in water or while driving.';
+
+  @override
+  String get breathFast => 'Breathe deep';
+
+  @override
+  String get breathHoldOut => 'Breathe out and hold';
+
+  @override
+  String get breathRelease => 'Breathe';
+
+  @override
+  String get breathRecover => 'Breathe in and hold';
+
+  @override
+  String get bodyLoadSetting => 'Count your body weight';
+
+  @override
+  String get bodyLoadSettingHint =>
+      'Volume uses your body weight that day plus the added weight (minus the help on assisted ones). Records still use the added weight.';
+
+  @override
+  String get lengthUnitsLabel => 'Body measurements';
+
+  @override
+  String get workoutFullView => 'Full view';
+
+  @override
+  String routineRepeatTag(int n, int total) {
+    return 'Block $n of $total';
+  }
+
+  @override
+  String get routineAddAgain => 'Add again';
+
+  @override
+  String get routineAddAgainHint => 'Do it again later in this workout, with its own sets';
+
+  @override
+  String get routineAddedAgain => 'Added again at the end';
+
+  @override
+  String get routineAddedAgainHint => 'Drag it to where you do it';
+
+  @override
+  String get restGlowSetting => 'Light at the end of rest';
+
+  @override
+  String get restGlowHint =>
+      'The edges of the screen glow when rest is over, so you notice it even if you cannot hear the beep';
+
+  @override
+  String bodyweightRatio(String x) {
+    return 'Your estimated 1RM is $x× your body weight';
+  }
+
+  @override
+  String get healthAddReading => 'Add a reading';
+
+  @override
+  String get healthFromYours => 'From Health Connect and your own readings · last 30 days';
+
+  @override
+  String get reportKindSummary => 'Summary';
+
+  @override
+  String get reportKindSummaryHint => 'The period at a glance: totals, records and averages';
+
+  @override
+  String get reportKindTraining => 'Training';
+
+  @override
+  String get reportKindTrainingHint => 'For your coach: every workout with its sets, RPE and notes';
+
+  @override
+  String get reportKindNutrition => 'Nutrition';
+
+  @override
+  String get reportKindNutritionHint => 'For your nutritionist: goals, daily totals and every meal';
+
+  @override
+  String get reportKindFull => 'Everything';
+
+  @override
+  String get reportKindFullHint => 'Training, nutrition, body and health, day by day';
+
+  @override
+  String get reportKindFullNoFoodHint => 'Training, body and health, day by day';
+
+  @override
+  String get reportKickerTraining => 'DETAILED TRAINING REPORT';
+
+  @override
+  String get reportKickerNutrition => 'NUTRITION REPORT';
+
+  @override
+  String get reportKickerFull => 'COMPLETE REPORT';
+
+  @override
+  String get reportWorkoutLog => 'Workout log';
+
+  @override
+  String get reportFoodLog => 'Food log';
+
+  @override
+  String get reportDayByDay => 'Day by day';
+
+  @override
+  String get reportGoalsLabel => 'Daily goal';
+
+  @override
+  String get reportGoalsRest => 'Goal on rest days';
+
+  @override
+  String get reportKcalOnTarget => 'Days within 10 % of the calorie goal';
+
+  @override
+  String get reportProteinMet => 'Days reaching the protein goal';
+
+  @override
+  String get reportDailyTotals => 'Daily totals';
+
+  @override
+  String get reportDateCol => 'DATE';
+
+  @override
+  String reportReadings(int n) {
+    String _temp0 = intl.Intl.pluralLogic(n, locale: localeName, other: '$n readings', one: '1 reading');
+    return '$_temp0';
+  }
+
+  @override
+  String get reportHealthAvg => 'Health · daily average';
+
+  @override
+  String get reportBodyHealth => 'Body and health';
+
+  @override
+  String get reportCopyMarkdown => 'Copy as Markdown';
+
+  @override
+  String reportDetailCap(int n) {
+    return 'Detailed reports cover up to $n days, ending on the last day you chose.';
+  }
+
+  @override
+  String get nutritionCopyDay => 'Copy the day';
+
+  @override
+  String get nutritionCopyFood => 'Food only';
+
+  @override
+  String get nutritionCopyFoodHint => 'Meals, foods, calories and macros';
+
+  @override
+  String get nutritionCopyAll => 'The whole day';
+
+  @override
+  String get nutritionCopyAllHint => 'Also your workout, weight and health data';
 }

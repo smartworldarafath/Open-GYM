@@ -61,6 +61,28 @@ void main() {
     expect(fit.toJson().containsKey('collapsedGroups'), isFalse);
   });
 
+  test('un grupo nuevo no hace desaparecer el anterior aunque se quede vacío', () {
+    routineIn('Otra', 'Legs');
+    final ppl = routineIn('PPL', 'Push');
+    fit.setRoutineGroup(ppl, 'Pull');
+    expect(fit.routineGroups, ['Legs', 'Push', 'Pull']);
+    expect(fit.routinesInGroup('Push'), isEmpty);
+    fit.moveGroup('Push', -1);
+    expect(fit.routineGroups, ['Push', 'Legs', 'Pull']);
+    fit.persistNow();
+    fit.loadFromStore();
+    expect(fit.routineGroups, ['Push', 'Legs', 'Pull']);
+    fit.renameGroup('Push', 'Empuje');
+    expect(fit.routineGroups, ['Empuje', 'Legs', 'Pull']);
+    fit.renameGroup('Empuje', '');
+    expect(fit.routineGroups, ['Legs', 'Pull']);
+    fit.setRoutineGroup(ppl, 'Push');
+    fit.deleteGroup('Pull');
+    expect(fit.routineGroups, ['Legs', 'Push']);
+    fit.deleteRoutine(ppl);
+    expect(fit.routineGroups, ['Legs', 'Push']);
+  });
+
   test('borrar el grupo borra sus rutinas, su plan y nada más', () {
     final a = routineIn('A', '5x5');
     routineIn('B', '5x5');
@@ -73,5 +95,21 @@ void main() {
     expect(fit.weeklyPlan[1], isNull);
     expect(fit.weeklyPlan[3], c);
     expect(fit.sessions.length, 1);
+  });
+
+  test('#401 ordenar rutinas solo mueve las de su grupo y deja las demás en su sitio', () {
+    routineIn('A', 'PPL');
+    routineIn('X', '');
+    routineIn('B', 'PPL');
+    routineIn('C', 'PPL');
+    routineIn('Y', '');
+    fit.reorderRoutines('PPL', 2, 0);
+    expect(fit.routinesInGroup('PPL').map((r) => r.name), ['C', 'A', 'B']);
+    expect(fit.routinesInGroup('').map((r) => r.name), ['X', 'Y']);
+    fit.reorderRoutines('', 0, 1);
+    expect(fit.routinesInGroup('').map((r) => r.name), ['Y', 'X']);
+    fit.reorderRoutines('PPL', 5, 0);
+    expect(fit.routinesInGroup('PPL').map((r) => r.name), ['C', 'A', 'B']);
+    expect(fit.routines.map((r) => r.name), ['C', 'Y', 'A', 'B', 'X']);
   });
 }

@@ -58,11 +58,14 @@ class Macros {
     this.fiber = 0,
     this.sugar = 0,
     this.sodium = 0,
+    this.chol = 0,
     this.animal = 0,
     this.sat = 0,
     this.trans = 0,
     this.mono = 0,
     this.poly = 0,
+    this.iron = 0,
+    this.potassium = 0,
     this.aminoProtein = 0,
     this.amino = const [],
   });
@@ -74,11 +77,14 @@ class Macros {
   final double fiber;
   final double sugar;
   final double sodium;
+  final double chol;
   final double animal;
   final double sat;
   final double trans;
   final double mono;
   final double poly;
+  final double iron;
+  final double potassium;
   final double aminoProtein;
   final List<double> amino;
 
@@ -98,11 +104,14 @@ class Macros {
         fiber: fiber + o.fiber,
         sugar: sugar + o.sugar,
         sodium: sodium + o.sodium,
+        chol: chol + o.chol,
         animal: animal + o.animal,
         sat: sat + o.sat,
         trans: trans + o.trans,
         mono: mono + o.mono,
         poly: poly + o.poly,
+        iron: iron + o.iron,
+        potassium: potassium + o.potassium,
         aminoProtein: aminoProtein + o.aminoProtein,
         amino: _addAmino(amino, o.amino),
       );
@@ -115,20 +124,25 @@ class Macros {
         fiber: fiber * k,
         sugar: sugar * k,
         sodium: sodium * k,
+        chol: chol * k,
         animal: animal * k,
         sat: sat * k,
         trans: trans * k,
         mono: mono * k,
         poly: poly * k,
+        iron: iron * k,
+        potassium: potassium * k,
         aminoProtein: aminoProtein * k,
         amino: [for (final a in amino) a * k],
       );
 
   bool get isEmpty => kcal <= 0 && protein <= 0 && carbs <= 0 && fat <= 0;
 
-  bool get hasExtras => fiber > 0 || sugar > 0 || sodium > 0;
+  bool get hasExtras => fiber > 0 || sugar > 0 || sodium > 0 || chol > 0;
 
   bool get hasFatTypes => sat > 0 || trans > 0 || mono > 0 || poly > 0;
+
+  bool get hasMinerals => iron > 0 || potassium > 0;
 
   double get plant => (protein - animal).clamp(0, double.infinity).toDouble();
 
@@ -159,11 +173,14 @@ class Macros {
         if (fiber > 0) 'fi': fiber,
         if (sugar > 0) 'su': sugar,
         if (sodium > 0) 'na': sodium,
+        if (chol > 0) 'ch': chol,
         if (animal > 0) 'an': animal,
         if (sat > 0) 'sa': sat,
         if (trans > 0) 'tf': trans,
         if (mono > 0) 'mu': mono,
         if (poly > 0) 'po': poly,
+        if (iron > 0) 'fe': iron,
+        if (potassium > 0) 'ka': potassium,
         if (aminoProtein > 0 && amino.length == Amino.values.length) ...{
           'ap': aminoProtein,
           'aa': [for (final a in amino) (a * 1000).round() / 1000],
@@ -181,11 +198,14 @@ class Macros {
       fiber: _num(j?['fi']),
       sugar: _num(j?['su']),
       sodium: _num(j?['na']),
+      chol: _num(j?['ch']),
       animal: _num(j?['an']),
       sat: _num(j?['sa']),
       trans: _num(j?['tf']),
       mono: _num(j?['mu']),
       poly: _num(j?['po']),
+      iron: _num(j?['fe']),
+      potassium: _num(j?['ka']),
       aminoProtein: ok ? _num(j?['ap']) : 0,
       amino: ok ? aa : const [],
     );
@@ -406,21 +426,25 @@ double _servings(Object? v) {
 }
 
 class Recipe {
-  const Recipe({required this.id, required this.name, required this.items});
+  const Recipe({required this.id, required this.name, required this.items, this.photo = ''});
 
   final String id;
   final String name;
   final List<FoodEntry> items;
+  final String photo;
 
   Macros get total => items.fold(Macros.zero, (s, e) => s + e.total);
 
-  Recipe copyWith({String? name}) => Recipe(id: id, name: name ?? this.name, items: items);
+  Recipe copyWith({String? name, List<FoodEntry>? items, String? photo}) =>
+      Recipe(id: id, name: name ?? this.name, items: items ?? this.items, photo: photo ?? this.photo);
 
-  Map<String, dynamic> toJson() => {'id': id, 'n': name, 'i': items.map((e) => e.toJson()).toList()};
+  Map<String, dynamic> toJson() =>
+      {'id': id, 'n': name, 'i': items.map((e) => e.toJson()).toList(), if (photo.isNotEmpty) 'ph': photo};
 
   factory Recipe.fromJson(Map<String, dynamic> j) => Recipe(
         id: j['id'] as String? ?? '',
         name: j['n'] as String? ?? '',
+        photo: j['ph'] as String? ?? '',
         items: [
           for (final e in (j['i'] as List?) ?? const [])
             if (e is Map) FoodEntry.fromJson(e.cast<String, dynamic>()),
@@ -636,6 +660,8 @@ class NutritionGoals {
     this.fiber = 30,
     this.sugar = 50,
     this.sodium = 2300,
+    this.iron = 0,
+    this.potassium = 0,
   });
 
   final int kcal;
@@ -647,6 +673,8 @@ class NutritionGoals {
   final int fiber;
   final int sugar;
   final int sodium;
+  final int iron;
+  final int potassium;
 
   int get satLimit => (kcal * 0.1 / 9).round();
 
@@ -660,6 +688,8 @@ class NutritionGoals {
     int? fiber,
     int? sugar,
     int? sodium,
+    int? iron,
+    int? potassium,
   }) =>
       NutritionGoals(
         kcal: kcal ?? this.kcal,
@@ -671,10 +701,23 @@ class NutritionGoals {
         fiber: fiber ?? this.fiber,
         sugar: sugar ?? this.sugar,
         sodium: sodium ?? this.sodium,
+        iron: iron ?? this.iron,
+        potassium: potassium ?? this.potassium,
       );
 
-  Map<String, dynamic> toJson() =>
-      {'k': kcal, 'p': protein, 'c': carbs, 'f': fat, 'w': waterMl, 'g': glassMl, 'fi': fiber, 'su': sugar, 'na': sodium};
+  Map<String, dynamic> toJson() => {
+        'k': kcal,
+        'p': protein,
+        'c': carbs,
+        'f': fat,
+        'w': waterMl,
+        'g': glassMl,
+        'fi': fiber,
+        'su': sugar,
+        'na': sodium,
+        if (iron > 0) 'fe': iron,
+        if (potassium > 0) 'ka': potassium,
+      };
 
   factory NutritionGoals.fromJson(Map<String, dynamic>? j) {
     const d = NutritionGoals();
@@ -693,6 +736,8 @@ class NutritionGoals {
       fiber: read('fi', d.fiber, 200),
       sugar: read('su', d.sugar, 500),
       sodium: read('na', d.sodium, 20000),
+      iron: read('fe', 0, 200),
+      potassium: read('ka', 0, 20000),
     );
   }
 }
@@ -797,6 +842,7 @@ enum Tracker {
   quality,
   fats,
   sugarSodium,
+  minerals,
   water,
   shake,
   supplements,
@@ -814,5 +860,6 @@ const kTrackersOffByDefault = {
   Tracker.quality,
   Tracker.fats,
   Tracker.sugarSodium,
+  Tracker.minerals,
   Tracker.fasting,
 };

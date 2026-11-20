@@ -147,10 +147,39 @@ void main() {
       expect(fit.exercisesMatching('bulgara').map((e) => e.id), contains(id));
     });
 
+    test('el material propio se guarda una vez y no se repite', () {
+      expect(fit.addCustomGear(' Cinturón de lastre '), 'Cinturón de lastre');
+      expect(fit.addCustomGear('cinturón de lastre'), 'Cinturón de lastre');
+      expect(fit.addCustomGear('barbell'), 'Barbell');
+      expect(fit.customGear, ['Cinturón de lastre']);
+      final id = fit.addCustomExercise(name: 'Dominada lastrada', primary: 'lats', equipment: 'Cinturón de lastre');
+      expect(fit.exerciseById(id)!.equipment, 'Cinturón de lastre');
+    });
+
     test('el selector de la rutina respeta los filtros de la biblioteca', () {
       fit.setEquipmentFilter('Bodyweight');
       expect(fit.exercisesMatching('').every((e) => e.equipment == 'Bodyweight'), isTrue);
       fit.clearExFilters();
+    });
+  });
+
+  group('duplicar ejercicio', () {
+    setUp(() async {
+      SharedPreferences.setMockInitialValues({});
+      await Store.instance.init();
+      fit.resetAllData();
+    });
+
+    test('la copia de uno del catálogo conserva su dibujo al guardar y cargar', () {
+      final squat = fit.matchExerciseByName('Barbell Full Squat')!;
+      final id = fit.addCustomExercise(
+          name: 'Sentadilla', primary: squat.primary, equipment: squat.equipment, art: squat.art);
+      final copy = fit.exerciseById(id)!;
+      expect(copy.art, squat.art);
+      expect(Exercise.fromJson(copy.toJson()).art, squat.art);
+      expect(Exercise.fromJson(fit.exerciseById(fit.addCustomExercise(
+              name: 'Sin dibujo', primary: 'chest', equipment: 'Barbell'))!.toJson()).toJson().containsKey('ar'),
+          isFalse);
     });
   });
 }

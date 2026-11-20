@@ -105,6 +105,9 @@ String _extrasLine(Macros m) => [
       if (m.fiber > 0) '${t.fiberLabel} ${_g(m.fiber)} g',
       if (m.sugar > 0) '${t.sugarLabel} ${_g(m.sugar)} g',
       if (m.sodium > 0) '${t.sodiumLabel} ${m.sodium.round()} mg',
+      if (m.chol > 0) '${t.cholesterolLabel} ${m.chol.round()} mg',
+      if (fit.trackerOn(Tracker.minerals) && m.iron > 0) '${t.ironLabel} ${fmt((m.iron * 10).round() / 10)} mg',
+      if (fit.trackerOn(Tracker.minerals) && m.potassium > 0) '${t.potassiumLabel} ${m.potassium.round()} mg',
     ].join('  ·  ');
 
 class _RingCard extends StatelessWidget {
@@ -115,8 +118,10 @@ class _RingCard extends StatelessWidget {
     required this.value,
     required this.sub,
     required this.pct,
+    this.unit = 'g',
   });
 
+  final String unit;
   final IconData icon;
   final Color color;
   final String label;
@@ -152,7 +157,7 @@ class _RingCard extends StatelessWidget {
                 textBaseline: TextBaseline.alphabetic,
                 children: [
                   RollingText(value, style: AppTheme.f(21, weight: FontWeight.w800, color: gc.text, height: 1.05)),
-                  Text(' g', style: AppTheme.f(12, weight: FontWeight.w700, color: gc.textSecondary)),
+                  Text(' $unit', style: AppTheme.f(12, weight: FontWeight.w700, color: gc.textSecondary)),
                 ],
               )),
             ),
@@ -211,8 +216,28 @@ class _DetailGrid extends StatelessWidget {
           pct: total.sodium / goals.sodium,
         ),
       ],
+      if (fit.trackerOn(Tracker.minerals)) ...[
+        _RingCard(
+          icon: PhosphorIconsFill.drop,
+          color: gc.danger,
+          label: t.ironLabel,
+          value: fmt((total.iron * 10).round() / 10),
+          sub: '/ ${fit.ironGoal(goals)} mg',
+          pct: total.iron / fit.ironGoal(goals),
+          unit: 'mg',
+        ),
+        _RingCard(
+          icon: PhosphorIconsFill.lightning,
+          color: gc.sage,
+          label: t.potassiumLabel,
+          value: fmt((total.potassium / 100).round() / 10),
+          sub: '/ ${fmt(fit.potassiumGoal(goals) / 1000)} g',
+          pct: total.potassium / fit.potassiumGoal(goals),
+        ),
+      ],
     ];
     if (cards.isEmpty) return const SizedBox.shrink();
+    final cover = fit.trackerOn(Tracker.minerals) ? fit.mineralsCoverage(day) : null;
     const perRow = 2;
     return Column(children: [
       for (var i = 0; i < cards.length; i += perRow) ...[
@@ -230,6 +255,12 @@ class _DetailGrid extends StatelessWidget {
               ],
           ]),
         ),
+      ],
+      if (cover != null && cover.total > 0 && cover.known < cover.total) ...[
+        const SizedBox(height: 8),
+        Text(t.mineralsCoverage(cover.known, cover.total),
+            textAlign: TextAlign.center,
+            style: AppTheme.f(11.5, weight: FontWeight.w600, color: gc.textTertiary, height: 1.35)),
       ],
     ]);
   }
@@ -878,6 +909,7 @@ Future<void> showShakePicker(BuildContext context) => _sheet<void>(context, (con
           SizedBox(
             height: 44,
             child: ListView.separated(
+              key: const PageStorageKey('h-cards-882'),
               scrollDirection: Axis.horizontal,
               itemCount: others.length,
               separatorBuilder: (_, _) => const SizedBox(width: 8),
@@ -945,8 +977,16 @@ const _suppPresets = [
 String _suppPhoto(Supplement s) =>
     s.photo.isEmpty || s.photo.endsWith('vessel-pills.webp') ? _suppPresets.first : s.photo;
 
-class _SupplementsCard extends StatelessWidget {
+class _SupplementsCard extends StatefulWidget {
   const _SupplementsCard();
+
+  @override
+  State<_SupplementsCard> createState() => _SupplementsCardState();
+}
+
+class _SupplementsCardState extends State<_SupplementsCard> {
+  final _key = GlobalKey();
+  bool _wasFocused = false;
 
   static List<String> get _suggested =>
       [t.suppCreatine, t.suppVitaminD, t.suppOmega3, t.suppMagnesium, t.suppMultivitamin, t.suppCaffeine];
@@ -956,12 +996,22 @@ class _SupplementsCard extends StatelessWidget {
     final gc = context.gc;
     final day = fit.nutritionDay;
     final taken = fit.takenOn(day);
+    final focused = fit.suppFocus.isNotEmpty;
+    if (focused && !_wasFocused) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final c = _key.currentContext;
+        if (c != null && c.mounted) {
+          Scrollable.ensureVisible(c, duration: const Duration(milliseconds: 420), curve: Curves.easeOutCubic, alignment: 0.1);
+        }
+      });
+    }
+    _wasFocused = focused;
     final list = fit.activeSupplements;
     final archived = fit.archivedSuppList;
     final due = [for (final s in list) if (s.dueOn(day)) s];
     final later = [for (final s in list) if (!s.dueOn(day)) s];
     final done = due.where((s) => taken.contains(s.id)).length;
-    return SoftCard(
+    return KeyedSubtree(key: _key, child: SoftCard(
       radius: 26,
       padding: const EdgeInsets.fromLTRB(14, 14, 14, 12),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -1042,7 +1092,7 @@ class _SupplementsCard extends StatelessWidget {
           ),
         ),
       ]),
-    );
+    ));
   }
 }
 
@@ -1111,7 +1161,13 @@ class _SupplementRow extends StatelessWidget {
           decoration: BoxDecoration(
             color: taken ? gc.sage.withValues(alpha: 0.14) : gc.bgRaised2,
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: taken ? gc.sage.withValues(alpha: 0.45) : Colors.transparent),
+            border: Border.all(
+                color: fit.suppFocus.contains(supp.id) && !taken
+                    ? gc.accent
+                    : taken
+                        ? gc.sage.withValues(alpha: 0.45)
+                        : Colors.transparent,
+                width: fit.suppFocus.contains(supp.id) && !taken ? 2 : 1),
           ),
           child: Row(children: [
             SizedBox(
@@ -1532,7 +1588,7 @@ class _SupplementEditorState extends State<_SupplementEditor> with _StickerDraft
       const SizedBox(height: 10),
       SizedBox(
         height: 64,
-        child: ListView(scrollDirection: Axis.horizontal, clipBehavior: Clip.none, children: [
+        child: ListView(key: const PageStorageKey('h-cards-1561'), scrollDirection: Axis.horizontal, clipBehavior: Clip.none, children: [
           for (final p in _suppPresets) ...[option(p), const SizedBox(width: 10)],
           for (final p in [_cutPhoto, _plainPhoto])
             if (p != null) ...[option(p), const SizedBox(width: 10)],
@@ -1596,7 +1652,7 @@ class _SupplementEditorState extends State<_SupplementEditor> with _StickerDraft
       const SizedBox(height: 8),
       SizedBox(
         height: 36,
-        child: ListView(scrollDirection: Axis.horizontal, clipBehavior: Clip.none, children: [
+        child: ListView(key: const PageStorageKey('h-cards-1625'), scrollDirection: Axis.horizontal, clipBehavior: Clip.none, children: [
           for (final u in kSuppUnits) ...[
             _Chip(
               label: fit.suppUnitLabel(u, _parsed(_amount) ?? 1),

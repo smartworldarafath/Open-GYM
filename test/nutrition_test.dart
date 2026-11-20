@@ -7,6 +7,7 @@ import 'package:gymmane/models/nutrition.dart';
 import 'package:gymmane/models/workout.dart';
 import 'package:gymmane/services/food_library.dart';
 import 'package:gymmane/services/local_store.dart';
+import 'package:gymmane/services/supplement_reminder.dart';
 import 'package:gymmane/services/sticker_cutout.dart';
 import 'package:gymmane/state/fit_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -117,6 +118,22 @@ void main() {
       expect(fit.takenOn(DateTime.now()), isEmpty);
       expect(fit.addSupplement('  '), isNull);
     });
+
+    test('#354 «Tomado» desde el aviso marca ese día sin desmarcar si ya estaba', () {
+      final a = fit.addSupplement('Creatina')!;
+      final b = fit.addSupplement('Omega 3')!;
+      final at = DateTime.now().subtract(const Duration(days: 1));
+      final day = DateTime(at.year, at.month, at.day);
+      final payload = SupplementReminder.payloadFor(at, [a.id, b.id]);
+      expect(SupplementReminder.idsOf(payload), [a.id, b.id]);
+      expect(SupplementReminder.dayOf(payload), day);
+      expect(SupplementReminder.idsOf('supp:${a.id}'), [a.id]);
+      fit.takeSupplementsOn(day, [a.id, b.id, 'nope']);
+      expect(fit.takenOn(day), {a.id, b.id});
+      fit.takeSupplementsOn(day, [a.id]);
+      expect(fit.takenOn(day), {a.id, b.id});
+      expect(fit.takenOn(DateTime.now()), isEmpty);
+    });
   });
 
   group('objetivos', () {
@@ -217,7 +234,7 @@ void main() {
     });
 
     test('los 17 idiomas tienen nombre propio y se buscan sin diacríticos', () {
-      for (final l in appLanguages.where((l) => l != 'vi' && l != 'bn')) {
+      for (final l in appLanguages.where((l) => !const {'vi', 'hi', 'bn', 'ur', 'id'}.contains(l))) {
         final missing = FoodLibrary.foods.where((f) => (f.names[l] ?? '').isEmpty).length;
         expect(missing, 0, reason: l);
       }
@@ -285,6 +302,20 @@ void main() {
       expect(rice.shownGrams, closeTo(250, 0.01));
       expect(rice.totalGrams, closeTo(250 / lib('Arroz blanco').cookedYield, 0.01));
       expect(r.total.kcal, greaterThan(400));
+    });
+
+    test('#355 la foto de una comida guardada se conserva al editarla y al guardar', () {
+      final dish = fit.searchDishes('arroz con pollo').single;
+      final r = fit.saveRecipe('Mi arroz', dish.items, photo: 'recipe_1.jpg')!;
+      expect(r.photo, 'recipe_1.jpg');
+      fit.updateRecipe(r.id, dish.items.take(1).toList());
+      fit.renameRecipe(r.id, 'Arroz');
+      final kept = fit.recipes.single;
+      expect(kept.photo, 'recipe_1.jpg');
+      expect(Recipe.fromJson(kept.toJson()).photo, 'recipe_1.jpg');
+      fit.setRecipePhoto(r.id, '');
+      expect(fit.recipes.single.photo, isEmpty);
+      expect(fit.recipes.single.toJson().containsKey('ph'), isFalse);
     });
 
     test('se buscan sin tildes y no se guardan solos', () {
@@ -1028,6 +1059,47 @@ void main() {
       expect(fit.fastGoalHours, 18);
     });
 
+    test('un ayuno terminado tarde se ajusta a la hora real', () {
+      fit.setFastGoal(16);
+      fit.startFast(at: DateTime.now().subtract(const Duration(hours: 20)));
+      final saved = fit.endFast()!;
+      final realEnd = saved.start.add(const Duration(hours: 16, minutes: 30));
+      expect(fit.saveFast(saved.start, realEnd, replacing: saved), isNotNull);
+      expect(fit.fasts.single.end, realEnd);
+      expect(fit.fasts.single.reached, true);
+      expect(fit.fasts.single.goalHours, 16);
+    });
+
+    test('se puede añadir un ayuno olvidado y se guarda en su sitio', () {
+      final now = DateTime.now();
+      fit.startFast(at: now.subtract(const Duration(hours: 2)));
+      fit.endFast();
+      final start = now.subtract(const Duration(days: 2, hours: 18));
+      final end = now.subtract(const Duration(days: 2));
+      expect(fit.saveFast(start, end), isNotNull);
+      expect(fit.fasts.first.start, start, reason: 'ordenado por inicio');
+      final saved = fit.nutritionJson();
+      fit.fasts.clear();
+      fit.loadNutrition(saved);
+      expect(fit.fasts.length, 2);
+    });
+
+    test('no se guardan ayunos imposibles', () {
+      final now = DateTime.now();
+      final a = fit.saveFast(now.subtract(const Duration(hours: 30)), now.subtract(const Duration(hours: 14)))!;
+      expect(fit.fastProblem(now.subtract(const Duration(hours: 2)), now.add(const Duration(hours: 3))), 'future');
+      expect(fit.fastProblem(now.subtract(const Duration(hours: 2)), now.subtract(const Duration(hours: 3))), 'order');
+      expect(fit.fastProblem(now.subtract(const Duration(minutes: 5)), now), 'short');
+      expect(fit.fastProblem(now.subtract(const Duration(hours: 20)), now.subtract(const Duration(hours: 10))), 'overlap');
+      expect(fit.fastProblem(a.start, a.end.add(const Duration(hours: 1)), editing: a), isNull,
+          reason: 'al editar no choca consigo mismo');
+      fit.startFast(at: now.subtract(const Duration(hours: 4)));
+      expect(fit.fastProblem(now.subtract(const Duration(hours: 8)), now.subtract(const Duration(hours: 3))), 'overlap',
+          reason: 'tampoco con el ayuno en curso');
+      expect(fit.saveFast(now.subtract(const Duration(hours: 8)), now.subtract(const Duration(hours: 3))), isNull);
+      expect(fit.fasts.length, 1);
+    });
+
     test('cancelar no deja rastro en el historial', () {
       fit.startFast(at: DateTime.now().subtract(const Duration(hours: 5)));
       fit.cancelFast();
@@ -1067,6 +1139,44 @@ void main() {
       fit.applyBackup(json);
       expect(fit.archivedSupps, {s.id});
       expect(fit.activeSupplements, isEmpty);
+    });
+  });
+
+  group('#394 hierro y potasio', () {
+    test('viene apagado y no se enciende solo al cargar ajustes viejos', () {
+      expect(fit.trackerOn(Tracker.minerals), isFalse);
+      final old = fit.toJson();
+      final n = Map<String, dynamic>.from(old['nutrition'] as Map);
+      n['trackers'] = [for (final t in Tracker.values) if (t != Tracker.minerals && fit.trackerOn(t)) t.name];
+      old['nutrition'] = n;
+      expect(fit.tryApplyBackup(old), isTrue);
+      expect(fit.trackerOn(Tracker.minerals), isFalse);
+    });
+
+    test('se guardan, se suman y cuentan cuántos alimentos del día los traen', () {
+      const lentils = Macros(kcal: 230, protein: 18, carbs: 40, fat: 1, iron: 6.6, potassium: 738);
+      expect(Macros.fromJson(lentils.toJson()).iron, 6.6);
+      expect(Macros.fromJson(lentils.toJson()).potassium, 738);
+      expect(Macros.fromJson(whey.toJson()).hasMinerals, isFalse);
+      fit.logFood(fit.saveFood(name: 'Lentejas', serving: '1 plato', macros: lentils));
+      fit.logFood(fit.saveFood(name: 'Whey', serving: '30 g', macros: whey), servings: 2);
+      final day = DateTime.now();
+      expect(fit.totalOn(day).iron, closeTo(6.6, 0.001));
+      expect(fit.totalOn(day).potassium, 738);
+      final c = fit.mineralsCoverage(day);
+      expect((c.known, c.total), (1, 2));
+    });
+
+    test('las metas salen del perfil hasta que pones las tuyas, y viajan en la copia', () {
+      fit.updateProfile(sex: 'female');
+      expect(fit.ironGoal(fit.nutritionGoals), 18);
+      fit.updateProfile(sex: 'male');
+      expect(fit.ironGoal(fit.nutritionGoals), 8);
+      expect(fit.potassiumGoal(fit.nutritionGoals), 3400);
+      fit.setNutritionGoals(fit.nutritionGoals.copyWith(iron: 12, potassium: 4000));
+      final g = NutritionGoals.fromJson(fit.nutritionGoals.toJson());
+      expect((g.iron, g.potassium), (12, 4000));
+      expect(NutritionGoals.fromJson(const NutritionGoals().toJson()).iron, 0);
     });
   });
 }

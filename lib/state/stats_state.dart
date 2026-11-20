@@ -277,6 +277,7 @@ mixin StatsState on FitCore, ToolsState, LibraryState, SettingsState, TimelineSt
   }
 
   double _setScore(String id, LoggedSet s) {
+    if (!s.counts) return 0;
     if ((s.km ?? 0) > 0) return s.km!;
     if (s.weight > 0 || isAssisted(id)) return liftScore(id, s);
     if (s.reps > 0) return s.reps.toDouble();
@@ -292,7 +293,8 @@ mixin StatsState on FitCore, ToolsState, LibraryState, SettingsState, TimelineSt
   }
 
   bool _beats(String id, LoggedSet st, _Best? best) {
-    if (best == null || st.reps <= 0 && (st.sec ?? 0) <= 0 && (st.km ?? 0) <= 0) return false;
+    if (best == null || !st.counts || st.reps <= 0 && (st.sec ?? 0) <= 0 && (st.km ?? 0) <= 0) return false;
+    if (_onLadder(id, st) && best.front.any((p) => p.$1 >= st.reps && p.$2 >= st.weight - 1e-9)) return false;
     if (_setScore(id, st) > best.score + 1e-9) return true;
     if (isAssisted(id) || st.weight <= 0) return false;
     if (st.weight > best.weight + 1e-9 || st.weight * st.reps > best.volume + 1e-9) return true;
@@ -309,11 +311,11 @@ mixin StatsState on FitCore, ToolsState, LibraryState, SettingsState, TimelineSt
 
   _Best _raise(String id, LoggedSet st, _Best? best) {
     var front = best?.front ?? const <(int, double)>[];
-    if (_onLadder(id, st)) {
+    if (_onLadder(id, st) && !front.any((p) => p.$1 >= st.reps && p.$2 >= st.weight - 1e-9)) {
       front = [
         for (final p in front)
           if (!(st.reps >= p.$1 && st.weight >= p.$2 - 1e-9)) p,
-        if (!front.any((p) => p.$1 >= st.reps && p.$2 >= st.weight - 1e-9)) (st.reps, st.weight),
+        (st.reps, st.weight),
       ];
     }
     return (
@@ -396,8 +398,8 @@ mixin StatsState on FitCore, ToolsState, LibraryState, SettingsState, TimelineSt
     return r.name.isEmpty ? t.newRoutineName : r.name;
   }
 
-  String workoutText(LoggedSession s) {
-    String line(LoggedSet x) {
+  String setText(LoggedSet x) {
+    String line() {
       if (x.km != null) return '${distanceLabel(x.km!)} · ${durationLabel(x.sec ?? 0)}';
       if (x.sec != null && x.reps == 0) return durationLabel(x.sec!);
       if (x.sided) {
@@ -406,6 +408,20 @@ mixin StatsState on FitCore, ToolsState, LibraryState, SettingsState, TimelineSt
       }
       return x.weight > 0 ? '${weightLabel(x.weight)} × ${x.reps}' : t.repCount(x.reps);
     }
+
+    final kind = switch (x.kind) {
+      SetKind.warmup => t.setTypeWarmup,
+      SetKind.drop => t.setTypeDrop,
+      SetKind.failure => t.setTypeFailure,
+      SetKind.restPause => t.setTypeRestPause,
+      SetKind.cluster => t.setTypeCluster,
+      SetKind.normal => null,
+    };
+    return [line(), if (x.rpe != null) effortTag(x.rpe!), if (kind != null) '($kind)'].join(' ');
+  }
+
+  String workoutText(LoggedSession s) {
+    String full(LoggedSet x) => setText(x);
 
     final title = sessionTitle(s);
     final out = [
@@ -417,15 +433,33 @@ mixin StatsState on FitCore, ToolsState, LibraryState, SettingsState, TimelineSt
       out
         ..add('')
         ..add(t.catalogName(e.id, e.name));
-      for (final x in e.sets) {
+      for (var i = 0; i < e.sets.length; i++) {
+        final x = e.sets[i];
         if (x.counts) reps += x.reps;
-        out.add('  ${line(x)}');
+        out.add('  ${i + 1}. ${full(x)}');
+        if (x.note.isNotEmpty) out.add('     ${x.note.replaceAll('\n', ' ')}');
       }
     }
     out
       ..add('')
       ..add('${t.setCount(s.setCount)} · ${t.repCount(reps)} · ${volumeLabel(s.volume)}');
     return out.join('\n');
+  }
+
+  double? strengthToWeight(String id, PersonalRecord? pr) {
+    if (pr == null || pr.kind != PrKind.weight || pr.oneRm <= 0) return null;
+    if (isAssisted(id) || carriesBody(id) || isRepsOnly(id) || modeOf(id).isNotEmpty) return null;
+    final body = bodyweightKgOn(DateTime.now());
+    if (body <= 0) return null;
+    final ratio = (pr.oneRm / body * 100).round() / 100;
+    return ratio >= 0.05 ? ratio : null;
+  }
+
+  LoggedSession? viewedSession;
+
+  void openWorkout(LoggedSession s) {
+    viewedSession = s;
+    pushRoute('workout');
   }
 
   void deleteSession(LoggedSession s) {
@@ -502,7 +536,7 @@ mixin StatsState on FitCore, ToolsState, LibraryState, SettingsState, TimelineSt
 
   void setLoggedKmShown(LoggedExercise e, int i, double shown) {
     if (i < 0 || i >= e.sets.length) return;
-    _replaceLoggedSet(e, i, km: _round3(fromDisplayKm(math.max(0.0, shown))));
+    _replaceLoggedSet(e, i, km: _round3(fromDisplayKmFor(e.id, math.max(0.0, shown))));
   }
 
   void bumpLoggedSec(LoggedExercise e, int i, int d) {
@@ -514,9 +548,9 @@ mixin StatsState on FitCore, ToolsState, LibraryState, SettingsState, TimelineSt
 
   void bumpLoggedKm(LoggedExercise e, int i, int dir) {
     if (i < 0 || i >= e.sets.length) return;
-    final shown = toDisplayKm(e.sets[i].km ?? 0);
+    final shown = toDisplayKmFor(e.id, e.sets[i].km ?? 0);
     final next = math.max(0.0, ((shown / distanceStep).round() + dir) * distanceStep);
-    _replaceLoggedSet(e, i, km: _round3(fromDisplayKm(next)));
+    _replaceLoggedSet(e, i, km: _round3(fromDisplayKmFor(e.id, next)));
   }
 
   bool loggedTimed(LoggedExercise e) =>
@@ -779,7 +813,8 @@ mixin StatsState on FitCore, ToolsState, LibraryState, SettingsState, TimelineSt
 
   double get volumeThisWeekKg => _thisWeekSessions.fold(0.0, (a, s) => a + s.volume);
 
-  int get weekSetCount => _thisWeekSessions.fold(0, (a, s) => a + s.setCount);
+  int get weekSetCount => _thisWeekSessions.fold(
+      0, (a, s) => a + s.exercises.where((e) => countsForMuscles(e.id)).fold(0, (n, e) => n + e.workingSets.length));
 
   int get setsToday {
     return _sessionsOnDay(DateTime.now()).fold(0, (a, s) => a + s.setCount);
@@ -800,6 +835,7 @@ mixin StatsState on FitCore, ToolsState, LibraryState, SettingsState, TimelineSt
   double get _assistBodyKg => profile.weightKg > 0 ? profile.weightKg : 75;
 
   double liftScore(String id, LoggedSet s) {
+    if (!s.counts) return 0;
     if (!isAssisted(id)) return s.oneRm;
     if (s.reps <= 0) return 0;
     return math.max(0.0, _assistBodyKg - s.weight) * (1 + s.reps / 30);
@@ -966,7 +1002,7 @@ mixin StatsState on FitCore, ToolsState, LibraryState, SettingsState, TimelineSt
     final ex = exerciseById(id);
     if (ex == null) return !isCardio(id);
     final kind = kindOf(ex);
-    return kind != 'cardio' && kind != 'sport';
+    return kind != 'cardio' && kind != 'sport' && kind != 'stretch';
   }
 
   Map<String, double> muscleSetsOver(int days) {
@@ -1198,13 +1234,18 @@ mixin StatsState on FitCore, ToolsState, LibraryState, SettingsState, TimelineSt
 
   Map<String, List<({DateTime date, LoggedExercise ex})>> _historyIndex() {
     final out = <String, List<({DateTime date, LoggedExercise ex})>>{};
+    final at = Map<LoggedExercise, int>.identity();
     for (final s in sessions) {
-      for (final e in s.exercises) {
+      for (final (i, e) in s.exercises.indexed) {
+        at[e] = i;
         (out[e.id] ??= []).add((date: s.date, ex: e));
       }
     }
     for (final list in out.values) {
-      list.sort((a, b) => b.date.compareTo(a.date));
+      list.sort((a, b) {
+        final by = b.date.compareTo(a.date);
+        return by != 0 ? by : at[a.ex]!.compareTo(at[b.ex]!);
+      });
     }
     return out;
   }
@@ -1217,18 +1258,19 @@ mixin StatsState on FitCore, ToolsState, LibraryState, SettingsState, TimelineSt
     return [for (final h in exerciseHistory(id)) if (!light.contains(h.ex)) h];
   }
 
-  List<LoggedSet> lastSetsFor(String id) {
+  List<LoggedSet> lastSetsFor(String id, [int nth = 0]) {
     final h = exerciseHistory(id);
     if (h.isEmpty) return const [];
     final light = _lightExercises;
-    for (final e in h) {
-      if (!light.contains(e.ex)) return e.ex.sets;
-    }
-    return h.first.ex.sets;
+    var at = h.indexWhere((e) => !light.contains(e.ex));
+    if (at < 0) at = 0;
+    final pick = at + nth;
+    if (nth > 0 && pick < h.length && h[pick].date == h[at].date) return h[pick].ex.sets;
+    return h[at].ex.sets;
   }
 
-  String? lastSummaryFor(String id) {
-    final sets = lastSetsFor(id);
+  String? lastSummaryFor(String id, [int nth = 0]) {
+    final sets = lastSetsFor(id, nth);
     if (sets.isEmpty) return null;
     return setsSummary(sets);
   }
@@ -1240,7 +1282,8 @@ mixin StatsState on FitCore, ToolsState, LibraryState, SettingsState, TimelineSt
     final km = s.km ?? 0;
     final sec = s.sec;
     final w = id == null ? weightValue(s.weight) : weightValueFor(id, s.weight);
-    if (km > 0) return sec == null ? distanceLabel(km) : '${distanceLabel(km)} · ${durationLabel(sec)}';
+    final d = id == null ? distanceLabel(km) : distanceLabelFor(id, km);
+    if (km > 0) return sec == null ? d : '$d · ${durationLabel(sec)}';
     if (sec != null && s.reps <= 0) {
       return s.weight > 0 ? '$w × ${durationLabel(sec)}' : durationLabel(sec);
     }
@@ -1663,7 +1706,10 @@ mixin StatsState on FitCore, ToolsState, LibraryState, SettingsState, TimelineSt
             _round1(r.ex.workingSets.where((s) => s.reps > 0).map((s) => s.weight).reduce(math.min)),
       ];
     }
-    return h.map((r) => _round1(r.ex.bestOneRm)).toList();
+    return [
+      for (final r in h)
+        if (r.ex.bestOneRm > 0) _round1(r.ex.bestOneRm),
+    ];
   }
 
   bool canShowRelative(String id) =>
@@ -1752,7 +1798,8 @@ mixin StatsState on FitCore, ToolsState, LibraryState, SettingsState, TimelineSt
 
   List<double> bestRepsSeries(String id) => [
         for (final r in exerciseHistory(id).reversed)
-          r.ex.sets.where((s) => s.counts).fold(0, (m, s) => math.max(m, s.reps)).toDouble(),
+          if (r.ex.workingSets.isNotEmpty)
+            r.ex.workingSets.fold(0, (m, s) => math.max(m, s.reps)).toDouble(),
       ];
 
   static const _habitWindowDays = 120;

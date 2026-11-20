@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/race_sheet.dart';
 import '../widgets/body_map.dart';
 import 'package:flutter/services.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
@@ -358,7 +359,8 @@ class SessionScreen extends StatelessWidget {
     final def = fit.exerciseById(ex.id);
     final mode = fit.modeOf(ex.id);
     final repsOnly = fit.isRepsOnly(ex.id);
-    final prev = fit.lastSetsFor(ex.id);
+    final nth = fit.nthInSession(ex);
+    final prev = fit.lastSetsFor(ex.id, nth);
     final linkedIn = i > 0 && s.exercises[i - 1].linkedNext;
     final linked = linkedIn || (ex.linkedNext && i < s.exercises.length - 1);
     final done = ex.sets.isNotEmpty && ex.sets.every((st) => st.done);
@@ -405,7 +407,11 @@ class SessionScreen extends StatelessWidget {
                       Text('  ·  ', style: AppTheme.f(11, weight: FontWeight.w500, color: gc.textTertiary)),
                     ],
                     Flexible(
-                      child: Text(muscleLabel(ex.primary),
+                      child: Text(
+                          [
+                            muscleLabel(ex.primary),
+                            if (fit.blockOf(ex) case (n: final n, of: final of) when of > 1) t.routineRepeatTag(n, of),
+                          ].join(' · '),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: AppTheme.f(11.5, weight: FontWeight.w600, color: gc.textTertiary)),
@@ -431,15 +437,15 @@ class SessionScreen extends StatelessWidget {
               ),
             ]),
           ),
-          if (WorkoutNoteStrip.offers(ex.id))
+          if (WorkoutNoteStrip.offers(ex.id, slot: ex.routineSlot))
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 10, 8, 0),
-              child: _guard(locked, WorkoutNoteStrip(exerciseId: ex.id, onDark: true)),
+              child: _guard(locked, WorkoutNoteStrip(exerciseId: ex.id, slot: ex.routineSlot, onDark: true)),
             ),
-          if (!locked && fit.lastSetNotes(ex.id).isNotEmpty)
+          if (!locked && fit.lastSetNotes(ex.id, nth).isNotEmpty)
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-              child: LastSetNotes(exerciseId: ex.id),
+              child: LastSetNotes(exerciseId: ex.id, nth: nth),
             ),
           const SizedBox(height: 12),
           Padding(
@@ -536,6 +542,12 @@ class SessionScreen extends StatelessWidget {
                     Navigator.pop(sheet);
                     fit.setExerciseUnits(ex.id, fit.isLbFor(ex.id) ? 'kg' : 'lb');
                   }),
+                if (mode == 'cardio')
+                  OptionItem(t.exerciseUnitSwitch(fit.isMiFor(ex.id) ? 'km' : 'mi'),
+                      icon: PhosphorIconsRegular.ruler, onTap: () {
+                    Navigator.pop(sheet);
+                    fit.setExerciseDistance(ex.id, fit.isMiFor(ex.id) ? 'km' : 'mi');
+                  }),
                 OptionItem(t.addNote, icon: PhosphorIconsRegular.notePencil, onTap: () {
                   Navigator.pop(sheet);
                   showWorkoutNoteEditor(context, ex.id);
@@ -559,6 +571,15 @@ class SessionScreen extends StatelessWidget {
                     HapticFeedback.selectionClick();
                     showNotchToast(context, t.superset,
                         subtitle: t.supersetHint, icon: PhosphorIconsFill.link, accent: gc.brass);
+                  }),
+                if (i < s.exercises.length - 1 && ex.linkedNext)
+                  OptionItem(t.jumpSet, icon: PhosphorIconsRegular.arrowsClockwise, selected: ex.jumpNext, onTap: () {
+                    Navigator.pop(sheet);
+                    fit.toggleSessionJump(i);
+                    if (!s.exercises[i].jumpNext) return;
+                    HapticFeedback.selectionClick();
+                    showNotchToast(context, t.jumpSet,
+                        subtitle: t.jumpSetHint, icon: PhosphorIconsFill.arrowsLeftRight, accent: gc.brass);
                   }),
                 OptionItem(t.lightSession,
                     icon: PhosphorIconsRegular.feather,
@@ -767,7 +788,7 @@ class SessionScreen extends StatelessWidget {
                       behavior: HitTestBehavior.opaque,
                       onTap: () => _editRest(context, s),
                       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                        FitText(t.liveResting.toUpperCase(),
+                        FitText((s.restSwitch ? t.switchSides : t.liveResting).toUpperCase(),
                             style: AppTheme.f(9.5, weight: FontWeight.w800, color: gc.accent, letterSpacing: 1.2)),
                         RollingText(clockLabel(left),
                             style: AppTheme.f(24, weight: FontWeight.w800, color: gc.text, height: 1.1)),
@@ -786,10 +807,13 @@ class SessionScreen extends StatelessWidget {
 
   Widget _holdDock(GymColors gc) {
     final lead = fit.holdLead;
-    final left = lead > 0 ? lead : fit.holdRemaining ?? 0;
+    final over = fit.holdOvertime;
+    final left = over ? 0 : (lead > 0 ? lead : fit.holdRemaining ?? 0);
     final total = lead > 0 ? WorkoutState.holdLeadIn : (fit.holdTotal <= 0 ? 1 : fit.holdTotal);
     final ex = fit.session?.exercises[fit.holdEx];
-    final label = lead > 0
+    final label = over
+        ? t.holdOvertime
+        : lead > 0
         ? (fit.switchingSides ? t.switchSides : t.getReady)
         : fit.holdSides > 1
             ? t.sideOfTwo('${fit.holdSide + 1}')
@@ -810,7 +834,8 @@ class SessionScreen extends StatelessWidget {
               FitText(
                   [label.toUpperCase(), if (ex != null) t.catalogName(ex.id, ex.name)].join(' · '),
                   style: AppTheme.f(9.5, weight: FontWeight.w800, color: gc.ember, letterSpacing: 1)),
-              RollingText(clockLabel(left), style: AppTheme.f(24, weight: FontWeight.w800, color: gc.text, height: 1.1)),
+              RollingText(over ? '+${clockLabel(fit.holdExtra)}' : clockLabel(left),
+                  style: AppTheme.f(24, weight: FontWeight.w800, color: gc.text, height: 1.1)),
             ]),
           ),
           _dockButton(gc, fit.holdPaused ? t.finishHoldNow : t.stopLabel,
@@ -842,13 +867,20 @@ class SessionScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
             decoration: BoxDecoration(color: gc.bgRaised2, borderRadius: BorderRadius.circular(100)),
             child: Row(mainAxisSize: MainAxisSize.min, children: [
-              Icon(PhosphorIconsRegular.link, size: 11, color: gc.brass),
+              Icon(fit.inJumpSet ? PhosphorIconsRegular.arrowsLeftRight : PhosphorIconsRegular.link,
+                  size: 11, color: gc.brass),
               const SizedBox(width: 5),
-              Text(t.superset,
+              Text(fit.inJumpSet ? t.jumpSet : t.superset,
                   style: AppTheme.f(10.5, weight: FontWeight.w700, color: gc.brass, letterSpacing: 0.5)),
             ]),
           ),
           const SizedBox(height: 8),
+        ],
+        if (ex != null)
+          if (fit.blockOf(ex) case (n: final n, of: final of) when of > 1) ...[
+          Text(t.routineRepeatTag(n, of).toUpperCase(),
+              style: AppTheme.f(10.5, weight: FontWeight.w700, color: gc.accent, letterSpacing: 1)),
+          const SizedBox(height: 4),
         ],
         Text(ex == null ? '' : t.catalogName(ex.id, ex.name),
             style: AppTheme.f(26, weight: FontWeight.w700, color: gc.text)),
@@ -884,15 +916,15 @@ class SessionScreen extends StatelessWidget {
             ),
           ],
         ]),
-        if (ex != null && WorkoutNoteStrip.offers(ex.id)) ...[
+        if (ex != null && WorkoutNoteStrip.offers(ex.id, slot: ex.routineSlot)) ...[
           const SizedBox(height: 12),
-          WorkoutNoteStrip(exerciseId: ex.id, onDark: true),
+          WorkoutNoteStrip(exerciseId: ex.id, slot: ex.routineSlot, onDark: true),
         ],
-        if (ex != null && fit.lastSetNotes(ex.id).isNotEmpty) ...[
+        if (ex != null && fit.lastSetNotes(ex.id, fit.nthInSession(ex)).isNotEmpty) ...[
           const SizedBox(height: 8),
-          LastSetNotes(exerciseId: ex.id),
+          LastSetNotes(exerciseId: ex.id, nth: fit.nthInSession(ex)),
         ],
-        if (ex != null && fit.lastSummaryFor(ex.id) != null) ...[
+        if (ex != null && fit.lastSummaryFor(ex.id, fit.nthInSession(ex)) != null) ...[
           const SizedBox(height: 10),
           GestureDetector(
             behavior: HitTestBehavior.opaque,
@@ -902,7 +934,7 @@ class SessionScreen extends StatelessWidget {
                   style: AppTheme.f(11, weight: FontWeight.w600, color: gc.textTertiary, letterSpacing: 0.4)),
               const SizedBox(width: 8),
               Flexible(
-                child: Text(fit.lastSummaryFor(ex.id)!,
+                child: Text(fit.lastSummaryFor(ex.id, fit.nthInSession(ex))!,
                     style: AppTheme.f(12, weight: FontWeight.w600, color: gc.textSecondary)),
               ),
               const SizedBox(width: 4),
@@ -939,6 +971,10 @@ class SessionScreen extends StatelessWidget {
                     Text('  ·  ', style: AppTheme.f(12, weight: FontWeight.w600, color: gc.textTertiary)),
                     RollingText('${fit.weightValue(fit.sessionVolumeKg)} ${fit.units}',
                         style: AppTheme.f(12, weight: FontWeight.w700, color: gc.text, letterSpacing: 0.2)),
+                  ],
+                  if (fit.raceDelta case final delta?) ...[
+                    const SizedBox(width: 8),
+                    RaceChip(delta: delta, onTap: locked ? null : () => showRaceSheet(context)),
                   ],
                 ]),
               ),
@@ -1162,7 +1198,8 @@ class SessionScreen extends StatelessWidget {
         SizedBox(width: gap),
         Expanded(flex: _prevFlex, child: label(t.previousCol)),
       ],
-      for (final h in _headers(mode, repsOnly, sided, exId == null ? fit.units : fit.unitsFor(exId))) ...[
+      for (final h in _headers(mode, repsOnly, sided, exId == null ? fit.units : fit.unitsFor(exId),
+          exId == null ? fit.distanceUnit : fit.distanceUnitFor(exId))) ...[
         SizedBox(width: gap),
         Expanded(flex: _cellFlex, child: label(h)),
       ],
@@ -1373,7 +1410,7 @@ class SessionScreen extends StatelessWidget {
       double minW, {
       required void Function(BuildContext) onEdit,
     }) step = list ? _pillCell : _miniStepper;
-    Widget reps() => step(
+    Widget repsStep() => step(
           gc,
           '${st.reps}',
           () => fit.bumpSessionReps(exIdx, j, -1),
@@ -1389,6 +1426,15 @@ class SessionScreen extends StatelessWidget {
             onSave: (v) => fit.setSessionReps(exIdx, j, v.round()),
           ),
         );
+    Widget reps() {
+      final goal = st.goal;
+      if (goal == null || st.done) return repsStep();
+      return Column(mainAxisSize: MainAxisSize.min, children: [
+        repsStep(),
+        Text(goal, style: AppTheme.f(10.5, weight: FontWeight.w700, color: gc.textTertiary)),
+      ]);
+    }
+
     final exId = fit.session!.exercises[exIdx].id;
     final sided = fit.isSidedReps(exId);
     Widget repsLeft() => step(
@@ -1461,7 +1507,7 @@ class SessionScreen extends StatelessWidget {
                   context,
                   title: t.timeSecondsTitle,
                   value: (st.sec ?? 0).toDouble(),
-                  max: 900,
+                  max: 3600,
                   step: 5,
                   majorEvery: 6,
                   format: (v) => clockLabel(v.round()),
@@ -1470,18 +1516,18 @@ class SessionScreen extends StatelessWidget {
         );
     Widget distance() => step(
           gc,
-          fit.distanceValue(st.km ?? 0),
+          fit.distanceValueFor(exId, st.km ?? 0),
           () => fit.bumpSessionDistance(exIdx, j, -1),
           () => fit.bumpSessionDistance(exIdx, j, 1),
           30,
           onEdit: (context) => _ruler(
             context,
-            title: t.distanceTitle(fit.distanceUnit),
-            value: fit.toDisplayKm(st.km ?? 0),
+            title: t.distanceTitle(fit.distanceUnitFor(exId)),
+            value: fit.toDisplayKmFor(exId, st.km ?? 0),
             max: 100,
             step: 0.1,
             majorEvery: 10,
-            unit: fit.distanceUnit,
+            unit: fit.distanceUnitFor(exId),
             onSave: (v) => fit.setSessionDistanceShown(exIdx, j, v),
           ),
         );
@@ -1492,8 +1538,8 @@ class SessionScreen extends StatelessWidget {
     };
   }
 
-  List<String> _headers(String mode, bool repsOnly, bool sided, String unit) => switch (mode) {
-        'cardio' => [t.distanceCol(fit.distanceUnit.toUpperCase()), t.timeCol],
+  List<String> _headers(String mode, bool repsOnly, bool sided, String unit, String dist) => switch (mode) {
+        'cardio' => [t.distanceCol(dist.toUpperCase()), t.timeCol],
         'time' => [sided ? t.timePerSideCol : t.timeCol, if (!repsOnly) t.weightCol(unit.toUpperCase())],
         _ => [
             if (sided) ...[t.repsLeftCol, t.repsRightCol] else t.repsCol,
@@ -1578,11 +1624,22 @@ class SessionScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: st.done ? gc.sage : Colors.transparent,
                       shape: BoxShape.circle,
-                      border: Border.all(color: st.done ? gc.sage : gc.textTertiary, width: 2),
+                      border: Border.all(color: st.done || st.half ? gc.sage : gc.textTertiary, width: 2),
                     ),
                     child: st.done
                         ? Center(child: SvgPathIcon(Ic.checkBold, size: 14, color: Colors.white))
-                        : null,
+                        : st.half
+                            ? Padding(
+                                padding: const EdgeInsets.all(2),
+                                child: ClipOval(
+                                  child: FractionallySizedBox(
+                                    alignment: AlignmentDirectional.centerStart,
+                                    widthFactor: 0.5,
+                                    child: ColoredBox(color: gc.sage),
+                                  ),
+                                ),
+                              )
+                            : null,
                   ),
                   if (fit.liveSetIsRecord(exIdx, j))
                     Positioned(top: -6, right: -8, child: RecordBadge(label: sentenceCase(t.personalRecord))),
@@ -1960,16 +2017,20 @@ class SessionScreen extends StatelessWidget {
   Widget _holdPanel(GymColors gc) {
     final count = fit.sessionSetCount;
     final lead = fit.holdLead;
+    final over = fit.holdOvertime;
     return TimerPanel(
-      label: lead > 0
+      label: over
+          ? t.holdOvertime
+          : lead > 0
           ? (fit.switchingSides ? t.switchSides : t.getReady)
           : fit.modeOf(fit.session?.exercises[fit.holdEx].id ?? '') == 'cardio'
               ? t.kindCardio
               : fit.holdSides > 1
                   ? t.sideOfTwo('${fit.holdSide + 1}')
                   : t.holdLabel,
-      remaining: lead > 0 ? lead : fit.holdRemaining ?? 0,
+      remaining: over ? fit.holdTotal : (lead > 0 ? lead : fit.holdRemaining ?? 0),
       total: lead > 0 ? WorkoutState.holdLeadIn : fit.holdTotal,
+      clock: over ? '+${clockLabel(fit.holdExtra)}' : null,
       elapsed: fit.elapsedLabel,
       elapsedLabel: t.elapsedCaps,
       sets: '${count.done}/${count.total}',
@@ -2013,7 +2074,7 @@ class SessionScreen extends StatelessWidget {
   Widget _restPanel(BuildContext context, GymColors gc, WorkoutSession s) {
     final count = fit.sessionSetCount;
     return TimerPanel(
-      label: t.liveResting,
+      label: s.restSwitch ? t.switchSides : t.liveResting,
       remaining: s.restRemaining ?? 0,
       total: fit.restTotal,
       elapsed: fit.elapsedLabel,
@@ -2034,7 +2095,9 @@ class SessionScreen extends StatelessWidget {
         return _ticking(() => PrimaryButton(
               label: fit.holdPaused
                   ? t.finishHoldNow
-                  : '${t.stopLabel} · ${durationLabel(fit.holdRemaining ?? 0)}',
+                  : fit.holdOvertime
+                      ? '${t.stopLabel} · +${durationLabel(fit.holdExtra)}'
+                      : '${t.stopLabel} · ${durationLabel(fit.holdRemaining ?? 0)}',
               onTap: fit.holdPaused ? fit.completeHold : fit.stopHold,
               height: 52,
             ));
@@ -2129,6 +2192,10 @@ class SessionScreen extends StatelessWidget {
                 index: 2,
                 child: vsLast != null ? _vsLastCard(gc, vsLast) : _firstTimeCard(gc),
               ),
+            ],
+            if (prs > 0 && fit.summaryRecords.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              Rise(index: 2, child: _recordsCard(context, gc, fit.summaryRecords)),
             ],
             AnimatedSize(
               duration: const Duration(milliseconds: 280),
@@ -2311,8 +2378,13 @@ class SessionScreen extends StatelessWidget {
                 for (final e in changes.removed) row(PhosphorIconsBold.minus, gc.danger, exerciseName(e)),
                 if (changes.reordered) row(PhosphorIconsBold.arrowsDownUp, gc.brass, t.routineOrderChanged),
                 for (final c in changes.sets)
-                  row(c.to > c.from ? PhosphorIconsBold.plus : PhosphorIconsBold.minus, gc.brass,
-                      '${exerciseName(c.ex)} · ${c.from} → ${c.to} ${t.statSets.toLowerCase()}'),
+                  row(c.to > c.from ? PhosphorIconsBold.plus : PhosphorIconsBold.minus, gc.brass, () {
+                    final repeat = fit.routineRepeat(routine, c.slot);
+                    final name = repeat.of > 1
+                        ? '${exerciseName(c.ex)} (${t.routineRepeatTag(repeat.n, repeat.of).toLowerCase()})'
+                        : exerciseName(c.ex);
+                    return '$name · ${c.from} → ${c.to} ${t.statSets.toLowerCase()}';
+                  }()),
               ],
             ),
           ),
@@ -2547,6 +2619,57 @@ class SessionScreen extends StatelessWidget {
           ]),
         ],
       ),
+    );
+  }
+
+  Widget _recordsCard(BuildContext context, GymColors gc, List<(LoggedExercise, LoggedSet)> records) {
+    const shown = 5;
+    Widget row((LoggedExercise, LoggedSet) r) {
+      final (e, st) = r;
+      final ex = fit.exerciseById(e.id);
+      return Semantics(
+        button: ex != null,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: ex == null ? null : () => showExercisePreview(context, ex),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6),
+            child: Row(children: [
+              Expanded(
+                child: Text(t.catalogName(e.id, e.name),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTheme.f(13.5, weight: FontWeight.w700, color: gc.text)),
+              ),
+              const SizedBox(width: 12),
+              Ltr(
+                child: Text(fit.loggedSetLabel(st, id: e.id),
+                    style: AppTheme.f(13, weight: FontWeight.w700, color: gc.accent)),
+              ),
+            ]),
+          ),
+        ),
+      );
+    }
+
+    return SoftCard(
+      radius: 16,
+      padding: const EdgeInsets.fromLTRB(16, 14, 16, 8),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        Row(children: [
+          Icon(PhosphorIconsRegular.trophy, size: 16, color: gc.accent),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(t.reportRecords.toUpperCase(),
+                style: AppTheme.f(11, weight: FontWeight.w600, color: gc.textSecondary, letterSpacing: 0.4)),
+          ),
+          if (records.length > shown)
+            Text('+${records.length - shown}',
+                style: AppTheme.f(12, weight: FontWeight.w700, color: gc.textSecondary)),
+        ]),
+        const SizedBox(height: 6),
+        for (final r in records.take(shown)) row(r),
+      ]),
     );
   }
 
@@ -2874,7 +2997,8 @@ class _ExerciseStageState extends State<_ExerciseStage> {
     final ex = fit.currentExercise;
     if (ex == null) return;
     final gc = context.gc;
-    final where = fit.inSuperset ? '${t.superset} · ${fit.sessionProgressLabel}' : fit.sessionProgressLabel;
+    final kind = fit.inJumpSet ? t.jumpSet : t.superset;
+    final where = fit.inSuperset ? '$kind · ${fit.sessionProgressLabel}' : fit.sessionProgressLabel;
     HapticFeedback.mediumImpact();
     showNotchToast(context, t.catalogName(ex.id, ex.name),
         subtitle: where,
@@ -3036,6 +3160,18 @@ Widget _overviewRow(BuildContext sheet, GymColors gc, WorkoutSession s, int i) {
                   Text(t.setsDoneOf(done, e.sets.length),
                       style: AppTheme.f(11.5,
                           weight: FontWeight.w500, color: all ? gc.sage : gc.textSecondary)),
+                  if (fit.blockOf(e) case (n: final n, of: final of) when of > 1) ...[
+                    Text(' · ', style: AppTheme.f(11.5, color: gc.textTertiary)),
+                    Semantics(
+                      label: t.routineRepeatTag(n, of),
+                      excludeSemantics: true,
+                      child: Row(mainAxisSize: MainAxisSize.min, children: [
+                        Icon(PhosphorIconsRegular.copySimple, size: 11, color: gc.accent),
+                        const SizedBox(width: 3),
+                        Text('$n/$of', style: AppTheme.f(11.5, weight: FontWeight.w700, color: gc.accent)),
+                      ]),
+                    ),
+                  ],
                   if (current) ...[
                     Text(' · ', style: AppTheme.f(11.5, color: gc.textTertiary)),
                     Text(t.nowLabel,
@@ -3299,7 +3435,7 @@ class _TuneCard extends StatelessWidget {
 
   Widget _row(GymColors gc, Routine routine, ({String muscle, String exId}) m) {
     final vote = fit.muscleVote(m.muscle);
-    final ex = fit.exerciseById(m.exId);
+    final ex = fit.exerciseById(slotExercise(m.exId));
     final sets = fit.routineSets(routine, m.exId);
     void pick(int v) => fit.voteMuscle(m.muscle, vote == v ? null : v);
     return Padding(

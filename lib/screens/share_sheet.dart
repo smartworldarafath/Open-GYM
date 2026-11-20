@@ -1,13 +1,11 @@
-import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../l10n/l10n.dart';
+import '../services/file_share.dart';
 import '../state/fit_state.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
@@ -62,11 +60,8 @@ class _ShareSheetState extends State<_ShareSheet> {
       image.dispose();
       if (data == null) return;
 
-      final dir = await getTemporaryDirectory();
-      final file = File('${dir.path}/gymmane-${_kind.name}.png');
-      await file.writeAsBytes(data.buffer.asUint8List(), flush: true);
       if (!mounted) return;
-      await SharePlus.instance.share(ShareParams(files: [XFile(file.path)], subject: 'GymMane'));
+      await shareFile('gymmane-${_kind.name}.png', data.buffer.asUint8List(), mime: 'image/png', subject: 'GymMane');
     } catch (_) {
       if (mounted) {
         showNotchToast(context, t.shareFailed, icon: PhosphorIconsFill.warningCircle, accent: context.gc.warn);
