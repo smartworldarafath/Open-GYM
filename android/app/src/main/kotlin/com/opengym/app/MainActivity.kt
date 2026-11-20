@@ -401,6 +401,7 @@ class MainActivity : FlutterActivity() {
     override fun onResume() {
         super.onResume()
         enableMaxRefreshRate()
+        NfcBridge.resume(this)
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -488,11 +489,6 @@ class MainActivity : FlutterActivity() {
         }
         val text = takeIncoming(intent) ?: return
         incomingChannel?.invokeMethod("incoming", text)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        NfcBridge.resume(this)
     }
 
     override fun onPause() {
