@@ -1,12 +1,12 @@
 {
-  "name": "GymMane",
-  "short_name": "GymMane",
+  "name": "Open-GYM",
+  "short_name": "Open-GYM",
   "start_url": ".",
   "scope": ".",
   "display": "standalone",
   "background_color": "#0A0A0A",
   "theme_color": "#0A0A0A",
-  "description": "Free, private gym tracker on your own server.",
+  "description": "Open-GYM: free, private gym tracker. Your workouts, routines, progress and nutrition.",
   "orientation": "any",
   "prefer_related_applications": false,
   "icons": [

@@ -66,12 +66,16 @@
   </div>
   <script>
     (function () {
-      var es = (navigator.language || '').toLowerCase().indexOf('es') === 0;
+      var lang = (navigator.language || '').toLowerCase();
+      var es = lang.indexOf('es') === 0;
+      var bn = lang.indexOf('bn') === 0;
       var text = document.getElementById('gm-text');
-      text.textContent = es ? 'Cargando…' : 'Loading…';
+      text.textContent = bn ? 'লোড হচ্ছে…' : (es ? 'Cargando…' : 'Loading…');
       var slow = setTimeout(function () {
-        text.textContent = es ? 'La primera vez tarda un poco más. Ya casi está.' : 'The first time takes a little longer. Almost there.';
-      }, 6000);
+        text.textContent = bn
+          ? 'প্রথমবার লোড হতে কিছুটা সময় লাগতে পারে। অনুগ্রহ করে অপেক্ষা করুন…'
+          : (es ? 'La primera vez tarda un poco más. Ya casi está.' : 'The first time takes a little longer. Almost there.');
+      }, 5000);
       window.addEventListener('flutter-first-frame', function () {
         clearTimeout(slow);
         var l = document.getElementById('gm-loader');
